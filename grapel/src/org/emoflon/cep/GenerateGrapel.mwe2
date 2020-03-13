@@ -9,10 +9,10 @@ var rootPath = ".."
 Workflow {
 	
 	bean = StandaloneSetup {
-//		registerEcoreFile = "http://www.emoflon.org/ibex/gt/editor/GT.ecore"
-//		registerGenModelFile = "file:///C:/Users/sehmes/git/emoflon-ibex-ui/org.emoflon.ibex.gt.editor/model/generated/GT.genmodel"
-		registerGeneratedEPackage="org.emoflon.ibex.gt.editor.gT.GTPackage"
-		registerGenModelFile = "platform:/resource/org.emoflon.ibex.gt.editor/model/generated/GT.genmodel"
+		    platformUri = "${rootPath}"
+    		scanClassPath = true
+    		registerGeneratedEPackage = "org.emoflon.ibex.gt.editor.gT.GTPackage"
+    		registerGenModelFile = "platform:/resource/org.emoflon.ibex.gt.editor/model/generated/GT.genmodel"
 	}
 	
 	component = XtextGenerator {
@@ -41,6 +41,8 @@ Workflow {
 		language = StandardLanguage {
 			name = "org.emoflon.cep.Grapel"
 			fileExtensions = "grpl"
+			
+			    referencedResource = "platform:/resource/org.emoflon.ibex.gt.editor/model/generated/GT.genmodel"
 			
 			serializer = {
 				generateStub = false

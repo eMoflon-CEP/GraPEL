@@ -11,12 +11,23 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.equinox.common;bundle-version="3.5.0",
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
  org.eclipse.xtext.util,
- org.emoflon.ibex.gt.editor;bundle-version="1.1.0"
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.emoflon.ibex.gt.editor,
+ org.emoflon.ibex.gt.editor.gT,
+ org.emoflon.ibex.gt.editor.gT.impl,
+ org.emoflon.ibex.gt.editor.gT.util
 Export-Package: org.emoflon.cep.validation,
  org.emoflon.cep.serializer,
  org.emoflon.cep.services,
  org.emoflon.cep.scoping,
  org.emoflon.cep,
- org.emoflon.cep.generator
+ org.emoflon.cep.generator,
+ org.emoflon.cep.grapel,
+ org.emoflon.cep.grapel.impl,
+ org.emoflon.cep.grapel.util,
+ org.emoflon.cep.parser.antlr.internal,
+ org.emoflon.cep.parser.antlr
