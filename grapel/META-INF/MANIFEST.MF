@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: grapel
+Bundle-ManifestVersion: 2
+Bundle-Name: grapel
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: grapel; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.emoflon.ibex.gt.editor;bundle-version="1.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.apache.log4j
+Export-Package: org.emoflon.cep.validation,
+ org.emoflon.cep.serializer,
+ org.emoflon.cep.services,
+ org.emoflon.cep.scoping,
+ org.emoflon.cep,
+ org.emoflon.cep.generator
