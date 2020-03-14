@@ -9,7 +9,9 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: grapel,
  org.eclipse.xtext.ide,
  org.eclipse.xtext.xbase.ide,
- org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
+ org.emoflon.ibex.gt.editor;bundle-version="1.1.0",
+ org.emoflon.ibex.gt.editor.ide;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.emoflon.cep.ide.contentassist.antlr,
  org.emoflon.cep.ide.contentassist.antlr.internal

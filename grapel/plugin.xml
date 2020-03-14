@@ -2,4 +2,12 @@
 <?eclipse version="3.4"?>
 <plugin>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Grapel -->
+      <package
+            uri="http://www.emoflon.org/cep/Grapel"
+            class="org.emoflon.cep.grapel.GrapelPackage"
+            genModel="model/generated/Grapel.genmodel"/>
+   </extension>
+
 </plugin>

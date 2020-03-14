@@ -1,0 +1,10 @@
+import "platform:/resource/Flights/model/Flights.ecore"
+
+event testEvent {
+	param : testEvent
+	param2 : p
+}
+
+pattern p() {
+  node : Airport
+}  
