@@ -3,6 +3,24 @@
  */
 package org.emoflon.cep.scoping;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.Scopes;
+import org.emoflon.cep.grapel.EditorGTFile;
+import org.emoflon.cep.grapel.Event;
+import org.emoflon.cep.grapel.EventAttribute;
+import org.emoflon.cep.grapel.EventPattern;
+import org.emoflon.cep.grapel.EventPatternNode;
+import org.emoflon.cep.grapel.GrapelPackage;
+import org.emoflon.ibex.gt.editor.gT.GTPackage;
+import org.emoflon.ibex.gt.editor.utils.GTEditorModelUtils;
 
 /**
  * This class contains custom scoping description.
@@ -11,5 +29,91 @@ package org.emoflon.cep.scoping;
  * on how and when to use it.
  */
 public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
-
+	@Override
+	public IScope getScope(EObject context, EReference reference) {	
+		// Events
+	    if (isEventName(context, reference)) {
+	    	return getScopeForEvents((Event)context);
+	    }
+	    // EventAttributes
+	    if (isEventAttributeName(context, reference)) {
+	    	return getScopeForEventAttributes((EventAttribute)context);
+		}
+	    // EventPatterns
+	    if (isEventPatternName(context, reference)) {
+	    	return getScopeForEventPatterns((EventPattern)context);
+		}
+	    // EventPatternNodes
+	    if (isEventPatternNodeName(context, reference)) {
+	    	return getScopeForEventPatternNodes((EventPatternNode)context);
+		}
+	    
+	    return super.getScope(context, reference);
+	}
+	
+	protected boolean isEventName(EObject context, EReference reference) {
+	    return (context instanceof Event && reference == GrapelPackage.Literals.EVENT_ATTRIBUTE__TYPE);
+	}
+	
+	protected IScope getScopeForEvents(Event context) {
+		Collection<EObject> scope = new HashSet<>();
+		scope.addAll(GTEditorModelUtils.getClasses((EditorGTFile)context.eContainer()));
+		scope.addAll(GTEditorModelUtils.getDatatypes((EditorGTFile)context.eContainer()));
+		return Scopes.scopeFor(scope);
+	}
+	
+	protected boolean isEventAttributeName(EObject context, EReference reference) {
+	    return (context instanceof EventAttribute && reference == GrapelPackage.Literals.EVENT_ATTRIBUTE__TYPE);
+	}
+	
+	protected IScope getScopeForEventAttributes(EventAttribute context) {
+		Collection<EObject> scope = new HashSet<>();
+		scope.addAll(GTEditorModelUtils.getClasses((EditorGTFile)context.eContainer().eContainer()));
+		scope.addAll(GTEditorModelUtils.getDatatypes((EditorGTFile)context.eContainer().eContainer()));
+		return Scopes.scopeFor(scope);
+	}
+	
+	protected boolean isEventPatternName(EObject context, EReference reference) {
+	    return (context instanceof EventPattern && reference == GrapelPackage.Literals.EVENT_PATTERN_NODE__TYPE);
+	}
+	
+	protected IScope getScopeForEventPatterns(EventPattern context) {
+		Collection<EObject> scope = new HashSet<>();
+		scope.addAll(((EditorGTFile)context.eContainer()).getPatterns());
+//		scope.addAll(
+//				((EditorGTFile)context.eContainer()).getImports().stream()
+//					.map(i -> GTEditorModelUtils.loadEcoreModel(i.getName()))
+//					.filter(i -> i.isPresent())
+//					.map(i -> i.get())
+//					.filter(i -> !i.getContents().isEmpty())
+//					.map(i -> i.getContents().get(0))
+//					.map(i -> (EditorGTFile)i)
+//					.flatMap(i->i.getPatterns().stream())
+//					.collect(Collectors.toSet())
+//		);
+		scope.addAll(((EditorGTFile)context.eContainer()).getEvents());
+		return Scopes.scopeFor(scope);
+	}
+	
+	protected boolean isEventPatternNodeName(EObject context, EReference reference) {
+	    return (context instanceof EventPatternNode && reference == GrapelPackage.Literals.EVENT_PATTERN_NODE__TYPE);
+	}
+	
+	protected IScope getScopeForEventPatternNodes(EventPatternNode context) {
+		Collection<EObject> scope = new HashSet<>();
+		scope.addAll(((EditorGTFile)context.eContainer().eContainer()).getPatterns());
+//		scope.addAll(
+//				((EditorGTFile)context.eContainer().eContainer()).getImports().stream()
+//					.map(i -> GTEditorModelUtils.loadEcoreModel(i.getName()))
+//					.filter(i -> i.isPresent())
+//					.map(i -> i.get())
+//					.filter(i -> !i.getContents().isEmpty())
+//					.map(i -> i.getContents().get(0))
+//					.map(i -> (EditorGTFile)i)
+//					.flatMap(i->i.getPatterns().stream())
+//					.collect(Collectors.toSet())
+//		);
+		scope.addAll(((EditorGTFile)context.eContainer().eContainer()).getEvents());
+		return Scopes.scopeFor(scope);
+	}
 }

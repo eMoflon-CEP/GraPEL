@@ -1,10 +1,17 @@
 import "platform:/resource/Flights/model/Flights.ecore"
+import "http://www.eclipse.org/emf/2002/Ecore"
 
-event testEvent {
-	param : testEvent
-	param2 : p
+event e1 {
+	Airport airport;
+	EString string;
 }
 
-pattern p() {
+event_pattern testEvent {
+//	node : e1 
+//	node2 : p1
+	node : e1
+}
+
+pattern p1(string:EString) {
   node : Airport
 }  

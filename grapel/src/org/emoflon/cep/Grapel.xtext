@@ -11,42 +11,50 @@ EditorGTFile: {EditorGTFile}
   	(patterns+=EditorPattern |
   	conditions+=EditorCondition |
   	attributeConditionLibraries+=EditorAttributeConditionLibrary |
-  	events += Event)*
+  	events += Event |
+  	evenPatterns += EventPattern)*
   	
 ;
 
-
-
-//Model: {Model} 
-//	(events += Event)*
-//;
-
 Event:
 	'event' name=ID '{'
-	(eventParameter += EventParameter)*
-//	(eventAttributes += EventAttributes)*
-//	(contextConstraints += ContextConstraint)*
+	(attributes += EventAttribute)*
+	'}'
+;
+
+EventAttribute:
+	type=[ecore::EDataType] | type=[ecore::EClass] name=ID ';' 
+;
+
+EventPattern:
+	'event_pattern' name=ID '{'
+	(nodes += EventPatternNode)*
+	(contextConstraints += EventPatternContextConstraint)*
 //	(temporalDependencies += TemporalDependency (relation += DependencyRelation temporalDependencies += TemporalDependency)*)?
 	'}'
 ;
 
-EventParameter:
+EventPatternNode:
 	name=ID ':' type=[Event] | type=[GT::EditorPattern]
+;
+
+EventPatternNodeAttributeExpression:
+	attributeExpression = [EventPatternNode] '.' (attribute = EventAttribute | attribute = GT::EditorNode)
+;
+
+EventPatternContextConstraint:
+	(lhs = EventPatternNodeAttributeExpression)
+	relation = ContextRelation
+	(rhs = EventPatternNodeAttributeExpression)
+;
+
+enum ContextRelation:
+	EQUAL='==' |
+  UNEQUAL='!=' 
 ;
 
 //EventAttributes:
 //	name=ID ':' type=[ecore::EClass] | type =[ecore::EDataType] (':=' value = [GT::EditorPattern]'.'parameterName=ID)?
-//;
-
-//ContextConstraint:
-//	(lhs = [GT::EditorExpression] | lhs = [GT::EditorReference])
-//	relation = ContextRelation
-//	(rhs = [GT::EditorExpression] | rhs = [GT::EditorReference])
-//;
-//
-//enum ContextRelation:
-//	EQUAL='==' |
-//  UNEQUAL='!=' 
 //;
 //
 //TemporalDependency:

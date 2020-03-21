@@ -4,14 +4,43 @@
   <eClassifiers xsi:type="ecore:EClass" name="EditorGTFile" eSuperTypes="platform:/resource/org.emoflon.ibex.gt.editor/model/generated/GT.ecore#//EditorGTFile">
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
         eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evenPatterns" upperBound="-1"
+        eType="#//EventPattern" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eventParameter" upperBound="-1"
-        eType="#//EventParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//EventAttribute" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EventParameter">
+  <eClassifiers xsi:type="ecore:EClass" name="EventAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPattern">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//EventPatternNode" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" upperBound="-1"
+        eType="#//EventPatternContextConstraint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPatternNode">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPatternNodeAttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeExpression" eType="#//EventPatternNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPatternContextConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//EventPatternNodeAttributeExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relation" eType="#//ContextRelation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//EventPatternNodeAttributeExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ContextRelation">
+    <eLiterals name="EQUAL" literal="=="/>
+    <eLiterals name="UNEQUAL" value="1" literal="!="/>
   </eClassifiers>
 </ecore:EPackage>
