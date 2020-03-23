@@ -10,6 +10,11 @@
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ContextRelation/EQUAL"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ContextRelation/UNEQUAL"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//RelationalOperator">
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//RelationalOperator/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//RelationalOperator/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//RelationalOperator/FOLLOWS"/>
+    </genEnums>
     <genClasses ecoreClass="Grapel.ecore#//EditorGTFile">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/events"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/evenPatterns"/>
@@ -26,6 +31,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPattern/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/nodes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/contextConstraints"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/relationalConstraint"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternNode">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternNode/name"/>
@@ -33,12 +39,16 @@
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternNodeAttributeExpression">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeAttributeExpression/attributeExpression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeAttributeExpression/attribute"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeAttributeExpression/attribute"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternContextConstraint">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternContextConstraint/lhs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternContextConstraint/relation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternContextConstraint/rhs"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//EventPatternRelationalConstraint">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternRelationalConstraint/operands"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternRelationalConstraint/operators"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

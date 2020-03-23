@@ -22,6 +22,8 @@
         eType="#//EventPatternNode" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" upperBound="-1"
         eType="#//EventPatternContextConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraint" eType="#//EventPatternRelationalConstraint"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNode">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -29,8 +31,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNodeAttributeExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeExpression" eType="#//EventPatternNode"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternContextConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//EventPatternNodeAttributeExpression"
@@ -42,5 +43,16 @@
   <eClassifiers xsi:type="ecore:EEnum" name="ContextRelation">
     <eLiterals name="EQUAL" literal="=="/>
     <eLiterals name="UNEQUAL" value="1" literal="!="/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPatternRelationalConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" unique="false"
+        upperBound="-1" eType="#//EventPatternNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"
+        upperBound="-1" eType="#//RelationalOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RelationalOperator">
+    <eLiterals name="AND" literal="&amp;&amp;"/>
+    <eLiterals name="OR" value="1" literal="||"/>
+    <eLiterals name="FOLLOWS" value="2" literal="->"/>
   </eClassifiers>
 </ecore:EPackage>

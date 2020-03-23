@@ -30,28 +30,44 @@ EventPattern:
 	'event_pattern' name=ID '{'
 	(nodes += EventPatternNode)*
 	(contextConstraints += EventPatternContextConstraint)*
+	(relationalConstraint = EventPatternRelationalConstraint)?
 //	(temporalDependencies += TemporalDependency (relation += DependencyRelation temporalDependencies += TemporalDependency)*)?
 	'}'
 ;
 
 EventPatternNode:
-	name=ID ':' type=[Event] | type=[GT::EditorPattern]
+	name=ID ':' type=[Event|ID] | type=[GT::EditorPattern|ID]
 ;
 
 EventPatternNodeAttributeExpression:
-	attributeExpression = [EventPatternNode] '.' (attribute = EventAttribute | attribute = GT::EditorNode)
+	attributeExpression = [EventPatternNode|ID] '.' attribute = [EventAttribute|ID] | attribute = [GT::EditorNode|ID]
 ;
 
 EventPatternContextConstraint:
-	(lhs = EventPatternNodeAttributeExpression)
+	lhs = EventPatternNodeAttributeExpression
 	relation = ContextRelation
-	(rhs = EventPatternNodeAttributeExpression)
+	rhs = EventPatternNodeAttributeExpression
 ;
 
 enum ContextRelation:
 	EQUAL='==' |
   UNEQUAL='!=' 
 ;
+
+EventPatternRelationalConstraint:
+	operands +=  [EventPatternNode|ID] (operators += RelationalOperator operands += [EventPatternNode|ID])* '{'
+	'}'
+;
+
+enum RelationalOperator:
+	AND='&&' |
+  	OR='||' |
+  	FOLLOWS='->' 
+;
+
+//NodeAttributeExpression:
+//	attributeExpression = [EventPatternNode] '.' (attribute = [EventAttribute] | attribute = [GT::EditorNode]) ('.' fields += ID)*
+//;
 
 //EventAttributes:
 //	name=ID ':' type=[ecore::EClass] | type =[ecore::EDataType] (':=' value = [GT::EditorPattern]'.'parameterName=ID)?
