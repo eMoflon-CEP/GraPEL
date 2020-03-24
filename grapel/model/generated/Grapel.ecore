@@ -32,6 +32,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNodeAttributeExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeExpression" eType="#//EventPatternNode"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternContextConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//EventPatternNodeAttributeExpression"
@@ -49,10 +50,32 @@
         upperBound="-1" eType="#//EventPatternNode"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"
         upperBound="-1" eType="#//RelationalOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//AttributeConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relations" unique="false"
+        upperBound="-1" eType="#//AttributeConstraintRelation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="RelationalOperator">
     <eLiterals name="AND" literal="&amp;&amp;"/>
     <eLiterals name="OR" value="1" literal="||"/>
     <eLiterals name="FOLLOWS" value="2" literal="->"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+        eType="#//EventPatternNodeAttributeExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relations" unique="false"
+        upperBound="-1" eType="#//AttributeRelation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeConstraintRelation">
+    <eLiterals name="AND" literal="&amp;&amp;"/>
+    <eLiterals name="OR" value="1" literal="||"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeRelation">
+    <eLiterals name="GREATER" literal=">"/>
+    <eLiterals name="GREATER_OR_EQUAL" value="1" literal=">="/>
+    <eLiterals name="EQUAL" value="2" literal="=="/>
+    <eLiterals name="UNEQUAL" value="3" literal="!="/>
+    <eLiterals name="SMALLER_OR_EQUAL" value="4" literal="&lt;="/>
+    <eLiterals name="SMALLER" value="5" literal="&lt;"/>
   </eClassifiers>
 </ecore:EPackage>

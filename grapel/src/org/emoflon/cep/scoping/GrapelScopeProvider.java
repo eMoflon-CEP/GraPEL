@@ -21,6 +21,7 @@ import org.emoflon.cep.grapel.EventPatternContextConstraint;
 import org.emoflon.cep.grapel.EventPatternNode;
 import org.emoflon.cep.grapel.EventPatternNodeAttributeExpression;
 import org.emoflon.cep.grapel.GrapelPackage;
+import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.editor.gT.GTPackage;
 import org.emoflon.ibex.gt.editor.utils.GTEditorModelUtils;
@@ -58,13 +59,48 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    if (isEventPatternNodeAttributeExpression(context, reference)) {
 	    	return getScopeForEventPatternNodeAttributeExpressions((EventPatternNodeAttributeExpression)context);
 		}
-	    // EventPatternNodeAttributeExpression
+	    // EventPatternNodeAttributeExpressionAttribute
 	    if (isEventPatternNodeAttributeExpressionAttribute(context, reference)) {
 	    	return getScopeForEventPatternNodeAttributeExpressionAttributes((EventPatternNodeAttributeExpression)context, reference);
+		}
+	    // EventPatternNodeAttributeExpressionField
+	    if (isEventPatternNodeAttributeExpressionAttributeField(context, reference)) {
+	    	return getScopeForEventPatternNodeAttributeExpressionAttributeFields((EventPatternNodeAttributeExpression)context, reference);
 		}
 	    return super.getScope(context, reference);
 	}
 	
+	private IScope getScopeForEventPatternNodeAttributeExpressionAttributeFields(
+			EventPatternNodeAttributeExpression context, EReference reference) {
+		Collection<EObject> scope = new HashSet<>();
+		//scope.add();
+		if(context.getAttributeExpression() == null)
+			return super.getScope(context, reference);
+		if(context.getAttribute() == null)
+			return super.getScope(context, reference);
+		if(context.getAttribute().eContainer() == null)
+			return super.getScope(context, reference);
+		
+		if(context.getAttributeExpression().getType() instanceof Event) {
+			EventAttribute attribute = (EventAttribute)context.getAttribute();
+			
+			if(attribute.getType() instanceof EDataType)
+				return super.getScope(context, reference);
+			
+			EClass clazz = (EClass)attribute.getType();
+			scope.addAll(clazz.getEAllAttributes());
+		}else {
+			EditorNode node = (EditorNode) context.getAttribute();
+			scope.addAll(node.getType().getEAllAttributes());
+		}
+		return Scopes.scopeFor(scope);
+	}
+
+	private boolean isEventPatternNodeAttributeExpressionAttributeField(EObject context, EReference reference) {
+		return (context instanceof EventPatternNodeAttributeExpression 
+				&& reference == GrapelPackage.Literals.EVENT_PATTERN_NODE_ATTRIBUTE_EXPRESSION__FIELD);
+	}
+
 	private IScope getScopeForEventPatternNodeAttributeExpressionAttributes(
 			EventPatternNodeAttributeExpression context, EReference reference) {
 		Collection<EObject> scope = new HashSet<>();
@@ -84,7 +120,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 
 	private boolean isEventPatternNodeAttributeExpressionAttribute(EObject context, EReference reference) {
 		return (context instanceof EventPatternNodeAttributeExpression 
-				&& reference != GrapelPackage.Literals.EVENT_PATTERN_NODE_ATTRIBUTE_EXPRESSION__ATTRIBUTE_EXPRESSION);
+				&& reference == GrapelPackage.Literals.EVENT_PATTERN_NODE_ATTRIBUTE_EXPRESSION__ATTRIBUTE);
 	}
 
 	private IScope getScopeForEventPatternNodeAttributeExpressions(EventPatternNodeAttributeExpression context) {

@@ -31,7 +31,6 @@ EventPattern:
 	(nodes += EventPatternNode)*
 	(contextConstraints += EventPatternContextConstraint)*
 	(relationalConstraint = EventPatternRelationalConstraint)?
-//	(temporalDependencies += TemporalDependency (relation += DependencyRelation temporalDependencies += TemporalDependency)*)?
 	'}'
 ;
 
@@ -40,7 +39,7 @@ EventPatternNode:
 ;
 
 EventPatternNodeAttributeExpression:
-	attributeExpression = [EventPatternNode|ID] '.' attribute = [EventAttribute|ID] | attribute = [GT::EditorNode|ID]
+	(attributeExpression = [EventPatternNode|ID] '.') (attribute = [EventAttribute|ID] ('->' field = [ecore::EAttribute|ID])?) | (attribute = [GT::EditorNode|ID] ('->' field = [ecore::EAttribute|ID])?)
 ;
 
 EventPatternContextConstraint:
@@ -56,6 +55,7 @@ enum ContextRelation:
 
 EventPatternRelationalConstraint:
 	operands +=  [EventPatternNode|ID] (operators += RelationalOperator operands += [EventPatternNode|ID])* '{'
+		(constraints += AttributeConstraint (relations += AttributeConstraintRelation constraints += AttributeConstraint)*)?
 	'}'
 ;
 
@@ -65,46 +65,20 @@ enum RelationalOperator:
   	FOLLOWS='->' 
 ;
 
-//NodeAttributeExpression:
-//	attributeExpression = [EventPatternNode] '.' (attribute = [EventAttribute] | attribute = [GT::EditorNode]) ('.' fields += ID)*
-//;
+AttributeConstraint:
+	operands += EventPatternNodeAttributeExpression (relations += AttributeRelation operands += EventPatternNodeAttributeExpression)*
+;
 
-//EventAttributes:
-//	name=ID ':' type=[ecore::EClass] | type =[ecore::EDataType] (':=' value = [GT::EditorPattern]'.'parameterName=ID)?
-//;
-//
-//TemporalDependency:
-//	dependency += GenericEvent ('->' dependency += GenericEvent)*
-//	('{'
-//		constraints += DependencyConstraint (relation += ConstraintRelation constraints += DependencyConstraint)*
-//	'}')?
-//;
-//
-//enum DependencyRelation:
-//	AND='&&' |
-//  OR='||' 
-//;
-//
-//DependencyConstraint:
-//	lhs = ConstraintExpression
-//	relation = ExpressionRelation
-//	rhs = ConstraintExpression
-//;
-//
-//enum ConstraintRelation:
-//	AND='&&' |
-//  OR='||' 
-//;
-//
-//enum ExpressionRelation:
-//  GREATER='>' |
-//  GREATER_OR_EQUAL='>=' |
-//  EQUAL='==' |
-//  UNEQUAL='!=' |
-//  SMALLER_OR_EQUAL='<=' |
-//  SMALLER='<'
-//;
-//
-//ConstraintExpression:
-//	lhs=[GT::EditorExpression]
-//;
+enum AttributeConstraintRelation:
+  AND='&&' |
+  	OR='||' 
+;
+
+enum AttributeRelation:
+  GREATER='>' |
+  GREATER_OR_EQUAL='>=' |
+  EQUAL='==' |
+  UNEQUAL='!=' |
+  SMALLER_OR_EQUAL='<=' |
+  SMALLER='<'
+;
