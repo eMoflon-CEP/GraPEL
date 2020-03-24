@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
+import org.emoflon.cep.grapel.AttributeConstraint;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.cep.grapel.Event;
 import org.emoflon.cep.grapel.EventAttribute;
@@ -20,7 +21,9 @@ import org.emoflon.cep.grapel.EventPattern;
 import org.emoflon.cep.grapel.EventPatternContextConstraint;
 import org.emoflon.cep.grapel.EventPatternNode;
 import org.emoflon.cep.grapel.EventPatternNodeAttributeExpression;
+import org.emoflon.cep.grapel.EventPatternRelationalConstraint;
 import org.emoflon.cep.grapel.GrapelPackage;
+import org.emoflon.cep.grapel.impl.EventPatternImpl;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.editor.gT.GTPackage;
@@ -67,9 +70,37 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    if (isEventPatternNodeAttributeExpressionAttributeField(context, reference)) {
 	    	return getScopeForEventPatternNodeAttributeExpressionAttributeFields((EventPatternNodeAttributeExpression)context, reference);
 		}
+	    // EventPatternRelationalConstraint
+	    if (isEventPatternRelationalConstraint(context, reference)) {
+	    	return getScopeForEventPatternRelationalConstraints((EventPatternRelationalConstraint)context, reference);
+		}
+	    // AttributeConstraint
+	    if (isAttributeConstraint(context, reference)) {
+	    	return getScopeForAttributeConstraints((AttributeConstraint)context, reference);
+		}
 	    return super.getScope(context, reference);
 	}
 	
+	private IScope getScopeForAttributeConstraints(AttributeConstraint context, EReference reference) {
+		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
+	}
+
+	private boolean isAttributeConstraint(EObject context, EReference reference) {
+		return (context instanceof AttributeConstraint);
+	}
+
+	private IScope getScopeForEventPatternRelationalConstraints(EventPatternRelationalConstraint context,
+			EReference reference) {
+		EventPattern ePattern = (EventPattern)context.eContainer();
+		Collection<EObject> scope = new HashSet<>();
+		scope.addAll(ePattern.getNodes());
+		return Scopes.scopeFor(scope);
+	}
+
+	private boolean isEventPatternRelationalConstraint(EObject context, EReference reference) {
+		return (context instanceof EventPatternRelationalConstraint);
+	}
+
 	private IScope getScopeForEventPatternNodeAttributeExpressionAttributeFields(
 			EventPatternNodeAttributeExpression context, EReference reference) {
 		Collection<EObject> scope = new HashSet<>();
@@ -124,7 +155,8 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	}
 
 	private IScope getScopeForEventPatternNodeAttributeExpressions(EventPatternNodeAttributeExpression context) {
-		return Scopes.scopeFor(((EventPattern)context.eContainer().eContainer()).getNodes());
+//		return Scopes.scopeFor(((EventPattern)context.eContainer().eContainer()).getNodes());
+		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
 	private boolean isEventPatternNodeAttributeExpression(EObject context, EReference reference) {
