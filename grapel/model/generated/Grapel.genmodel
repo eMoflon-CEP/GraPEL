@@ -10,6 +10,10 @@
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ContextRelation/EQUAL"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ContextRelation/UNEQUAL"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//RelationalConstraintRelation">
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//RelationalConstraintRelation/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//RelationalConstraintRelation/OR"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//RelationalOperator">
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//RelationalOperator/AND"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//RelationalOperator/OR"/>
@@ -43,7 +47,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPattern/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/nodes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/contextConstraints"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/relationalConstraint"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/relationalConstraints"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPattern/relConstraintRelations"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternNode">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternNode/name"/>

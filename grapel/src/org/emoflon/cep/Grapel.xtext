@@ -30,7 +30,9 @@ EventPattern:
 	'event_pattern' name=ID '{'
 	(nodes += EventPatternNode)*
 	(contextConstraints += EventPatternContextConstraint)*
-	(relationalConstraint = EventPatternRelationalConstraint)?
+	(relationalConstraints += EventPatternRelationalConstraint 
+		(relConstraintRelations += RelationalConstraintRelation relationalConstraints += EventPatternRelationalConstraint)*
+	)?
 	'}'
 ;
 
@@ -51,6 +53,11 @@ EventPatternContextConstraint:
 enum ContextRelation:
 	EQUAL='==' |
   UNEQUAL='!=' 
+;
+
+enum RelationalConstraintRelation:
+	AND='&&' |
+  	OR='||' 
 ;
 
 EventPatternRelationalConstraint:

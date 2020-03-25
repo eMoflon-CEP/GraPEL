@@ -22,8 +22,10 @@
         eType="#//EventPatternNode" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" upperBound="-1"
         eType="#//EventPatternContextConstraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraint" eType="#//EventPatternRelationalConstraint"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraints"
+        upperBound="-1" eType="#//EventPatternRelationalConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relConstraintRelations"
+        unique="false" upperBound="-1" eType="#//RelationalConstraintRelation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNode">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -44,6 +46,10 @@
   <eClassifiers xsi:type="ecore:EEnum" name="ContextRelation">
     <eLiterals name="EQUAL" literal="=="/>
     <eLiterals name="UNEQUAL" value="1" literal="!="/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RelationalConstraintRelation">
+    <eLiterals name="AND" literal="&amp;&amp;"/>
+    <eLiterals name="OR" value="1" literal="||"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternRelationalConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" unique="false"
