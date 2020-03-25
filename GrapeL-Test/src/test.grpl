@@ -25,7 +25,8 @@ event_pattern testEvent spawns e1{
 		node2.airport == node.airport->size
 	} ||
 	node2 -> node {
-		
+		node.airport->ID + node.airport->ID < node2.airport->ID * node2.airport->ID + node.airport->ID &&
+		node2.airport->ID / node.airport->size == node.airport->ID
 	}
 	
 	spawn e1(node.airport->ID,node2.airport->size)

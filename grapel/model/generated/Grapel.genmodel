@@ -31,6 +31,12 @@
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//AttributeRelation/SMALLER_OR_EQUAL"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//AttributeRelation/SMALLER"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//ArithmeticOperator">
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/PLUS"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/MINUS"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/MULTIPLY"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/DIVIDE"/>
+    </genEnums>
     <genClasses ecoreClass="Grapel.ecore#//EditorGTFile">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/events"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/evenPatterns"/>
@@ -76,6 +82,10 @@
     <genClasses ecoreClass="Grapel.ecore#//AttributeConstraint">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeConstraint/operands"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeConstraint/relations"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//AttributeExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeExpression/operands"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpression/operators"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
 import org.emoflon.cep.grapel.AttributeConstraint;
+import org.emoflon.cep.grapel.AttributeExpression;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.cep.grapel.Event;
 import org.emoflon.cep.grapel.EventAttribute;
@@ -82,9 +83,21 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    if (isAttributeConstraint(context, reference)) {
 	    	return getScopeForAttributeConstraints((AttributeConstraint)context, reference);
 		}
+	    // AttributeExpression
+	    if (isAttributeExpression(context, reference)) {
+	    	return getScopeForAttributeExpressions((AttributeExpression)context, reference);
+		}
 	    return super.getScope(context, reference);
 	}
 	
+	private IScope getScopeForAttributeExpressions(AttributeExpression context, EReference reference) {
+		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
+	}
+
+	private boolean isAttributeExpression(EObject context, EReference reference) {
+		 return (context instanceof AttributeExpression);
+	}
+
 	private boolean isEventPatternReturnType(EObject context, EReference reference) {
 		 return (context instanceof EventPattern && 
 				 (reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE || reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_ARG));

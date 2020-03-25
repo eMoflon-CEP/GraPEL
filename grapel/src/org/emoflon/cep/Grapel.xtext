@@ -80,7 +80,8 @@ enum RelationalOperator:
 ;
 
 AttributeConstraint:
-	operands += EventPatternNodeAttributeExpression (relations += AttributeRelation operands += EventPatternNodeAttributeExpression)*
+//	operands += EventPatternNodeAttributeExpression (relations += AttributeRelation operands += EventPatternNodeAttributeExpression)*
+	operands += AttributeExpression (relations += AttributeRelation operands += AttributeExpression)*
 ;
 
 enum AttributeConstraintRelation:
@@ -95,4 +96,20 @@ enum AttributeRelation:
   UNEQUAL='!=' |
   SMALLER_OR_EQUAL='<=' |
   SMALLER='<'
+;
+
+AttributeExpression:
+	operands+=EventPatternNodeAttributeExpression (operators+= ArithmeticOperator operands+=EventPatternNodeAttributeExpression)*
+;
+
+//ArithmeticExpression:
+//	operands+=EventPatternNodeAttributeExpression operators+= ArithmeticOperator operands+=EventPatternNodeAttributeExpression 
+//	(operators+= ArithmeticOperator operands+=EventPatternNodeAttributeExpression)*
+//;
+
+enum ArithmeticOperator:
+  PLUS='+' |
+  MINUS='-' |
+  MULTIPLY='*' |
+  DIVIDE='/'
 ;
