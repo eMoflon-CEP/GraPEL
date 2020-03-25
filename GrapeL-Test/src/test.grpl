@@ -10,7 +10,7 @@ pattern p1(string:EString) {
   airport : Airport
 }
 
-event_pattern testEvent {
+event_pattern testEvent spawns e1{
 	node : e1
 	node2 : p1
 	
@@ -27,4 +27,6 @@ event_pattern testEvent {
 	node2 -> node {
 		
 	}
+	
+	spawn e1(node.airport->ID,node2.airport->size)
 }

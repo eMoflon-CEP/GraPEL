@@ -50,6 +50,10 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    if (isEventPattern(context, reference)) {
 	    	return getScopeForEventPatterns((EventPattern)context, reference);
 		}
+	    // EventPatternReturnTypes
+	    if (isEventPatternReturnType(context, reference)) {
+	    	return getScopeForEventPatternReturnTypes((EventPattern)context, reference);
+		}
 	    // EventPatternNodes
 	    if (isEventPatternNode(context, reference)) {
 	    	return getScopeForEventPatternNodes((EventPatternNode)context);
@@ -81,6 +85,15 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    return super.getScope(context, reference);
 	}
 	
+	private boolean isEventPatternReturnType(EObject context, EReference reference) {
+		 return (context instanceof EventPattern && 
+				 (reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE || reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_ARG));
+	}
+	
+	protected IScope getScopeForEventPatternReturnTypes(EventPattern context, EReference reference) {
+		return Scopes.scopeFor(getGTFile(context).getEvents());
+	}
+
 	private IScope getScopeForAttributeConstraints(AttributeConstraint context, EReference reference) {
 		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
 	}
@@ -195,13 +208,13 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	}
 	
 	protected boolean isEventPattern(EObject context, EReference reference) {
-	    return (context instanceof EventPattern);
+	    return (context instanceof EventPattern && reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE
+	    		&& reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_ARG
+	    		&& reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_PARAMS);
 	}
 	
 	protected IScope getScopeForEventPatterns(EventPattern context, EReference reference) {
-		Collection<EObject> scope = new HashSet<>();
-		scope.addAll(context.getNodes());
-		return Scopes.scopeFor(scope);
+		return Scopes.scopeFor(context.getNodes());
 	}
 	
 	protected boolean isEventPatternNode(EObject context, EReference reference) {

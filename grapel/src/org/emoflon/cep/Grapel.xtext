@@ -27,12 +27,19 @@ EventAttribute:
 ;
 
 EventPattern:
-	'event_pattern' name=ID '{'
+	'event_pattern' name=ID ('spawns' returnType=[Event|ID])?'{'
 	(nodes += EventPatternNode)*
 	(contextConstraints += EventPatternContextConstraint)*
 	(relationalConstraints += EventPatternRelationalConstraint 
 		(relConstraintRelations += RelationalConstraintRelation relationalConstraints += EventPatternRelationalConstraint)*
 	)?
+	
+	('spawn' returnArg=[Event|ID]'('
+		(returnParams+=EventPatternNodeAttributeExpression 
+			(',' returnParams+=EventPatternNodeAttributeExpression)* 
+		)?
+	')')?
+	
 	'}'
 ;
 

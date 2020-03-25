@@ -45,10 +45,13 @@
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPattern">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPattern/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/returnType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/nodes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/contextConstraints"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/relationalConstraints"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPattern/relConstraintRelations"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/returnArg"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/returnParams"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternNode">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternNode/name"/>
