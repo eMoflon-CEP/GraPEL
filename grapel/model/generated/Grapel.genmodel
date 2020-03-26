@@ -31,6 +31,14 @@
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//AttributeRelation/SMALLER_OR_EQUAL"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//AttributeRelation/SMALLER"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//NegationOperators">
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//NegationOperators/RELATIONAL_NEGATION"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//NegationOperators/LOGICAL_NEGATION"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//Brackets">
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//Brackets/ROUNDL"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//Brackets/ROUNDR"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//ArithmeticOperator">
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/PLUS"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/MINUS"/>
@@ -54,6 +62,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/returnType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/nodes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/contextConstraints"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPattern/brackets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/relationalConstraints"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPattern/relConstraintRelations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/returnArg"/>
@@ -84,6 +93,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeConstraint/relations"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//AttributeExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpression/brackets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeExpression/operands"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpression/operators"/>
     </genClasses>

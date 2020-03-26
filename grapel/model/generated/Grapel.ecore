@@ -23,6 +23,8 @@
         eType="#//EventPatternNode" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" upperBound="-1"
         eType="#//EventPatternContextConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="brackets" unique="false"
+        upperBound="-1" eType="#//Brackets"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraints"
         upperBound="-1" eType="#//EventPatternRelationalConstraint" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relConstraintRelations"
@@ -52,8 +54,8 @@
     <eLiterals name="UNEQUAL" value="1" literal="!="/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="RelationalConstraintRelation">
-    <eLiterals name="AND" literal="&amp;&amp;"/>
-    <eLiterals name="OR" value="1" literal="||"/>
+    <eLiterals name="AND" literal="AND"/>
+    <eLiterals name="OR" value="1" literal="OR"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternRelationalConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" unique="false"
@@ -88,7 +90,17 @@
     <eLiterals name="SMALLER_OR_EQUAL" value="4" literal="&lt;="/>
     <eLiterals name="SMALLER" value="5" literal="&lt;"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NegationOperators">
+    <eLiterals name="RELATIONAL_NEGATION" literal="NOT"/>
+    <eLiterals name="LOGICAL_NEGATION" value="1" literal="!"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Brackets">
+    <eLiterals name="ROUNDL" literal="("/>
+    <eLiterals name="ROUNDR" value="1" literal=")"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="brackets" unique="false"
+        upperBound="-1" eType="#//Brackets"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
         eType="#//EventPatternNodeAttributeExpression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"

@@ -30,8 +30,9 @@ EventPattern:
 	'event_pattern' name=ID ('spawns' returnType=[Event|ID])?'{'
 	(nodes += EventPatternNode)*
 	(contextConstraints += EventPatternContextConstraint)*
-	(relationalConstraints += EventPatternRelationalConstraint 
-		(relConstraintRelations += RelationalConstraintRelation relationalConstraints += EventPatternRelationalConstraint)*
+	((brackets+=Brackets)* relationalConstraints += EventPatternRelationalConstraint 
+		(relConstraintRelations += RelationalConstraintRelation 
+			(brackets+=Brackets)* relationalConstraints += EventPatternRelationalConstraint (brackets+=Brackets)* )*
 	)?
 	
 	('spawn' returnArg=[Event|ID]'('
@@ -63,13 +64,15 @@ enum ContextRelation:
 ;
 
 enum RelationalConstraintRelation:
-	AND='&&' |
-  	OR='||' 
+	AND='AND' |
+  	OR='OR' 
 ;
 
 EventPatternRelationalConstraint:
 	operands +=  [EventPatternNode|ID] (operators += RelationalOperator operands += [EventPatternNode|ID])* '{'
-		(constraints += AttributeConstraint (relations += AttributeConstraintRelation constraints += AttributeConstraint)*)?
+		(constraints += AttributeConstraint (relations += AttributeConstraintRelation 
+				constraints += AttributeConstraint)*
+		)?
 	'}'
 ;
 
@@ -80,8 +83,7 @@ enum RelationalOperator:
 ;
 
 AttributeConstraint:
-//	operands += EventPatternNodeAttributeExpression (relations += AttributeRelation operands += EventPatternNodeAttributeExpression)*
-	operands += AttributeExpression (relations += AttributeRelation operands += AttributeExpression)*
+	 operands += AttributeExpression (relations += AttributeRelation operands += AttributeExpression)*
 ;
 
 enum AttributeConstraintRelation:
@@ -98,14 +100,22 @@ enum AttributeRelation:
   SMALLER='<'
 ;
 
-AttributeExpression:
-	operands+=EventPatternNodeAttributeExpression (operators+= ArithmeticOperator operands+=EventPatternNodeAttributeExpression)*
+enum NegationOperators:
+	RELATIONAL_NEGATION='NOT' |
+	LOGICAL_NEGATION='!'
 ;
 
-//ArithmeticExpression:
-//	operands+=EventPatternNodeAttributeExpression operators+= ArithmeticOperator operands+=EventPatternNodeAttributeExpression 
-//	(operators+= ArithmeticOperator operands+=EventPatternNodeAttributeExpression)*
-//;
+enum Brackets:
+	ROUNDL='(' |
+	ROUNDR=')'
+;
+
+AttributeExpression:
+	(brackets+=Brackets)* operands+=EventPatternNodeAttributeExpression (brackets+=Brackets)* 
+		(operators+= ArithmeticOperator (brackets+=Brackets)* 
+			operands+=EventPatternNodeAttributeExpression (brackets+=Brackets)*
+		)*
+;
 
 enum ArithmeticOperator:
   PLUS='+' |
