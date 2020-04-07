@@ -5,7 +5,7 @@
     editorDirectory="/grapelmodel.editor/src-gen" modelPluginID="grapelmodel" modelName="GrapeLModel"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" codeFormatting="true"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    usedGenPackages="platform:/resource/org.emoflon.ibex.common/model/Common.genmodel#//IBeXLanguage"
+    usedGenPackages="../../org.emoflon.ibex.common/model/Common.genmodel#//IBeXLanguage"
     operationReflection="true" importOrganizing="true">
   <foreignModel>GrapeLModel.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
@@ -13,6 +13,7 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//GrapeLModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/events"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/eventPatterns"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/ibexPatterns"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//EventPattern">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPattern/name"/>
@@ -32,13 +33,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventAttribute/name"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//SimpleAttribute">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//SimpleAttribute/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//SimpleAttribute/type"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//ComplexAttribute">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ComplexAttribute/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ComplexAttribute/type"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//IBeXPatternNode">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//IBeXPatternNode/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//IBeXPatternNode/type"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
