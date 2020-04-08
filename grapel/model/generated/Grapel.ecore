@@ -18,17 +18,23 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPattern">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//ReturnType"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
         eType="#//EventPatternNode" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" upperBound="-1"
         eType="#//EventPatternContextConstraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="brackets" unique="false"
-        upperBound="-1" eType="#//Brackets"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraints"
         upperBound="-1" eType="#//EventPatternRelationalConstraint" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relConstraintRelations"
         unique="false" upperBound="-1" eType="#//RelationalConstraintRelation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnStatement" eType="#//ReturnStatement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnArg" eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnParams" upperBound="-1"
         eType="#//EventPatternNodeAttributeExpression" containment="true"/>
@@ -90,17 +96,7 @@
     <eLiterals name="SMALLER_OR_EQUAL" value="4" literal="&lt;="/>
     <eLiterals name="SMALLER" value="5" literal="&lt;"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="NegationOperators">
-    <eLiterals name="RELATIONAL_NEGATION" literal="NOT"/>
-    <eLiterals name="LOGICAL_NEGATION" value="1" literal="!"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="Brackets">
-    <eLiterals name="ROUNDL" literal="("/>
-    <eLiterals name="ROUNDR" value="1" literal=")"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeExpression">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="brackets" unique="false"
-        upperBound="-1" eType="#//Brackets"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
         eType="#//EventPatternNodeAttributeExpression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"

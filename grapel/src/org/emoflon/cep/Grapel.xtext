@@ -27,21 +27,27 @@ EventAttribute:
 ;
 
 EventPattern:
-	'event_pattern' name=ID ('spawns' returnType=[Event|ID])?'{'
+	'event_pattern' name=ID (returnType=ReturnType)?'{'
 	(nodes += EventPatternNode)*
 	(contextConstraints += EventPatternContextConstraint)*
-	((brackets+=Brackets)* relationalConstraints += EventPatternRelationalConstraint 
+	(relationalConstraints += EventPatternRelationalConstraint 
 		(relConstraintRelations += RelationalConstraintRelation 
-			(brackets+=Brackets)* relationalConstraints += EventPatternRelationalConstraint (brackets+=Brackets)* )*
+			relationalConstraints += EventPatternRelationalConstraint)*
 	)?
-	
-	('spawn' returnArg=[Event|ID]'('
+	(returnStatement = ReturnStatement)?
+	'}'
+;
+
+ReturnType:
+	'spawns' returnType=[Event|ID]
+;
+
+ReturnStatement:
+	'spawn' returnArg=[Event|ID]'('
 		(returnParams+=EventPatternNodeAttributeExpression 
 			(',' returnParams+=EventPatternNodeAttributeExpression)* 
 		)?
-	')')?
-	
-	'}'
+	')'
 ;
 
 EventPatternNode:
@@ -100,20 +106,20 @@ enum AttributeRelation:
   SMALLER='<'
 ;
 
-enum NegationOperators:
-	RELATIONAL_NEGATION='NOT' |
-	LOGICAL_NEGATION='!'
-;
+//enum NegationOperators:
+//	RELATIONAL_NEGATION='NOT' |
+//	LOGICAL_NEGATION='!'
+//;
 
-enum Brackets:
-	ROUNDL='(' |
-	ROUNDR=')'
-;
+//enum Brackets:
+//	ROUNDL='(' |
+//	ROUNDR=')'
+//;
 
 AttributeExpression:
-	(brackets+=Brackets)* operands+=EventPatternNodeAttributeExpression (brackets+=Brackets)* 
-		(operators+= ArithmeticOperator (brackets+=Brackets)* 
-			operands+=EventPatternNodeAttributeExpression (brackets+=Brackets)*
+	operands+=EventPatternNodeAttributeExpression 
+		(operators+= ArithmeticOperator
+			operands+=EventPatternNodeAttributeExpression
 		)*
 ;
 

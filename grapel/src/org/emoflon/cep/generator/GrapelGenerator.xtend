@@ -7,6 +7,12 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
+import org.eclipse.emf.ecore.xmi.XMIResource
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.common.util.URI
+import org.emoflon.cep.grapel.EditorGTFile
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 /**
  * Generates code from your model files on save.
@@ -16,10 +22,22 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class GrapelGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
+		val rs = new ResourceSetImpl;
+		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
+		val model = resource.contents.get(0) as EditorGTFile;
+		val output = rs.createResource(URI.createFileURI("C:/Users/sebas/git/GraPEL/GrapeL-Test/models/"+resource.URI.trimFileExtension.lastSegment+".xmi"))
+		EcoreUtil.resolveAll(model)
+		output.contents.add(model)
+		EcoreUtil.resolveAll(output)
+
+		val saveOptions = (output as XMIResource).getDefaultSaveOptions()
+		saveOptions.put(XMIResource.OPTION_ENCODING,"UTF-8");
+		saveOptions.put(XMIResource.OPTION_USE_XMI_TYPE, Boolean.TRUE);
+		saveOptions.put(XMIResource.OPTION_SAVE_TYPE_INFORMATION,Boolean.TRUE);
+		saveOptions.put(XMIResource.OPTION_SCHEMA_LOCATION_IMPLEMENTATION, Boolean.TRUE);
+		
+		(output as XMIResource).save(saveOptions)
+		System.out.println("Model saved to: "+output.URI.path)
 	}
 }

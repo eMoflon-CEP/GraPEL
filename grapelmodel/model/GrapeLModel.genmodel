@@ -10,20 +10,37 @@
   <foreignModel>GrapeLModel.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
   <genPackages prefix="GrapeLModel" disposableProviderFactory="true" ecorePackage="GrapeLModel.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//ContextRelation">
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ContextRelation/EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ContextRelation/UNEQUAL"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//RelationalConstraintOperator">
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintOperator/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintOperator/OR"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//RelationalExpressionOperator">
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalExpressionOperator/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalExpressionOperator/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalExpressionOperator/FOLLOWS"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//AttributeConstraintOperator">
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintOperator/GREATER"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintOperator/GREATER_OR_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintOperator/EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintOperator/UNEQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintOperator/SMALLER_OR_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintOperator/SMALLER"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//ArithmeticExpressionOperator">
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/PLUS"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/MINUS"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/MULTIPLY"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/DIVIDE"/>
+    </genEnums>
     <genClasses ecoreClass="GrapeLModel.ecore#//GrapeLModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/events"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/eventPatterns"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/ibexPatterns"/>
-    </genClasses>
-    <genClasses ecoreClass="GrapeLModel.ecore#//EventPattern">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPattern/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventPattern/nodes"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//EventPatternNode">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPatternNode/name"/>
-    </genClasses>
-    <genClasses ecoreClass="GrapeLModel.ecore#//EventNode">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventNode/type"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//Event">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//Event/name"/>
@@ -38,8 +55,89 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//ComplexAttribute">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ComplexAttribute/type"/>
     </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//EventPattern">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPattern/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventPattern/nodes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventPattern/contextConstraints"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventPattern/relationalConstraint"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//EventPatternNode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPatternNode/name"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//EventNode">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventNode/type"/>
+    </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//IBeXPatternNode">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//IBeXPatternNode/type"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//ContextConstraint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ContextConstraint/relation"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//NodeContextConstraint">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//NodeContextConstraint/lhs"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//NodeContextConstraint/rhs"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//RelationalConstraint"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//RelationalConstraintLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintLiteral/relationalExpression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintLiteral/attributeConstraint"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//RelationalConstraintProduction">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintProduction/lhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintProduction/rhs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalConstraintProduction/op"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalConstraintProduction/negated"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//RelationalExpression"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//RelationalExpressionLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalExpressionLiteral/eventPatternNode"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//RelationalExpressionProduction">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalExpressionProduction/lhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalExpressionProduction/rhs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalExpressionProduction/op"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalExpressionProduction/negated"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//AttributeConstraint"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//AttributeConstraintLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraintLiteral/returnType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraintLiteral/arithmeticExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//AttributeConstraintProduction">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraintProduction/lhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraintProduction/rhs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//AttributeConstraintProduction/op"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//AttributeConstraintProduction/negated"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//ArithmeticExpression"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticExpressionLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticExpressionLiteral/returnType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticExpressionLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticExpressionProduction">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticExpressionProduction/lhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticExpressionProduction/rhs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ArithmeticExpressionProduction/op"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//ArithmeticValue"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticValueLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ArithmeticValueLiteral/value"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueLiteral/type"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticValueExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueExpression/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueExpression/eventPatternNode"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueExpression/attributeExpression"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//AttributeExpression"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//AttributeExpressionLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionLiteral/attribute"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionLiteral/class"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//AttributeExpressionProduction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionProduction/attribute"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionProduction/class"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionProduction/child"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

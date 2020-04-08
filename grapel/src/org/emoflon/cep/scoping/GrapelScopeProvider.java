@@ -100,7 +100,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 
 	private boolean isEventPatternReturnType(EObject context, EReference reference) {
 		 return (context instanceof EventPattern && 
-				 (reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE || reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_ARG));
+				 (reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE || reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_STATEMENT));
 	}
 	
 	protected IScope getScopeForEventPatternReturnTypes(EventPattern context, EReference reference) {
@@ -222,8 +222,9 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	
 	protected boolean isEventPattern(EObject context, EReference reference) {
 	    return (context instanceof EventPattern && reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE
-	    		&& reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_ARG
-	    		&& reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_PARAMS);
+//	    		&& reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_ARG
+//	    		&& reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_PARAMS
+	    		);
 	}
 	
 	protected IScope getScopeForEventPatterns(EventPattern context, EReference reference) {

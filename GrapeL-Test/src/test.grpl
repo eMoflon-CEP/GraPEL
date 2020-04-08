@@ -11,23 +11,25 @@ pattern p1(string:EString) {
 }
 
 event_pattern testEvent spawns e1{
-	node : e1
-	node2 : p1
+	dot : e1
+	dot2 : p1
+	 
+	dot.airport->ID == dot2.airport->ID
+	dot.string != dot.airport
+	dot.airport->ID == dot2.airport->ID
 	
-	node.airport->ID == node2.airport->ID
-	node.string == node.airport
-	node.airport->ID == node2.airport->ID
-	
-	(node -> node && node2 {
-		node.airport->ID < node.airport->ID
-	} AND
-	node -> node2 {
-		node2.airport == node.airport->size
-	}) OR
-	(node2 -> node {
-		(((node.airport->ID + node.airport->ID)) < ((node2.airport->ID * node2.airport->ID) + node.airport->ID)) &&
-		((node2.airport->ID / node.airport->size) == node.airport->ID)
-	}) 
-	
-	spawn e1(node.airport->ID,node2.airport->size)
-}
+	dot -> dot2 { 
+		dot.airport->ID < dot2.airport->ID
+	} 
+	AND 
+	dot && dot2 {
+		dot2.airport == dot.airport->size
+	} 
+	AND
+	dot2 || dot {
+		dot.airport->ID + dot.airport->ID >= dot2.airport->ID * dot2.airport->ID + dot.airport->ID ||
+		dot2.airport->ID / dot.airport->size == dot.airport->ID
+	}   
+	 
+	spawn e1(dot.airport->ID,dot2.airport->size)
+}      

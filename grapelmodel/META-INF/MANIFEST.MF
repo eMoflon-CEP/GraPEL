@@ -1,7 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: grapelmodel
-Bundle-SymbolicName: grapelmodel; singleton:=true
+Bundle-Name: %pluginName
+Bundle-SymbolicName: grapelmodel;singleton:=true
+Automatic-Module-Name: grapelmodel
 Bundle-Version: 0.1.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: GrapeLModel,
+ GrapeLModel.impl,
+ GrapeLModel.util
 Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
+ org.emoflon.ibex.common;visibility:=reexport,
  org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
