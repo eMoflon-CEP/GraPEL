@@ -1,0 +1,9 @@
+src-gen/
+xtend-gen/
+*/*/*.xmi
+*.jar
+.launch/
+.settings/
+bin/
+/build.properties
+/plugin.xml

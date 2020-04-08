@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="GrapelBuilderExtension" name="GrapelBuilderExtension" schema="schema/GrapelBuilderExtension.exsd"/>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated Grapel -->

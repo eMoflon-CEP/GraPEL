@@ -31,5 +31,5 @@ event_pattern testEvent spawns e1{
 		dot2.airport->ID / dot.airport->size == dot.airport->ID
 	}   
 	 
-	spawn e1(dot.airport->ID,dot2.airport->size)
-}      
+	spawn e1(dot.airport->ID,dot2.airport->size)                      
+}       
