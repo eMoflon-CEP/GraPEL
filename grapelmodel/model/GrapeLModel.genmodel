@@ -37,10 +37,10 @@
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/MULTIPLY"/>
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/DIVIDE"/>
     </genEnums>
-    <genClasses ecoreClass="GrapeLModel.ecore#//GrapeLModel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/events"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/eventPatterns"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModel/ibexPatterns"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//GrapeLModelContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/events"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/eventPatterns"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/ibexPatterns"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//Event">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//Event/name"/>
