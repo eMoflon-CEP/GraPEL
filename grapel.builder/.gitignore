@@ -1,6 +1,5 @@
 src-gen/
 xtend-gen/
-*/*/*.xmi
 *.jar
 .launch/
 .settings/
