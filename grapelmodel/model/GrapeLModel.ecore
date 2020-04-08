@@ -144,6 +144,28 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArithmeticValue" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="ArithmeticValueLiteral" eSuperTypes="#//ArithmeticValue">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EDataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArithmeticValueExpression" eSuperTypes="#//ArithmeticValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EDataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventPatternNode" lowerBound="1"
+        eType="#//EventPatternNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeExpression" lowerBound="1"
+        eType="#//ArithmeticExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpression" abstract="true"
+      interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionLiteral" eSuperTypes="#//AttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionProduction" eSuperTypes="#//AttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" lowerBound="1" eType="#//AttributeExpression"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>
