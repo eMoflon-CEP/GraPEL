@@ -43,16 +43,21 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EventPatternNodeAttributeExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeExpression" eType="#//EventPatternNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPatternNodeExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternNode" eType="#//EventPatternNode"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPatternNodeAttributeExpression"
+      eSuperTypes="#//AttributeExpressionOperand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodeExpression" eType="#//EventPatternNodeExpression"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternContextConstraint">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//EventPatternNodeAttributeExpression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//EventPatternNodeExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relation" eType="#//ContextRelation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//EventPatternNodeAttributeExpression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//EventPatternNodeExpression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ContextRelation">
@@ -98,9 +103,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-        eType="#//EventPatternNodeAttributeExpression" containment="true"/>
+        eType="#//AttributeExpressionOperand" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"
         upperBound="-1" eType="#//ArithmeticOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionOperand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionLiteral" eSuperTypes="#//AttributeExpressionOperand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ArithmeticOperator">
     <eLiterals name="PLUS" literal="+"/>

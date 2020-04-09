@@ -69,9 +69,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternNode/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNode/type"/>
     </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//EventPatternNodeExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeExpression/patternNode"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeExpression/attribute"/>
+    </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternNodeAttributeExpression">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeAttributeExpression/attributeExpression"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeAttributeExpression/attribute"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeAttributeExpression/nodeExpression"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPatternNodeAttributeExpression/field"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternContextConstraint">
@@ -92,6 +95,10 @@
     <genClasses ecoreClass="Grapel.ecore#//AttributeExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeExpression/operands"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpression/operators"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//AttributeExpressionOperand"/>
+    <genClasses ecoreClass="Grapel.ecore#//AttributeExpressionLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpressionLiteral/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

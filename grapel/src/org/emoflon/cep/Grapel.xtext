@@ -54,14 +54,20 @@ EventPatternNode:
 	name=ID ':' type=[Event|ID] | type=[GT::EditorPattern|ID]
 ;
 
+EventPatternNodeExpression:
+	patternNode = [EventPatternNode|ID] ('.' attribute = [EventAttribute|ID] | attribute = [GT::EditorNode|ID])
+;
+
 EventPatternNodeAttributeExpression:
-	(attributeExpression = [EventPatternNode|ID] '.') (attribute = [EventAttribute|ID] ('->' field = [ecore::EAttribute|ID])?) | (attribute = [GT::EditorNode|ID] ('->' field = [ecore::EAttribute|ID])?)
+	nodeExpression = EventPatternNodeExpression ('->' field = [ecore::EAttribute|ID])?
 ;
 
 EventPatternContextConstraint:
-	lhs = EventPatternNodeAttributeExpression
+//	lhs = EventPatternNodeAttributeExpression
+	lhs = EventPatternNodeExpression
 	relation = ContextRelation
-	rhs = EventPatternNodeAttributeExpression
+//	rhs = EventPatternNodeAttributeExpression
+	rhs = EventPatternNodeExpression
 ;
 
 enum ContextRelation:
@@ -117,10 +123,56 @@ enum AttributeRelation:
 //;
 
 AttributeExpression:
-	operands+=EventPatternNodeAttributeExpression 
+	operands+=AttributeExpressionOperand 
 		(operators+= ArithmeticOperator
-			operands+=EventPatternNodeAttributeExpression
+			operands+=AttributeExpressionOperand
 		)*
+;
+
+AttributeExpressionOperand:
+	AttributeExpressionLiteral | EventPatternNodeAttributeExpression
+;
+
+AttributeExpressionLiteral:
+	value = NumberLiteral  | value = STRING | value = BooleanLiteral
+;
+
+NumberLiteral:
+	Double | UnsignedInteger | SignedInteger
+;
+
+Double returns ecore::EDouble:
+	('-')?INT '.' INT
+;
+
+UnsignedInteger returns ecore::EInt:
+	INT
+;
+
+SignedInteger returns ecore::EInt:
+	('-' INT)
+;
+
+@Override
+terminal INT returns ecore::EInt:
+	'0'..'9' ('0'..'9')*
+;
+
+@Override
+terminal STRING returns ecore::EString:
+	'"' ( '""' | !('"') )* '"'
+;
+
+BooleanLiteral:
+	TRUE | FALSE
+;
+
+terminal TRUE returns ecore::EBoolean:
+	'true'
+;
+
+terminal FALSE returns ecore::EBoolean:
+	'false'
 ;
 
 enum ArithmeticOperator:

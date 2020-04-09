@@ -14,16 +14,18 @@ event_pattern testEvent spawns e1{
 	dot : e1
 	dot2 : p1
 	 
-	dot.airport->ID == dot2.airport->ID
+	dot.airport == dot2.airport
 	dot.string != dot.airport
-	dot.airport->ID == dot2.airport->ID
+	dot.airport == dot2.airport  
+	dot.string != dot2.airport
 	
 	dot -> dot2 { 
-		dot.airport->ID < dot2.airport->ID
+		dot.airport->ID < dot2.airport->ID &&
+		dot2.airport->ID > dot.string
 	} 
 	AND 
 	dot && dot2 {
-		dot2.airport == dot.airport->size
+		dot2.airport->ID == dot.airport->size && 8 > dot.airport->ID
 	} 
 	AND
 	dot2 || dot {
@@ -31,5 +33,5 @@ event_pattern testEvent spawns e1{
 		dot2.airport->ID / dot.airport->size == dot.airport->ID
 	}   
 	 
-	spawn e1(dot.airport->ID,dot2.airport->size)                      
+	spawn e1(dot.airport->ID,dot2.airport->size)                       
 }       
