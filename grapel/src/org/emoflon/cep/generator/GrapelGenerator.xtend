@@ -34,30 +34,30 @@ import java.util.ArrayDeque
 class GrapelGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
-//		val rs = new ResourceSetImpl;
-//		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
-//		val model = resource.contents.get(0) as EditorGTFile;
-//		val output = rs.createResource(URI.createURI(resource.URI.trimFileExtension+".xmi"))
-//		output.contents.add(model)
-//		EcoreUtil.resolveAll(output)
-//		println(resource.URI)
-//
-//		val saveOptions = (output as XMIResource).getDefaultSaveOptions()
-//		saveOptions.put(XMIResource.OPTION_ENCODING,"UTF-8");
-//		saveOptions.put(XMIResource.OPTION_USE_XMI_TYPE, Boolean.TRUE);
-//		saveOptions.put(XMIResource.OPTION_SAVE_TYPE_INFORMATION,Boolean.TRUE);
-//		saveOptions.put(XMIResource.OPTION_SCHEMA_LOCATION_IMPLEMENTATION, Boolean.TRUE);
-//		(output as XMIResource).save(saveOptions)
-//		System.out.println("Xtext model saved to: "+output.URI.path)
-//		
-//		println("Running Builder extensions...")
-//		val workspace = getWorkspace()
-//		val project = getProjectOfResource(workspace, output)
-//		if(project === null)
-//			throw new FileNotFoundException("Could not find xtext model file: "+ output.URI.path)
-//			
-//		runBuilderExtensions([ext | ext.run(project, output)])
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
+		val rs = new ResourceSetImpl;
+		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
+		val model = resource.contents.get(0) as EditorGTFile;
+		val output = rs.createResource(URI.createURI(resource.URI.trimFileExtension+".xmi"))
+		output.contents.add(model)
+		EcoreUtil.resolveAll(output)
+		println(resource.URI)
+
+		val saveOptions = (output as XMIResource).getDefaultSaveOptions()
+		saveOptions.put(XMIResource.OPTION_ENCODING,"UTF-8");
+		saveOptions.put(XMIResource.OPTION_USE_XMI_TYPE, Boolean.TRUE);
+		saveOptions.put(XMIResource.OPTION_SAVE_TYPE_INFORMATION,Boolean.TRUE);
+		saveOptions.put(XMIResource.OPTION_SCHEMA_LOCATION_IMPLEMENTATION, Boolean.TRUE);
+		(output as XMIResource).save(saveOptions)
+		System.out.println("Xtext model saved to: "+output.URI.path)
+		
+		println("Running Builder extensions...")
+		val workspace = getWorkspace()
+		val project = getProjectOfResource(workspace, output)
+		if(project === null)
+			throw new FileNotFoundException("Could not find xtext model file: "+ output.URI.path)
+			
+		runBuilderExtensions([ext | ext.run(project, output)])
 		
 	}
 	

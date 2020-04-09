@@ -84,10 +84,11 @@
     <eLiterals name="FOLLOWS" value="2" literal="->"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-        eType="#//AttributeExpression" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relations" unique="false"
-        upperBound="-1" eType="#//AttributeRelation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//AttributeExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relation" eType="#//AttributeRelation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//AttributeExpression"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="AttributeConstraintRelation">
     <eLiterals name="AND" literal="&amp;&amp;"/>

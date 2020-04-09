@@ -95,7 +95,7 @@ enum RelationalOperator:
 ;
 
 AttributeConstraint:
-	 operands += AttributeExpression (relations += AttributeRelation operands += AttributeExpression)*
+	 lhs = AttributeExpression relation = AttributeRelation rhs = AttributeExpression
 ;
 
 enum AttributeConstraintRelation:

@@ -25,7 +25,10 @@ event_pattern testEvent spawns e1{
 	} 
 	AND 
 	dot && dot2 {
-		dot2.airport->ID == dot.airport->size && 8 > dot.airport->ID
+		dot2.airport->ID == dot.airport->size 
+		&& 8 > dot.airport->ID
+		|| dot.airport->ID < dot2.airport->size
+		
 	} 
 	AND
 	dot2 || dot {

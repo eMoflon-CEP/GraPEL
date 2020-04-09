@@ -89,8 +89,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternRelationalConstraint/relations"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//AttributeConstraint">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeConstraint/operands"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeConstraint/relations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeConstraint/lhs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeConstraint/relation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeConstraint/rhs"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//AttributeExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeExpression/operands"/>
