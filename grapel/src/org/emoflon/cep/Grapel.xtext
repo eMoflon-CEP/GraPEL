@@ -59,7 +59,7 @@ EventPatternNodeExpression:
 ;
 
 EventPatternNodeAttributeExpression:
-	nodeExpression = EventPatternNodeExpression ('->' field = [ecore::EAttribute|ID])?
+	nodeExpression = EventPatternNodeExpression ('.' field = [ecore::EAttribute|ID])?
 ;
 
 EventPatternContextConstraint:
@@ -134,23 +134,39 @@ AttributeExpressionOperand:
 ;
 
 AttributeExpressionLiteral:
-	value = NumberLiteral  | value = STRING | value = BooleanLiteral
+	NumberLiteral  | StringLiteral | BooleanLiteral
 ;
 
 NumberLiteral:
-	Double | UnsignedInteger | SignedInteger
+	DoubleLiteral | IntegerLiteral
+;
+
+DoubleLiteral:
+	value = Double
+;
+
+IntegerLiteral:
+	value = Integer
+;
+
+StringLiteral:
+	value = STRING
+;
+
+BooleanLiteral:
+	value = BOOLEAN
 ;
 
 Double returns ecore::EDouble:
 	('-')?INT '.' INT
 ;
 
-UnsignedInteger returns ecore::EInt:
-	INT
-;
+//UnsignedInteger returns ecore::EInt:
+//	INT
+//;
 
-SignedInteger returns ecore::EInt:
-	('-' INT)
+Integer returns ecore::EInt:
+	(('-')? INT)
 ;
 
 @Override
@@ -163,7 +179,7 @@ terminal STRING returns ecore::EString:
 	'"' ( '""' | !('"') )* '"'
 ;
 
-BooleanLiteral:
+BOOLEAN returns ecore::EBoolean:
 	TRUE | FALSE
 ;
 

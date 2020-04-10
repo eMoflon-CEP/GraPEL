@@ -104,7 +104,7 @@
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//AttributeConstraint"/>
     <genClasses ecoreClass="GrapeLModel.ecore#//AttributeConstraintLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraintLiteral/arithmeticExpression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraintLiteral/constraintExpression"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//AttributeConstraintProduction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraintProduction/lhs"/>
@@ -129,9 +129,18 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ArithmeticExpressionProduction/op"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//ArithmeticValue"/>
-    <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticValueLiteral">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ArithmeticValueLiteral/value"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueLiteral/type"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticValueLiteral"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//IntegerLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//IntegerLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//DoubleLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//DoubleLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//StringLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//StringLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//BooleanLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//BooleanLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticValueExpression">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueExpression/type"/>

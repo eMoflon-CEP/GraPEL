@@ -20,21 +20,21 @@ event_pattern testEvent spawns e1{
 	dot.string != dot2.airport
 	
 	dot -> dot2 { 
-		dot.airport->ID < dot2.airport->ID &&
-		dot2.airport->ID > dot.string
+		dot.airport.ID < dot2.airport.ID 
+		&& dot2.airport.ID > dot.string
 	} 
 	AND 
 	dot && dot2 {
-		dot2.airport->ID == dot.airport->size 
-		&& 8 > dot.airport->ID
-		|| dot.airport->ID < dot2.airport->size
-		
-	} 
+		dot2.airport.ID == dot.airport.size 
+		&& 8 > dot.airport.ID
+		|| dot.airport.ID < dot2.airport.size
+	 	 
+	}   
 	AND
 	dot2 || dot {
-		dot.airport->ID + dot.airport->ID >= dot2.airport->ID * dot2.airport->ID + dot.airport->ID ||
-		dot2.airport->ID / dot.airport->size == dot.airport->ID
-	}   
+		dot.airport.ID + dot.airport.ID >= dot2.airport.ID * dot2.airport.ID + dot.airport.ID ||
+		dot2.airport.ID / dot.airport.size == dot.airport.ID  
+	}    
 	 
-	spawn e1(dot.airport->ID,dot2.airport->size)                       
+	spawn e1(dot.airport.ID,dot2.airport.size)                        
 }       

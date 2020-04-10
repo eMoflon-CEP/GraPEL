@@ -21,6 +21,7 @@ import GrapeLModel.EventNode;
 import GrapeLModel.EventNodeExpression;
 import GrapeLModel.IBeXPatternNode;
 import GrapeLModel.IBeXPatternNodeExpression;
+import GrapeLModel.IntegerLiteral;
 import GrapeLModel.NodeContextConstraint;
 import GrapeLModel.RelationalConstraint;
 import GrapeLModel.RelationalConstraintLiteral;
@@ -31,16 +32,29 @@ import GrapeLModel.RelationalExpressionLiteral;
 import GrapeLModel.RelationalExpressionOperator;
 import GrapeLModel.RelationalExpressionProduction;
 import GrapeLModel.SimpleAttribute;
+import GrapeLModel.StringLiteral;
 import IBeXLanguage.IBeXContextPattern;
 import IBeXLanguage.IBeXNode;
 import IBeXLanguage.IBeXPatternSet;
+import GrapeLModel.ArithmeticExpression;
+import GrapeLModel.ArithmeticExpressionLiteral;
+import GrapeLModel.ArithmeticExpressionOperator;
+import GrapeLModel.ArithmeticExpressionProduction;
+import GrapeLModel.ArithmeticValue;
+import GrapeLModel.ArithmeticValueExpression;
+import GrapeLModel.ArithmeticValueLiteral;
 import GrapeLModel.AttributeConstraint;
+import GrapeLModel.AttributeConstraintExpression;
 import GrapeLModel.AttributeConstraintLiteral;
 import GrapeLModel.AttributeConstraintOperator;
 import GrapeLModel.AttributeConstraintProduction;
+import GrapeLModel.AttributeConstraintRelation;
+import GrapeLModel.AttributeExpressionLiteral;
+import GrapeLModel.BooleanLiteral;
 import GrapeLModel.ComplexAttribute;
 import GrapeLModel.ContextConstraint;
 import GrapeLModel.ContextRelation;
+import GrapeLModel.DoubleLiteral;
 import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.GrapeLModelFactory;
 
@@ -117,13 +131,17 @@ public class GrapelToGrapelModelTransformer {
 	private EventPattern transform(org.emoflon.cep.grapel.EventPattern gEventPattern) {
 		EventPattern pattern = factory.createEventPattern();
 		pattern.setName(gEventPattern.getName());
+		// transform pattern nodes
 		pattern.getNodes().addAll(gEventPattern.getNodes().parallelStream()
 				.map(eventPatternNode -> transform(eventPatternNode))
 				.collect(Collectors.toList()));
+		
+		// transform context constraints
 		pattern.getContextConstraints().addAll(gEventPattern.getContextConstraints().parallelStream()
 				.map(contextConstraints -> transform(contextConstraints))
 				.collect(Collectors.toList()));
 		
+		// transform relational constraints
 		List<org.emoflon.cep.grapel.EventPatternRelationalConstraint> gRelationalConstraints = new LinkedList<>();
 		gRelationalConstraints.addAll(gEventPattern.getRelationalConstraints());
 		
@@ -131,6 +149,9 @@ public class GrapelToGrapelModelTransformer {
 		gRelations.addAll(gEventPattern.getRelConstraintRelations());
 		
 		pattern.setRelationalConstraint(transform(gRelationalConstraints, gRelations));
+		
+		// TODO: transform return values!
+		
 		return pattern;
 	}
 	
@@ -138,10 +159,10 @@ public class GrapelToGrapelModelTransformer {
 		EventPatternNode patternNode = null;
 		if(gEventPatternNode.getType() instanceof org.emoflon.cep.grapel.Event) {
 			patternNode = factory.createEventNode();
-			((EventNode)patternNode).setType((Event) gEventPatternNode.getType());
+			((EventNode)patternNode).setType(gEvent2Events.get(gEventPatternNode.getType()));
 		}else {
 			patternNode = factory.createIBeXPatternNode();
-			((IBeXPatternNode)patternNode).setType((IBeXContextPattern) gEventPatternNode.getType());
+			((IBeXPatternNode)patternNode).setType(editor2IBeXPatterns.get(gEventPatternNode.getType()));
 		}
 		
 		gNode2Nodes.put(gEventPatternNode, patternNode);
@@ -266,10 +287,13 @@ public class GrapelToGrapelModelTransformer {
 		if(gConstraints.size()<2) {
 			org.emoflon.cep.grapel.AttributeConstraint gConstraint = gConstraints.remove(0);
 			AttributeConstraintLiteral acl = factory.createAttributeConstraintLiteral();
-			//TODO:
-			// Transform lhs expr.
-			// Transform rhs expr.
-			// Transform rel. op.
+			AttributeConstraintExpression ace = factory.createAttributeConstraintExpression();
+			acl.setConstraintExpression(ace);
+			
+			ace.setOp(transform(gConstraint.getRelation()));
+			ace.setLhs(transform(gConstraint.getLhs()));
+			ace.setLhs(transform(gConstraint.getRhs()));
+			
 			return acl;
 		}
 		
@@ -293,6 +317,116 @@ public class GrapelToGrapelModelTransformer {
 			return AttributeConstraintOperator.OR;
 		default:
 			return null;
+		}
+	}
+	
+	private AttributeConstraintRelation transform(org.emoflon.cep.grapel.AttributeRelation gRelation) {
+		switch(gRelation) {
+		case EQUAL:
+			return AttributeConstraintRelation.EQUAL;
+		case GREATER:
+			return AttributeConstraintRelation.GREATER;
+		case GREATER_OR_EQUAL:
+			return AttributeConstraintRelation.GREATER_OR_EQUAL;
+		case SMALLER:
+			return AttributeConstraintRelation.SMALLER;
+		case SMALLER_OR_EQUAL:
+			return AttributeConstraintRelation.SMALLER_OR_EQUAL;
+		case UNEQUAL:
+			return AttributeConstraintRelation.UNEQUAL;
+		default:
+			return null;
+		}
+	}
+	
+	private ArithmeticExpression transform(org.emoflon.cep.grapel.AttributeExpression gExpression) {
+		List<org.emoflon.cep.grapel.AttributeExpressionOperand> gOperands = new LinkedList<>();
+		gOperands.addAll(gExpression.getOperands());
+		List<org.emoflon.cep.grapel.ArithmeticOperator> gOperators = new LinkedList<>();
+		gOperators.addAll(gExpression.getOperators());
+		
+		return transformAE(gOperands, gOperators);
+		
+	}
+	
+	private ArithmeticExpression transformAE(List<org.emoflon.cep.grapel.AttributeExpressionOperand> gOperands, List<org.emoflon.cep.grapel.ArithmeticOperator> gOperators) {
+		if(gOperands.size()<2) {
+			org.emoflon.cep.grapel.AttributeExpressionOperand gOperand = gOperands.remove(0);
+			ArithmeticExpressionLiteral ael = factory.createArithmeticExpressionLiteral();
+			ael.setValue(transform(gOperand));
+			return ael;
+		}
+		
+		ArithmeticExpressionProduction aep = factory.createArithmeticExpressionProduction();
+		aep.setOp(transform(gOperators.remove(0)));
+		
+		List<org.emoflon.cep.grapel.AttributeExpressionOperand> leftConstraint = new LinkedList<>();
+		leftConstraint.add(gOperands.remove(0));
+		aep.setLhs(transformAE(leftConstraint, new LinkedList<>()));
+		
+		aep.setRhs(transformAE(gOperands, gOperators));
+		
+		return aep;
+	}
+	
+	private ArithmeticValue transform(org.emoflon.cep.grapel.AttributeExpressionOperand gOperand) {
+		if(gOperand instanceof org.emoflon.cep.grapel.AttributeExpressionLiteral) {
+			return transform((org.emoflon.cep.grapel.AttributeExpressionLiteral)gOperand);
+		}else {
+			return transform((org.emoflon.cep.grapel.EventPatternNodeAttributeExpression)gOperand);
+		}
+	}
+	
+	private ArithmeticValue transform(org.emoflon.cep.grapel.AttributeExpressionLiteral gLiteral) {
+		if(gLiteral instanceof org.emoflon.cep.grapel.NumberLiteral) {
+			if(gLiteral instanceof org.emoflon.cep.grapel.DoubleLiteral) {
+				DoubleLiteral literal = factory.createDoubleLiteral();
+				literal.setValue(((org.emoflon.cep.grapel.DoubleLiteral) gLiteral).getValue());
+				return literal;
+			}else {
+				IntegerLiteral literal = factory.createIntegerLiteral();
+				literal.setValue(((org.emoflon.cep.grapel.IntegerLiteral) gLiteral).getValue());
+				return literal;
+			}
+			
+		}else if(gLiteral instanceof org.emoflon.cep.grapel.StringLiteral) {
+			StringLiteral literal = factory.createStringLiteral();
+			literal.setValue(((org.emoflon.cep.grapel.StringLiteral) gLiteral).getValue());
+			return literal;
+		}else {
+			BooleanLiteral literal = factory.createBooleanLiteral();
+			literal.setValue(((org.emoflon.cep.grapel.BooleanLiteral)gLiteral).isValue());
+			return literal;
+		}
+	}
+	
+	private ArithmeticValue transform(org.emoflon.cep.grapel.EventPatternNodeAttributeExpression gExpression) {
+		ArithmeticValueExpression expression = factory.createArithmeticValueExpression();
+		expression.setNodeExpression(transform(gExpression.getNodeExpression()));
+		if(gExpression.getField() == null) {
+			return expression;
+		}
+		AttributeExpressionLiteral ael = factory.createAttributeExpressionLiteral();
+		expression.setAttributeExpression(ael);
+		ael.setAttribute(gExpression.getField());
+		ael.setClass(gExpression.getField().getEContainingClass());
+		
+		return expression;
+	}
+	
+	private ArithmeticExpressionOperator transform(org.emoflon.cep.grapel.ArithmeticOperator gOperator) {
+		switch(gOperator) {
+		case DIVIDE:
+			return ArithmeticExpressionOperator.DIVIDE;
+		case MINUS:
+			return ArithmeticExpressionOperator.MINUS;
+		case MULTIPLY:
+			return ArithmeticExpressionOperator.MULTIPLY;
+		case PLUS:
+			return ArithmeticExpressionOperator.PLUS;
+		default:
+			return null;
+		
 		}
 	}
 	

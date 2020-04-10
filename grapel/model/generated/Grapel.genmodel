@@ -98,8 +98,19 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpression/operators"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//AttributeExpressionOperand"/>
-    <genClasses ecoreClass="Grapel.ecore#//AttributeExpressionLiteral">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpressionLiteral/value"/>
+    <genClasses ecoreClass="Grapel.ecore#//AttributeExpressionLiteral"/>
+    <genClasses ecoreClass="Grapel.ecore#//NumberLiteral"/>
+    <genClasses ecoreClass="Grapel.ecore#//DoubleLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//DoubleLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//IntegerLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//IntegerLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//StringLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//StringLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//BooleanLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//BooleanLiteral/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
