@@ -8,7 +8,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventPatterns" upperBound="-1"
         eType="#//EventPattern" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ibexPatterns" upperBound="-1"
-        eType="ecore:EClass ../../org.emoflon.ibex.common/model/Common.ecore#//IBeXPatternSet"
+        eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXPatternSet"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event">
@@ -41,7 +41,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Event"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IBeXPatternNode" eSuperTypes="#//EventPatternNode">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass ../../org.emoflon.ibex.common/model/Common.ecore#//IBeXContextPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXContextPattern"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ContextConstraint" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relation" lowerBound="1"
@@ -201,6 +201,6 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IBeXPatternNodeExpression" eSuperTypes="#//EventPatternNodeExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="patternAttribute" lowerBound="1"
-        eType="ecore:EClass ../../org.emoflon.ibex.common/model/Common.ecore#//IBeXNode"/>
+        eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXNode"/>
   </eClassifiers>
 </ecore:EPackage>

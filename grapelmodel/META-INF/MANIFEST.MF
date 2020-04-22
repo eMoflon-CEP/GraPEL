@@ -12,6 +12,7 @@ Export-Package: GrapeLModel,
  GrapeLModel.impl,
  GrapeLModel.util
 Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
+ org.emoflon.ibex.patternmodel;visibility:=reexport,
  org.emoflon.ibex.common;visibility:=reexport,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
