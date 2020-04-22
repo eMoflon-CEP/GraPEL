@@ -1,5 +1,6 @@
 package org.emoflon.cep.builder;
 
+import java.nio.channels.GatheringByteChannel;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.emoflon.cep.grapel.EditorGTFile;
+import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.transformations.EditorToIBeXPatternTransformation;
 import GrapeLModel.Event;
@@ -62,10 +64,10 @@ public class GrapelToGrapelModelTransformer {
 	
 	private GrapeLModelFactory factory = GrapeLModelFactory.eINSTANCE;
 	private GrapeLModelContainer container;
-	private IBeXPatternSet ibexPatterns;
 	
 	private Map<EditorPattern, IBeXContextPattern> editor2IBeXPatterns = new HashMap<>();
-	private Map<org.emoflon.cep.grapel.Event, Event> gEvent2Events = Collections.synchronizedMap(new HashMap<>()); 
+	private Map<org.emoflon.cep.grapel.Event, Event> gEvent2Events = Collections.synchronizedMap(new HashMap<>());
+	private Map<Object, Object> gEventAttr2Attr = Collections.synchronizedMap(new HashMap<>());
 	private Map<org.emoflon.cep.grapel.EventPatternNode, EventPatternNode> gNode2Nodes = Collections.synchronizedMap(new HashMap<>()); 
 	
 	public GrapeLModelContainer transform(EditorGTFile grapelFile) {
@@ -73,11 +75,7 @@ public class GrapelToGrapelModelTransformer {
 		
 		//transform GT to IBeXPatterns
 		EditorToIBeXPatternTransformation ibexTransformer = new EditorToIBeXPatternTransformation();
-		ibexPatterns = ibexTransformer.transform(grapelFile);
-		container.getIbexPatterns().addAll(ibexPatterns.getContextPatterns().stream()
-				.filter(cPattern -> (cPattern instanceof IBeXContextPattern))
-				.map(cPattern -> (IBeXContextPattern)cPattern)
-				.collect(Collectors.toList()));
+		container.getIbexPatterns().add(ibexTransformer.transform(grapelFile));
 		mapEditor2IBeXPatterns(grapelFile);
 		
 		//transform events
@@ -95,9 +93,20 @@ public class GrapelToGrapelModelTransformer {
 	
 	private void mapEditor2IBeXPatterns(EditorGTFile grapelFile) {
 		for(EditorPattern ePattern : grapelFile.getPatterns()) {
-			for(IBeXContextPattern iPattern : container.getIbexPatterns()) {
-				if(iPattern.getName().equals(ePattern)) {
+			for(IBeXContextPattern iPattern : container.getIbexPatterns().stream()
+					.flatMap(ps -> ps.getContextPatterns().stream())
+					.filter(cp -> (cp instanceof IBeXContextPattern))
+					.map(cp -> (IBeXContextPattern)cp)
+					.collect(Collectors.toList())) {
+				if(iPattern.getName().equals(ePattern.getName())) {
 					editor2IBeXPatterns.put(ePattern, iPattern);
+					for(EditorNode eNode : ePattern.getNodes()) {
+						for(IBeXNode iNode : iPattern.getSignatureNodes()) {
+							if(eNode.getName().equals(iNode.getName())) {
+								gEventAttr2Attr.put(eNode, iNode);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -124,7 +133,7 @@ public class GrapelToGrapelModelTransformer {
 			((ComplexAttribute)attribute).setType((EClass) gAttribute.getType());
 		}
 		attribute.setName(gAttribute.getName());
-		
+		gEventAttr2Attr.put(gAttribute, attribute);
 		return attribute;
 	}
 	
@@ -164,7 +173,7 @@ public class GrapelToGrapelModelTransformer {
 			patternNode = factory.createIBeXPatternNode();
 			((IBeXPatternNode)patternNode).setType(editor2IBeXPatterns.get(gEventPatternNode.getType()));
 		}
-		
+		patternNode.setName(gEventPatternNode.getName());
 		gNode2Nodes.put(gEventPatternNode, patternNode);
 		return patternNode;
 	}
@@ -188,16 +197,17 @@ public class GrapelToGrapelModelTransformer {
 		return null;
 	}
 	
+	//TODO: CCE Bug
 	private EventPatternNodeExpression transform(org.emoflon.cep.grapel.EventPatternNodeExpression gNodeExpression) {
 		if(gNodeExpression.getPatternNode().getType() instanceof org.emoflon.cep.grapel.Event) {
 			EventNodeExpression nodeExpression = factory.createEventNodeExpression();
 			nodeExpression.setEventPatternNode(gNode2Nodes.get(gNodeExpression.getPatternNode()));
-			nodeExpression.setEventAttribute((EventAttribute) gNodeExpression.getAttribute());
+			nodeExpression.setEventAttribute((EventAttribute)gEventAttr2Attr.get(gNodeExpression.getAttribute()));
 			return nodeExpression;
 		}else {
 			IBeXPatternNodeExpression nodeExpression = factory.createIBeXPatternNodeExpression();
 			nodeExpression.setEventPatternNode(gNode2Nodes.get(gNodeExpression.getPatternNode()));
-			nodeExpression.setPatternAttribute((IBeXNode) gNodeExpression.getAttribute());
+			nodeExpression.setPatternAttribute((IBeXNode)gEventAttr2Attr.get(gNodeExpression.getAttribute()));
 			return nodeExpression;
 		}
 	}
@@ -292,7 +302,7 @@ public class GrapelToGrapelModelTransformer {
 			
 			ace.setOp(transform(gConstraint.getRelation()));
 			ace.setLhs(transform(gConstraint.getLhs()));
-			ace.setLhs(transform(gConstraint.getRhs()));
+			ace.setRhs(transform(gConstraint.getRhs()));
 			
 			return acl;
 		}

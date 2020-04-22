@@ -14,6 +14,7 @@ import org.emoflon.cep.generator.GrapelBuilderExtension;
 import org.emoflon.cep.grapel.EditorGTFile;
 
 import GrapeLModel.GrapeLModelContainer;
+import IBeXLanguage.IBeXLanguagePackage;
 
 public class GrapelBuilder implements GrapelBuilderExtension {
 
@@ -25,6 +26,7 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		
 		EditorGTFile grapelFile = (EditorGTFile) resource.getContents().get(0);
 		GrapelToGrapelModelTransformer transformer =  new GrapelToGrapelModelTransformer();
+		IBeXLanguagePackage.eINSTANCE.getClass();
 		
 		GrapeLModelContainer container = transformer.transform(grapelFile);
 		

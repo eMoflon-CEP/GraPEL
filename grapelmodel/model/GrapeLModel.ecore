@@ -8,7 +8,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventPatterns" upperBound="-1"
         eType="#//EventPattern" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ibexPatterns" upperBound="-1"
-        eType="ecore:EClass ../../org.emoflon.ibex.common/model/Common.ecore#//IBeXContextPattern"
+        eType="ecore:EClass ../../org.emoflon.ibex.common/model/Common.ecore#//IBeXPatternSet"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event">
@@ -61,7 +61,7 @@
       interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraintLiteral" eSuperTypes="#//RelationalConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="relationalExpression" lowerBound="1"
-        eType="#//RelationalExpression"/>
+        eType="#//RelationalExpression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConstraint" eType="#//AttributeConstraint"
         containment="true"/>
   </eClassifiers>

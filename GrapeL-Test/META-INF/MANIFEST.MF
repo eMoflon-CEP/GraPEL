@@ -3,3 +3,4 @@ Bundle-ManifestVersion: 2
 Bundle-Name: GrapeL-Test
 Bundle-SymbolicName: GrapeL-Test
 Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.emoflon.ibex.common;bundle-version="1.0.0"
