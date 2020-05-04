@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+<provider id="org.eclipse.egit.core.GitProvider">
+<project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapel"/>
+<project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapel.builder"/>
+<project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapel.ide"/>
+<project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapel.ui"/>
+<project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapelmodel"/>
+</provider>
+<workingSets editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1584091365243_17" label="grapel" name="grapel">
+<item elementID="=grapel" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=grapelmodel" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=grapel.engine" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=grapel.ide" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=grapel.ui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSets>
+</psf>
