@@ -5,7 +5,7 @@
     editorDirectory="/grapelmodel.editor/src-gen" modelPluginID="grapelmodel" modelName="GrapeLModel"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" codeFormatting="true"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    usedGenPackages="platform:/resource/org.emoflon.ibex.patternmodel/model/IBeXPatternModel.genmodel#//IBeXPatternModel"
+    usedGenPackages="../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.genmodel#//IBeXPatternModel ../../org.emoflon.ibex.gt.sgtpatternmodel/model/SGTPatternModel.genmodel#//SGTPatternModel"
     operationReflection="true" importOrganizing="true">
   <foreignModel>GrapeLModel.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>

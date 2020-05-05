@@ -6,16 +6,16 @@ event e1 {
 	EString string;    
 }
 
-pattern p1(string:EString) { 
-  airport : Airport 
-} 
-  
+pattern p1(string:EString) {  
+  airport : Airport        
+}       
+   
 event_pattern testEvent spawns e1{
 	dot : e1 
-	dot2 : p1      
+	dot2 : p1        
 	 
 	dot.airport == dot2.airport
-	dot.string != dot.airport
+	dot.string != dot.airport 
 	dot.airport == dot2.airport    
 	dot.string != dot2.airport
 	

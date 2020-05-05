@@ -14,4 +14,8 @@ Require-Bundle: grapel;bundle-version="1.0.0",
  org.emoflon.ibex.gt.editor;bundle-version="1.1.0",
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.xmi,
- org.emoflon.ibex.patternmodel
+ org.emoflon.ibex.patternmodel,
+ org.moflon.core.build,
+ org.emoflon.core.dependencies,
+ org.emoflon.ibex.gt.editor.ui,
+ org.moflon.core.plugins

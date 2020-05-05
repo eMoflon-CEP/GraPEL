@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GTLanguage:GTRuleSet xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:GTLanguage="platform:/resource/org.emoflon.ibex.gt/model/Gt.ecore" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xsi:schemaLocation="platform:/resource/org.emoflon.ibex.gt/model/Gt.ecore java://GTLanguage.GTLanguagePackage http://www.eclipse.org/emf/2002/Ecore java://org.eclipse.emf.ecore.EcorePackage">
+  <rules xmi:type="GTLanguage:GTRule" name="p1" documentation="" ruleNodes="//@rules.0/@nodes.0">
+    <nodes xmi:type="GTLanguage:GTNode" name="airport">
+      <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Airport"/>
+    </nodes>
+    <parameters xmi:type="GTLanguage:GTParameter" name="string">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </parameters>
+  </rules>
+</GTLanguage:GTRuleSet>

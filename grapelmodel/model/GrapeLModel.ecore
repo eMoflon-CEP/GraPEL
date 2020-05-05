@@ -7,8 +7,7 @@
         eType="#//Event" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventPatterns" upperBound="-1"
         eType="#//EventPattern" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ibexPatterns" upperBound="-1"
-        eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXPatternSet"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ibexPatterns" eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXPatternSet"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event">
