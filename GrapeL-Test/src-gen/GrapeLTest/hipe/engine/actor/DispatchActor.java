@@ -73,6 +73,12 @@ public class DispatchActor extends AbstractActor {
 			util.newMessage();
 			name2actor.get("Airport_object").tell(new ObjectAdded<Flights.Airport>(_airport), getSelf());
 		});
+		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getPlane(), obj -> {
+			Flights.Plane _plane = (Flights.Plane) obj;
+		});
+		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getGate(), obj -> {
+			Flights.Gate _gate = (Flights.Gate) obj;
+		});
 		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getBooking(), obj -> {
 			Flights.Booking _booking = (Flights.Booking) obj;
 		});
@@ -81,12 +87,6 @@ public class DispatchActor extends AbstractActor {
 		});
 		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getPerson(), obj -> {
 			Flights.Person _person = (Flights.Person) obj;
-		});
-		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getPlane(), obj -> {
-			Flights.Plane _plane = (Flights.Plane) obj;
-		});
-		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getGate(), obj -> {
-			Flights.Gate _gate = (Flights.Gate) obj;
 		});
 	}
 	

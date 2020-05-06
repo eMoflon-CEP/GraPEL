@@ -91,6 +91,14 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		saveResource(ibexPatterns, apiPackage.getFullPath()+"/ibex-patterns.xmi");
 		saveResource(gtRules, apiPackage.getFullPath()+"/gt-rules.xmi");
 		
+		//cleanup
+		if(container.eResource() != null)
+			container.eResource().unload();
+		if(ibexPatterns.eResource() != null)
+			ibexPatterns.eResource().unload();
+		if(gtRules.eResource() != null)
+			gtRules.eResource().unload();
+		
 		// build HiPE engine code
 		if(ibexPatterns != null && !ibexPatterns.getContextPatterns().isEmpty()) {
 			IFolder packagePath = project.getFolder(project.getName().replace(".", "/"));
@@ -100,13 +108,7 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		//TODO: Build Grapel API :)
 
 		
-		//cleanup
-		if(container.eResource() != null)
-			container.eResource().unload();
-		if(ibexPatterns.eResource() != null)
-			ibexPatterns.eResource().unload();
-		if(gtRules.eResource() != null)
-			gtRules.eResource().unload();
+		
 		
 		try {
 			project.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());

@@ -6,11 +6,11 @@ event e1 {
 	EString string;    
 }
 
-pattern p1(string:EString) {  
-  airport : Airport        
+pattern p1(string:EString) {       
+  airport : Airport         
 }       
    
-event_pattern testEvent spawns e1{
+event_pattern testEvent spawns e1{        
 	dot : e1 
 	dot2 : p1        
 	 
