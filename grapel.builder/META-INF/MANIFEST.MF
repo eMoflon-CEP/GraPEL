@@ -7,7 +7,7 @@ Automatic-Module-Name: grapel.builder
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: grapel;bundle-version="1.0.0",
  grapelmodel;bundle-version="0.1.0",
- ApamaDependencies;bundle-version="1.0.0",
+ ApamaDependencies;bundle-version="1.0.0";visibility:=reexport,
  org.eclipse.core.resources,
  org.eclipse.core.runtime;bundle-version="3.17.0",
  org.emoflon.ibex.gt,
@@ -20,3 +20,6 @@ Require-Bundle: grapel;bundle-version="1.0.0",
  org.emoflon.core.dependencies,
  org.emoflon.ibex.gt.editor.ui,
  org.moflon.core.plugins
+Export-Package: org.emoflon.cep.builder,
+ org.emoflon.cep.engine,
+ org.emoflon.cep.util

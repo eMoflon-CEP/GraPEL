@@ -62,28 +62,28 @@ public class DispatchActor extends AbstractActor {
 	}
 	
 	private void initializeAdd() {
-		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlight(), obj -> {
-			Flights.Flight _flight = (Flights.Flight) obj;
-		});
-		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getTravel(), obj -> {
-			Flights.Travel _travel = (Flights.Travel) obj;
-		});
 		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getAirport(), obj -> {
 			Flights.Airport _airport = (Flights.Airport) obj;
 			util.newMessage();
 			name2actor.get("Airport_object").tell(new ObjectAdded<Flights.Airport>(_airport), getSelf());
 		});
-		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getPlane(), obj -> {
-			Flights.Plane _plane = (Flights.Plane) obj;
-		});
-		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getGate(), obj -> {
-			Flights.Gate _gate = (Flights.Gate) obj;
+		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getRoute(), obj -> {
+			Flights.Route _route = (Flights.Route) obj;
 		});
 		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getBooking(), obj -> {
 			Flights.Booking _booking = (Flights.Booking) obj;
 		});
-		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getRoute(), obj -> {
-			Flights.Route _route = (Flights.Route) obj;
+		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getPlane(), obj -> {
+			Flights.Plane _plane = (Flights.Plane) obj;
+		});
+		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getTravel(), obj -> {
+			Flights.Travel _travel = (Flights.Travel) obj;
+		});
+		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getGate(), obj -> {
+			Flights.Gate _gate = (Flights.Gate) obj;
+		});
+		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlight(), obj -> {
+			Flights.Flight _flight = (Flights.Flight) obj;
 		});
 		type2addConsumer.put(Flights.FlightsPackage.eINSTANCE.getPerson(), obj -> {
 			Flights.Person _person = (Flights.Person) obj;

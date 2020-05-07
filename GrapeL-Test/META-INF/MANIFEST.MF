@@ -2,7 +2,8 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: GrapeLTest
 Bundle-Name: GrapeL-Test
 Bundle-Version: 1.0.0.qualifier
-Require-Bundle: org.emoflon.ibex.common;bundle-version="1.0.0",
+Require-Bundle: grapel.engine;bundle-version="1.0.0",
+ org.emoflon.ibex.common;bundle-version="1.0.0",
  org.emoflon.ibex.gt,
  grapelmodel,
  org.emoflon.ibex.gt.democles,
