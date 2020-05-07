@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <psf version="2.0">
 <provider id="org.eclipse.egit.core.GitProvider">
+<project reference="1.0,https://github.com/arg0n1s/ApamaDependencies.git,master,."/>
 <project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapel"/>
 <project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapel.builder"/>
 <project reference="1.0,https://github.com/eMoflon-CEP/GraPEL,master,grapel.ide"/>
@@ -13,5 +14,6 @@
 <item elementID="=grapel.engine" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=grapel.ide" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=grapel.ui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=ApamaDependencies" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSets>
 </psf>
