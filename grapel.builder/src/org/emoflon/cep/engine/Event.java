@@ -32,4 +32,5 @@ public abstract class Event {
 		fields.forEach((name, obj) -> apamaEvent.setField(name, obj));
 		return apamaEvent;
 	}
+	
 }

@@ -18,4 +18,9 @@ public class EventP1Match extends EMoflonEvent<P1Match, P1Pattern> {
 		return match.getAirport();
 	}
 
+	@Override
+	public void assignFields(P1Match match) {
+		fields.put("Airport", match.getAirport());
+	}
+
 }

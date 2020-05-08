@@ -1,6 +1,10 @@
 package experimental;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.emoflon.cep.engine.ApamaCorrelator;
+import org.emoflon.cep.engine.EventHandler;
 import org.emoflon.cep.engine.GrapeEngineAPI;
 
 import com.apama.EngineException;
@@ -40,6 +44,17 @@ public abstract class GrapeLTestGrapeEngineAPI extends GrapeEngineAPI{
 			e.printStackTrace();
 		}
 		return engineClient;
+	}
+	
+	@Override
+	public List<String> getMonitorScriptFiles() {
+		return Arrays.asList("","");
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<EventHandler> getEventHandler() {
+		return Arrays.asList(new E1EventHandler(grapeEngine), new P1MatchEventHandler(grapeEngine));
 	}
 
 }

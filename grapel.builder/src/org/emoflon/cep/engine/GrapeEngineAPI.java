@@ -1,5 +1,7 @@
 package org.emoflon.cep.engine;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.emoflon.ibex.gt.api.GraphTransformationAPI;
 import org.emoflon.ibex.gt.api.GraphTransformationApp;
@@ -28,9 +30,20 @@ public abstract class GrapeEngineAPI {
 		ApamaCorrelator correlator = configureApamaCorrelator();
 		grapeEngine = new GrapeEngine(eMoflonAPI, correlator);
 		grapeEngine.init(this::configureEngineClient);
+		for(String mon : getMonitorScriptFiles()) {
+			grapeEngine.injectMonitorScript(mon);
+		}
+		for(@SuppressWarnings("rawtypes") EventHandler handler : getEventHandler()) {
+			grapeEngine.addEventHandler(handler);
+		}
 	}
 	
 	public abstract ApamaCorrelator configureApamaCorrelator() throws Exception;
 	
 	public abstract EngineClientInterface configureEngineClient();
+	
+	public abstract List<String> getMonitorScriptFiles();
+	
+	@SuppressWarnings("rawtypes")
+	public abstract List<EventHandler> getEventHandler();
 }

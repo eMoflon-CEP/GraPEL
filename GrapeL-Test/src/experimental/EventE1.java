@@ -12,6 +12,10 @@ public class EventE1 extends Event{
 		super(type);
 	}
 	
+	public EventE1(final com.apama.event.Event apamaEvent) {
+		super(apamaEvent);
+	}
+	
 	public Airport getAirport() {
 		return (Airport) fields.get("Airport");
 	}

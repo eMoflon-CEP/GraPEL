@@ -12,6 +12,8 @@ public abstract class EMoflonEvent <M extends GraphTransformationMatch<M, P>, P 
 
 	public EMoflonEvent(final EventType type, final P pattern, final M match) {
 		super(type);
+		assignFields(match);
 	}
 
+	public abstract void assignFields(final M match);
 }
