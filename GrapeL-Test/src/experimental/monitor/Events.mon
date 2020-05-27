@@ -1,0 +1,9 @@
+event EventE1 {
+	integer airport;
+	string string;
+}
+
+event EventP1Match {
+	boolean vanished;
+	integer airport;
+}

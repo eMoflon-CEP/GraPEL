@@ -37,7 +37,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnArg" eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnParams" upperBound="-1"
-        eType="#//EventPatternNodeAttributeExpression" containment="true"/>
+        eType="#//AttributeExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNode">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

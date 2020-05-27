@@ -227,8 +227,10 @@ public class GrapelToGrapelModelTransformer {
 			List<org.emoflon.cep.grapel.AttributeConstraintRelation> gSubRelations = new LinkedList<>();
 			gSubRelations.addAll(gConstraint.getRelations());
 			
-			rcl.setAttributeConstraint(transformAC(gConstraints, gSubRelations));
+			if(gConstraints.isEmpty())
+				return rcl;
 			
+			rcl.setAttributeConstraint(transformAC(gConstraints, gSubRelations));
 			return rcl;
 		}
 		

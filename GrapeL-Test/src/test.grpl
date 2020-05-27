@@ -10,31 +10,39 @@ pattern p1(string:EString) {
   airport : Airport         
 }       
    
-event_pattern testEvent spawns e1{        
-	dot : e1 
-	dot2 : p1        
-	 
-	dot.airport == dot2.airport
-	dot.string != dot.airport 
-	dot.airport == dot2.airport    
-	dot.string != dot2.airport
+//event_pattern testEvent spawns e1{        
+//	dot : e1 
+//	dot2 : p1        
+//	 
+//	dot.airport == dot2.airport
+//	dot.string != dot.airport 
+//	dot.airport == dot2.airport    
+//	dot.string != dot2.airport
+//	
+//	dot -> dot2 {      
+//		dot.airport.ID < dot2.airport.ID 
+//		&& dot2.airport.ID > dot.string
+//	} 
+//	AND 
+//	dot && dot2 {
+//		dot2.airport.ID == dot.airport.size 
+//		&& 8 > dot.airport.ID
+//		|| dot.airport.ID < dot2.airport.size 
+//	 	 
+//	}     
+//	AND
+//	dot2 || dot {
+//		dot.airport.ID + dot.airport.ID >= dot2.airport.ID * dot2.airport.ID + dot.airport.ID ||
+//		dot2.airport.ID / dot.airport.size == dot.airport.ID  
+//	}    
+//	     
+//	spawn e1(dot.airport.ID,dot2.airport.size)                        
+//}  
+
+event_pattern testEvent spawns e1 {
+	event1 : p1
 	
-	dot -> dot2 {      
-		dot.airport.ID < dot2.airport.ID 
-		&& dot2.airport.ID > dot.string
-	} 
-	AND 
-	dot && dot2 {
-		dot2.airport.ID == dot.airport.size 
-		&& 8 > dot.airport.ID
-		|| dot.airport.ID < dot2.airport.size 
-	 	 
-	}     
-	AND
-	dot2 || dot {
-		dot.airport.ID + dot.airport.ID >= dot2.airport.ID * dot2.airport.ID + dot.airport.ID ||
-		dot2.airport.ID / dot.airport.size == dot.airport.ID  
-	}    
-	     
-	spawn e1(dot.airport.ID,dot2.airport.size)                        
-}       
+	event1 {}
+	
+	spawn e1(event1.airport, "found!")        
+}     

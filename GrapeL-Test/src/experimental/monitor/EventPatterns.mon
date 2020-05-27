@@ -1,0 +1,7 @@
+monitor testEvent {
+	const string eventChannel := "channel1";
+	
+	action onload() {
+		monitor.subscribe(eventChannel);
+		
+		
