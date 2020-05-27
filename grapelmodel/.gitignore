@@ -4,6 +4,3 @@ xtend-gen/
 .launch/
 .settings/
 bin/
-/build.properties
-/plugin.properties
-/plugin.xml
