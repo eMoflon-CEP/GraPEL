@@ -6,7 +6,7 @@ event e1 {
 	EString string;    
 }
 
-pattern p1(string:EString) {       
+pattern p1() {       
   airport : Airport         
 }       
    

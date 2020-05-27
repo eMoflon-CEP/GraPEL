@@ -6,13 +6,13 @@ import org.emoflon.ibex.common.operational.IMatch;
 import org.emoflon.ibex.gt.api.GraphTransformationMatch;
 
 /**
- * A match for the pattern <code>p1(string)</code>.
+ * A match for the pattern <code>p1()</code>.
  */
 public class P1Match extends GraphTransformationMatch<P1Match, P1Pattern> {
 	private Airport varAirport;
 
 	/**
-	 * Creates a new match for the pattern <code>p1(string)</code>.
+	 * Creates a new match for the pattern <code>p1()</code>.
 	 * 
 	 * @param pattern
 	 *            the pattern

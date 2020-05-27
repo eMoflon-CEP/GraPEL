@@ -27,7 +27,7 @@ public abstract class EventHandler <E extends Event> implements IEventListener{
 	}
 	
 	public void init() throws EngineException {
-		apamaEventType = createEventType();
+		apamaEventType = getEventType();
 		engineClient.injectMonitorScriptFromFile(loadEPLDescription());
 		eventConsumer = engineClient.addConsumer(getHandlerName(), getChannelNames());
 		eventConsumer.addEventListener(this);
@@ -39,11 +39,11 @@ public abstract class EventHandler <E extends Event> implements IEventListener{
 	
 	public abstract String loadEPLDescription();
 	
-	public abstract EventType createEventType();
+	public abstract EventType getEventType();
 	
 	public void sendEvent(E event) {
 		try {
-			engineClient.sendEvents(event.toApamaEvent());
+			engineClient.sendEvents(event.toApamaEvent(registry));
 		} catch (EngineException e) {
 			e.printStackTrace();
 		}

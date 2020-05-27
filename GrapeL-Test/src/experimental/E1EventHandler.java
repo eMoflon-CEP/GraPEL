@@ -13,10 +13,9 @@ import experimental.EventE1;
 
 public class E1EventHandler extends EventHandler<EventE1>{
 	
-	final public static String EVENT_NAME = "e1";
 	final public static String HANDLER_NAME = "E1EventHandler";
 	final public static String[] CHANNELS = {"channel1"};
-	final public static String EPL_PATH = "some path..";
+	final public static String EPL_PATH = "src/experimental/event/EventE1.mon";
 
 	public E1EventHandler(GrapeEngine engine) {
 		super(engine);
@@ -45,11 +44,8 @@ public class E1EventHandler extends EventHandler<EventE1>{
 	}
 
 	@Override
-	public EventType createEventType() {
-		EventType type = new EventType(EVENT_NAME);
-		type.addField("Airport", FieldTypes.INTEGER);
-		type.addField("string", FieldTypes.STRING);
-		return type;
+	public EventType getEventType() {
+		return EventE1.EVENT_TYPE;
 	}
 
 	@Override

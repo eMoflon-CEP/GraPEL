@@ -1,58 +1,68 @@
 package experimental;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 
 import org.emoflon.cep.engine.EMoflonEventHandler;
 import org.emoflon.cep.engine.GrapeEngine;
+import org.emoflon.cep.util.IOUtils;
 import org.emoflon.ibex.gt.api.GraphTransformationMatch;
 
 import com.apama.event.Event;
 import com.apama.event.parser.EventType;
+import com.apama.event.parser.FieldTypes;
 
+import GrapeLTest.api.GrapeLTestApp;
+import GrapeLTest.api.GrapeLTestAPI;
 import GrapeLTest.api.matches.P1Match;
 import GrapeLTest.api.rules.P1Pattern;
 
 public class P1MatchEventHandler extends EMoflonEventHandler<EventP1Match, P1Match, P1Pattern>{
+	
+	
+	final public static String HANDLER_NAME = "P1MatchEventHandler";
+	final public static String[] CHANNELS = {"channel1"};
+	final public static String EPL_PATH = "src/experimental/event/EventP1Match.mon";
 
 	public P1MatchEventHandler(GrapeEngine engine) {
 		super(engine);
-		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public P1Pattern getPattern() {
+		return ((GrapeLTestAPI)engine.getEMoflonAPI()).p1();
+	}
+	
+	@Override
+	public void subscribeToPattern(Consumer<P1Match> appearing, Consumer<P1Match> disappearing) {
+		pattern.subscribeAppearing(appearing);
+		pattern.subscribeDisappearing(disappearing);
 	}
 
 	@Override
-	public void subscribeToPattern(Consumer<GraphTransformationMatch<P1Match, P1Pattern>> matchConsumer) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public EventP1Match matchToEvent(GraphTransformationMatch<P1Match, P1Pattern> match) {
-		// TODO Auto-generated method stub
-		return null;
+	public EventP1Match matchToEvent(P1Match match) {
+		return new EventP1Match(pattern, match);
 	}
 
 	@Override
 	public String getHandlerName() {
-		// TODO Auto-generated method stub
-		return null;
+		return HANDLER_NAME;
 	}
 
 	@Override
 	public String[] getChannelNames() {
-		// TODO Auto-generated method stub
-		return null;
+		return CHANNELS;
 	}
 
 	@Override
 	public String loadEPLDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EventType createEventType() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return IOUtils.loadTextFile(EPL_PATH);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -60,5 +70,11 @@ public class P1MatchEventHandler extends EMoflonEventHandler<EventP1Match, P1Mat
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public EventType getEventType() {
+		return EventP1Match.EVENT_TYPE;
+	}
+
 
 }

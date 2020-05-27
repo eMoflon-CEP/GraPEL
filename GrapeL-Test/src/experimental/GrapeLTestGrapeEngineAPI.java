@@ -48,7 +48,7 @@ public abstract class GrapeLTestGrapeEngineAPI extends GrapeEngineAPI{
 	
 	@Override
 	public List<String> getMonitorScriptFiles() {
-		return Arrays.asList("","");
+		return Arrays.asList("src/experimental/monitor/PatternTestEvent.mon");
 	}
 	
 	@SuppressWarnings("rawtypes")

@@ -1,0 +1,4 @@
+event p1Match {
+	boolean vanished;
+	integer airport;
+}

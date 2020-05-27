@@ -79,6 +79,7 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 	
 	private Map<String, Supplier<? extends GraphTransformationPattern>> initiatePatternMap(){
 		Map<String, Supplier<? extends GraphTransformationPattern>> map = new HashMap<String, Supplier<? extends GraphTransformationPattern>>();
+		map.put("P1Pattern", () -> p1());
 		return map;
 	}
 	
@@ -143,13 +144,13 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 					
 
 	/**
-	 * Creates a new instance of the pattern <code>p1(string)</code> which does the following:
+	 * Creates a new instance of the pattern <code>p1()</code> which does the following:
 	 * If this pattern is not self-explaining, you really should add some comment in the specification.
 	 *
 	 * @return the new instance of the pattern
 	 */
-	public P1Pattern p1(final java.lang.String stringValue) {
-		return new P1Pattern(this, interpreter, stringValue);
+	public P1Pattern p1() {
+		return new P1Pattern(this, interpreter);
 	}
 /**
  * returns all the patterns and rules of the model that do not need an input parameter

@@ -4,4 +4,9 @@ monitor testEvent {
 	action onload() {
 		monitor.subscribe(eventChannel);
 		
+		on all EventP1Match as p1 {
+			send EventE1(p1.airport, "found!") to eventChannel;
+		}
 		
+	}
+}

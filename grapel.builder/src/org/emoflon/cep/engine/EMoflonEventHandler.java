@@ -8,6 +8,8 @@ import org.emoflon.ibex.gt.api.GraphTransformationPattern;
 import com.apama.EngineException;
 
 public abstract class EMoflonEventHandler <E extends EMoflonEvent<M,P>, M extends GraphTransformationMatch<M, P>, P extends GraphTransformationPattern<M, P>> extends EventHandler<E> {
+	
+	protected P pattern;
 
 	public EMoflonEventHandler(GrapeEngine engine) {
 		super(engine);
@@ -16,14 +18,23 @@ public abstract class EMoflonEventHandler <E extends EMoflonEvent<M,P>, M extend
 	@Override
 	public void init() throws EngineException {
 		super.init();
-		subscribeToPattern(this::sendMatchToApama);
+		pattern = getPattern();
+		subscribeToPattern(this::sendAppearingMatchToApama, this::sendDisappearingMatchToApama);
 	}
 	
-	public abstract void subscribeToPattern(Consumer<GraphTransformationMatch<M,P>> matchConsumer);
+	public abstract P getPattern();
 	
-	public abstract E matchToEvent(GraphTransformationMatch<M,P> match);
+	public abstract void subscribeToPattern(Consumer<M> appearing, Consumer<M> disappearing);
 	
-	public void sendMatchToApama(GraphTransformationMatch<M,P> match) {
+	public abstract E matchToEvent(M match);
+	
+	public void sendAppearingMatchToApama(M match) {
+		//TODO
+		sendEvent(matchToEvent(match));
+	}
+	
+	public void sendDisappearingMatchToApama(M match) {
+		//TODO
 		sendEvent(matchToEvent(match));
 	}
 

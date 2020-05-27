@@ -13,28 +13,24 @@ import org.emoflon.ibex.gt.api.GraphTransformationPattern;
 import org.emoflon.ibex.gt.engine.GraphTransformationInterpreter;
 
 /**
- * The pattern <code>p1(string)</code> which does the following:
+ * The pattern <code>p1()</code> which does the following:
  * If this pattern is not self-explaining, you really should add some comment in the specification.
  */
 public class P1Pattern extends GraphTransformationPattern<P1Match, P1Pattern> {
 	private static String patternName = "p1";
 
 	/**
-	 * Creates a new pattern p1(string).
+	 * Creates a new pattern p1().
 	 * 
 	 * @param api
 	 *            the API the pattern belongs to
 	 * @param interpreter
 	 *            the interpreter
-	 * @param stringValue
-	 *            the value for the parameter string
 	 */
 	 
 	
-	public P1Pattern(final GrapeLTestAPI api, final GraphTransformationInterpreter interpreter,
-			final java.lang.String stringValue) {
+	public P1Pattern(final GrapeLTestAPI api, final GraphTransformationInterpreter interpreter) {
 		super(api, interpreter, patternName );
-		setString(stringValue);
 	}
 
 	@Override
@@ -59,23 +55,11 @@ public class P1Pattern extends GraphTransformationPattern<P1Match, P1Pattern> {
 		parameters.put("airport", Objects.requireNonNull(object, "airport must not be null!"));
 		return this;
 	}
-
-	/**
-	 * Sets the parameter string to the given value.
-	 *
-	 * @param value
-	 *            the value to set
-	 */
-	public P1Pattern setString(final java.lang.String value) {
-		parameters.put("string", Objects.requireNonNull(value, "string must not be null!"));
-		return this;
-	}
 	
 	@Override
 	public String toString() {
 		String s = "pattern " + patternName + " {" + System.lineSeparator();
 		s += "	airport --> " + parameters.get("airport") + System.lineSeparator();
-		s += "	string --> " + parameters.get("string") + System.lineSeparator();
 		s += "}";
 		return s;
 	}

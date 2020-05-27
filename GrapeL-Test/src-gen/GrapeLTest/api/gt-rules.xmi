@@ -4,8 +4,5 @@
     <nodes xmi:type="GTLanguage:GTNode" name="airport">
       <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Airport"/>
     </nodes>
-    <parameters xmi:type="GTLanguage:GTParameter" name="string">
-      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </parameters>
   </rules>
 </GTLanguage:GTRuleSet>

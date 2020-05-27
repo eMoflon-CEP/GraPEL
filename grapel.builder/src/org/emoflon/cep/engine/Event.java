@@ -10,8 +10,8 @@ public abstract class Event {
 	protected Map<String, Object> fields = Collections.synchronizedMap(new LinkedHashMap<>());
 	protected final EventType type;
 	
-	public Event(final EventType type) {
-		this.type = type;
+	public Event() {
+		this.type = getStaticEventType();
 	}
 	
 	public Event(final com.apama.event.Event apamaEvent) {
@@ -27,10 +27,12 @@ public abstract class Event {
 		return fields.get(name);
 	}
 	
-	public com.apama.event.Event toApamaEvent() {
+	public com.apama.event.Event toApamaEvent(final TypeRegistry registry) {
 		com.apama.event.Event apamaEvent = new com.apama.event.Event(type);
 		fields.forEach((name, obj) -> apamaEvent.setField(name, obj));
 		return apamaEvent;
 	}
+	
+	public abstract EventType getStaticEventType();
 	
 }
