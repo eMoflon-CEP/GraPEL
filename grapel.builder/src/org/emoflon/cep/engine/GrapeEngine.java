@@ -38,6 +38,7 @@ public class GrapeEngine {
 	
 	public void update() {
 		eMoflonAPI.updateMatches();
+		//TODO synchronize with Apama by using a synchroneous request (send -> wait -> receive)
 	}
 	
 	public GraphTransformationAPI getEMoflonAPI() {

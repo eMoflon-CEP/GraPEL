@@ -10,8 +10,25 @@ public abstract class EMoflonEvent <M extends GraphTransformationMatch<M, P>, P 
 
 	public EMoflonEvent(final P pattern, final M match) {
 		this.pattern = pattern;
-		assignFields(match);
+		this.match = match;
+		assignFields();
+	}
+	
+	public EMoflonEvent(final com.apama.event.Event apamaEvent, final TypeRegistry registry, final P pattern) {
+		super(apamaEvent, registry);
+		this.pattern = pattern;
+		assignMatch();
 	}
 
-	public abstract void assignFields(final M match);
+	public abstract void assignFields();
+	
+	public abstract void assignMatch();
+	
+	public M getMatch() {
+		return match;
+	}
+	
+	public P getPattern() {
+		return pattern;
+	}
 }

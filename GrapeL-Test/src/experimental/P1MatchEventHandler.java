@@ -8,7 +8,6 @@ import org.emoflon.cep.engine.GrapeEngine;
 import org.emoflon.cep.util.IOUtils;
 import org.emoflon.ibex.gt.api.GraphTransformationMatch;
 
-import com.apama.event.Event;
 import com.apama.event.parser.EventType;
 import com.apama.event.parser.FieldTypes;
 
@@ -66,9 +65,8 @@ public class P1MatchEventHandler extends EMoflonEventHandler<EventP1Match, P1Mat
 	}
 
 	@Override
-	public EventP1Match convertEvent(Event apamaEvent) {
-		// TODO Auto-generated method stub
-		return null;
+	public EventP1Match convertEvent(com.apama.event.Event apamaEvent) {
+		return new EventP1Match(apamaEvent, registry, pattern);
 	}
 
 	@Override

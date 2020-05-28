@@ -7,7 +7,6 @@ import org.emoflon.cep.engine.GrapeEngine;
 import org.emoflon.cep.util.IOUtils;
 
 import com.apama.event.parser.EventType;
-import com.apama.event.parser.FieldTypes;
 
 import experimental.EventE1;
 
@@ -50,7 +49,7 @@ public class E1EventHandler extends EventHandler<EventE1>{
 
 	@Override
 	public EventE1 convertEvent(com.apama.event.Event apamaEvent) {
-		return new EventE1(apamaEvent);
+		return new EventE1(apamaEvent, registry);
 	}
 
 }
