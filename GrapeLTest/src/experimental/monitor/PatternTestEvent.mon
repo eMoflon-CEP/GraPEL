@@ -1,0 +1,12 @@
+monitor testEvent {
+	constant string eventChannel := "channel1";
+	
+	action onload() {
+		monitor.subscribe(eventChannel);
+		
+		on all p1Match() as p1 {
+			send e1(p1.airport, "found!") to eventChannel;
+		}
+		
+	}
+}

@@ -3,10 +3,15 @@ package org.emoflon.cep.engine;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.function.Consumer;
 
 import com.apama.EngineException;
+import com.apama.engine.MonitorScript;
 import com.apama.engine.beans.interfaces.ConsumerOperationsInterface;
 import com.apama.engine.beans.interfaces.EngineClientInterface;
+import com.apama.event.parser.EventParser;
 import com.apama.event.parser.EventType;
 import com.apama.event.IEventListener;
 
@@ -16,9 +21,12 @@ public abstract class EventHandler <E extends Event> implements IEventListener{
 	protected final TypeRegistry registry;
 	protected final EngineClientInterface engineClient;
 	protected ConsumerOperationsInterface eventConsumer;
+	protected EventParser parser;
 	
 	protected EventType apamaEventType;
-	protected Collection<E> events = Collections.synchronizedSet(new LinkedHashSet<>());
+	protected Collection<E> events = Collections.synchronizedList(new LinkedList<>());
+	protected Collection<E> lastEvents = Collections.synchronizedList(new LinkedList<>());
+	protected Set<Consumer<E>> subscriber = new LinkedHashSet<>();
 	
 	public EventHandler(final GrapeEngine engine) {
 		this.engine = engine;
@@ -26,20 +34,49 @@ public abstract class EventHandler <E extends Event> implements IEventListener{
 		this.engineClient = engine.getEngineClient();
 	}
 	
-	public void init() throws EngineException {
+	protected void setEventParser(final EventParser parser) {
+		this.parser = parser;
+	}
+	
+	protected void init() throws EngineException {
 		apamaEventType = getEventType();
-		engineClient.injectMonitorScriptFromFile(loadEPLDescription());
+		parser.registerEventType(apamaEventType);
+		MonitorScript script = new MonitorScript(loadEPLDescription());
+		engineClient.injectMonitorScript(script);
 		eventConsumer = engineClient.addConsumer(getHandlerName(), getChannelNames());
 		eventConsumer.addEventListener(this);
+	}
+	
+	protected abstract E convertEvent(final com.apama.event.Event apamaEvent);
+	
+	protected abstract String loadEPLDescription();
+	
+	protected void clearRecentEvents() {
+		lastEvents.clear();
 	}
 	
 	public abstract String getHandlerName();
 	
 	public abstract String[] getChannelNames();
 	
-	public abstract String loadEPLDescription();
-	
 	public abstract EventType getEventType();
+	
+	
+	public Collection<E> getNewEvents() {
+		return lastEvents;
+	}
+	
+	public Collection<E> getAllEvents() {
+		return events;
+	}
+	
+	public boolean subscribe(Consumer<E> consumer) {
+		return subscriber.add(consumer);
+	}
+	
+	public boolean unsubscribe(Consumer<E> consumer) {
+		return subscriber.remove(consumer);
+	}
 	
 	public void sendEvent(E event) {
 		try {
@@ -48,19 +85,17 @@ public abstract class EventHandler <E extends Event> implements IEventListener{
 			e.printStackTrace();
 		}
 	}
-	
-	public Collection<E> getEvents() {
-		return events; 
-	}
-	
-	public abstract E convertEvent(final com.apama.event.Event apamaEvent);
 
 	@Override
 	public void handleEvent(com.apama.event.Event arg0) {
+		arg0.setEventParser(parser);
 		if(!arg0.getEventType().getName().equals(apamaEventType.getName()))
 			return;
 		
-		events.add(convertEvent(arg0));
+		E event = convertEvent(arg0);
+		events.add(event);
+		lastEvents.add(event);
+		subscriber.forEach(sub -> sub.accept(event));
 	}
 
 	@Override

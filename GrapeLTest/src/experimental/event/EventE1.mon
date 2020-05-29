@@ -1,4 +1,4 @@
 event e1 {
 	integer airport;
-	string string;
+	string str;
 }

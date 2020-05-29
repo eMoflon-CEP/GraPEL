@@ -66,6 +66,7 @@ public class ApamaCorrelator {
 	}
 	
 	public void disposeCorrelator() throws InterruptedException {
+		runner.close();
 		runner.join();
 	}
 }

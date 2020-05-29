@@ -21,8 +21,8 @@ public class EventE1 extends Event{
 		return (Airport) fields.get("Airport");
 	}
 	
-	public String getString() {
-		return (String) fields.get("string");
+	public String getStr() {
+		return (String) fields.get("str");
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class EventE1 extends Event{
 	public static EventType createEventType() {
 		EventType type = new EventType(EVENT_NAME);
 		type.addField("Airport", FieldTypes.INTEGER);
-		type.addField("string", FieldTypes.STRING);
+		type.addField("str", FieldTypes.STRING);
 		return type;
 	}
 

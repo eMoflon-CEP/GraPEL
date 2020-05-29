@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.emoflon.cep.engine.ApamaCorrelator;
+import org.emoflon.cep.engine.Event;
 import org.emoflon.cep.engine.EventHandler;
 import org.emoflon.cep.engine.GrapeEngineAPI;
 
@@ -29,14 +30,14 @@ public abstract class GrapeLTestGrapeEngineAPI extends GrapeEngineAPI{
 	}
 
 	@Override
-	public ApamaCorrelator configureApamaCorrelator() throws Exception {
+	protected ApamaCorrelator configureApamaCorrelator() throws Exception {
 		ApamaCorrelator correlator = new ApamaCorrelator(CORRELATOR_LOCATION);
 		correlator.setDebug(true);
 		return correlator;
 	}
 
 	@Override
-	public EngineClientInterface configureEngineClient() {
+	protected EngineClientInterface configureEngineClient() {
 		EngineClientInterface engineClient = null;
 		try {
 			engineClient = EngineClientFactory.createEngineClient(CORRELATOR_HOSTNAME, CORRELATOR_PORT, GrapeLTestGrapeEngineAPI.class.getSimpleName());
@@ -47,14 +48,21 @@ public abstract class GrapeLTestGrapeEngineAPI extends GrapeEngineAPI{
 	}
 	
 	@Override
-	public List<String> getMonitorScriptFiles() {
+	protected List<String> getMonitorScriptFiles() {
 		return Arrays.asList("src/experimental/monitor/PatternTestEvent.mon");
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<EventHandler> getEventHandler() {
+	protected List<EventHandler<? extends Event>> createEventHandler() {
 		return Arrays.asList(new E1EventHandler(grapeEngine), new P1MatchEventHandler(grapeEngine));
+	}
+	
+	public E1EventHandler getE1EventHandler() {
+		return (E1EventHandler) getEventHandler(E1EventHandler.HANDLER_NAME);
+	}
+	
+	public P1MatchEventHandler getP1MatchEventHandler() {
+		return (P1MatchEventHandler) getEventHandler(P1MatchEventHandler.HANDLER_NAME);
 	}
 
 }

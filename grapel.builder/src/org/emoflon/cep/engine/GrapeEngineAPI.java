@@ -1,11 +1,14 @@
 package org.emoflon.cep.engine;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.emoflon.ibex.gt.api.GraphTransformationAPI;
 import org.emoflon.ibex.gt.api.GraphTransformationApp;
 
+import com.apama.EngineException;
 import com.apama.engine.beans.interfaces.EngineClientInterface;
 
 public abstract class GrapeEngineAPI {
@@ -30,20 +33,45 @@ public abstract class GrapeEngineAPI {
 		ApamaCorrelator correlator = configureApamaCorrelator();
 		grapeEngine = new GrapeEngine(eMoflonAPI, correlator);
 		grapeEngine.init(this::configureEngineClient);
+		for(EventHandler<? extends Event> handler : createEventHandler()) {
+			grapeEngine.addEventHandler(handler);
+			handler.init();
+		}
 		for(String mon : getMonitorScriptFiles()) {
 			grapeEngine.injectMonitorScript(mon);
 		}
-		for(@SuppressWarnings("rawtypes") EventHandler handler : getEventHandler()) {
-			grapeEngine.addEventHandler(handler);
-		}
+		
 	}
 	
-	public abstract ApamaCorrelator configureApamaCorrelator() throws Exception;
+	protected abstract ApamaCorrelator configureApamaCorrelator() throws Exception;
 	
-	public abstract EngineClientInterface configureEngineClient();
+	protected abstract EngineClientInterface configureEngineClient();
 	
-	public abstract List<String> getMonitorScriptFiles();
+	protected abstract List<String> getMonitorScriptFiles();
 	
-	@SuppressWarnings("rawtypes")
-	public abstract List<EventHandler> getEventHandler();
+	protected abstract List<EventHandler<? extends Event>> createEventHandler();
+	
+	public EventHandler<? extends Event> getEventHandler(final String eventType) {
+		return grapeEngine.getEventHandler(eventType);
+	}
+	
+	public void update() {
+		grapeEngine.update();
+	}
+	
+	public Map<String, Collection<? extends Event>> getAllEvents() {
+		return grapeEngine.getAllEvents();
+	} 
+	
+	public Map<String, Collection<? extends Event>> getNewEvents() {
+		return grapeEngine.getNewEvents();
+	}
+	
+	public void dispose() {
+		try {
+			grapeEngine.dispose();
+		} catch (EngineException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }

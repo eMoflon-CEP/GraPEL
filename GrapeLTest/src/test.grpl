@@ -3,7 +3,7 @@ import "http://www.eclipse.org/emf/2002/Ecore"
 
 event e1 {
 	Airport airport; 
-	EString string;    
+	EString str;    
 }
 
 pattern p1() {       

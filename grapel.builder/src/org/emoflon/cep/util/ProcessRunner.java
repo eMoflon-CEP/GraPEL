@@ -25,6 +25,7 @@ public class ProcessRunner extends Thread{
 		try
 		{
 			pr = runtime.exec(execArgs);
+			running = true;
 //			System.out.println("Running: " + pr.toString()+" status: "+pr.isAlive());
 			
 			BufferedReader stdInput = new BufferedReader(new 
@@ -46,7 +47,6 @@ public class ProcessRunner extends Thread{
 					    	System.out.println(s);
 					}
 				}
-				
 				close();
 				
 		}
