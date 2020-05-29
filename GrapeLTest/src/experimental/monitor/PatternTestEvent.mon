@@ -4,6 +4,10 @@ monitor testEvent {
 	action onload() {
 		monitor.subscribe(eventChannel);
 		
+		on all RequestSynchronizationEvent() as request  {
+			send UpdateEvent(request.id) to eventChannel;
+		}
+		
 		on all p1Match() as p1 {
 			send e1(p1.airport, "found!") to eventChannel;
 		}

@@ -22,12 +22,6 @@ public class ExperimentalTest {
 		E1EventHandler e1 = api.getE1EventHandler();
 		
 		api.update(); 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		e1.getAllEvents().forEach(event -> System.out.println(event));
 		
