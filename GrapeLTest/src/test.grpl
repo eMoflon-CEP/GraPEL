@@ -15,13 +15,13 @@ pattern p1() {
 //	dot2 : p1        
 //	 
 //	dot.airport == dot2.airport
-//	dot.string != dot.airport 
+//	dot.str != dot.airport 
 //	dot.airport == dot2.airport    
-//	dot.string != dot2.airport
+//	dot.str != dot2.airport
 //	
 //	dot -> dot2 {      
 //		dot.airport.ID < dot2.airport.ID 
-//		&& dot2.airport.ID > dot.string
+//		&& dot2.airport.ID > dot.str
 //	} 
 //	AND 
 //	dot && dot2 {

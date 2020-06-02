@@ -6,12 +6,9 @@ import java.util.function.Consumer;
 import org.emoflon.cep.engine.EMoflonEventHandler;
 import org.emoflon.cep.engine.GrapeEngine;
 import org.emoflon.cep.util.IOUtils;
-import org.emoflon.ibex.gt.api.GraphTransformationMatch;
 
 import com.apama.event.parser.EventType;
-import com.apama.event.parser.FieldTypes;
 
-import GrapeLTest.api.GrapeLTestApp;
 import GrapeLTest.api.GrapeLTestAPI;
 import GrapeLTest.api.matches.P1Match;
 import GrapeLTest.api.rules.P1Pattern;
@@ -58,7 +55,6 @@ public class P1MatchEventHandler extends EMoflonEventHandler<EventP1Match, P1Mat
 		try {
 			return IOUtils.loadTextFile(EPL_PATH);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
