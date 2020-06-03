@@ -2,9 +2,11 @@ package org.emoflon.cep.builder;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
@@ -26,6 +28,7 @@ import GrapeLModel.EventNodeExpression;
 import GrapeLModel.IBeXPatternNode;
 import GrapeLModel.IBeXPatternNodeExpression;
 import GrapeLModel.IntegerLiteral;
+import GrapeLModel.MatchEvent;
 import GrapeLModel.NodeContextConstraint;
 import GrapeLModel.RelationalConstraint;
 import GrapeLModel.RelationalConstraintLiteral;
@@ -35,6 +38,7 @@ import GrapeLModel.RelationalExpression;
 import GrapeLModel.RelationalExpressionLiteral;
 import GrapeLModel.RelationalExpressionOperator;
 import GrapeLModel.RelationalExpressionProduction;
+import GrapeLModel.ReturnStatement;
 import GrapeLModel.SimpleAttribute;
 import GrapeLModel.StringLiteral;
 import GrapeLModel.ArithmeticExpression;
@@ -71,7 +75,6 @@ public class GrapelToGrapelModelTransformer {
 	
 	public GrapeLModelContainer transform(EditorGTFile grapelFile) {
 		container = factory.createGrapeLModelContainer();
-		
 		//transform GT to IBeXPatterns
 		EditorToIBeXPatternTransformation ibexTransformer = new EditorToIBeXPatternTransformation();
 		container.setIbexPatterns(ibexTransformer.transform(grapelFile));
@@ -98,10 +101,21 @@ public class GrapelToGrapelModelTransformer {
 					.collect(Collectors.toList())) {
 				if(iPattern.getName().equals(ePattern.getName())) {
 					editor2IBeXPatterns.put(ePattern, iPattern);
+					
+					MatchEvent matchEvent = factory.createMatchEvent();
+					container.getEvents().add(matchEvent);
+					matchEvent.setName(iPattern.getName());
+					
 					for(EditorNode eNode : ePattern.getNodes()) {
 						for(IBeXNode iNode : iPattern.getSignatureNodes()) {
 							if(eNode.getName().equals(iNode.getName())) {
 								gEventAttr2Attr.put(eNode, iNode);
+								
+								ComplexAttribute cAtr = factory.createComplexAttribute();
+								cAtr.setName(iNode.getName());
+								cAtr.setType(iNode.getType());
+								matchEvent.getAttributes().add(cAtr);
+								matchEvent.getEventNode2patternNode().put(cAtr, iNode);
 							}
 						}
 					}
@@ -157,7 +171,8 @@ public class GrapelToGrapelModelTransformer {
 		
 		pattern.setRelationalConstraint(transform(gRelationalConstraints, gRelations));
 		
-		// TODO: transform return values!
+		// transform return statement
+		pattern.setReturnStatement(transform(gEventPattern.getReturnStatement()));
 		
 		return pattern;
 	}
@@ -230,7 +245,9 @@ public class GrapelToGrapelModelTransformer {
 			if(gConstraints.isEmpty())
 				return rcl;
 			
-			rcl.setAttributeConstraint(transformAC(gConstraints, gSubRelations));
+			AttributeConstraint ac = transformAC(gConstraints, gSubRelations);
+			ac.getParams().addAll(getAttributeConstraintParams(ac));
+			rcl.setAttributeConstraint(ac);
 			return rcl;
 		}
 		
@@ -319,6 +336,25 @@ public class GrapelToGrapelModelTransformer {
 		return acp;
 	}
 	
+	private Set<EventPatternNode> getAttributeConstraintParams(AttributeConstraint root) {
+		if(root instanceof AttributeConstraintLiteral) {
+			AttributeConstraintLiteral literal = (AttributeConstraintLiteral)root;
+			AttributeConstraintExpression expr = literal.getConstraintExpression();
+			
+			Set<EventPatternNode> params = new HashSet<>();
+			params.addAll(getArithmeticExpressionParams(expr.getLhs()));
+			params.addAll(getArithmeticExpressionParams(expr.getRhs()));
+			return params;
+		}
+		
+		AttributeConstraintProduction production = (AttributeConstraintProduction)root;
+		Set<EventPatternNode> params = new HashSet<>();
+		params.addAll(getAttributeConstraintParams(production.getLhs()));
+		params.addAll(getAttributeConstraintParams(production.getRhs()));
+		
+		return params;
+	}
+	
 	private AttributeConstraintOperator transform(org.emoflon.cep.grapel.AttributeConstraintRelation gRelation) {
 		switch(gRelation) {
 		case AND:
@@ -355,8 +391,29 @@ public class GrapelToGrapelModelTransformer {
 		List<org.emoflon.cep.grapel.ArithmeticOperator> gOperators = new LinkedList<>();
 		gOperators.addAll(gExpression.getOperators());
 		
-		return transformAE(gOperands, gOperators);
+		ArithmeticExpression expr = transformAE(gOperands, gOperators);
+		expr.getParams().addAll(getArithmeticExpressionParams(expr));
+		return expr;
+	}
+	
+	private Set<EventPatternNode> getArithmeticExpressionParams(ArithmeticExpression root) {
+		if(root instanceof ArithmeticExpressionLiteral) {
+			ArithmeticExpressionLiteral literal = (ArithmeticExpressionLiteral)root;
+			if(literal.getValue() instanceof ArithmeticValueLiteral)
+				return new HashSet<>();
+			
+			ArithmeticValueExpression expr = (ArithmeticValueExpression) root;
+			Set<EventPatternNode> params = new HashSet<>();
+			params.add(expr.getNodeExpression().getEventPatternNode());
+			return params;
+		}
 		
+		ArithmeticExpressionProduction production = (ArithmeticExpressionProduction)root;
+		Set<EventPatternNode> params = new HashSet<>();
+		params.addAll(getArithmeticExpressionParams(production.getLhs()));
+		params.addAll(getArithmeticExpressionParams(production.getRhs()));
+		
+		return params;
 	}
 	
 	private ArithmeticExpression transformAE(List<org.emoflon.cep.grapel.AttributeExpressionOperand> gOperands, List<org.emoflon.cep.grapel.ArithmeticOperator> gOperators) {
@@ -438,6 +495,13 @@ public class GrapelToGrapelModelTransformer {
 			return null;
 		
 		}
+	}
+	
+	private ReturnStatement transform(org.emoflon.cep.grapel.ReturnStatement gReturn) {
+		ReturnStatement returnState = factory.createReturnStatement();
+		returnState.setReturnType(gEvent2Events.get(gReturn.getReturnArg()));
+		returnState.getParameters().addAll(gReturn.getReturnParams().stream().map(param -> transform(param)).collect(Collectors.toList()));
+		return returnState;
 	}
 	
 }

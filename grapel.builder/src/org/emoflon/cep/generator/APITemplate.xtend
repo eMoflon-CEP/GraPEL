@@ -59,7 +59,7 @@ public abstract class «names.APIName» extends GrapeEngineAPI{
 	@Override
 	protected List<String> getMonitorScriptFiles() {
 		return Arrays.asList(
-			«FOR monitor : paths.monitorLocations SEPARATOR ', '»
+			«FOR monitor : paths.patternMonitorLocations SEPARATOR ', '»
 			"«monitor»"
 			«ENDFOR»
 		);

@@ -22,21 +22,21 @@ import com.apama.event.parser.EventType;
 
 import «imports.EMoflonAPIFQN»;
 import «imports.getMatchFQN(eventName)»;
-import «imports.getPatternFQN(eventName)»;
+import «imports.getPatternFQN(eventName, true)»;
 
-public class «names.getMatchEventHandlerName(eventName)» extends EMoflonEventHandler<«names.getMatchEventName(eventName)», «names.getMatchName(eventName)», «names.getPatternName(eventName)»>{
+public class «names.getMatchEventHandlerName(eventName)» extends EMoflonEventHandler<«names.getMatchEventName(eventName)», «names.getMatchName(eventName)», «names.getPatternName(eventName, true)»>{
 	
 	
 	final public static String HANDLER_NAME = "«names.getMatchEventHandlerName(eventName)»";
 	final public static String[] CHANNELS = {"channel1"};
-	final public static String EPL_PATH = "«paths.getMatchEventLocation(eventName)»";
+	final public static String EPL_PATH = "«paths.getMatchEventMonitorLocation(eventName)»";
 
 	public «names.getMatchEventHandlerName(eventName)»(GrapeEngine engine) {
 		super(engine);
 	}
 	
 	@Override
-	public «names.getPatternName(eventName)» getPattern() {
+	public «names.getPatternName(eventName, true)» getPattern() {
 		return ((«names.EMoflonAPIName»)engine.getEMoflonAPI()).«eventName»();
 	}
 	

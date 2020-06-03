@@ -36,8 +36,8 @@ public class «names.getEventName(eventName)» extends Event{
 	}
 	
 «FOR field : model.getFields(eventName)»
-	public «field.EType.name» get«field.name»() {
-		return («field.EType.name») fields.get("«field.name»");
+	public «ModelManager.getJavaFieldType(field)» get«field.name»() {
+		return («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
 	}
 «ENDFOR»
 		
@@ -49,7 +49,7 @@ public class «names.getEventName(eventName)» extends Event{
 	public static EventType createEventType() {
 		EventType type = new EventType(EVENT_NAME);
 		«FOR field : model.getFields(eventName)»
-		type.addField("«field.name»", FieldTypes.«model.getApamaFieldType(eventName, field)»
+		type.addField("«field.name»", FieldTypes.«ModelManager.getApamaFieldType(field)»
 		«ENDFOR»
 		return type;
 	}
@@ -68,7 +68,7 @@ public class «names.getEventName(eventName)» extends Event{
 	public Class<?> getClassOfField(String fieldName) {
 		«FOR field : model.getFields(eventName)»
 		if("«field.name»".equals(fieldName)) {
-			return «field.EType.name».class;
+			return «ModelManager.getJavaFieldType(field)».class;
 		}
 		«ENDFOR»
 		return null;

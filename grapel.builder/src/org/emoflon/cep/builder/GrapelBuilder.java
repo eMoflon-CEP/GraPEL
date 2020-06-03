@@ -68,8 +68,9 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		EditorGTFile grapelFile = (EditorGTFile) resource.getContents().get(0);
 		GrapelToGrapelModelTransformer transformer =  new GrapelToGrapelModelTransformer();
 		GrapeLModelContainer container = transformer.transform(grapelFile);
-		IBeXPatternSet ibexPatterns = container.getIbexPatterns();
-		
+		container.setName(resource.getURI().trimFileExtension().lastSegment());
+		container.setCorrelatorLocation("C:\\SoftwareAG\\Apama\\bin\\correlator.exe");
+			
 		// Create GT rule model
 		EditorToGTModelTransformation trafo = new EditorToGTModelTransformation();
 		GTRuleSet gtRules = trafo.transform(grapelFile);
@@ -88,6 +89,8 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		// Save ibex-patterns and gt-rules for the hipe engine builder
 		IFolder apiPackage = project.getFolder("src-gen/"+project.getName().replace(".", "/")+"/api");
 		saveResource(container, resource.getURI().trimFileExtension()+"_model.xmi");
+		
+		IBeXPatternSet ibexPatterns = container.getIbexPatterns();
 		saveResource(ibexPatterns, apiPackage.getFullPath()+"/ibex-patterns.xmi");
 		saveResource(gtRules, apiPackage.getFullPath()+"/gt-rules.xmi");
 		

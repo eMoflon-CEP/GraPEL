@@ -19,7 +19,7 @@ import org.emoflon.ibex.common.operational.SimpleMatch;
 import com.apama.event.parser.EventType;
 import com.apama.event.parser.FieldTypes;
 
-import «imports.getPatternFQN(eventName)»;
+import «imports.getPatternFQN(eventName, true)»;
 import «imports.getMatchFQN(eventName)»;
 «FOR field : model.getFields(eventName)»
 import «imports.getFieldFQN(eventName, field.name)»;
@@ -35,8 +35,8 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match
 	}
 	
 «FOR field : model.getFields(eventName)»
-	public «field.EType.name» get«field.name»() {
-		return («field.EType.name») fields.get("«field.name»");
+	public «ModelManager.getJavaFieldType(field)» get«field.name»() {
+		return («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
 	}
 «ENDFOR»
 		
@@ -49,7 +49,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match
 		EventType type = new EventType(EVENT_NAME);
 		type.addField("vanished", FieldTypes.BOOLEAN);
 		«FOR field : model.getFields(eventName)»
-		type.addField("«field.name»", FieldTypes.«model.getApamaFieldType(eventName, field)»
+		type.addField("«field.name»", FieldTypes.«ModelManager.getApamaFieldType(field)»
 		«ENDFOR»
 		return type;
 	}
@@ -68,7 +68,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match
 	public Class<?> getClassOfField(String fieldName) {
 		«FOR field : model.getFields(eventName)»
 		if("«field.name»".equals(fieldName)) {
-			return «field.EType.name».class;
+			return «ModelManager.getJavaFieldType(field)».class;
 		}
 		«ENDFOR»
 		return null;

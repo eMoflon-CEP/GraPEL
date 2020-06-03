@@ -1,42 +1,101 @@
 package org.emoflon.cep.generator;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EEnum;
+
+import GrapeLModel.Event;
+import GrapeLModel.ComplexAttribute;
+import GrapeLModel.EventAttribute;
+import GrapeLModel.EventPattern;
+import GrapeLModel.GrapeLModelContainer;
+import GrapeLModel.SimpleAttribute;
 
 public class ModelManager {
 	
-	public List<EAttribute> getFields(String eventName) {
-		return null;
+	private String projectName;
+	private GrapeLModelContainer container;
+	
+	private Map<String, EventPattern> eventPatterns = new HashMap<>();
+	private Map<String, Map<String, EventAttribute>> fields = new HashMap<>();
+	
+	private void mapFields() {
+		container.getEvents().forEach(event -> {
+			Map<String, EventAttribute> localFields = new HashMap<>();
+			fields.put(event.getName(), localFields);
+			event.getAttributes().forEach(atr -> {
+				localFields.put(atr.getName(), atr);
+			});
+		});
 	}
 	
-	public List<EAttribute> getComplexFields(String eventName) {
-		return getFields(eventName).stream().filter(field -> isComplexType(field.getEType())).collect(Collectors.toList());
+	private void mapEventPatterns() {
+		container.getEventPatterns().forEach(eventPattern -> {
+			eventPatterns.put(eventPattern.getName(), eventPattern);
+		});
 	}
 	
-	public String getApamaFieldType(String eventName, EAttribute field) {
-		return null;
+	public ModelManager(String projectName, GrapeLModelContainer container) {
+		this.projectName = projectName;
+		this.container = container;
+		mapEventPatterns();
+		mapFields();
 	}
 	
-	public static boolean isComplexType(final EClassifier classifier) {
-		if(classifier instanceof EDataType) {
+	public Collection<EventAttribute> getFields(String eventName) {
+		return fields.get(eventName).values();
+	}
+	
+	public Collection<EventAttribute> getComplexFields(String eventName) {
+		return getFields(eventName).stream().filter(field -> isComplexType(field)).collect(Collectors.toList());
+	}
+	
+	public EventPattern getEventPattern(String eventPattern) {
+		return eventPatterns.get(eventPattern);
+	}
+	
+	public static String getApamaFieldType(EventAttribute field) {
+		if(isComplexType(field))
+			return "FieldTypes.INTEGER";
+		EDataType type = ((SimpleAttribute)field).getType();
+		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
+			return "FieldTypes.INTEGER";
+		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
+			return "FieldTypes.FLOAT";
+		}else if(type.getName().equals("EString") || type.getName().equals("EChar")) {
+			return "FieldTypes.STRING";
+		}else if(type.getName().equals("EBoolean")) {
+			return "FieldTypes.BOOLEAN";
+		}else {
+			throw new RuntimeException("Unsupported type: "+type.getName());
+		}
+	}
+	
+	public static String getJavaFieldType(EventAttribute field) {
+		if(isComplexType(field)) {
+			ComplexAttribute cAtr = (ComplexAttribute)field;
+			return cAtr.getType().getName();
+		}else {
+			SimpleAttribute sAtr = (SimpleAttribute)field;
+			return sAtr.getType().getInstanceClassName();
+		}
+	}
+	
+	public static boolean isComplexType(final EventAttribute field) {
+		if(field instanceof SimpleAttribute) {
 			return false;
 		} else {
 			return true;	
 		}
 	}
 	
-	public static String asApamaType(final EClassifier classifier) {
-		if(isComplexType(classifier))
+	public static String asApamaType(final EventAttribute field) {
+		if(isComplexType(field))
 			return "integer";
-		if(classifier instanceof EEnum)
-			throw new RuntimeException("Unsupported type: "+classifier.getName());
-		
-		EDataType type = (EDataType)classifier;
+		EDataType type = ((SimpleAttribute)field).getType();
 		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
 			return "integer";
 		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
@@ -46,7 +105,7 @@ public class ModelManager {
 		}else if(type.getName().equals("EBoolean")) {
 			return "boolean";
 		}else {
-			throw new RuntimeException("Unsupported type: "+classifier.getName());
+			throw new RuntimeException("Unsupported type: "+type.getName());
 		}
 
 	}

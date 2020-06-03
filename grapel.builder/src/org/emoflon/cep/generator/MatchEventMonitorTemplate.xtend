@@ -12,7 +12,7 @@ class MatchEventMonitorTemplate extends EventMonitorTemplate {
 		return '''event «eventName» {
 boolean vanished;
 «FOR field : model.getFields(eventName)»
-«ModelManager.asApamaType(field.EType)» «field.name»
+«ModelManager.asApamaType(field)» «field.name»
 «ENDFOR»
 }
 '''

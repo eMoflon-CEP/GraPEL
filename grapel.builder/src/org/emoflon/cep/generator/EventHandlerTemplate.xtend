@@ -30,7 +30,7 @@ public class «names.getEventHandlerName(eventName)» extends EventHandler<«nam
 	
 	final public static String HANDLER_NAME = "«names.getEventHandlerName(eventName)»";
 	final public static String[] CHANNELS = {"channel1"};
-	final public static String EPL_PATH = "«paths.getEventLocation(eventName)»";
+	final public static String EPL_PATH = "«paths.getEventMonitorLocation(eventName)»";
 
 	public «names.getEventHandlerName(eventName)»(GrapeEngine engine) {
 		super(engine);

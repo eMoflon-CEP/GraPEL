@@ -13,7 +13,7 @@ class EventMonitorTemplate {
 	def String generate() {
 		return '''event «eventName» {
 «FOR field : model.getFields(eventName)»
-«ModelManager.asApamaType(field.EType)» «field.name»
+«ModelManager.asApamaType(field)» «field.name»
 «ENDFOR»
 }
 '''

@@ -1,23 +1,92 @@
 package org.emoflon.cep.generator;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.resources.IProject;
+
+import GrapeLModel.GrapeLModelContainer;
 
 public class PathManager {
 	
+	private IProject project;
+	private String projectName;
+	private GrapeLModelContainer container;
+	
+	private NSManager names;
+	
+	private String projectLocation;
+	
+	private String eMoflonAPIFolder;
+	private String eMoflonPatternFolder;
+	private String eMoflonMatchFolder;
+	
+	private String basePackageLocation;
+	private String eventFolder;
+	private String handlerFolder;
+	private String eventMonitorFolder;
+	private String patternMonitorFolder;
+	
+	private Map<String, String> patternMonitors = new HashMap<>();
+	private Map<String, String> eventMonitors = new HashMap<>();
+	private Map<String, String> events = new HashMap<>();
+	private Map<String, String> eventHandler = new HashMap<>();
+	
+	private void mapMonitors() {
+		container.getEventPatterns().forEach(pattern -> {
+			patternMonitors.put(pattern.getName(), patternMonitorFolder+"/"+StringUtil.firstToUpper(pattern.getName())+".mon");
+		});
+		patternMonitors.put("Maintainance", patternMonitorFolder+"/Maintainance.mon");
+		
+		container.getEvents().forEach(event -> {
+			eventMonitors.put(event.getName(), eventMonitorFolder+"/"+names.getEventName(event.getName())+".mon");
+		});
+	}
+	
+	private void mapEvents() {
+		container.getEvents().forEach(event -> {
+			events.put(event.getName(), eventFolder+"/"+names.getEventName(event.getName())+".java");
+			eventHandler.put(event.getName(), handlerFolder+"/"+names.getEventName(event.getName())+".java");
+		});
+	}
+	
+	public PathManager(IProject project, NSManager names, GrapeLModelContainer container) {
+		this.project = project;
+		this.projectName = project.getName();
+		this.names = names;
+		this.container = container;
+		
+		projectLocation = project.getLocation().toPortableString();
+		eMoflonAPIFolder = projectLocation + "/src-gen/" + projectName.replace(".", "/") + "/api";
+		eMoflonMatchFolder = eMoflonAPIFolder + "/matches";
+		eMoflonPatternFolder = eMoflonAPIFolder + "/rules";
+		
+		basePackageLocation = projectLocation + "/src-gen/" + projectName.replace(".", "/") + "/grapel/" + StringUtil.firstToUpper(container.getName());
+		eventFolder = basePackageLocation + "/events";
+		handlerFolder = basePackageLocation + "/eventhandler";
+		eventMonitorFolder = basePackageLocation + "/eventmonitors";
+		patternMonitorFolder = basePackageLocation + "/patternmonitors";
+		
+		mapMonitors();
+		mapEvents();
+	}
+	
 	public String getCorrelatorLocation( ) {
-		return null;
+		return container.getCorrelatorLocation();
 	}
 	
-	public List<String> getMonitorLocations() {
-		return new LinkedList<>();
+	public Collection<String> getPatternMonitorLocations() {
+		return patternMonitors.values();
 	}
 	
-	public String getEventLocation(String eventName) {
-		return null;
+	public String getEventMonitorLocation(String eventName) {
+		return eventMonitors.get(eventName);
 	}
 	
-	public String getMatchEventLocation(String patternName) {
-		return null;
+	public String getMatchEventMonitorLocation(String patternName) {
+		return getEventMonitorLocation(patternName);
 	}
 }
