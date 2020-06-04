@@ -57,6 +57,7 @@ import GrapeLModel.AttributeConstraintRelation;
 import GrapeLModel.AttributeExpressionLiteral;
 import GrapeLModel.BooleanLiteral;
 import GrapeLModel.ComplexAttribute;
+import GrapeLModel.Context;
 import GrapeLModel.ContextConstraint;
 import GrapeLModel.ContextRelation;
 import GrapeLModel.DoubleLiteral;
@@ -158,9 +159,15 @@ public class GrapelToGrapelModelTransformer {
 				.collect(Collectors.toList()));
 		
 		// transform context constraints
-		pattern.getContextConstraints().addAll(gEventPattern.getContextConstraints().parallelStream()
-				.map(contextConstraints -> transform(contextConstraints))
-				.collect(Collectors.toList()));
+		if(!gEventPattern.getContextConstraints().isEmpty()) {
+			Context context = factory.createContext();
+			context.getContextConstraints().addAll(gEventPattern.getContextConstraints().parallelStream()
+					.map(contextConstraints -> transform(contextConstraints))
+					.collect(Collectors.toList()));
+			context.getParams().addAll(getContextConstraintParams(context));
+			pattern.setContext(context);
+		}
+		
 		
 		// transform relational constraints
 		List<org.emoflon.cep.grapel.EventPatternRelationalConstraint> gRelationalConstraints = new LinkedList<>();
@@ -169,7 +176,21 @@ public class GrapelToGrapelModelTransformer {
 		List<org.emoflon.cep.grapel.RelationalConstraintRelation> gRelations = new LinkedList<>();
 		gRelations.addAll(gEventPattern.getRelConstraintRelations());
 		
-		pattern.setRelationalConstraint(transform(gRelationalConstraints, gRelations));
+		RelationalConstraint relConstraint = transform(gRelationalConstraints, gRelations);
+		pattern.setRelationalConstraint(relConstraint);
+		
+		// transform attribute constraints
+		List<org.emoflon.cep.grapel.AttributeConstraint> gConstraints = new LinkedList<>();
+		gConstraints.addAll(gEventPattern.getConstraints());
+		
+		List<org.emoflon.cep.grapel.AttributeConstraintRelation> gSubRelations = new LinkedList<>();
+		gSubRelations.addAll(gEventPattern.getRelations());
+		
+		if(!gConstraints.isEmpty()) {
+			AttributeConstraint atrConstraint = transformAC(gConstraints, gSubRelations);
+			pattern.setAttributeConstraint(atrConstraint);
+			atrConstraint.getParams().addAll(getAttributeConstraintParams(atrConstraint));
+		}
 		
 		// transform return statement
 		pattern.setReturnStatement(transform(gEventPattern.getReturnStatement()));
@@ -199,6 +220,16 @@ public class GrapelToGrapelModelTransformer {
 		return constraint;
 	}
 	
+	private Set<EventPatternNode> getContextConstraintParams(Context context) {
+		Set<EventPatternNode> params = new HashSet<>();
+		context.getContextConstraints().stream().filter(cc -> (cc instanceof NodeContextConstraint)).map(cc -> (NodeContextConstraint)cc).forEach(cc -> {
+			params.add(cc.getLhs().getEventPatternNode());
+			params.add(cc.getRhs().getEventPatternNode());
+		});
+		
+		return params;
+	}
+	
 	private ContextRelation transform(org.emoflon.cep.grapel.ContextRelation gContextRelation) {
 		switch(gContextRelation) {
 		case EQUAL:
@@ -210,7 +241,6 @@ public class GrapelToGrapelModelTransformer {
 		return null;
 	}
 	
-	//TODO: CCE Bug
 	private EventPatternNodeExpression transform(org.emoflon.cep.grapel.EventPatternNodeExpression gNodeExpression) {
 		if(gNodeExpression.getPatternNode().getType() instanceof org.emoflon.cep.grapel.Event) {
 			EventNodeExpression nodeExpression = factory.createEventNodeExpression();
@@ -236,18 +266,6 @@ public class GrapelToGrapelModelTransformer {
 			gOperators.addAll(gConstraint.getOperators());
 			
 			rcl.setRelationalExpression(transformRE(gNodes, gOperators));
-			
-			List<org.emoflon.cep.grapel.AttributeConstraint> gConstraints = new LinkedList<>();
-			gConstraints.addAll(gConstraint.getConstraints());
-			List<org.emoflon.cep.grapel.AttributeConstraintRelation> gSubRelations = new LinkedList<>();
-			gSubRelations.addAll(gConstraint.getRelations());
-			
-			if(gConstraints.isEmpty())
-				return rcl;
-			
-			AttributeConstraint ac = transformAC(gConstraints, gSubRelations);
-			ac.getParams().addAll(getAttributeConstraintParams(ac));
-			rcl.setAttributeConstraint(ac);
 			return rcl;
 		}
 		
@@ -402,7 +420,7 @@ public class GrapelToGrapelModelTransformer {
 			if(literal.getValue() instanceof ArithmeticValueLiteral)
 				return new HashSet<>();
 			
-			ArithmeticValueExpression expr = (ArithmeticValueExpression) root;
+			ArithmeticValueExpression expr = (ArithmeticValueExpression) literal.getValue();
 			Set<EventPatternNode> params = new HashSet<>();
 			params.add(expr.getNodeExpression().getEventPatternNode());
 			return params;

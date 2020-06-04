@@ -32,7 +32,10 @@ EventPattern:
 	(contextConstraints += EventPatternContextConstraint)*
 	relationalConstraints += EventPatternRelationalConstraint 
 		(relConstraintRelations += RelationalConstraintRelation 
-			relationalConstraints += EventPatternRelationalConstraint)*
+			relationalConstraints += EventPatternRelationalConstraint)* '{'
+	(constraints += AttributeConstraint (relations += AttributeConstraintRelation 
+			constraints += AttributeConstraint)*)?
+	'}'
 	
 	(returnStatement = ReturnStatement)?
 	'}'
@@ -63,10 +66,8 @@ EventPatternNodeAttributeExpression:
 ;
 
 EventPatternContextConstraint:
-//	lhs = EventPatternNodeAttributeExpression
 	lhs = EventPatternNodeExpression
 	relation = ContextRelation
-//	rhs = EventPatternNodeAttributeExpression
 	rhs = EventPatternNodeExpression
 ;
 
@@ -81,11 +82,7 @@ enum RelationalConstraintRelation:
 ;
 
 EventPatternRelationalConstraint:
-	operands +=  [EventPatternNode|ID] (operators += RelationalOperator operands += [EventPatternNode|ID])* '{'
-		(constraints += AttributeConstraint (relations += AttributeConstraintRelation 
-				constraints += AttributeConstraint)*
-		)?
-	'}'
+	operands +=  [EventPatternNode|ID] (operators += RelationalOperator operands += [EventPatternNode|ID])*
 ;
 
 enum RelationalOperator:
@@ -111,16 +108,6 @@ enum AttributeRelation:
   SMALLER_OR_EQUAL='<=' |
   SMALLER='<'
 ;
-
-//enum NegationOperators:
-//	RELATIONAL_NEGATION='NOT' |
-//	LOGICAL_NEGATION='!'
-//;
-
-//enum Brackets:
-//	ROUNDL='(' |
-//	ROUNDR=')'
-//;
 
 AttributeExpression:
 	operands+=AttributeExpressionOperand 
@@ -160,10 +147,6 @@ BooleanLiteral:
 Double returns ecore::EDouble:
 	('-')?INT '.' INT
 ;
-
-//UnsignedInteger returns ecore::EInt:
-//	INT
-//;
 
 Integer returns ecore::EInt:
 	(('-')? INT)

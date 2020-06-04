@@ -2,12 +2,15 @@ package org.emoflon.cep.generator;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EDataType;
 
 import GrapeLModel.Event;
+import GrapeLModel.AttributeConstraint;
 import GrapeLModel.ComplexAttribute;
 import GrapeLModel.EventAttribute;
 import GrapeLModel.EventPattern;

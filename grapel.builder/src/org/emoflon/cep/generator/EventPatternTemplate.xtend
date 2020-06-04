@@ -16,24 +16,39 @@ import GrapeLModel.EventPatternNodeExpression
 import GrapeLModel.AttributeExpression
 import GrapeLModel.AttributeExpressionLiteral
 import GrapeLModel.AttributeExpressionProduction
-import java.util.Map
 import GrapeLModel.AttributeConstraint
-import java.util.HashMap
 import GrapeLModel.EventNode
-import java.util.Collection
 import GrapeLModel.EventPatternNode
 import GrapeLModel.IBeXPatternNode
+import GrapeLModel.AttributeConstraintLiteral
+import GrapeLModel.AttributeConstraintExpression
+import GrapeLModel.AttributeConstraintProduction
+import GrapeLModel.AttributeConstraintOperator
+import GrapeLModel.AttributeConstraintRelation
+import GrapeLModel.Context
+import GrapeLModel.ContextConstraint
+import GrapeLModel.NodeContextConstraint
+import GrapeLModel.ContextRelation
+import GrapeLModel.RelationalConstraint
+import GrapeLModel.ReturnStatement
+import GrapeLModel.RelationalConstraintLiteral
+import GrapeLModel.RelationalExpression
+import GrapeLModel.RelationalConstraintProduction
+import GrapeLModel.RelationalConstraintOperator
+import GrapeLModel.RelationalExpressionLiteral
+import GrapeLModel.RelationalExpressionProduction
+import GrapeLModel.RelationalExpressionOperator
 
 class EventPatternTemplate {
 	
 	String eventPatternName;
-	ModelManager model;
 	EventPattern pattern;
-	Map<AttributeConstraint, String> checkActions = new HashMap
+	String contextConstraint = "contextCheck";
+	String attributeConstraint = "attributeCheck";
+	String sendActionName = "sendAction";
 	
 	new(String eventPatternName, ModelManager model) {
 		this.eventPatternName = eventPatternName;
-		this.model = model;
 		this.pattern = model.getEventPattern(eventPatternName);
 	}
 	
@@ -44,32 +59,177 @@ class EventPatternTemplate {
 	action onload() {
 		monitor.subscribe(eventChannel);
 		
-		on all p1Match() as p1 {
-			send e1(p1.airport, "found!") to eventChannel;
+		on all «getRelationalConstraint(pattern.relationalConstraint)» {
+			«getRelationalConstraintBody(pattern.context, pattern.attributeConstraint)»
 		}
 		
-		«sendAction»
+		«IF pattern.context !== null»«getContextConstraint(pattern.context)»«ENDIF»
+				
+		«IF pattern.attributeConstraint !== null»«getAttributeConstraint(pattern.attributeConstraint)»«ENDIF»
+		
+		«getSendAction(pattern.returnStatement)»
+		
 	}
 }
 '''
 	}
 	
-	def String getCheckAction(AttributeConstraint constraint) {
-		val name = "checkAction"+checkActions.size+1
-return '''
-action «name»(«FOR param : constraint.params SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») returns boolean {
-	return true;
+	def String getRelationalConstraint(RelationalConstraint constraint) {
+		if(constraint instanceof RelationalConstraintLiteral) {
+			val literal = constraint as RelationalConstraintLiteral;
+			return relationalExpr2Apama(literal.relationalExpression)
+		} else {
+			val production = constraint as RelationalConstraintProduction
+			return '''«getRelationalConstraint(constraint)» «relationalConstraintOp2Apama(production.op)» «getRelationalConstraint(constraint)»'''
+		}
+	}
+	
+	def String relationalConstraintOp2Apama(RelationalConstraintOperator op) {
+		switch(op) {
+			case AND: {
+				return "AND"
+			}
+			case OR: {
+				return "OR"
+			}
+			
+		}
+	}
+	
+	def String relationalExpr2Apama(RelationalExpression expr) {
+		if(expr instanceof RelationalExpressionLiteral) {
+			val literal = expr as RelationalExpressionLiteral;
+			return literal.eventPatternNode.name
+		} else {
+			val production = expr as RelationalExpressionProduction
+			return '''«relationalExpr2Apama(production.lhs)» «relationalExprOp2Apama(production.op)» «relationalExpr2Apama(production.rhs)»'''
+		}
+	}
+	
+	def String relationalExprOp2Apama(RelationalExpressionOperator op) {
+		switch(op) {
+			case AND: {
+				return "&&"
+			}
+			case FOLLOWS: {
+				return "->"
+			}
+			case OR: {
+				return "||"
+			}
+			
+		}
+	}
+	
+	def String getRelationalConstraintBody(Context context, AttributeConstraint constraint) {
+		if(context === null && constraint === null) {
+			return '''«getSendAction(pattern.returnStatement)»();'''
+		} else {
+			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF constraint !== null» && «attributeConstraint»()«ENDIF») {
+	«getSendAction(pattern.returnStatement)»();
+}'''
+		}
+		
+	}
+	
+	def String getContextConstraintParams(Context context) {
+		return '''«FOR param : context.params SEPARATOR ', '»«param.name»«ENDFOR»'''
+	}
+
+	def String getContextConstraint(Context context) {	
+		return '''
+action «contextConstraint»(«FOR param : context.params SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») returns boolean {
+	return «FOR constraint : context.contextConstraints SEPARATOR ' &&\n'»«contextConstraint2Apama(constraint)»«ENDFOR»;
 }
 '''
 	}
 	
-	def String getSendAction() {
-		val returnStatement = pattern.returnStatement;
-return '''
-action sendAction(«FOR param : returnStatement.parameters.flatMap[param | param.params] SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») {
+	def String getAttributeConstraint(AttributeConstraint constraint) {
+		return '''
+action «attributeConstraint»(«FOR param : constraint.params SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») returns boolean {
+	return «attributeConstraint2Apama(constraint)»;
+}
+'''
+	}
+	
+	def String getSendAction(ReturnStatement returnStatement) {
+		return '''
+action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param | param.params] SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») {
 	send «returnStatement.returnType.name»(«FOR param : returnStatement.parameters SEPARATOR ', '»«arithmeticExpr2Apama(param)»«ENDFOR») to eventChannel;
 }
 '''		
+	}
+	
+	def String contextConstraint2Apama(ContextConstraint constraint) {
+		if(!(constraint instanceof NodeContextConstraint)) {
+			return "";
+		}else {
+			val nodeContext = constraint as NodeContextConstraint
+			return '''«nodeExpression2Apama(nodeContext.lhs)» «contextRelation2Apama(constraint.relation)» «nodeExpression2Apama(nodeContext.rhs)»'''
+		}
+			
+	}
+	
+	def String contextRelation2Apama(ContextRelation op) {
+		switch(op) {
+			case EQUAL: {
+				return "=="
+			}
+			case UNEQUAL: {
+				return "!="
+			}
+			
+		}
+	}
+	
+	def String attributeConstraint2Apama(AttributeConstraint constraint) {
+		if(constraint instanceof AttributeConstraintLiteral) {
+			val literal = constraint as AttributeConstraintLiteral;
+			return attributeConstrExpr2Apama(literal.constraintExpression)
+		}else {
+			val production = constraint as AttributeConstraintProduction
+			return '''«attributeConstraint2Apama(production.lhs)» «attributeConstrOp2Apama(production.op)» «attributeConstraint2Apama(production.rhs)»'''
+		}
+	}
+	
+	def String attributeConstrOp2Apama(AttributeConstraintOperator op) {
+		switch(op) {
+			case AND: {
+				return "&&"
+			}
+			case OR: {
+				return "||"
+			}
+			
+		}
+	}
+	
+	def String attributeConstrExpr2Apama(AttributeConstraintExpression expr) {
+		return '''«arithmeticExpr2Apama(expr.lhs)» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»'''
+	}
+	
+	def String attributeConstraintRelation2Apama(AttributeConstraintRelation op) {
+		switch(op) {
+			case EQUAL: {
+				return "=="
+			}
+			case GREATER: {
+				return ">"
+			}
+			case GREATER_OR_EQUAL: {
+				return ">="
+			}
+			case SMALLER: {
+				return "<"
+			}
+			case SMALLER_OR_EQUAL: {
+				return "<="
+			}
+			case UNEQUAL: {
+				return "!="
+			}
+			
+		}
 	}
 	
 	def String arithmeticExpr2Apama(ArithmeticExpression expr) {

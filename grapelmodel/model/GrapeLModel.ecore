@@ -39,12 +39,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
         eType="#//EventPatternNode" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" upperBound="-1"
-        eType="#//ContextConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Context"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraint" lowerBound="1"
         eType="#//RelationalConstraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="returnStatement" eType="#//ReturnStatement"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConstraint" eType="#//AttributeConstraint"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnStatement" lowerBound="1"
+        eType="#//ReturnStatement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
@@ -60,6 +62,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IBeXPatternNode" eSuperTypes="#//EventPatternNode">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXContextPattern"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Context">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" lowerBound="1"
+        upperBound="-1" eType="#//EventPatternNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" lowerBound="1"
+        upperBound="-1" eType="#//ContextConstraint" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ContextConstraint" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relation" lowerBound="1"
@@ -80,8 +88,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraintLiteral" eSuperTypes="#//RelationalConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="relationalExpression" lowerBound="1"
         eType="#//RelationalExpression" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConstraint" eType="#//AttributeConstraint"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraintProduction" eSuperTypes="#//RelationalConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" lowerBound="1" eType="#//RelationalConstraint"

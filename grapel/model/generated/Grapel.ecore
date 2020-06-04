@@ -28,6 +28,10 @@
         upperBound="-1" eType="#//EventPatternRelationalConstraint" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relConstraintRelations"
         unique="false" upperBound="-1" eType="#//RelationalConstraintRelation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//AttributeConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relations" unique="false"
+        upperBound="-1" eType="#//AttributeConstraintRelation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnStatement" eType="#//ReturnStatement"
         containment="true"/>
   </eClassifiers>
@@ -73,10 +77,6 @@
         upperBound="-1" eType="#//EventPatternNode"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"
         upperBound="-1" eType="#//RelationalOperator"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
-        eType="#//AttributeConstraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relations" unique="false"
-        upperBound="-1" eType="#//AttributeConstraintRelation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="RelationalOperator">
     <eLiterals name="AND" literal="&amp;&amp;"/>
