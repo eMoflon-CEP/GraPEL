@@ -12,4 +12,6 @@ abstract class AbstractTemplate {
 	}
 	
 	abstract def String generate();
+	
+	abstract def String getPath();
 }

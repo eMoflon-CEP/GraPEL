@@ -70,4 +70,8 @@ public class «names.getEventHandlerName(eventName)» extends EventHandler<«nam
 '''
 	}
 	
+	override getPath() {
+		paths.getEventHandlerLocation(eventName)
+	}
+	
 }

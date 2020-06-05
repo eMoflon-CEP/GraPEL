@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.emoflon.cep.generator.GrapeLGenerator;
 import org.emoflon.cep.generator.GrapelBuilderExtension;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.ibex.gt.codegen.EClassifiersManager;
@@ -110,7 +111,8 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		
 		//TODO: Build Grapel API :)
 
-		
+		GrapeLGenerator apiGenerator = new GrapeLGenerator(project, container, Arrays.asList("Democles", "HiPE", "Viatra"));
+//		apiGenerator.generateCode();
 		
 		
 		try {

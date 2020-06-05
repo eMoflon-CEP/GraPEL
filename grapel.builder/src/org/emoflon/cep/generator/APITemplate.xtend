@@ -81,4 +81,9 @@ public abstract class «names.APIName» extends GrapeEngineAPI{
 	«ENDFOR»
 }'''
 	}
+	
+	override String getPath() {
+		return paths.APILocation
+	}
+	
 }

@@ -78,4 +78,8 @@ public class «names.getEventName(eventName)» extends Event{
 '''
 	}
 	
+	override getPath() {
+		return paths.getEventLocation(eventName)
+	}
+	
 }

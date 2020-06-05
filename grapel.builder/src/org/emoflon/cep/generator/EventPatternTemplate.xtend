@@ -39,7 +39,7 @@ import GrapeLModel.RelationalExpressionLiteral
 import GrapeLModel.RelationalExpressionProduction
 import GrapeLModel.RelationalExpressionOperator
 
-class EventPatternTemplate {
+class EventPatternTemplate extends AbstractTemplate{
 	
 	String eventPatternName;
 	EventPattern pattern;
@@ -47,12 +47,13 @@ class EventPatternTemplate {
 	String attributeConstraint = "attributeCheck";
 	String sendActionName = "sendAction";
 	
-	new(String eventPatternName, ModelManager model) {
+	new(String eventPatternName, ImportManager imports, NSManager names, PathManager paths, ModelManager model) {
+		super(imports, names, paths)
 		this.eventPatternName = eventPatternName;
 		this.pattern = model.getEventPattern(eventPatternName);
 	}
 	
-	def String generate() {
+	override String generate() {
 		return '''monitor «eventPatternName» {
 	constant string eventChannel := "channel1";
 	
@@ -325,4 +326,9 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 }
 '''
 	}
+	
+	override getPath() {
+		paths.getEventPatternMonitorLocation(eventPatternName)
+	}
+	
 }

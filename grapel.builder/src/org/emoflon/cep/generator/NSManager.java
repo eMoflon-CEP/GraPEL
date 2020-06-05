@@ -8,6 +8,8 @@ import GrapeLModel.GrapeLModelContainer;
 
 public class NSManager {
 	
+	public static final String MAINTAINANCE_MONITOR = "Maintainance"; 
+	
 	private String projectName;
 	private GrapeLModelContainer container;
 	private Map<String, String> event2handler = new HashMap<>();
@@ -75,4 +77,5 @@ public class NSManager {
 	public String getMatchEventHandlerName(String eventName) {
 		return getEventHandlerName(eventName);
 	}
+
 }

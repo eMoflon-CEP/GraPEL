@@ -39,7 +39,7 @@ public class PathManager {
 		container.getEventPatterns().forEach(pattern -> {
 			patternMonitors.put(pattern.getName(), patternMonitorFolder+"/"+StringUtil.firstToUpper(pattern.getName())+".mon");
 		});
-		patternMonitors.put("Maintainance", patternMonitorFolder+"/Maintainance.mon");
+		patternMonitors.put(NSManager.MAINTAINANCE_MONITOR, patternMonitorFolder+"/Maintainance.mon");
 		
 		container.getEvents().forEach(event -> {
 			eventMonitors.put(event.getName(), eventMonitorFolder+"/"+names.getEventName(event.getName())+".mon");
@@ -82,11 +82,35 @@ public class PathManager {
 		return patternMonitors.values();
 	}
 	
+	public String getAPILocation() {
+		return basePackageLocation+"/"+names.getAPIName()+".java";
+	}
+	
+	public String getAPIEngineLocation(String engineName) {
+		return basePackageLocation+"/"+names.getEngineName(engineName)+".java";
+	}
+	
+	public String getEventLocation(String eventName) {
+		return events.get(eventName);
+	}
+	
+	public String getEventHandlerLocation(String eventHandlerName) {
+		return eventHandler.get(eventHandlerName);
+	}
+	
+	public String getMatchEventHandlerLocation(String patternName) {
+		return getEventHandlerLocation(patternName);
+	}
+	
 	public String getEventMonitorLocation(String eventName) {
 		return eventMonitors.get(eventName);
 	}
 	
 	public String getMatchEventMonitorLocation(String patternName) {
 		return getEventMonitorLocation(patternName);
+	}
+	
+	public String getEventPatternMonitorLocation(String eventPatternName) {
+		return patternMonitors.get(eventPatternName);
 	}
 }

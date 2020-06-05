@@ -24,4 +24,8 @@ public class «names.getEngineName(engineName)» extends «names.EMoflonAppName�
 '''
 	}
 	
+	override getPath() {
+		return paths.getAPIEngineLocation(engineName)
+	}
+	
 }
