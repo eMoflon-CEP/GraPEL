@@ -14,7 +14,7 @@ monitor testEvent2 {
 	
 					
 	action attributeCheck(p1 event1) returns boolean {
-		return event1.airport.ID == "Frankfurt";
+		return event1.p1airportID = "Frankfurt";
 	}
 			
 	action sendAction(p1 event1) {

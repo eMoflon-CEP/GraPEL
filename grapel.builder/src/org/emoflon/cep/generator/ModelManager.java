@@ -17,6 +17,7 @@ import GrapeLModel.EventAttribute;
 import GrapeLModel.EventPattern;
 import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.SimpleAttribute;
+import GrapeLModel.VirtualEventAttribute;
 
 public class ModelManager {
 	
@@ -53,8 +54,12 @@ public class ModelManager {
 		return fields.get(eventName).values();
 	}
 	
+	public Collection<EventAttribute> getNonVirtualFields(String eventName) {
+		return fields.get(eventName).values().stream().filter(eatr -> !(eatr instanceof VirtualEventAttribute)).collect(Collectors.toList());
+	}
+	
 	public Collection<EventAttribute> getComplexFields(String eventName) {
-		return getFields(eventName).stream().filter(field -> isComplexType(field)).collect(Collectors.toList());
+		return getFields(eventName).stream().filter(field -> (field instanceof ComplexAttribute)).collect(Collectors.toList());
 	}
 	
 	public EventPattern getEventPattern(String eventPattern) {
@@ -62,9 +67,9 @@ public class ModelManager {
 	}
 	
 	public static String getApamaFieldType(EventAttribute field) {
-		if(isComplexType(field))
+		if(field instanceof ComplexAttribute)
 			return "FieldTypes.INTEGER";
-		EDataType type = ((SimpleAttribute)field).getType();
+		EDataType type = (field instanceof SimpleAttribute)?((SimpleAttribute)field).getType():((VirtualEventAttribute)field).getType();
 		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
 			return "FieldTypes.INTEGER";
 		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
@@ -79,27 +84,23 @@ public class ModelManager {
 	}
 	
 	public static String getJavaFieldType(EventAttribute field) {
-		if(isComplexType(field)) {
+		if(field instanceof ComplexAttribute) {
 			ComplexAttribute cAtr = (ComplexAttribute)field;
 			return cAtr.getType().getName();
-		}else {
+		}else if(field instanceof SimpleAttribute) {
 			SimpleAttribute sAtr = (SimpleAttribute)field;
 			return sAtr.getType().getInstanceClassName();
+		} else {
+			VirtualEventAttribute vAtr = (VirtualEventAttribute)field;
+			return vAtr.getType().getInstanceClassName();
 		}
 	}
 	
-	public static boolean isComplexType(final EventAttribute field) {
-		if(field instanceof SimpleAttribute) {
-			return false;
-		} else {
-			return true;	
-		}
-	}
 	
 	public static String asApamaType(final EventAttribute field) {
-		if(isComplexType(field))
+		if(field instanceof ComplexAttribute)
 			return "integer";
-		EDataType type = ((SimpleAttribute)field).getType();
+		EDataType type = (field instanceof SimpleAttribute)?((SimpleAttribute)field).getType():((VirtualEventAttribute)field).getType();
 		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
 			return "integer";
 		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {

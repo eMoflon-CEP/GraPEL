@@ -45,7 +45,7 @@ event_pattern testEvent2 spawns e1 {
 	          
 	event1 {
 		event1.airport.ID == "Frankfurt"
-	}             
-	  
+	}                
+	       
 	spawn e1(event1.airport, "found with constraint!")           
 }      

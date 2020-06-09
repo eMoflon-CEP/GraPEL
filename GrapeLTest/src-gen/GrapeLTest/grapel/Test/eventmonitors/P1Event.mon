@@ -1,5 +1,6 @@
 event p1 {
 	boolean vanished;
 	integer airport;
+	string p1airportID;
 }
 

@@ -32,6 +32,7 @@ public class P1Event extends EMoflonEvent<P1Match, P1Pattern>{
 	@Override
 	public void assignFields() {
 		fields.put("airport", match.getAirport());
+		fields.put("p1airportID", match.getAirport().getID());
 	}
 		
 	@Override
@@ -43,6 +44,7 @@ public class P1Event extends EMoflonEvent<P1Match, P1Pattern>{
 		EventType type = new EventType(EVENT_NAME);
 		type.addField("vanished", FieldTypes.BOOLEAN);
 		type.addField("airport", FieldTypes.INTEGER);
+		type.addField("p1airportID", FieldTypes.STRING);
 		return type;
 	}
 		
@@ -59,6 +61,9 @@ public class P1Event extends EMoflonEvent<P1Match, P1Pattern>{
 		if("airport".equals(fieldName)) {
 			return Airport.class;
 		}
+		if("p1airportID".equals(fieldName)) {
+			return java.lang.String.class;
+		}
 		return null;
 	}
 	
@@ -66,6 +71,7 @@ public class P1Event extends EMoflonEvent<P1Match, P1Pattern>{
 	public void assignMatch() {
 		IMatch iMatch = new SimpleMatch(pattern.getPatternName());
 		iMatch.put("airport", fields.get("airport"));
+		iMatch.put("p1airportID", fields.get("p1airportID"));
 		P1Match match = new P1Match(pattern, iMatch);
 		this.match = match;
 	}	

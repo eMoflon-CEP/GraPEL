@@ -35,7 +35,7 @@ public class «names.getEventName(eventName)» extends Event{
 		super(apamaEvent, registry);
 	}
 	
-	«FOR field : model.getFields(eventName)»
+	«FOR field : model.getNonVirtualFields(eventName)»
 	public «ModelManager.getJavaFieldType(field)» get«StringUtil.firstToUpper(field.name)»() {
 		return («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
 	}

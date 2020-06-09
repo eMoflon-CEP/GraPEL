@@ -35,6 +35,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="ComplexAttribute" eSuperTypes="#//EventAttribute">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VirtualEventAttribute" eSuperTypes="#//EventAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EDataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseAttribute" lowerBound="1"
+        eType="#//ComplexAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPattern">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
@@ -213,6 +220,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="virtualAttribute" lowerBound="1"
+        eType="#//VirtualEventAttribute"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionProduction" eSuperTypes="#//AttributeExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"

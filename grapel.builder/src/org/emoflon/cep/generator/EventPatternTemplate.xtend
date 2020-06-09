@@ -190,7 +190,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	def String contextRelation2Apama(ContextRelation op) {
 		switch(op) {
 			case EQUAL: {
-				return "=="
+				return "="
 			}
 			case UNEQUAL: {
 				return "!="
@@ -228,7 +228,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	def String attributeConstraintRelation2Apama(AttributeConstraintRelation op) {
 		switch(op) {
 			case EQUAL: {
-				return "=="
+				return "="
 			}
 			case GREATER: {
 				return ">"
@@ -311,7 +311,12 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	}
 	
 	def String arithmeticValExpr2Apama(ArithmeticValueExpression expr) {
-		return '''«nodeExpression2Apama(expr.nodeExpression)»«IF expr.attributeExpression !== null».«attributeExpression2Apama(expr.attributeExpression)»«ENDIF»'''
+		if(expr.attributeExpression === null) {
+			return nodeExpression2Apama(expr.nodeExpression)
+		} else {
+			return  '''«expr.nodeExpression.eventPatternNode.name».«attributeExpression2Apama(expr.attributeExpression)»'''
+		}
+//		return '''«nodeExpression2Apama(expr.nodeExpression)»«IF expr.attributeExpression !== null».«attributeExpression2Apama(expr.attributeExpression)»«ENDIF»'''
 	}
 	
 	def String nodeExpression2Apama(EventPatternNodeExpression expr) {
@@ -335,10 +340,12 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	def String attributeExpression2Apama(AttributeExpression expr) {
 		if(expr instanceof AttributeExpressionLiteral) {
 			val literal = expr as  AttributeExpressionLiteral
-			return literal.attribute.name
+//			return literal.attribute.name
+			return literal.virtualAttribute.name
 		}else {
-			val production = expr as AttributeExpressionProduction
-			return production.attribute.name + "." + attributeExpression2Apama(production.child)
+//			val production = expr as AttributeExpressionProduction
+//			return production.attribute.name + "." + attributeExpression2Apama(production.child)
+			throw new RuntimeException("Nested attribute expressions not yet supported!");
 		}
 	}
 	

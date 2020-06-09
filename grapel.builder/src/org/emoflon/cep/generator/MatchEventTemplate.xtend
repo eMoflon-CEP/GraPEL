@@ -1,6 +1,8 @@
 package org.emoflon.cep.generator
 
 import org.emoflon.cep.generator.EventTemplate
+import GrapeLModel.EventAttribute
+import GrapeLModel.VirtualEventAttribute
 
 class MatchEventTemplate extends EventTemplate {
 	
@@ -21,7 +23,7 @@ import com.apama.event.parser.FieldTypes;
 
 import «imports.getPatternFQN(eventName, true)»;
 import «imports.getMatchFQN(eventName)»;
-«FOR field : model.getFields(eventName)»
+«FOR field : model.getComplexFields(eventName)»
 import «imports.getFieldFQN(eventName, field.name)»;
 «ENDFOR»
 		
@@ -38,7 +40,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match
 		super(apamaEvent, registry, pattern);
 	}
 	
-	«FOR field : model.getFields(eventName)»
+	«FOR field : model.getNonVirtualFields(eventName)»
 	public «ModelManager.getJavaFieldType(field)» get«StringUtil.firstToUpper(field.name)»() {
 		return («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
 	}
@@ -47,7 +49,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match
 	@Override
 	public void assignFields() {
 		«FOR field : model.getFields(eventName)»
-		fields.put("«field.name»", match.get«StringUtil.firstToUpper(field.name)»());
+		fields.put("«field.name»", «getAccessAttribute(field)»);
 		«ENDFOR»
 	}
 		
@@ -96,6 +98,15 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match
 	}	
 }
 '''		
+	}
+	
+	def String getAccessAttribute(EventAttribute eAtr) {
+		if(!(eAtr instanceof VirtualEventAttribute)) {
+			return '''match.get«StringUtil.firstToUpper(eAtr.name)»()'''
+		}else {
+			val vAtr = eAtr as VirtualEventAttribute
+			return '''match.get«StringUtil.firstToUpper(vAtr.baseAttribute.name)»().get«StringUtil.firstToUpper(vAtr.attribute.name)»()'''
+		}
 	}
 	
 }

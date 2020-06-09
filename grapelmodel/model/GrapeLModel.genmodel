@@ -66,6 +66,11 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//ComplexAttribute">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ComplexAttribute/type"/>
     </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//VirtualEventAttribute">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/baseAttribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//VirtualEventAttribute/attribute"/>
+    </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//EventPattern">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPattern/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventPattern/nodes"/>
@@ -171,6 +176,7 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//AttributeExpressionLiteral">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionLiteral/attribute"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionLiteral/class"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionLiteral/virtualAttribute"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//AttributeExpressionProduction">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeExpressionProduction/attribute"/>
