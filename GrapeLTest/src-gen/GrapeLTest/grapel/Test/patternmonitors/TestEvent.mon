@@ -4,16 +4,16 @@ monitor testEvent {
 	action onload() {
 		monitor.subscribe(eventChannel);
 		
-		on all event1 {
+		on all p1() as event1 {
 			sendAction(event1);
 		}
 		
-				
-		
-		action sendAction(p1 event1) {
-			send e1(event1.airport, "found!") to eventChannel;
-		}
-		
+	}
+	
+					
+			
+	action sendAction(p1 event1) {
+		send e1(event1.airport, "found!") to eventChannel;
 	}
 }
 

@@ -61,23 +61,14 @@ public class NotificationActor extends AbstractActor {
 			Collection<EObject> children = new LinkedList<>();
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlightObject(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getTimeStamp(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlight(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlightContainer(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
-			Flights.Flight _flight = (Flights.Flight) obj;
-			if(_flight.getDeparture() != null)
-				children.add(_flight.getDeparture());
-			if(_flight.getArrival() != null)
-				children.add(_flight.getArrival());
-			return children;
-		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getPersons(), obj -> {
-			Collection<EObject> children = new LinkedList<>();
-			Flights.Persons _persons = (Flights.Persons) obj;
-			children.addAll(_persons.getPersons());
+			Flights.FlightContainer _flightcontainer = (Flights.FlightContainer) obj;
+			children.addAll(_flightcontainer.getFlights());
 			return children;
 		});
 		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getPlanes(), obj -> {
@@ -86,16 +77,16 @@ public class NotificationActor extends AbstractActor {
 			children.addAll(_planes.getPlanes());
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getBooking(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getPersons(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
-			Flights.Booking _booking = (Flights.Booking) obj;
-			children.addAll(_booking.getTravels());
+			Flights.Persons _persons = (Flights.Persons) obj;
+			children.addAll(_persons.getPersons());
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getAirports(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getAirport(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
-			Flights.Airports _airports = (Flights.Airports) obj;
-			children.addAll(_airports.getAirports());
+			Flights.Airport _airport = (Flights.Airport) obj;
+			children.addAll(_airport.getGates());
 			return children;
 		});
 		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlightModel(), obj -> {
@@ -117,30 +108,33 @@ public class NotificationActor extends AbstractActor {
 				children.add(_flightmodel.getGlobalTime());
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getTimeStamp(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlightObject(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getRoute(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getBooking(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
-			return children;
-		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getGate(), obj -> {
-			Collection<EObject> children = new LinkedList<>();
-			return children;
-		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlightContainer(), obj -> {
-			Collection<EObject> children = new LinkedList<>();
-			Flights.FlightContainer _flightcontainer = (Flights.FlightContainer) obj;
-			children.addAll(_flightcontainer.getFlights());
+			Flights.Booking _booking = (Flights.Booking) obj;
+			children.addAll(_booking.getTravels());
 			return children;
 		});
 		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getPerson(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getPlane(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getAirports(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
+			Flights.Airports _airports = (Flights.Airports) obj;
+			children.addAll(_airports.getAirports());
+			return children;
+		});
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getFlight(), obj -> {
+			Collection<EObject> children = new LinkedList<>();
+			Flights.Flight _flight = (Flights.Flight) obj;
+			if(_flight.getDeparture() != null)
+				children.add(_flight.getDeparture());
+			if(_flight.getArrival() != null)
+				children.add(_flight.getArrival());
 			return children;
 		});
 		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getBookings(), obj -> {
@@ -155,10 +149,16 @@ public class NotificationActor extends AbstractActor {
 			children.addAll(_routes.getRoutes());
 			return children;
 		});
-		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getAirport(), obj -> {
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getPlane(), obj -> {
 			Collection<EObject> children = new LinkedList<>();
-			Flights.Airport _airport = (Flights.Airport) obj;
-			children.addAll(_airport.getGates());
+			return children;
+		});
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getGate(), obj -> {
+			Collection<EObject> children = new LinkedList<>();
+			return children;
+		});
+		explorationConsumer.put(Flights.FlightsPackage.eINSTANCE.getRoute(), obj -> {
+			Collection<EObject> children = new LinkedList<>();
 			return children;
 		});
 	}

@@ -66,13 +66,13 @@ class EventPatternTemplate extends AbstractTemplate{
 			«getRelationalConstraintBody(pattern.context, pattern.attributeConstraint)»
 		}
 		
-		«IF pattern.context !== null»«getContextConstraint(pattern.context)»«ENDIF»
-				
-		«IF pattern.attributeConstraint !== null»«getAttributeConstraint(pattern.attributeConstraint)»«ENDIF»
-		
-		«getSendAction(pattern.returnStatement)»
-		
 	}
+	
+	«IF pattern.context !== null»«getContextConstraint(pattern.context)»«ENDIF»
+					
+	«IF pattern.attributeConstraint !== null»«getAttributeConstraint(pattern.attributeConstraint)»«ENDIF»
+			
+	«getSendAction(pattern.returnStatement)»
 }
 '''
 	}
@@ -102,7 +102,13 @@ class EventPatternTemplate extends AbstractTemplate{
 	def String relationalExpr2Apama(RelationalExpression expr) {
 		if(expr instanceof RelationalExpressionLiteral) {
 			val literal = expr as RelationalExpressionLiteral;
-			return literal.eventPatternNode.name
+			if(literal.eventPatternNode instanceof EventNode) {
+				val node = literal.eventPatternNode as EventNode;
+				return '''«node.type.name»() as «node.name»'''
+			}else {
+				val node = literal.eventPatternNode as IBeXPatternNode;
+				return '''«node.type.name»() as «node.name»'''
+			}
 		} else {
 			val production = expr as RelationalExpressionProduction
 			return '''«relationalExpr2Apama(production.lhs)» «relationalExprOp2Apama(production.op)» «relationalExpr2Apama(production.rhs)»'''

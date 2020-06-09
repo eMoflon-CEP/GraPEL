@@ -3,6 +3,7 @@ package org.emoflon.cep.builder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -221,7 +222,7 @@ public class GrapelToGrapelModelTransformer {
 	}
 	
 	private Set<EventPatternNode> getContextConstraintParams(Context context) {
-		Set<EventPatternNode> params = new HashSet<>();
+		Set<EventPatternNode> params = new LinkedHashSet<>();
 		context.getContextConstraints().stream().filter(cc -> (cc instanceof NodeContextConstraint)).map(cc -> (NodeContextConstraint)cc).forEach(cc -> {
 			params.add(cc.getLhs().getEventPatternNode());
 			params.add(cc.getRhs().getEventPatternNode());
@@ -359,14 +360,14 @@ public class GrapelToGrapelModelTransformer {
 			AttributeConstraintLiteral literal = (AttributeConstraintLiteral)root;
 			AttributeConstraintExpression expr = literal.getConstraintExpression();
 			
-			Set<EventPatternNode> params = new HashSet<>();
+			Set<EventPatternNode> params = new LinkedHashSet<>();
 			params.addAll(getArithmeticExpressionParams(expr.getLhs()));
 			params.addAll(getArithmeticExpressionParams(expr.getRhs()));
 			return params;
 		}
 		
 		AttributeConstraintProduction production = (AttributeConstraintProduction)root;
-		Set<EventPatternNode> params = new HashSet<>();
+		Set<EventPatternNode> params = new LinkedHashSet<>();
 		params.addAll(getAttributeConstraintParams(production.getLhs()));
 		params.addAll(getAttributeConstraintParams(production.getRhs()));
 		
@@ -418,16 +419,16 @@ public class GrapelToGrapelModelTransformer {
 		if(root instanceof ArithmeticExpressionLiteral) {
 			ArithmeticExpressionLiteral literal = (ArithmeticExpressionLiteral)root;
 			if(literal.getValue() instanceof ArithmeticValueLiteral)
-				return new HashSet<>();
+				return new LinkedHashSet<>();
 			
 			ArithmeticValueExpression expr = (ArithmeticValueExpression) literal.getValue();
-			Set<EventPatternNode> params = new HashSet<>();
+			Set<EventPatternNode> params = new LinkedHashSet<>();
 			params.add(expr.getNodeExpression().getEventPatternNode());
 			return params;
 		}
 		
 		ArithmeticExpressionProduction production = (ArithmeticExpressionProduction)root;
-		Set<EventPatternNode> params = new HashSet<>();
+		Set<EventPatternNode> params = new LinkedHashSet<>();
 		params.addAll(getArithmeticExpressionParams(production.getLhs()));
 		params.addAll(getArithmeticExpressionParams(production.getRhs()));
 		

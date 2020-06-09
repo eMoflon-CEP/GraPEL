@@ -17,11 +17,11 @@ public class E1Event extends Event{
 		super(apamaEvent, registry);
 	}
 	
-	public java.lang.String getStr() {
-		return (java.lang.String) fields.get("str");
-	}
 	public Airport getAirport() {
 		return (Airport) fields.get("airport");
+	}
+	public java.lang.String getStr() {
+		return (java.lang.String) fields.get("str");
 	}
 		
 	@Override
@@ -31,8 +31,8 @@ public class E1Event extends Event{
 			
 	public static EventType createEventType() {
 		EventType type = new EventType(EVENT_NAME);
-		type.addField("str", FieldTypes.STRING);
 		type.addField("airport", FieldTypes.INTEGER);
+		type.addField("str", FieldTypes.STRING);
 		return type;
 	}
 		
@@ -46,11 +46,11 @@ public class E1Event extends Event{
 		
 	@Override
 	public Class<?> getClassOfField(String fieldName) {
-		if("str".equals(fieldName)) {
-			return java.lang.String.class;
-		}
 		if("airport".equals(fieldName)) {
 			return Airport.class;
+		}
+		if("str".equals(fieldName)) {
+			return java.lang.String.class;
 		}
 		return null;
 	}

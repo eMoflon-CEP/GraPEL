@@ -2,6 +2,7 @@ package org.emoflon.cep.generator;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -23,11 +24,11 @@ public class ModelManager {
 	private GrapeLModelContainer container;
 	
 	private Map<String, EventPattern> eventPatterns = new HashMap<>();
-	private Map<String, Map<String, EventAttribute>> fields = new HashMap<>();
+	private Map<String, Map<String, EventAttribute>> fields = new LinkedHashMap<>();
 	
 	private void mapFields() {
 		container.getEvents().forEach(event -> {
-			Map<String, EventAttribute> localFields = new HashMap<>();
+			Map<String, EventAttribute> localFields = new LinkedHashMap<>();
 			fields.put(event.getName(), localFields);
 			event.getAttributes().forEach(atr -> {
 				localFields.put(atr.getName(), atr);
