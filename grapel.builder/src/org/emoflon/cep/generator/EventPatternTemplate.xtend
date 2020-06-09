@@ -134,7 +134,7 @@ class EventPatternTemplate extends AbstractTemplate{
 		if(context === null && constraint === null) {
 			return '''«sendActionName»(«getSendActionParams(pattern.returnStatement)»);'''
 		} else {
-			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF constraint !== null» && «attributeConstraint»()«ENDIF») {
+			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» && «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
 	«sendActionName»(«getSendActionParams(pattern.returnStatement)»);
 }'''
 		}
@@ -151,6 +151,10 @@ action «contextConstraint»(«FOR param : context.params SEPARATOR ', '»«even
 	return «FOR constraint : context.contextConstraints SEPARATOR ' &&\n'»«contextConstraint2Apama(constraint)»«ENDFOR»;
 }
 '''
+	}
+	
+	def String getAttributeConstraintParams(AttributeConstraint constraint) {
+		return '''«FOR param : constraint.params SEPARATOR ', '»«param.name»«ENDFOR»'''
 	}
 	
 	def String getAttributeConstraint(AttributeConstraint constraint) {

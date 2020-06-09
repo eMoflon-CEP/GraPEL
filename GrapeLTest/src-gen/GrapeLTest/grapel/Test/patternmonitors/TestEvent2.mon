@@ -1,0 +1,24 @@
+monitor testEvent2 {
+	constant string eventChannel := "channel1";
+	
+	action onload() {
+		monitor.subscribe(eventChannel);
+		
+		on all p1() as event1 {
+			if(attributeCheck(event1)) {
+				sendAction(event1);
+			}
+		}
+		
+	}
+	
+					
+	action attributeCheck(p1 event1) returns boolean {
+		return event1.airport.ID == "Frankfurt";
+	}
+			
+	action sendAction(p1 event1) {
+		send e1(event1.airport, "found with constraint!") to eventChannel;
+	}
+}
+
