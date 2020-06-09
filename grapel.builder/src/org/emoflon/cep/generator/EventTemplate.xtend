@@ -14,7 +14,7 @@ class EventTemplate extends AbstractTemplate {
 	}
 	
 	override String generate() {
-		return '''package «imports.packageFQN»;
+		return '''package «imports.packageFQN».events;
 		
 import org.emoflon.cep.engine.Event;
 import org.emoflon.cep.engine.TypeRegistry;
@@ -22,7 +22,7 @@ import org.emoflon.cep.engine.TypeRegistry;
 import com.apama.event.parser.EventType;
 import com.apama.event.parser.FieldTypes;
 
-«FOR field : model.getFields(eventName)»
+«FOR field : model.getComplexFields(eventName)»
 import «imports.getFieldFQN(eventName, field.name)»;
 «ENDFOR»
 		
@@ -35,11 +35,11 @@ public class «names.getEventName(eventName)» extends Event{
 		super(apamaEvent, registry);
 	}
 	
-«FOR field : model.getFields(eventName)»
-	public «ModelManager.getJavaFieldType(field)» get«field.name»() {
+	«FOR field : model.getFields(eventName)»
+	public «ModelManager.getJavaFieldType(field)» get«StringUtil.firstToUpper(field.name)»() {
 		return («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
 	}
-«ENDFOR»
+	«ENDFOR»
 		
 	@Override
 	public EventType getStaticEventType() {
@@ -49,7 +49,7 @@ public class «names.getEventName(eventName)» extends Event{
 	public static EventType createEventType() {
 		EventType type = new EventType(EVENT_NAME);
 		«FOR field : model.getFields(eventName)»
-		type.addField("«field.name»", FieldTypes.«ModelManager.getApamaFieldType(field)»
+		type.addField("«field.name»", «ModelManager.getApamaFieldType(field)»);
 		«ENDFOR»
 		return type;
 	}

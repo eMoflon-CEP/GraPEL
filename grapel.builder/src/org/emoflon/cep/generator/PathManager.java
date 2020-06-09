@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.moflon.core.utilities.WorkspaceHelper;
 
 import GrapeLModel.GrapeLModelContainer;
 
@@ -49,8 +52,11 @@ public class PathManager {
 	private void mapEvents() {
 		container.getEvents().forEach(event -> {
 			events.put(event.getName(), eventFolder+"/"+names.getEventName(event.getName())+".java");
-			eventHandler.put(event.getName(), handlerFolder+"/"+names.getEventName(event.getName())+".java");
+			eventHandler.put(event.getName(), handlerFolder+"/"+names.getEventHandlerName(event.getName())+".java");
 		});
+		
+		events.put(NSManager.SYNCHRONIZATION_EVENT, eventMonitorFolder+"/RequestSynchronizationEvent.mon");
+		events.put(NSManager.UPDATE_EVENT, eventMonitorFolder+"/UpdateEvent.mon");
 	}
 	
 	public PathManager(IProject project, NSManager names, GrapeLModelContainer container) {
@@ -72,6 +78,17 @@ public class PathManager {
 		
 		mapMonitors();
 		mapEvents();
+	}
+	
+	public void createRequiredFolders() throws CoreException {
+		String relGrapelPkg = "src-gen/"+project.getName().replace(".", "/")+"/grapel";
+		String relBasePkg = relGrapelPkg + "/" + StringUtil.firstToUpper(container.getName());
+		WorkspaceHelper.createFolderIfNotExists(project.getFolder(relGrapelPkg), new NullProgressMonitor());
+		WorkspaceHelper.createFolderIfNotExists(project.getFolder(relBasePkg), new NullProgressMonitor());
+		WorkspaceHelper.createFolderIfNotExists(project.getFolder(relBasePkg + "/events"), new NullProgressMonitor());
+		WorkspaceHelper.createFolderIfNotExists(project.getFolder(relBasePkg + "/eventhandler"), new NullProgressMonitor());
+		WorkspaceHelper.createFolderIfNotExists(project.getFolder(relBasePkg + "/eventmonitors"), new NullProgressMonitor());
+		WorkspaceHelper.createFolderIfNotExists(project.getFolder(relBasePkg + "/patternmonitors"), new NullProgressMonitor());
 	}
 	
 	public String getCorrelatorLocation( ) {

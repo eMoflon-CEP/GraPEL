@@ -10,10 +10,10 @@ class MatchEventMonitorTemplate extends EventMonitorTemplate {
 	
 	override String generate() {
 		return '''event «eventName» {
-boolean vanished;
-«FOR field : model.getFields(eventName)»
-«ModelManager.asApamaType(field)» «field.name»
-«ENDFOR»
+	boolean vanished;
+	«FOR field : model.getFields(eventName)»
+	«ModelManager.asApamaType(field)» «field.name»;
+	«ENDFOR»
 }
 '''
 	}

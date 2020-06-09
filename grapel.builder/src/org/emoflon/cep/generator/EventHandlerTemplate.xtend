@@ -14,7 +14,7 @@ class EventHandlerTemplate extends AbstractTemplate {
 	}
 	
 	override String generate() {
-		return '''package «imports.packageFQN»;
+		return '''package «imports.packageFQN».eventhandler;
 
 import java.io.IOException;
 
@@ -58,7 +58,7 @@ public class «names.getEventHandlerName(eventName)» extends EventHandler<«nam
 
 	@Override
 	public EventType getEventType() {
-		return EventE1.EVENT_TYPE;
+		return «names.getEventName(eventName)».EVENT_TYPE;
 	}
 
 	@Override

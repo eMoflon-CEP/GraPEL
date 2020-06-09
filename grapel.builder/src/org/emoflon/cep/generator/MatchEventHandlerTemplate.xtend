@@ -9,7 +9,7 @@ class MatchEventHandlerTemplate extends EventHandlerTemplate {
 	}
 	
 	override String generate() {
-		return'''package «imports.packageFQN»;
+		return'''package «imports.packageFQN».eventhandler;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -23,6 +23,8 @@ import com.apama.event.parser.EventType;
 import «imports.EMoflonAPIFQN»;
 import «imports.getMatchFQN(eventName)»;
 import «imports.getPatternFQN(eventName, true)»;
+
+import «imports.getEventFQN(eventName)»;
 
 public class «names.getMatchEventHandlerName(eventName)» extends EMoflonEventHandler<«names.getMatchEventName(eventName)», «names.getMatchName(eventName)», «names.getPatternName(eventName, true)»>{
 	

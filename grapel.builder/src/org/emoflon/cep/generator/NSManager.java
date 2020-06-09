@@ -8,7 +8,9 @@ import GrapeLModel.GrapeLModelContainer;
 
 public class NSManager {
 	
-	public static final String MAINTAINANCE_MONITOR = "Maintainance"; 
+	public static final String MAINTAINANCE_MONITOR = "Maintainance";
+	public static final String SYNCHRONIZATION_EVENT = "RequestSynchronizationEvent";
+	public static final String UPDATE_EVENT = "UpdateEvent";
 	
 	private String projectName;
 	private GrapeLModelContainer container;
@@ -47,7 +49,7 @@ public class NSManager {
 	}
 	
 	public String getEngineName(String engineName) {
-		return StringUtil.firstToUpper(container.getName())+"GrapeLEngine";
+		return getPkgName()+"GrapeL"+engineName+"Engine";
 	}
 	
 	public String getEMoflonEngineAppName(String engineName) {

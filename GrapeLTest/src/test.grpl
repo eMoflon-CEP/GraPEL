@@ -33,9 +33,9 @@ pattern p1() {
 //}  
 
 event_pattern testEvent spawns e1 {
-	event1 : p1
-	     
-	event1 {}        
+	event1 : p1      
+	          
+	event1 {}             
 	 
 	spawn e1(event1.airport, "found!")        
 }      

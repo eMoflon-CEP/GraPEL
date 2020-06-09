@@ -1,0 +1,5 @@
+event p1 {
+	boolean vanished;
+	integer airport;
+}
+

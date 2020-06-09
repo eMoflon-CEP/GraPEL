@@ -49,9 +49,9 @@ public abstract class GrapeEngineAPI {
 	
 	protected abstract List<String> getMonitorScriptFiles();
 	
-	protected abstract List<EventHandler<? extends Event>> createEventHandler();
+	protected abstract List<EventHandler<?>> createEventHandler();
 	
-	public EventHandler<? extends Event> getEventHandler(final String eventType) {
+	public EventHandler<?> getEventHandler(final String eventType) {
 		return grapeEngine.getEventHandler(eventType);
 	}
 	

@@ -12,9 +12,10 @@ class APIEngineTemplate extends AbstractTemplate{
 	override generate() {
 		return '''package «imports.packageFQN»;
 		
+import «imports.APIFQN»;
 import «imports.getEMoflonEngineAppFQN(engineName)»;
 		
-public class «names.getEngineName(engineName)» extends «names.EMoflonAppName» {
+public class «names.getEngineName(engineName)» extends «names.APIName» {
 		
 	public «names.getEngineName(engineName)»() {
 		super(new «names.getEMoflonEngineAppName(engineName)»());

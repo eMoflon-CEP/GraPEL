@@ -38,6 +38,8 @@ import GrapeLModel.RelationalConstraintOperator
 import GrapeLModel.RelationalExpressionLiteral
 import GrapeLModel.RelationalExpressionProduction
 import GrapeLModel.RelationalExpressionOperator
+import GrapeLModel.EventNodeExpression
+import GrapeLModel.IBeXPatternNodeExpression
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -124,10 +126,10 @@ class EventPatternTemplate extends AbstractTemplate{
 	
 	def String getRelationalConstraintBody(Context context, AttributeConstraint constraint) {
 		if(context === null && constraint === null) {
-			return '''«getSendAction(pattern.returnStatement)»();'''
+			return '''«sendActionName»(«getSendActionParams(pattern.returnStatement)»);'''
 		} else {
 			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF constraint !== null» && «attributeConstraint»()«ENDIF») {
-	«getSendAction(pattern.returnStatement)»();
+	«sendActionName»(«getSendActionParams(pattern.returnStatement)»);
 }'''
 		}
 		
@@ -151,6 +153,10 @@ action «attributeConstraint»(«FOR param : constraint.params SEPARATOR ', '»�
 	return «attributeConstraint2Apama(constraint)»;
 }
 '''
+	}
+	
+	def String getSendActionParams(ReturnStatement returnStatement) {
+		return '''«FOR param : returnStatement.parameters.flatMap[param | param.params] SEPARATOR ', '»«param.name»«ENDFOR»'''
 	}
 	
 	def String getSendAction(ReturnStatement returnStatement) {
@@ -283,7 +289,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 				return longfloat.value+""
 			}else if(literal instanceof StringLiteral) {
 				val str = literal as StringLiteral
-				return str.value
+				return '''"«str.value»"'''
 			}else {
 				val bool = literal as BooleanLiteral
 				return (bool.value)?"true":"false"
@@ -295,11 +301,25 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	}
 	
 	def String arithmeticValExpr2Apama(ArithmeticValueExpression expr) {
-		return nodeExpression2Apama(expr.nodeExpression)+"."+attributeExpression2Apama(expr.attributeExpression)
+		return '''«nodeExpression2Apama(expr.nodeExpression)»«IF expr.attributeExpression !== null».«attributeExpression2Apama(expr.attributeExpression)»«ENDIF»'''
 	}
 	
 	def String nodeExpression2Apama(EventPatternNodeExpression expr) {
-		return expr.eventPatternNode.name
+		if(expr instanceof EventNodeExpression) {
+			val enExpr = expr as EventNodeExpression
+			return nodeExpression2Apama(enExpr)
+		} else {
+			val ptExpr = expr as IBeXPatternNodeExpression
+			return nodeExpression2Apama(ptExpr)
+		}
+	}
+	
+	def String nodeExpression2Apama(EventNodeExpression expr) {
+		return '''«expr.eventPatternNode.name»«IF expr.eventAttribute !== null».«expr.eventAttribute.name»«ENDIF»'''
+	}
+	
+	def String nodeExpression2Apama(IBeXPatternNodeExpression expr) {
+		return '''«expr.eventPatternNode.name»«IF expr.patternAttribute !== null».«expr.patternAttribute.name»«ENDIF»'''
 	}
 	
 	def String attributeExpression2Apama(AttributeExpression expr) {

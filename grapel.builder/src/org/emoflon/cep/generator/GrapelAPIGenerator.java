@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.MatchEvent;
 
-public class GrapeLGenerator {
+public class GrapelAPIGenerator {
 	
 	private IProject project;
 	private GrapeLModelContainer container;
@@ -30,7 +31,7 @@ public class GrapeLGenerator {
 	private List<AbstractTemplate> templates = new LinkedList<>();
 	private Map<String, String> files = Collections.synchronizedMap(new HashMap<>());
 
-	public GrapeLGenerator(IProject project, GrapeLModelContainer container, Collection<String> pmEngines) {
+	public GrapelAPIGenerator(IProject project, GrapeLModelContainer container, Collection<String> pmEngines) {
 		this.project = project;
 		this.container = container;
 		this.pmEngines = pmEngines;
@@ -66,14 +67,19 @@ public class GrapeLGenerator {
 		});
 	}
 	
-	public void generateCode() {
+	public void generateCode() throws CoreException {
+		paths.createRequiredFolders();
+		
 		templates.parallelStream().forEach(template -> {
 			files.put(template.getPath(), template.generate());
 		});
 		
+		files.put(paths.getEventPatternMonitorLocation(NSManager.MAINTAINANCE_MONITOR), EventPatternTemplate.getSyncPattern());
+		
 		files.entrySet().parallelStream().forEach(entry -> {
 			try {
 				Files.write(Paths.get(entry.getKey()), Arrays.asList(entry.getValue()));
+				System.out.println("Saved file: "+entry.getKey());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -19,7 +19,9 @@ Require-Bundle: grapel;bundle-version="1.0.0",
  org.moflon.core.build,
  org.emoflon.core.dependencies,
  org.emoflon.ibex.gt.editor.ui,
- org.moflon.core.plugins
+ org.moflon.core.plugins,
+ org.eclipse.pde.core
 Export-Package: org.emoflon.cep.builder,
  org.emoflon.cep.engine,
+ org.emoflon.cep.generator,
  org.emoflon.cep.util

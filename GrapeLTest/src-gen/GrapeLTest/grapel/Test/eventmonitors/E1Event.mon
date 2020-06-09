@@ -1,0 +1,5 @@
+event e1 {
+	string str;
+	integer airport;
+}
+

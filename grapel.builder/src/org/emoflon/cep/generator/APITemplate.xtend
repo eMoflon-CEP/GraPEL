@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.emoflon.cep.engine.ApamaCorrelator;
-import org.emoflon.cep.engine.Event;
 import org.emoflon.cep.engine.EventHandler;
 import org.emoflon.cep.engine.GrapeEngineAPI;
 
@@ -22,6 +21,10 @@ import com.apama.engine.beans.EngineClientFactory;
 import com.apama.engine.beans.interfaces.EngineClientInterface;
 
 import «imports.EMoflonAppFQN»;
+
+«FOR fqns : imports.getEventHandlerFQNs()»
+import «fqns»;
+«ENDFOR»
 
 public abstract class «names.APIName» extends GrapeEngineAPI{
 	
@@ -66,7 +69,7 @@ public abstract class «names.APIName» extends GrapeEngineAPI{
 	}
 	
 	@Override
-	protected List<EventHandler<? extends Event>> createEventHandler() {
+	protected List<EventHandler<?>> createEventHandler() {
 		return Arrays.asList(
 			«FOR handler : names.eventHandlerNames SEPARATOR ', '»
 			new «handler»(grapeEngine)

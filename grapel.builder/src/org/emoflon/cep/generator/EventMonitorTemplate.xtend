@@ -13,9 +13,9 @@ class EventMonitorTemplate extends AbstractTemplate{
 	
 	override String generate() {
 		return '''event «eventName» {
-«FOR field : model.getFields(eventName)»
-«ModelManager.asApamaType(field)» «field.name»
-«ENDFOR»
+	«FOR field : model.getFields(eventName)»
+	«ModelManager.asApamaType(field)» «field.name»;
+	«ENDFOR»
 }
 '''
 	}
