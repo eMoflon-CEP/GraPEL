@@ -39,7 +39,7 @@
     </genEnums>
     <genClasses ecoreClass="Grapel.ecore#//EditorGTFile">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/events"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/evenPatterns"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/eventPatterns"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//Event">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//Event/name"/>
