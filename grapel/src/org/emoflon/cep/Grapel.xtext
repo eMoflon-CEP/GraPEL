@@ -12,7 +12,7 @@ EditorGTFile: {EditorGTFile}
   	conditions+=EditorCondition |
   	attributeConditionLibraries+=EditorAttributeConditionLibrary |
   	events += Event |
-  	evenPatterns += EventPattern)*
+  	eventPatterns += EventPattern)*
   	
 ;
 

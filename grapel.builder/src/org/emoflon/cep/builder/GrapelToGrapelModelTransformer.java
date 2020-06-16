@@ -95,7 +95,7 @@ public class GrapelToGrapelModelTransformer {
 				.collect(Collectors.toList()));
 		
 		//transform event patterns
-		container.getEventPatterns().addAll(grapelFile.getEvenPatterns().parallelStream()
+		container.getEventPatterns().addAll(grapelFile.getEventPatterns().parallelStream()
 				.map(pattern -> transform(pattern))
 				.collect(Collectors.toList()));
 		
