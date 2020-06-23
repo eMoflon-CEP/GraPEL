@@ -3,6 +3,14 @@
  */
 package org.emoflon.cep.validation;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.xtext.validation.Check;
+import org.emoflon.cep.grapel.EditorGTFile;
+import org.emoflon.cep.grapel.Event;
+import org.emoflon.cep.grapel.EventPattern;
+import org.emoflon.cep.grapel.GrapelPackage;
 
 /**
  * This class contains custom validation rules. 
@@ -11,15 +19,85 @@ package org.emoflon.cep.validation;
  */
 public class GrapelValidator extends AbstractGrapelValidator {
 	
-//	public static final INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	public void checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.getName().charAt(0))) {
-//			warning("Name should start with a capital",
-//					GrapelPackage.Literals.GREETING__NAME,
-//					INVALID_NAME);
-//		}
-//	}
+	// TODO: fill in blacklisted names not liked by Apama or Java
+	public static final List<String> eventNameBlacklist = new LinkedList<>();
+	public static final List<String> eventPatternNameBlacklist = new LinkedList<>();
+
+	public static final String CODE_PREFIX = "org.emoflon.cep.";
 	
+	// Errors for event_patterns
+	public static final String EVENT_PATTERN_NAME_FORBIDDEN_MESSAGE = "Event_pattern cannot be named '%s'. Use a different name.";
+	public static final String EVENT_PATTERN_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event_pattern '%s' must not be declared multiple times.";
+	
+	public static final String EVENT_PATTERN_INVALID_RETURN = CODE_PREFIX +  "event_pattern.returnStatement.invalid";
+	public static final String SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE = "Event_pattern %s spawns a different event than indicated.";
+	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with wrong parameters.";
+	
+	
+	// Errors for events
+	public static final String EVENT_NAME_FORBIDDEN_MESSAGE = "Event cannot be named '%s'. Use a different name.";
+	public static final String EVENT_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event '%s' must not be declared multiple times.";
+
+	@Check
+	public void checkEventPattern(EventPattern pattern) {
+		checkEventPatternNameValid(pattern);
+		checkEventPatternNameUnique(pattern);
+		checkEventPatternReturnStatement(pattern);
+	}
+	
+	public void checkEventPatternNameValid(EventPattern pattern) {
+		if(pattern.getName() == null)
+			return;
+		if(eventPatternNameBlacklist.contains(pattern.getName()))
+			error(String.format(EVENT_PATTERN_NAME_FORBIDDEN_MESSAGE, pattern.getName()),
+					GrapelPackage.Literals.EVENT_PATTERN__NAME,
+					NAME_BLACKLISTED);
+		// any style rules?
+	}
+	
+	public void checkEventPatternNameUnique(EventPattern pattern) {
+		EditorGTFile file = (EditorGTFile) pattern.eContainer();
+		long count = file.getEventPatterns().stream().filter(p -> p.getName() !=  null && p.getName().equals(pattern.getName())).count();
+		if (count != 1)
+			error(String.format(EVENT_PATTERN_NAME_MULTIPLE_DECLARATIONS_MESSAGE, pattern.getName()),
+					GrapelPackage.Literals.EVENT_PATTERN__NAME,
+					NAME_EXPECT_UNIQUE);
+	}
+	
+	public void checkEventPatternReturnStatement(EventPattern pattern) {
+		Event returnType = pattern.getReturnType().getReturnType();
+		Event returnArg = pattern.getReturnStatement().getReturnArg();
+		if(returnType.getName() != null && returnArg.getName() != null) {
+			if(!returnType.getName().equals(returnArg.getName()))
+				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+						GrapelPackage.Literals.EVENT_PATTERN__NAME,
+						EVENT_PATTERN_INVALID_RETURN);
+			// else TODO: CHECKING FOR PARAMETERS
+		}
+	}
+	
+	@Check
+	public void checkEvent(Event event) {
+		checkEventNameValid(event);
+		checkEventNameUnique(event);
+	}
+	
+	public void checkEventNameValid(Event event) {
+		if(event.getName() == null)
+			return;
+		if(eventPatternNameBlacklist.contains(event.getName()))
+			error(String.format(EVENT_NAME_FORBIDDEN_MESSAGE, event.getName()),
+					GrapelPackage.Literals.EVENT__NAME,
+					NAME_BLACKLISTED);
+		// any style rules?
+	}
+	
+	public void checkEventNameUnique(Event event) {
+		EditorGTFile file = (EditorGTFile) event.eContainer();
+		long count = file.getEvents().stream().filter(e -> e.getName() !=  null && e.getName().equals(event.getName())).count();
+		if (count != 1)
+			error(String.format(EVENT_NAME_MULTIPLE_DECLARATIONS_MESSAGE, event.getName()),
+					GrapelPackage.Literals.EVENT__NAME,
+					NAME_EXPECT_UNIQUE);
+	}
 }
