@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flights:FlightModel
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:Flights="platform:/resource/Flights/model/Flights.ecore">
+  <flights>
+    <flights
+        ID="MUC->FRA_1"
+        travels="//@bookings/@bookings.0/@travels.0 //@bookings/@bookings.0/@travels.1"
+        route="//@routes/@routes.2"
+        src="//@airports/@airports.3/@gates.0"
+        trg="//@airports/@airports.0/@gates.0"
+        plane="//@planes/@planes.0">
+      <departure
+          time="1588662000000"/>
+      <arrival
+          time="1588665900000"/>
+    </flights>
+    <flights
+        ID="FRA->BER_1"
+        travels="//@bookings/@bookings.0/@travels.0 //@bookings/@bookings.0/@travels.1"
+        route="//@routes/@routes.0"
+        src="//@airports/@airports.0/@gates.2"
+        trg="//@airports/@airports.1/@gates.0"
+        plane="//@planes/@planes.0">
+      <departure
+          time="1588666200000"/>
+      <arrival
+          time="1588670400000"/>
+    </flights>
+    <flights
+        ID="FRA->BER_2"
+        travels="//@bookings/@bookings.1/@travels.0"
+        route="//@routes/@routes.0"
+        src="//@airports/@airports.0/@gates.0"
+        trg="//@airports/@airports.1/@gates.1"
+        plane="//@planes/@planes.2">
+      <departure
+          time="1588676400000"/>
+      <arrival
+          time="1588680600000"/>
+    </flights>
+  </flights>
+  <bookings>
+    <bookings
+        ID="Rick&amp;Morty_MUC->FRA->BER">
+      <travels
+          ID="MUC->FRA->BER_1"
+          flights="//@flights/@flights.0 //@flights/@flights.1"
+          person="//@persons/@persons.0"/>
+      <travels
+          ID="MUC->FRA->BER_2"
+          flights="//@flights/@flights.0 //@flights/@flights.1"
+          person="//@persons/@persons.1"/>
+    </bookings>
+    <bookings
+        ID="Beth_FRA->BER">
+      <travels
+          ID="FRA->BER_3"
+          flights="//@flights/@flights.2"
+          person="//@persons/@persons.5"/>
+    </bookings>
+  </bookings>
+  <persons>
+    <persons
+        ID="Rick Sanchez"
+        travels="//@bookings/@bookings.0/@travels.0"/>
+    <persons
+        ID="Morty Smith"
+        travels="//@bookings/@bookings.0/@travels.1"/>
+    <persons
+        ID="Jerry Smith"/>
+    <persons
+        ID="Summer Smith"/>
+    <persons
+        ID="Abradolf Lincler"/>
+    <persons
+        ID="Beth Smith"
+        travels="//@bookings/@bookings.1/@travels.0"/>
+    <persons
+        ID="Birdperson"/>
+    <persons
+        ID="Mr. Meeseeks"/>
+  </persons>
+  <routes>
+    <routes
+        ID="FRA->BER"
+        duration="4200000"
+        flights="//@flights/@flights.1 //@flights/@flights.2"
+        src="//@airports/@airports.0"
+        trg="//@airports/@airports.1"/>
+    <routes
+        ID="BER->FRA"
+        duration="4200000"
+        src="//@airports/@airports.1"
+        trg="//@airports/@airports.0"/>
+    <routes
+        ID="MUC->FRA"
+        duration="3900000"
+        flights="//@flights/@flights.0"
+        src="//@airports/@airports.3"
+        trg="//@airports/@airports.0"/>
+    <routes
+        ID="FRA->MUC"
+        duration="3900000"
+        src="//@airports/@airports.0"
+        trg="//@airports/@airports.3"/>
+    <routes
+        ID="MUC->DUS"
+        duration="4200000"
+        src="//@airports/@airports.3"
+        trg="//@airports/@airports.4"/>
+    <routes
+        ID="DUS->MUC"
+        duration="4200000"
+        src="//@airports/@airports.4"
+        trg="//@airports/@airports.3"/>
+    <routes
+        ID="DUS->BER"
+        duration="4500000"
+        src="//@airports/@airports.4"
+        trg="//@airports/@airports.1"/>
+    <routes
+        ID="BER->DUS"
+        duration="4500000"
+        src="//@airports/@airports.1"
+        trg="//@airports/@airports.4"/>
+    <routes
+        ID="MUC->BER"
+        duration="4200000"
+        src="//@airports/@airports.3"
+        trg="//@airports/@airports.1"/>
+    <routes
+        ID="BER->MUC"
+        duration="4200000"
+        src="//@airports/@airports.1"
+        trg="//@airports/@airports.3"/>
+  </routes>
+  <airports>
+    <airports
+        ID="Frankfurt"
+        outgoingRoutes="//@routes/@routes.0 //@routes/@routes.3"
+        incomingRoutes="//@routes/@routes.1 //@routes/@routes.2">
+      <gates
+          ID="FRA1"
+          outgoingFlights="//@flights/@flights.2"
+          incomingFlights="//@flights/@flights.0"/>
+      <gates
+          ID="FRA2"
+          position="1"/>
+      <gates
+          ID="FRA3"
+          position="2"
+          outgoingFlights="//@flights/@flights.1"/>
+    </airports>
+    <airports
+        ID="Berlin"
+        outgoingRoutes="//@routes/@routes.1 //@routes/@routes.7 //@routes/@routes.9"
+        incomingRoutes="//@routes/@routes.0 //@routes/@routes.6 //@routes/@routes.8">
+      <gates
+          ID="BER1"
+          incomingFlights="//@flights/@flights.1"/>
+      <gates
+          ID="BER2"
+          position="1"
+          incomingFlights="//@flights/@flights.2"/>
+      <gates
+          ID="BER3"
+          position="2"/>
+    </airports>
+    <airports
+        ID="Nuremberg">
+      <gates
+          ID="NUE1"/>
+      <gates
+          ID="NUE2"
+          position="1"/>
+    </airports>
+    <airports
+        ID="Munich"
+        outgoingRoutes="//@routes/@routes.2 //@routes/@routes.4 //@routes/@routes.8"
+        incomingRoutes="//@routes/@routes.3 //@routes/@routes.5 //@routes/@routes.9">
+      <gates
+          ID="MUC1"
+          outgoingFlights="//@flights/@flights.0"/>
+      <gates
+          ID="MUC2"
+          position="1"/>
+      <gates
+          ID="MUC3"
+          position="2"/>
+    </airports>
+    <airports
+        ID="Dusseldorf"
+        outgoingRoutes="//@routes/@routes.5 //@routes/@routes.6"
+        incomingRoutes="//@routes/@routes.4 //@routes/@routes.7">
+      <gates
+          ID="DUS1"/>
+      <gates
+          ID="DUS2"
+          position="1"/>
+      <gates
+          ID="DUS3"
+          position="2"/>
+    </airports>
+  </airports>
+  <planes>
+    <planes
+        ID="Cessna 172"
+        capacity="4"
+        flights="//@flights/@flights.0 //@flights/@flights.1"/>
+    <planes
+        ID="ME 262"
+        capacity="1"/>
+    <planes
+        ID="EC665 Tiger"
+        capacity="2"
+        flights="//@flights/@flights.2"/>
+  </planes>
+  <globalTime/>
+</Flights:FlightModel>
