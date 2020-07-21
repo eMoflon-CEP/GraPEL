@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grapel:EditorGTFile xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:gT="http://www.emoflon.org/ibex/gt/editor/GT" xmlns:grapel="http://www.emoflon.org/cep/Grapel" xsi:schemaLocation="http://www.eclipse.org/emf/2002/Ecore java://org.eclipse.emf.ecore.EcorePackage http://www.emoflon.org/ibex/gt/editor/GT java://org.emoflon.ibex.gt.editor.gT.GTPackage http://www.emoflon.org/cep/Grapel java://org.emoflon.cep.grapel.GrapelPackage">
+  <imports xmi:type="gT:EditorImport" name="platform:/resource/Flights/model/Flights.ecore"/>
+  <imports xmi:type="gT:EditorImport" name="http://www.eclipse.org/emf/2002/Ecore"/>
+  <patterns xmi:type="gT:EditorPattern" name="flightWithArrival">
+    <nodes xmi:type="gT:EditorNode" name="routex">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="flight">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
+      <references xmi:type="gT:EditorReference" target="//@patterns.0/@nodes.0">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
+      </references>
+      <references xmi:type="gT:EditorReference" target="//@patterns.0/@nodes.2">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/arrival"/>
+      </references>
+      <references xmi:type="gT:EditorReference" target="//@patterns.0/@nodes.3">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </references>
+      <references xmi:type="gT:EditorReference" target="//@patterns.0/@nodes.4">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/plane"/>
+      </references>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="arrival">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="departure">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="plane">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Plane"/>
+    </nodes>
+  </patterns>
+  <patterns xmi:type="gT:EditorPattern" name="travelHasConnectingFlight">
+    <nodes xmi:type="gT:EditorNode" name="transitAirport">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Airport"/>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.1">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </references>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.2">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </references>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="arrivalGate">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="departingGate">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="routex">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.0">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Route/trg"/>
+      </references>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="flight">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.3">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
+      </references>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.1">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/trg"/>
+      </references>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="connectingRoute">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.0">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Route/src"/>
+      </references>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="connectingFlight">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.5">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
+      </references>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.2">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/src"/>
+      </references>
+    </nodes>
+    <nodes xmi:type="gT:EditorNode" name="travel">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Travel"/>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.4">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Travel/flights"/>
+      </references>
+      <references xmi:type="gT:EditorReference" target="//@patterns.1/@nodes.6">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Travel/flights"/>
+      </references>
+    </nodes>
+  </patterns>
+  <events xmi:type="grapel:Event" name="e1">
+    <attributes xmi:type="grapel:EventAttribute" name="airport">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapel:EventAttribute" name="str">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </attributes>
+  </events>
+  <events xmi:type="grapel:Event" name="flightDelayed">
+    <attributes xmi:type="grapel:EventAttribute" name="flight">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapel:EventAttribute" name="arrival">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+  </events>
+  <events xmi:type="grapel:Event" name="connectingFlightNotReachable">
+    <attributes xmi:type="grapel:EventAttribute" name="connectingFlight">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapel:EventAttribute" name="travel">
+      <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Travel"/>
+    </attributes>
+  </events>
+  <eventPatterns xmi:type="grapel:EventPattern" name="testEvent">
+    <returnType xmi:type="grapel:ReturnType" returnType="//@events.1"/>
+    <nodes xmi:type="grapel:EventPatternNode" name="event1" type="//@patterns.0"/>
+    <relationalConstraints xmi:type="grapel:EventPatternRelationalConstraint" operands="//@eventPatterns.0/@nodes.0"/>
+    <constraints xmi:type="grapel:AttributeConstraint">
+      <lhs xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.0/@nodes.0" attribute="//@patterns.0/@nodes.2"/>
+          <field xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+        </operands>
+      </lhs>
+      <rhs xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.0/@nodes.0" attribute="//@patterns.0/@nodes.0"/>
+          <field xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Route/duration"/>
+        </operands>
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.0/@nodes.0" attribute="//@patterns.0/@nodes.3"/>
+          <field xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+        </operands>
+        <operators>+</operators>
+      </rhs>
+    </constraints>
+    <returnStatement xmi:type="grapel:ReturnStatement" returnArg="//@events.1">
+      <returnParams xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.0/@nodes.0" attribute="//@patterns.0/@nodes.1"/>
+        </operands>
+      </returnParams>
+      <returnParams xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.0/@nodes.0" attribute="//@patterns.0/@nodes.2"/>
+        </operands>
+      </returnParams>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapel:EventPattern" name="connectingFlightNotReachableEvent">
+    <returnType xmi:type="grapel:ReturnType" returnType="//@events.2"/>
+    <nodes xmi:type="grapel:EventPatternNode" name="delayed" type="//@events.1"/>
+    <nodes xmi:type="grapel:EventPatternNode" name="connecting" type="//@patterns.1"/>
+    <contextConstraints xmi:type="grapel:EventPatternContextConstraint">
+      <lhs xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.0" attribute="//@events.1/@attributes.0"/>
+      <rhs xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.4"/>
+    </contextConstraints>
+    <relationalConstraints xmi:type="grapel:EventPatternRelationalConstraint" operands="//@eventPatterns.1/@nodes.1"/>
+    <constraints xmi:type="grapel:AttributeConstraint">
+      <lhs xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.0" attribute="//@events.1/@attributes.1"/>
+        </operands>
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.2"/>
+          <field xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Gate/position"/>
+        </operands>
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.1"/>
+          <field xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Gate/position"/>
+        </operands>
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.0"/>
+          <field xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Airport/size"/>
+        </operands>
+        <operators>+</operators>
+        <operators>-</operators>
+        <operators>*</operators>
+      </lhs>
+      <rhs xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.6"/>
+        </operands>
+      </rhs>
+    </constraints>
+    <returnStatement xmi:type="grapel:ReturnStatement" returnArg="//@events.2">
+      <returnParams xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.4"/>
+        </operands>
+      </returnParams>
+      <returnParams xmi:type="grapel:AttributeExpression">
+        <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
+          <nodeExpression xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.7"/>
+        </operands>
+      </returnParams>
+    </returnStatement>
+  </eventPatterns>
+</grapel:EditorGTFile>

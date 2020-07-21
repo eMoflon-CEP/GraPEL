@@ -1,0 +1,107 @@
+import "platform:/resource/Flights/model/Flights.ecore"
+import "http://www.eclipse.org/emf/2002/Ecore"
+
+event e1 {
+	Airport airport; 
+	EString str;    
+}
+
+event flightDelayed {
+	Flight flight;
+	TimeStamp arrival;
+}
+
+event connectingFlightNotReachable {
+	Flight connectingFlight;
+	Travel travel;
+}
+
+pattern flightWithArrival() {       
+  	routex: Route
+  	flight: Flight {
+  		-route->routex
+		-arrival->arrival
+		-departure->departure
+  		-plane->plane
+  	}
+	arrival: TimeStamp
+	departure: TimeStamp
+  	plane: Plane
+}
+
+/*
+ * find travels with connecting flights
+ */
+pattern travelHasConnectingFlight {
+	transitAirport: Airport {
+		-gates->arrivalGate
+		-gates->departingGate	
+	}
+	arrivalGate: Gate
+	departingGate: Gate
+	
+	routex: Route {
+		-trg -> transitAirport
+	}
+	flight: Flight {
+		-route -> routex
+		-trg -> arrivalGate
+	}
+	connectingRoute: Route {
+		-src -> transitAirport
+	}
+	connectingFlight: Flight {
+		-route -> connectingRoute
+		-src -> departingGate
+	}
+	travel: Travel {
+		-flights -> flight
+		-flights -> connectingFlight
+	}
+}
+   
+//event_pattern testEvent spawns e1{        
+//	dot : e1 
+//	dot2 : p1        
+//	 
+//	dot.airport == dot2.airport
+//	dot.str != dot.airport 
+//	dot.airport == dot2.airport    
+//	dot.str != dot2.airport
+//	
+//	dot -> dot2 AND dot && dot2 AND dot2 || dot {
+//		dot.airport.ID < dot2.airport.ID 
+//		&& dot2.airport.ID > dot.str &&
+//		dot2.airport.ID == dot.airport.size 
+//		&& 8 > dot.airport.ID
+//		|| dot.airport.ID < dot2.airport.size &&
+//		dot.airport.ID + dot.airport.ID >= dot2.airport.ID * dot2.airport.ID + dot.airport.ID ||
+//		dot2.airport.ID / dot.airport.size == dot.airport.ID  
+//	}     
+//	     
+//	spawn e1(dot.airport.ID,dot2.airport.size)                        
+//}  
+
+event_pattern testEvent spawns flightDelayed {
+	event1 : flightWithArrival      
+	          
+	event1 {
+		event1.arrival.time > event1.routex.duration + event1.departure.time
+	}             
+	 
+	spawn flightDelayed(event1.flight, event1.arrival)           
+}
+
+event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReachable {
+	delayed: flightDelayed
+	connecting: travelHasConnectingFlight
+	
+	delayed.flight == connecting.flight
+	
+	connecting {
+		delayed.arrival + connecting.departingGate.position - connecting.arrivalGate.position * connecting.transitAirport.size > connecting.connectingFlight
+	}
+	
+	spawn connectingFlightNotReachable(connecting.flight,connecting.travel)
+}
+      
