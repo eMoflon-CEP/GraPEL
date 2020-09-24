@@ -5,7 +5,7 @@
     editorDirectory="/grapelmodel.editor/src-gen" modelPluginID="grapelmodel" modelName="GrapeLModel"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" codeFormatting="true"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    usedGenPackages="../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.genmodel#//IBeXPatternModel ../../org.emoflon.ibex.gt.sgtpatternmodel/model/SGTPatternModel.genmodel#//SGTPatternModel"
+    usedGenPackages="../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.genmodel#//IBeXPatternModel"
     operationReflection="true" importOrganizing="true">
   <foreignModel>GrapeLModel.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
@@ -44,7 +44,7 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//GrapeLModelContainer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/events"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/eventPatterns"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/ibexPatterns"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/ibexModel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//GrapeLModelContainer/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//GrapeLModelContainer/correlatorLocation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//GrapeLModelContainer/licenceLocation"/>
@@ -69,7 +69,7 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//VirtualEventAttribute">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/type"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/baseAttribute"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//VirtualEventAttribute/attribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/attribute"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//EventPattern">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPattern/name"/>
