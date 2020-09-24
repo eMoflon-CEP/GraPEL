@@ -129,8 +129,10 @@ public class DispatchActor extends AbstractActor {
 	}
 
 	private void handleAdd(Notification notification) {
-		handleAddedNode(notification.getNewValue());
-		handleAddedEdge(notification);
+		if(notification.getFeature() == null) 
+			handleAddedNode(notification.getNewValue());
+		else
+			handleAddedEdge(notification);
 	}
 
 	private void handleAddedNode(Object node) {
@@ -151,6 +153,10 @@ public class DispatchActor extends AbstractActor {
 	}
 
 	private void handleAddedEdge(Notification notification) {
+		//check for self-edges
+		if(notification.getNotifier().equals(notification.getNewValue()))
+			handleAddedNode(notification.getNewValue());
+					
 		Object feature = notification.getFeature();
 		if(feature2addEdgeConsumer.containsKey(feature)) {
 			feature2addEdgeConsumer.get(feature).accept(notification);

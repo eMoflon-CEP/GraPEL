@@ -14,7 +14,7 @@ public class E1EventHandler extends EventHandler<E1Event>{
 	
 	final public static String HANDLER_NAME = "E1EventHandler";
 	final public static String[] CHANNELS = {"channel1"};
-	final public static String EPL_PATH = "C:/Users/sebas/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/eventmonitors/E1Event.mon";
+	final public static String EPL_PATH = "D:/Eclipse Workspaces/emoflon-ibex-devel3/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/eventmonitors/E1Event.mon";
 
 	public E1EventHandler(GrapeEngine engine) {
 		super(engine);

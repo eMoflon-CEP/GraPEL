@@ -32,6 +32,7 @@ import org.emoflon.cep.generator.GrapelAPIGenerator;
 import org.emoflon.cep.generator.GrapelBuilderExtension;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.ibex.gt.codegen.EClassifiersManager;
+import org.emoflon.ibex.gt.codegen.GTEngineBuilderExtension;
 import org.emoflon.ibex.gt.codegen.GTEngineExtension;
 import org.emoflon.ibex.gt.codegen.JavaFileGenerator;
 import org.emoflon.ibex.gt.editor.ui.builder.GTBuilderExtension;
@@ -87,12 +88,10 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		saveResource(container, resource.getURI().trimFileExtension()+"_model.xmi");
 		saveResource(ibexModel, apiPackage.getFullPath()+"/ibex-patterns.xmi");
 		
-		
-		
 		// build HiPE engine code
 		if(ibexModel != null && !ibexModel.getPatternSet().getContextPatterns().isEmpty()) {
 			IFolder packagePath = project.getFolder(project.getName().replace(".", "/"));
-			collectEngineBuilderExtensions().forEach(ext->ext.run(project, packagePath.getProjectRelativePath()));
+			collectEngineBuilderExtensions().forEach(ext->ext.run(project, packagePath.getProjectRelativePath(), ibexModel));
 		}
 		
 		//TODO: Build Grapel API :)
@@ -158,11 +157,8 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		generateAPI(project, apiPackage, ibexModel, packageRegistry);
 	}
 	
-	public static Collection<GTBuilderExtension> collectEngineBuilderExtensions() {
-		return ExtensionsUtil.collectExtensions(GTBuilderExtension.BUILDER_EXTENSON_ID, "class", GTBuilderExtension.class)
-				.stream()
-				.filter(ext -> ext.getClass().getCanonicalName().contains("HiPE"))
-				.collect(Collectors.toList());
+	public static Collection<GTEngineBuilderExtension> collectEngineBuilderExtensions() {
+		return ExtensionsUtil.collectExtensions(GTEngineBuilderExtension.BUILDER_EXTENSON_ID, "class", GTEngineBuilderExtension.class);
 	}
 	
 	public static void findAllEPackages(final IBeXModel ibexModel, final Registry packageRegistry) {
