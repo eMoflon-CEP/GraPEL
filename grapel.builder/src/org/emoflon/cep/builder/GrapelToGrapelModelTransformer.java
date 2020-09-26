@@ -2,7 +2,6 @@ package org.emoflon.cep.builder;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -86,7 +85,7 @@ public class GrapelToGrapelModelTransformer {
 		container = factory.createGrapeLModelContainer();
 		//transform GT to IBeXPatterns
 		EditorToIBeXPatternTransformation ibexTransformer = new EditorToIBeXPatternTransformation();
-		container.setIbexPatterns(ibexTransformer.transform(grapelFile));
+		container.setIbexModel(ibexTransformer.transform(grapelFile));
 		mapEditor2IBeXPatterns(grapelFile);
 		
 		//transform events
@@ -104,7 +103,7 @@ public class GrapelToGrapelModelTransformer {
 	
 	private void mapEditor2IBeXPatterns(EditorGTFile grapelFile) {
 		for(EditorPattern ePattern : grapelFile.getPatterns()) {
-			for(IBeXContextPattern iPattern : container.getIbexPatterns().getContextPatterns().stream()
+			for(IBeXContextPattern iPattern : container.getIbexModel().getPatternSet().getContextPatterns().stream()
 					.filter(cp -> (cp instanceof IBeXContextPattern))
 					.map(cp -> (IBeXContextPattern)cp)
 					.collect(Collectors.toList())) {

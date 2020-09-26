@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
@@ -16,7 +18,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -31,20 +32,18 @@ import org.emoflon.cep.generator.GrapelAPIGenerator;
 import org.emoflon.cep.generator.GrapelBuilderExtension;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.ibex.gt.codegen.EClassifiersManager;
+import org.emoflon.ibex.gt.codegen.GTEngineBuilderExtension;
 import org.emoflon.ibex.gt.codegen.GTEngineExtension;
 import org.emoflon.ibex.gt.codegen.JavaFileGenerator;
 import org.emoflon.ibex.gt.editor.ui.builder.GTBuilderExtension;
-import org.emoflon.ibex.gt.transformations.EditorToGTModelTransformation;
-import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXPatternSet;
+import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXModel;
+import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXPattern;
 import org.gervarro.eclipse.workspace.util.AntPatternCondition;
 import org.moflon.core.build.CleanVisitor;
 import org.moflon.core.plugins.manifest.ManifestFileUpdater;
 import org.moflon.core.utilities.ExtensionsUtil;
 import org.moflon.core.utilities.WorkspaceHelper;
 
-import GTLanguage.GTNode;
-import GTLanguage.GTRule;
-import GTLanguage.GTRuleSet;
 import GrapeLModel.GrapeLModelContainer;
 
 public class GrapelBuilder implements GrapelBuilderExtension {
@@ -71,14 +70,11 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		GrapeLModelContainer container = transformer.transform(grapelFile);
 		container.setName(resource.getURI().trimFileExtension().lastSegment());
 		container.setCorrelatorLocation("C:\\\\SoftwareAG\\\\Apama\\\\bin\\\\correlator.exe");
-			
-		// Create GT rule model
-		EditorToGTModelTransformation trafo = new EditorToGTModelTransformation();
-		GTRuleSet gtRules = trafo.transform(grapelFile);
+		IBeXModel ibexModel = container.getIbexModel();
 		
-		if(gtRules!= null) {
+		if(ibexModel!= null) {
 			try {
-				buildEMoflonAPI(project, gtRules);
+				buildEMoflonAPI(project, ibexModel);
 				updateManifest(project, this::processManifestForPackage);
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
@@ -90,35 +86,29 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		// Save ibex-patterns and gt-rules for the hipe engine builder
 		IFolder apiPackage = project.getFolder("src-gen/"+project.getName().replace(".", "/")+"/api");
 		saveResource(container, resource.getURI().trimFileExtension()+"_model.xmi");
-		
-		IBeXPatternSet ibexPatterns = container.getIbexPatterns();
-		saveResource(ibexPatterns, apiPackage.getFullPath()+"/ibex-patterns.xmi");
-		saveResource(gtRules, apiPackage.getFullPath()+"/gt-rules.xmi");
-		
-		//cleanup
-		if(container.eResource() != null)
-			container.eResource().unload();
-		if(ibexPatterns.eResource() != null)
-			ibexPatterns.eResource().unload();
-		if(gtRules.eResource() != null)
-			gtRules.eResource().unload();
+		saveResource(ibexModel, apiPackage.getFullPath()+"/ibex-patterns.xmi");
 		
 		// build HiPE engine code
-		if(ibexPatterns != null && !ibexPatterns.getContextPatterns().isEmpty()) {
+		if(ibexModel != null && !ibexModel.getPatternSet().getContextPatterns().isEmpty()) {
 			IFolder packagePath = project.getFolder(project.getName().replace(".", "/"));
-			collectEngineBuilderExtensions().forEach(ext->ext.run(project, packagePath.getProjectRelativePath()));
+			collectEngineBuilderExtensions().forEach(ext->ext.run(project, packagePath.getProjectRelativePath(), ibexModel));
 		}
 		
 		//TODO: Build Grapel API :)
-
 		GrapelAPIGenerator apiGenerator = new GrapelAPIGenerator(project, container, Arrays.asList("Democles", "HiPE", "Viatra"));
 		try {
 			apiGenerator.generateCode();
 		} catch (CoreException e1) {
 			e1.printStackTrace();
+			//cleanup
+			if(container.eResource() != null)
+				container.eResource().unload();
 			return;
 		}
 		
+		//cleanup
+		if(container.eResource() != null)
+			container.eResource().unload();
 		
 		try {
 			project.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
@@ -158,54 +148,52 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 		return changedBasics || updatedDependencies;
 	}
 	
-	public void buildEMoflonAPI(IProject project, GTRuleSet gtRules) throws CoreException {
+	public void buildEMoflonAPI(IProject project, IBeXModel ibexModel) throws CoreException {
 		final Registry packageRegistry = new EPackageRegistryImpl();
-		findAllEPackages(gtRules, packageRegistry);
+		findAllEPackages(ibexModel, packageRegistry);
 		
 		IFolder apiPackage = project.getFolder("src-gen/"+project.getName().replace(".", "/")+"/api");
 		ensureFolderExists(apiPackage);
-		generateAPI(project, apiPackage, gtRules, packageRegistry);
-		
-		//cleanup
-		if(gtRules.eResource() != null)
-			gtRules.eResource().unload();
+		generateAPI(project, apiPackage, ibexModel, packageRegistry);
 	}
 	
-	public static Collection<GTBuilderExtension> collectEngineBuilderExtensions() {
-		return ExtensionsUtil.collectExtensions(GTBuilderExtension.BUILDER_EXTENSON_ID, "class", GTBuilderExtension.class)
-				.stream()
-				.filter(ext -> ext.getClass().getCanonicalName().contains("HiPE"))
-				.collect(Collectors.toList());
+	public static Collection<GTEngineBuilderExtension> collectEngineBuilderExtensions() {
+		return ExtensionsUtil.collectExtensions(GTEngineBuilderExtension.BUILDER_EXTENSON_ID, "class", GTEngineBuilderExtension.class);
 	}
 	
-	public static void findAllEPackages(final GTRuleSet gtRules, final Registry packageRegistry) {
-		for(GTRule rule : gtRules.getRules()) {
-			for(GTNode node : rule.getNodes()) {
-				EPackage foreign = node.getType().getEPackage();
-				if(!packageRegistry.containsKey(foreign.getNsURI())) {
-					packageRegistry.put(foreign.getNsURI(), foreign);
-				}
+	public static void findAllEPackages(final IBeXModel ibexModel, final Registry packageRegistry) {
+		ibexModel.getNodeSet().getNodes().forEach(node -> {
+			EPackage foreign = node.getType().getEPackage();
+			if(!packageRegistry.containsKey(foreign.getNsURI())) {
+				packageRegistry.put(foreign.getNsURI(), foreign);
 			}
-			for(GTNode node : rule.getRuleNodes()) {
-				EPackage foreign = node.getType().getEPackage();
-				if(!packageRegistry.containsKey(foreign.getNsURI())) {
-					packageRegistry.put(foreign.getNsURI(), foreign);
-				}
-			}
-		}
+		});
 	}
 	
-	public static void generateAPI(final IProject project, final IFolder apiPackage, final GTRuleSet gtRuleSet,
+	public static void generateAPI(final IProject project, final IFolder apiPackage, final IBeXModel ibexModel,
 			final Registry packageRegistry) throws CoreException {
 		JavaFileGenerator generator = new JavaFileGenerator(getClassNamePrefix(project), project.getName(), createEClassifierManager(packageRegistry));
 		IFolder matchesPackage = ensureFolderExists(apiPackage.getFolder("matches"));
 		IFolder rulesPackage = ensureFolderExists(apiPackage.getFolder("rules"));
-		gtRuleSet.getRules().forEach(gtRule -> {
-			generator.generateMatchClass(matchesPackage, gtRule);
-			generator.generateRuleClass(rulesPackage, gtRule);
+		IFolder probabilitiesPackage = ensureFolderExists(apiPackage.getFolder("probabilities"));
+		
+		Set<IBeXPattern> ruleContextPatterns = new HashSet<>();
+		ibexModel.getRuleSet().getRules().forEach(ibexRule -> {
+			generator.generateMatchClass(matchesPackage, ibexRule);
+			generator.generateRuleClass(rulesPackage, ibexRule);
+			generator.generateProbabilityClass(probabilitiesPackage, ibexRule);
+			ruleContextPatterns.add(ibexRule.getLhs());
+		});
+		
+		ibexModel.getPatternSet().getContextPatterns().stream()
+		.filter(pattern -> !ruleContextPatterns.contains(pattern))
+		.filter(pattern -> !pattern.getName().contains("CONDITION"))
+		.forEach(pattern -> {
+			generator.generateMatchClass(matchesPackage, pattern);
+			generator.generatePatternClass(rulesPackage, pattern);
 		});
 
-		generator.generateAPIClass(apiPackage, gtRuleSet,
+		generator.generateAPIClass(apiPackage, ibexModel,
 				String.format("%s/%s/%s/api/ibex-patterns.xmi", project.getName(), "src-gen", project.getName().replace(".", "/")));
 		generator.generateAppClass(apiPackage);
 		collectEngineExtensions().forEach(e -> generator.generateAppClassForEngine(apiPackage, e));

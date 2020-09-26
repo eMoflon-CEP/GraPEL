@@ -1,7 +1,6 @@
 package GrapeLTest.api;
 
 import GrapeLTest.api.rules.P1Pattern;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,10 +15,10 @@ import org.emoflon.ibex.gt.api.GraphTransformationAPI;
 import org.emoflon.ibex.gt.api.GraphTransformationMatch;
 import org.emoflon.ibex.gt.api.GraphTransformationPattern;
 import org.emoflon.ibex.gt.api.GraphTransformationRule;
-import org.emoflon.ibex.gt.arithmetics.Probability;
+import org.emoflon.ibex.gt.arithmetic.Probability;
 
 /**
- * The GrapeLTestAPI with 1 rules.
+ * The GrapeLTestAPI with 0 rules and 1 patterns.
  */
 public class GrapeLTestAPI extends GraphTransformationAPI {
 	
@@ -28,13 +27,13 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 	/**
 	 * Map with all the rules and patterns of the model
 	 */
-	private Map<String, Supplier<? extends GraphTransformationPattern>> patternMap;
+	private Map<String, Supplier<? extends GraphTransformationPattern<?,?>>> patternMap;
 	
 	/*
 	 *Map with all the rules that can be applied to Gillespie and their probabilities;
 	 * array[0] is the probability; array[1] is probability*matchCount
 	 */
-	private Map<GraphTransformationRule, double[]> gillespieMap;
+	private Map<GraphTransformationRule<?,?>, double[]> gillespieMap;
 
 	/**
 	 * Creates a new GrapeLTestAPI.
@@ -77,16 +76,15 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 		gillespieMap = initiateGillespieMap();
 	}
 	
-	private Map<String, Supplier<? extends GraphTransformationPattern>> initiatePatternMap(){
-		Map<String, Supplier<? extends GraphTransformationPattern>> map = new HashMap<String, Supplier<? extends GraphTransformationPattern>>();
+	private Map<String, Supplier<? extends GraphTransformationPattern<?,?>>> initiatePatternMap(){
+		Map<String, Supplier<? extends GraphTransformationPattern<?,?>>> map = new HashMap<>();
 		map.put("P1Pattern", () -> p1());
 		return map;
 	}
 	
-	
-	private Map<GraphTransformationRule, double[]> initiateGillespieMap(){
-		Map<GraphTransformationRule, double[]> map = 
-			new HashMap<GraphTransformationRule, double[]>();
+	private Map<GraphTransformationRule<?,?>, double[]> initiateGillespieMap(){
+		Map<GraphTransformationRule<?,?>, double[]> map = 
+			new HashMap<>();
 		return map;
 	}
 	 
@@ -95,7 +93,7 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 	 * Gillespie algorithm; only works if the rules do not have parameters and the
 	 * probability is static
 	 */
-	public double getGillespieProbability(GraphTransformationRule rule){
+	public double getGillespieProbability(GraphTransformationRule<?,?> rule){
 		if(gillespieMap.containsKey(rule)){
 			double totalActivity = getTotalSystemActivity();
 			if(totalActivity > 0){
@@ -110,16 +108,17 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 	 * only rules that do not have parameters are counted
 	 * @return an {@link Optional} for the the match after rule application
 	 */
-	public final Optional<GraphTransformationMatch> applyGillespie(){
+	@SuppressWarnings("unchecked")
+	public final Optional<GraphTransformationMatch<?,?>> applyGillespie(){
 		double totalActivity = getTotalSystemActivity();
 		if(totalActivity != 0){
 			Random rnd = new Random();
 			double randomValue = totalActivity*rnd.nextDouble();
 			double currentActivity = 0;
-			for(Entry<GraphTransformationRule, double[]> entries : gillespieMap.entrySet()){
+			for(Entry<GraphTransformationRule<?,?>, double[]> entries : gillespieMap.entrySet()){
 			currentActivity += entries.getValue()[1];
 				if(currentActivity >= randomValue){
-					return entries.getKey().apply();
+					return (Optional<GraphTransformationMatch<?, ?>>)entries.getKey().apply();
 				}						
 			}
 		}
@@ -132,7 +131,7 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 	 */
 	private double getTotalSystemActivity(){
 		 gillespieMap.forEach((v,z) -> {
-		 	z[0] =((Probability) v.getProbability().get()).getProbability();
+		 	z[0] =((Probability<?,?>) v.getProbability().get()).getProbability();
 			 z[1] = v.countMatches()*z[0];
 			});
 		double totalActivity = 0;
@@ -142,20 +141,19 @@ public class GrapeLTestAPI extends GraphTransformationAPI {
 		return totalActivity;
 	}
 					
-
 	/**
-	 * Creates a new instance of the pattern <code>p1()</code> which does the following:
-	 * If this pattern is not self-explaining, you really should add some comment in the specification.
-	 *
-	 * @return the new instance of the pattern
-	 */
+	* Creates a new instance of the pattern <code>p1()</code> which does the following:
+	* If this pattern is not self-explaining, you really should add some comment in the specification.
+	*
+	* @return the new instance of the pattern»
+	*/
 	public P1Pattern p1() {
 		return new P1Pattern(this, interpreter);
 	}
-/**
- * returns all the patterns and rules of the model that do not need an input parameter
- */
-public Map<String, Supplier<? extends GraphTransformationPattern>> getAllPatterns(){
-	return patternMap;
-}
+	/**
+ 	* returns all the patterns and rules of the model that do not need an input parameter
+ 	*/
+	public Map<String, Supplier<? extends GraphTransformationPattern<?,?>>> getAllPatterns(){
+		return patternMap;
+	}
 }
