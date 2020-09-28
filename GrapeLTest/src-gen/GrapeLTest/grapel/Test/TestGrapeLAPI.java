@@ -52,9 +52,9 @@ public abstract class TestGrapeLAPI extends GrapeEngineAPI{
 	@Override
 	protected List<String> getMonitorScriptFiles() {
 		return Arrays.asList(
-			"D:/Eclipse Workspaces/emoflon-ibex-devel3/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/patternmonitors/Maintainance.mon", 
-			"D:/Eclipse Workspaces/emoflon-ibex-devel3/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/patternmonitors/TestEvent.mon", 
-			"D:/Eclipse Workspaces/emoflon-ibex-devel3/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/patternmonitors/TestEvent2.mon"
+			"C:/Users/sehmes/Coding/eclipse_workspaces/emoflon_devel/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/patternmonitors/Maintainance.mon", 
+			"C:/Users/sehmes/Coding/eclipse_workspaces/emoflon_devel/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/patternmonitors/TestEvent.mon", 
+			"C:/Users/sehmes/Coding/eclipse_workspaces/emoflon_devel/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/patternmonitors/TestEvent2.mon"
 		);
 	}
 	

@@ -28,11 +28,11 @@
       <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//TimeStamp/time"/>
     </attributes>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.0" value="//@ibexPatterns/@contextPatterns.0/@signatureNodes.4"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.1" value="//@ibexPatterns/@contextPatterns.0/@signatureNodes.2"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.2" value="//@ibexPatterns/@contextPatterns.0/@signatureNodes.0"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.3" value="//@ibexPatterns/@contextPatterns.0/@signatureNodes.1"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.4" value="//@ibexPatterns/@contextPatterns.0/@signatureNodes.3"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.9"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.6"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.0"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.5"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.4" value="//@ibexModel/@nodeSet/@nodes.8"/>
   </events>
   <events xmi:type="grapelmodel:MatchEvent" name="travelHasConnectingFlight">
     <attributes xmi:type="grapelmodel:ComplexAttribute" name="transitAirport">
@@ -71,14 +71,14 @@
       <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
       <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Airport/size"/>
     </attributes>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.0" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.6"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.1" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.0"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.2" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.3"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.3" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.5"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.4" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.4"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.5" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.2"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.6" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.1"/>
-    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.7" value="//@ibexPatterns/@contextPatterns.1/@signatureNodes.7"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.11"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.1"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.4"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.10"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.4" value="//@ibexModel/@nodeSet/@nodes.7"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.5" value="//@ibexModel/@nodeSet/@nodes.3"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.6" value="//@ibexModel/@nodeSet/@nodes.2"/>
+    <eventNode2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.7" value="//@ibexModel/@nodeSet/@nodes.12"/>
   </events>
   <events xmi:type="grapelmodel:Event" name="e1">
     <attributes xmi:type="grapelmodel:ComplexAttribute" name="airport">
@@ -105,7 +105,7 @@
     </attributes>
   </events>
   <eventPatterns xmi:type="grapelmodel:EventPattern" name="testEvent">
-    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="event1" type="//@ibexPatterns/@contextPatterns.0"/>
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="event1" type="//@ibexModel/@patternSet/@contextPatterns.0"/>
     <relationalConstraint xmi:type="grapelmodel:RelationalConstraintLiteral">
       <relationalExpression xmi:type="grapelmodel:RelationalExpressionLiteral" eventPatternNode="//@eventPatterns.0/@nodes.0"/>
     </relationalConstraint>
@@ -113,7 +113,7 @@
       <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">
         <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.0/@nodes.0">
           <value xmi:type="grapelmodel:ArithmeticValueExpression">
-            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexPatterns/@contextPatterns.0/@signatureNodes.0"/>
+            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.0"/>
             <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.0/@attributes.5">
               <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//TimeStamp/time"/>
               <class xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
@@ -123,7 +123,7 @@
         <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction" params="//@eventPatterns.0/@nodes.0">
           <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
             <value xmi:type="grapelmodel:ArithmeticValueExpression">
-              <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexPatterns/@contextPatterns.0/@signatureNodes.4"/>
+              <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.9"/>
               <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.0/@attributes.6">
                 <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Route/duration"/>
                 <class xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
@@ -132,7 +132,7 @@
           </lhs>
           <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
             <value xmi:type="grapelmodel:ArithmeticValueExpression">
-              <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexPatterns/@contextPatterns.0/@signatureNodes.1"/>
+              <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.5"/>
               <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.0/@attributes.7">
                 <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//TimeStamp/time"/>
                 <class xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
@@ -145,23 +145,23 @@
     <returnStatement xmi:type="grapelmodel:ReturnStatement" returnType="//@events.3">
       <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.0/@nodes.0">
         <value xmi:type="grapelmodel:ArithmeticValueExpression">
-          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexPatterns/@contextPatterns.0/@signatureNodes.2"/>
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.6"/>
         </value>
       </parameters>
       <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.0/@nodes.0">
         <value xmi:type="grapelmodel:ArithmeticValueExpression">
-          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexPatterns/@contextPatterns.0/@signatureNodes.0"/>
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.0"/>
         </value>
       </parameters>
     </returnStatement>
   </eventPatterns>
   <eventPatterns xmi:type="grapelmodel:EventPattern" name="connectingFlightNotReachableEvent">
     <nodes xmi:type="grapelmodel:EventNode" name="delayed" type="//@events.3"/>
-    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="connecting" type="//@ibexPatterns/@contextPatterns.1"/>
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="connecting" type="//@ibexModel/@patternSet/@contextPatterns.1"/>
     <context xmi:type="grapelmodel:Context" params="//@eventPatterns.1/@nodes.0 //@eventPatterns.1/@nodes.1">
       <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
         <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" eventAttribute="//@events.3/@attributes.0"/>
-        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexPatterns/@contextPatterns.1/@signatureNodes.4"/>
+        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.7"/>
       </contextConstraints>
     </context>
     <relationalConstraint xmi:type="grapelmodel:RelationalConstraintLiteral">
@@ -178,7 +178,7 @@
           <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction" op="MINUS">
             <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
               <value xmi:type="grapelmodel:ArithmeticValueExpression">
-                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexPatterns/@contextPatterns.1/@signatureNodes.3"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.4"/>
                 <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.1/@attributes.8">
                   <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Gate/position"/>
                   <class xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
@@ -188,7 +188,7 @@
             <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction" op="MULTIPLY">
               <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
                 <value xmi:type="grapelmodel:ArithmeticValueExpression">
-                  <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexPatterns/@contextPatterns.1/@signatureNodes.0"/>
+                  <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.1"/>
                   <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.1/@attributes.9">
                     <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Gate/position"/>
                     <class xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
@@ -197,7 +197,7 @@
               </lhs>
               <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
                 <value xmi:type="grapelmodel:ArithmeticValueExpression">
-                  <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexPatterns/@contextPatterns.1/@signatureNodes.6"/>
+                  <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.11"/>
                   <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.1/@attributes.10">
                     <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Airport/size"/>
                     <class xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Airport"/>
@@ -209,7 +209,7 @@
         </lhs>
         <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.1/@nodes.1">
           <value xmi:type="grapelmodel:ArithmeticValueExpression">
-            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexPatterns/@contextPatterns.1/@signatureNodes.1"/>
+            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.2"/>
           </value>
         </rhs>
       </constraintExpression>
@@ -217,105 +217,112 @@
     <returnStatement xmi:type="grapelmodel:ReturnStatement" returnType="//@events.4">
       <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.1/@nodes.1">
         <value xmi:type="grapelmodel:ArithmeticValueExpression">
-          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexPatterns/@contextPatterns.1/@signatureNodes.4"/>
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.7"/>
         </value>
       </parameters>
       <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.1/@nodes.1">
         <value xmi:type="grapelmodel:ArithmeticValueExpression">
-          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexPatterns/@contextPatterns.1/@signatureNodes.7"/>
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.12"/>
         </value>
       </parameters>
     </returnStatement>
   </eventPatterns>
-  <ibexPatterns xmi:type="IBeXPatternModel:IBeXPatternSet">
-    <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="flightWithArrival">
-      <injectivityConstraints xmi:type="IBeXPatternModel:IBeXNodePair" values="//@ibexPatterns/@contextPatterns.0/@signatureNodes.0 //@ibexPatterns/@contextPatterns.0/@signatureNodes.1"/>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.2" targetNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.0">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/arrival"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.2" targetNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.1">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/departure"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.2" targetNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.3">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/plane"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.2" targetNode="//@ibexPatterns/@contextPatterns.0/@signatureNodes.4">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
-      </localEdges>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="arrival" incomingEdges="//@ibexPatterns/@contextPatterns.0/@localEdges.0">
+  <ibexModel xmi:type="IBeXPatternModel:IBeXModel">
+    <patternSet xmi:type="IBeXPatternModel:IBeXPatternSet">
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="flightWithArrival" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.3 //@ibexModel/@edgeSet/@edges.5 //@ibexModel/@edgeSet/@edges.6 //@ibexModel/@edgeSet/@edges.7" signatureNodes="//@ibexModel/@nodeSet/@nodes.0 //@ibexModel/@nodeSet/@nodes.5 //@ibexModel/@nodeSet/@nodes.6 //@ibexModel/@nodeSet/@nodes.8 //@ibexModel/@nodeSet/@nodes.9">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.0 //@ibexModel/@nodeSet/@nodes.5"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="travelHasConnectingFlight" documentation="find travels with connecting flights" localEdges="//@ibexModel/@edgeSet/@edges.13 //@ibexModel/@edgeSet/@edges.12 //@ibexModel/@edgeSet/@edges.10 //@ibexModel/@edgeSet/@edges.11 //@ibexModel/@edgeSet/@edges.8 //@ibexModel/@edgeSet/@edges.0 //@ibexModel/@edgeSet/@edges.2 //@ibexModel/@edgeSet/@edges.1 //@ibexModel/@edgeSet/@edges.9 //@ibexModel/@edgeSet/@edges.4" signatureNodes="//@ibexModel/@nodeSet/@nodes.1 //@ibexModel/@nodeSet/@nodes.2 //@ibexModel/@nodeSet/@nodes.3 //@ibexModel/@nodeSet/@nodes.4 //@ibexModel/@nodeSet/@nodes.7 //@ibexModel/@nodeSet/@nodes.10 //@ibexModel/@nodeSet/@nodes.11 //@ibexModel/@nodeSet/@nodes.12">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.1 //@ibexModel/@nodeSet/@nodes.4"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.2 //@ibexModel/@nodeSet/@nodes.7"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.3 //@ibexModel/@nodeSet/@nodes.10"/>
+      </contextPatterns>
+    </patternSet>
+    <ruleSet xmi:type="IBeXPatternModel:IBeXRuleSet"/>
+    <nodeSet xmi:type="IBeXPatternModel:IBeXNodeSet">
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="arrival" incomingEdges="//@ibexModel/@edgeSet/@edges.3">
         <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="departure" incomingEdges="//@ibexPatterns/@contextPatterns.0/@localEdges.1">
-        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" outgoingEdges="//@ibexPatterns/@contextPatterns.0/@localEdges.0 //@ibexPatterns/@contextPatterns.0/@localEdges.1 //@ibexPatterns/@contextPatterns.0/@localEdges.2 //@ibexPatterns/@contextPatterns.0/@localEdges.3">
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="arrivalGate" incomingEdges="//@ibexModel/@edgeSet/@edges.10 //@ibexModel/@edgeSet/@edges.4">
+        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="connectingFlight" incomingEdges="//@ibexModel/@edgeSet/@edges.12" outgoingEdges="//@ibexModel/@edgeSet/@edges.0 //@ibexModel/@edgeSet/@edges.1">
         <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="plane" incomingEdges="//@ibexPatterns/@contextPatterns.0/@localEdges.2">
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="connectingRoute" incomingEdges="//@ibexModel/@edgeSet/@edges.0" outgoingEdges="//@ibexModel/@edgeSet/@edges.2">
+        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="departingGate" incomingEdges="//@ibexModel/@edgeSet/@edges.11 //@ibexModel/@edgeSet/@edges.1">
+        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="departure" incomingEdges="//@ibexModel/@edgeSet/@edges.5">
+        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" outgoingEdges="//@ibexModel/@edgeSet/@edges.3 //@ibexModel/@edgeSet/@edges.5 //@ibexModel/@edgeSet/@edges.6 //@ibexModel/@edgeSet/@edges.7">
+        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" incomingEdges="//@ibexModel/@edgeSet/@edges.13" outgoingEdges="//@ibexModel/@edgeSet/@edges.8 //@ibexModel/@edgeSet/@edges.4">
+        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="plane" incomingEdges="//@ibexModel/@edgeSet/@edges.6">
         <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Plane"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="routex" incomingEdges="//@ibexPatterns/@contextPatterns.0/@localEdges.3">
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="routex" incomingEdges="//@ibexModel/@edgeSet/@edges.7">
         <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
-      </signatureNodes>
-    </contextPatterns>
-    <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="travelHasConnectingFlight">
-      <injectivityConstraints xmi:type="IBeXPatternModel:IBeXNodePair" values="//@ibexPatterns/@contextPatterns.1/@signatureNodes.0 //@ibexPatterns/@contextPatterns.1/@signatureNodes.3"/>
-      <injectivityConstraints xmi:type="IBeXPatternModel:IBeXNodePair" values="//@ibexPatterns/@contextPatterns.1/@signatureNodes.1 //@ibexPatterns/@contextPatterns.1/@signatureNodes.4"/>
-      <injectivityConstraints xmi:type="IBeXPatternModel:IBeXNodePair" values="//@ibexPatterns/@contextPatterns.1/@signatureNodes.2 //@ibexPatterns/@contextPatterns.1/@signatureNodes.5"/>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.7" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.4">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Travel/flights"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.7" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.1">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Travel/flights"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.6" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.0">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Airport/gates"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.6" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.3">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Airport/gates"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.4" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.5">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.1" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.2">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.2" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.6">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Route/src"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.1" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.3">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/src"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.5" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.6">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Route/trg"/>
-      </localEdges>
-      <localEdges xmi:type="IBeXPatternModel:IBeXEdge" sourceNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.4" targetNode="//@ibexPatterns/@contextPatterns.1/@signatureNodes.0">
-        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/trg"/>
-      </localEdges>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="arrivalGate" incomingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.2 //@ibexPatterns/@contextPatterns.1/@localEdges.9">
-        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="connectingFlight" incomingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.1" outgoingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.5 //@ibexPatterns/@contextPatterns.1/@localEdges.7">
-        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="connectingRoute" incomingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.5" outgoingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.6">
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="routex" incomingEdges="//@ibexModel/@edgeSet/@edges.8" outgoingEdges="//@ibexModel/@edgeSet/@edges.9">
         <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="departingGate" incomingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.3 //@ibexPatterns/@contextPatterns.1/@localEdges.7">
-        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Gate"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" incomingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.0" outgoingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.4 //@ibexPatterns/@contextPatterns.1/@localEdges.9">
-        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Flight"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="routex" incomingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.4" outgoingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.8">
-        <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Route"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="transitAirport" incomingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.6 //@ibexPatterns/@contextPatterns.1/@localEdges.8" outgoingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.2 //@ibexPatterns/@contextPatterns.1/@localEdges.3">
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="transitAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.2 //@ibexModel/@edgeSet/@edges.9" outgoingEdges="//@ibexModel/@edgeSet/@edges.10 //@ibexModel/@edgeSet/@edges.11">
         <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Airport"/>
-      </signatureNodes>
-      <signatureNodes xmi:type="IBeXPatternModel:IBeXNode" name="travel" outgoingEdges="//@ibexPatterns/@contextPatterns.1/@localEdges.0 //@ibexPatterns/@contextPatterns.1/@localEdges.1">
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="travel" outgoingEdges="//@ibexModel/@edgeSet/@edges.13 //@ibexModel/@edgeSet/@edges.12">
         <type xmi:type="ecore:EClass" href="../../Flights/model/Flights.ecore#//Travel"/>
-      </signatureNodes>
-    </contextPatterns>
-  </ibexPatterns>
+      </nodes>
+    </nodeSet>
+    <edgeSet xmi:type="IBeXPatternModel:IBeXEdgeSet">
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="connectingFlight->connectingRoute" sourceNode="//@ibexModel/@nodeSet/@nodes.2" targetNode="//@ibexModel/@nodeSet/@nodes.3">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="connectingFlight->departingGate" sourceNode="//@ibexModel/@nodeSet/@nodes.2" targetNode="//@ibexModel/@nodeSet/@nodes.4">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="connectingRoute->transitAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.3" targetNode="//@ibexModel/@nodeSet/@nodes.11">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Route/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->arrival" sourceNode="//@ibexModel/@nodeSet/@nodes.6" targetNode="//@ibexModel/@nodeSet/@nodes.0">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/arrival"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->arrivalGate" sourceNode="//@ibexModel/@nodeSet/@nodes.7" targetNode="//@ibexModel/@nodeSet/@nodes.1">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->departure" sourceNode="//@ibexModel/@nodeSet/@nodes.6" targetNode="//@ibexModel/@nodeSet/@nodes.5">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->plane" sourceNode="//@ibexModel/@nodeSet/@nodes.6" targetNode="//@ibexModel/@nodeSet/@nodes.8">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/plane"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->routex" sourceNode="//@ibexModel/@nodeSet/@nodes.6" targetNode="//@ibexModel/@nodeSet/@nodes.9">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->routex" sourceNode="//@ibexModel/@nodeSet/@nodes.7" targetNode="//@ibexModel/@nodeSet/@nodes.10">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="routex->transitAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.10" targetNode="//@ibexModel/@nodeSet/@nodes.11">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Route/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="transitAirport->arrivalGate" sourceNode="//@ibexModel/@nodeSet/@nodes.11" targetNode="//@ibexModel/@nodeSet/@nodes.1">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="transitAirport->departingGate" sourceNode="//@ibexModel/@nodeSet/@nodes.11" targetNode="//@ibexModel/@nodeSet/@nodes.4">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="travel->connectingFlight" sourceNode="//@ibexModel/@nodeSet/@nodes.12" targetNode="//@ibexModel/@nodeSet/@nodes.2">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Travel/flights"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="travel->flight" sourceNode="//@ibexModel/@nodeSet/@nodes.12" targetNode="//@ibexModel/@nodeSet/@nodes.7">
+        <type xmi:type="ecore:EReference" href="../../Flights/model/Flights.ecore#//Travel/flights"/>
+      </edges>
+    </edgeSet>
+  </ibexModel>
 </grapelmodel:GrapeLModelContainer>

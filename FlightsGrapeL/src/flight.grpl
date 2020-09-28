@@ -15,7 +15,7 @@ event connectingFlightNotReachable {
 	Flight connectingFlight;
 	Travel travel;
 }
-
+ 
 pattern flightWithArrival() {       
   	routex: Route
   	flight: Flight {
