@@ -23,11 +23,11 @@ import com.apama.event.parser.FieldTypes;
 
 import «imports.getPatternFQN(eventName, true)»;
 import «imports.getMatchFQN(eventName)»;
-«FOR field : model.getComplexFields(eventName)»
-import «imports.getFieldFQN(eventName, field.name)»;
+«FOR fieldName : model.getComplexFields(eventName).map[field | imports.getFieldFQN(eventName, field.name)].toSet»
+import «fieldName»;
 «ENDFOR»
 		
-public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match, P1Pattern>{
+public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names.getMatchName(eventName)», «names.getPatternName(eventName, true)»>{
 			
 	final public static String EVENT_NAME = "«eventName»";
 	final public static EventType EVENT_TYPE = createEventType();
@@ -93,7 +93,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<P1Match
 		«FOR field : model.getFields(eventName)»
 		iMatch.put("«field.name»", fields.get("«field.name»"));
 		«ENDFOR»
-		P1Match match = new P1Match(pattern, iMatch);
+		«names.getMatchName(eventName)» match = new «names.getMatchName(eventName)»(pattern, iMatch);
 		this.match = match;
 	}	
 }
