@@ -282,7 +282,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 				return "*"
 			}
 			case PLUS: {
-				return "-"
+				return "+"
 			}
 			
 		}
