@@ -171,8 +171,8 @@ action «attributeConstraint»(«FOR param : constraint.params SEPARATOR ', '»�
 	
 	def String getSendAction(ReturnStatement returnStatement) {
 		return '''
-action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param | param.params] SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») {
-	send «returnStatement.returnType.name»(«FOR param : returnStatement.parameters SEPARATOR ', '»«arithmeticExpr2Apama(param)»«ENDFOR») to eventChannel;
+action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param | param.params].map[param | eventPatternNode2param(param)].toSet SEPARATOR ', '»«param»«ENDFOR») {
+	send «returnStatement.returnType.name»(«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param)].toSet SEPARATOR ', '»«param»«ENDFOR») to eventChannel;
 }
 '''		
 	}
