@@ -15,7 +15,6 @@ import GrapeLModel.ArithmeticValueExpression
 import GrapeLModel.EventPatternNodeExpression
 import GrapeLModel.AttributeExpression
 import GrapeLModel.AttributeExpressionLiteral
-import GrapeLModel.AttributeExpressionProduction
 import GrapeLModel.AttributeConstraint
 import GrapeLModel.EventNode
 import GrapeLModel.EventPatternNode
@@ -134,7 +133,7 @@ class EventPatternTemplate extends AbstractTemplate{
 		if(context === null && constraint === null) {
 			return '''«sendActionName»(«getSendActionParams(pattern.returnStatement)»);'''
 		} else {
-			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» && «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
+			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» AND «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
 	«sendActionName»(«getSendActionParams(pattern.returnStatement)»);
 }'''
 		}
@@ -142,31 +141,31 @@ class EventPatternTemplate extends AbstractTemplate{
 	}
 	
 	def String getContextConstraintParams(Context context) {
-		return '''«FOR param : context.params SEPARATOR ', '»«param.name»«ENDFOR»'''
+		return '''«FOR param : context.params.map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 
 	def String getContextConstraint(Context context) {	
 		return '''
-action «contextConstraint»(«FOR param : context.params SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») returns boolean {
-	return «FOR constraint : context.contextConstraints SEPARATOR ' &&\n'»«contextConstraint2Apama(constraint)»«ENDFOR»;
+action «contextConstraint»(«FOR param : context.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
+	return «FOR constraint : context.contextConstraints.map[constraint | contextConstraint2Apama(constraint)] SEPARATOR ' AND\n'»«constraint»«ENDFOR»;
 }
 '''
 	}
 	
 	def String getAttributeConstraintParams(AttributeConstraint constraint) {
-		return '''«FOR param : constraint.params SEPARATOR ', '»«param.name»«ENDFOR»'''
+		return '''«FOR param : constraint.params.map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
 	def String getAttributeConstraint(AttributeConstraint constraint) {
 		return '''
-action «attributeConstraint»(«FOR param : constraint.params SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») returns boolean {
+action «attributeConstraint»(«FOR param : constraint.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
 	return «attributeConstraint2Apama(constraint)»;
 }
 '''
 	}
 	
 	def String getSendActionParams(ReturnStatement returnStatement) {
-		return '''«FOR param : returnStatement.parameters.flatMap[param | param.params] SEPARATOR ', '»«param.name»«ENDFOR»'''
+		return '''«FOR param : returnStatement.parameters.flatMap[param | param.params].map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
 	def String getSendAction(ReturnStatement returnStatement) {
