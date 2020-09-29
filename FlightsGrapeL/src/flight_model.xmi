@@ -165,7 +165,10 @@
       </contextConstraints>
     </context>
     <relationalConstraint xmi:type="grapelmodel:RelationalConstraintLiteral">
-      <relationalExpression xmi:type="grapelmodel:RelationalExpressionLiteral" eventPatternNode="//@eventPatterns.1/@nodes.1"/>
+      <relationalExpression xmi:type="grapelmodel:RelationalExpressionProduction" op="FOLLOWS">
+        <lhs xmi:type="grapelmodel:RelationalExpressionLiteral" eventPatternNode="//@eventPatterns.1/@nodes.1"/>
+        <rhs xmi:type="grapelmodel:RelationalExpressionLiteral" eventPatternNode="//@eventPatterns.1/@nodes.0"/>
+      </relationalExpression>
     </relationalConstraint>
     <attributeConstraint xmi:type="grapelmodel:AttributeConstraintLiteral" params="//@eventPatterns.1/@nodes.0 //@eventPatterns.1/@nodes.1">
       <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">

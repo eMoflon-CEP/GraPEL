@@ -89,10 +89,10 @@ class EventPatternTemplate extends AbstractTemplate{
 	def String relationalConstraintOp2Apama(RelationalConstraintOperator op) {
 		switch(op) {
 			case AND: {
-				return "AND"
+				return "and"
 			}
 			case OR: {
-				return "OR"
+				return "or"
 			}
 			
 		}
@@ -133,7 +133,7 @@ class EventPatternTemplate extends AbstractTemplate{
 		if(context === null && constraint === null) {
 			return '''«sendActionName»(«getSendActionParams(pattern.returnStatement)»);'''
 		} else {
-			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» AND «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
+			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» and «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
 	«sendActionName»(«getSendActionParams(pattern.returnStatement)»);
 }'''
 		}

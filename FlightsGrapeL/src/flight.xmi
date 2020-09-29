@@ -155,7 +155,9 @@
       <lhs xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.0" attribute="//@events.1/@attributes.0"/>
       <rhs xmi:type="grapel:EventPatternNodeExpression" patternNode="//@eventPatterns.1/@nodes.1" attribute="//@patterns.1/@nodes.4"/>
     </contextConstraints>
-    <relationalConstraints xmi:type="grapel:EventPatternRelationalConstraint" operands="//@eventPatterns.1/@nodes.1"/>
+    <relationalConstraints xmi:type="grapel:EventPatternRelationalConstraint" operands="//@eventPatterns.1/@nodes.1 //@eventPatterns.1/@nodes.0">
+      <operators>-></operators>
+    </relationalConstraints>
     <constraints xmi:type="grapel:AttributeConstraint">
       <lhs xmi:type="grapel:AttributeExpression">
         <operands xmi:type="grapel:EventPatternNodeAttributeExpression">
