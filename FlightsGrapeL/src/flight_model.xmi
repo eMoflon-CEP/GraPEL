@@ -112,7 +112,9 @@
     <attributeConstraint xmi:type="grapelmodel:AttributeConstraintLiteral" params="//@eventPatterns.0/@nodes.0">
       <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">
         <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.0/@nodes.0">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
           <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
             <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.0"/>
             <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.0/@attributes.5">
               <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//TimeStamp/time"/>
@@ -122,7 +124,9 @@
         </lhs>
         <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction" params="//@eventPatterns.0/@nodes.0">
           <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
             <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
               <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.9"/>
               <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.0/@attributes.6">
                 <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Route/duration"/>
@@ -131,7 +135,9 @@
             </value>
           </lhs>
           <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
             <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
               <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.5"/>
               <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.0/@attributes.7">
                 <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//TimeStamp/time"/>
@@ -173,14 +179,20 @@
     <attributeConstraint xmi:type="grapelmodel:AttributeConstraintLiteral" params="//@eventPatterns.1/@nodes.0 //@eventPatterns.1/@nodes.1">
       <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">
         <lhs xmi:type="grapelmodel:ArithmeticExpressionProduction" params="//@eventPatterns.1/@nodes.0 //@eventPatterns.1/@nodes.1">
-          <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+          <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" requiresCast="true">
+            <castTo xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
             <value xmi:type="grapelmodel:ArithmeticValueExpression">
               <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" eventAttribute="//@events.3/@attributes.1"/>
             </value>
           </lhs>
           <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction" op="MINUS">
-            <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" requiresCast="true">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <castTo xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
               <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
                 <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.4"/>
                 <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.1/@attributes.8">
                   <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Gate/position"/>
@@ -189,8 +201,12 @@
               </value>
             </lhs>
             <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction" op="MULTIPLY">
-              <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" requiresCast="true">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <castTo xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
                 <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                  <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
                   <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.1"/>
                   <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.1/@attributes.9">
                     <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Gate/position"/>
@@ -199,7 +215,9 @@
                 </value>
               </lhs>
               <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
                 <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                  <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
                   <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.11"/>
                   <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.1/@attributes.10">
                     <attribute xmi:type="ecore:EAttribute" href="../../Flights/model/Flights.ecore#//Airport/size"/>
@@ -210,7 +228,8 @@
             </rhs>
           </rhs>
         </lhs>
-        <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.1/@nodes.1">
+        <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral" params="//@eventPatterns.1/@nodes.1" requiresCast="true">
+          <castTo xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
           <value xmi:type="grapelmodel:ArithmeticValueExpression">
             <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.2"/>
           </value>

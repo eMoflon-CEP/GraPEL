@@ -114,4 +114,18 @@ public class ModelManager {
 		}
 
 	}
+	
+	public static String eDataTypeAsApamaType(final EDataType type) {
+		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
+			return "integer";
+		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
+			return "float";
+		}else if(type.getName().equals("EString") || type.getName().equals("EChar")) {
+			return "string";
+		}else if(type.getName().equals("EBoolean")) {
+			return "boolean";
+		}else {
+			throw new RuntimeException("Unsupported type: "+type.getName());
+		}
+	}
 }

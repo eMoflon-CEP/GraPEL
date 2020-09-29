@@ -222,6 +222,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	
 	def String attributeConstrExpr2Apama(AttributeConstraintExpression expr) {
 		return '''«arithmeticExpr2Apama(expr.lhs)» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»'''
+//		return '''«arithmeticExpr2Apama(expr.lhs)»«IF expr.lhs.requiresCast».to«ModelManager.eDataTypeAsApamaType(expr.lhs.castTo).toFirstUpper»«ENDIF» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»«IF expr.rhs.requiresCast».to«ModelManager.eDataTypeAsApamaType(expr.rhs.castTo).toFirstUpper»«ENDIF»'''
 	}
 	
 	def String attributeConstraintRelation2Apama(AttributeConstraintRelation op) {
@@ -251,7 +252,10 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	def String arithmeticExpr2Apama(ArithmeticExpression expr) {
 		if(expr instanceof ArithmeticExpressionLiteral) {
 			val literal = expr as ArithmeticExpressionLiteral;
-			return arithmeticVal2Apama(literal.value)
+			if(expr.requiresCast)
+				return  '''«arithmeticVal2Apama(literal.value)».to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
+			else
+				return  arithmeticVal2Apama(literal.value)
 		}else {
 			val production = expr as ArithmeticExpressionProduction;
 			return arithmeticExpr2Apama(production.lhs) + " "+ arithmeticOp2Apama(production.op) + " " + arithmeticExpr2Apama(production.rhs)
@@ -305,7 +309,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 			}
 		}else {
 			val expr = value as ArithmeticValueExpression;
-			return arithmeticValExpr2Apama(expr)
+				return arithmeticValExpr2Apama(expr)
 		}
 	}
 	

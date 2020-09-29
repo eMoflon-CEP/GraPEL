@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
@@ -357,6 +358,7 @@ public class GrapelToGrapelModelTransformer {
 			ace.setOp(transform(gConstraint.getRelation()));
 			ace.setLhs(transform(gConstraint.getLhs()));
 			ace.setRhs(transform(gConstraint.getRhs()));
+			checkACCast(ace.getLhs(), ace.getRhs());
 			
 			return acl;
 		}
@@ -371,6 +373,25 @@ public class GrapelToGrapelModelTransformer {
 		acp.setRhs(transformAC(gConstraints, gRelations));
 		
 		return acp;
+	}
+	
+	private void checkACCast(ArithmeticExpression lhs, ArithmeticExpression rhs) {
+		if(lhs.getType() == rhs.getType()) {
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(lhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			rhs.setRequiresCast(true);
+			rhs.setCastTo(EcorePackage.Literals.EDOUBLE);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			lhs.setRequiresCast(true);
+			lhs.setCastTo(EcorePackage.Literals.EDOUBLE);
+		}
 	}
 	
 	private Set<EventPatternNode> getAttributeConstraintParams(AttributeConstraint root) {
@@ -458,6 +479,7 @@ public class GrapelToGrapelModelTransformer {
 			org.emoflon.cep.grapel.AttributeExpressionOperand gOperand = gOperands.remove(0);
 			ArithmeticExpressionLiteral ael = factory.createArithmeticExpressionLiteral();
 			ael.setValue(transform(gOperand));
+			ael.setType(ael.getValue().getType());
 			return ael;
 		}
 		
@@ -467,10 +489,32 @@ public class GrapelToGrapelModelTransformer {
 		List<org.emoflon.cep.grapel.AttributeExpressionOperand> leftConstraint = new LinkedList<>();
 		leftConstraint.add(gOperands.remove(0));
 		aep.setLhs(transformAE(leftConstraint, new LinkedList<>()));
-		
 		aep.setRhs(transformAE(gOperands, gOperators));
-		
+		//TODO: This will fail spectacularly if anyone decides to use Strings and Numbers in the same expression!
+		setAETypeAndCast(aep, aep.getLhs(), aep.getRhs());
 		return aep;
+	}
+	
+	private void setAETypeAndCast(ArithmeticExpressionProduction production, ArithmeticExpression lhs, ArithmeticExpression rhs) {
+		if(lhs.getType() == rhs.getType()) {
+			production.setType(lhs.getType());
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(lhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			production.setType(lhs.getType());
+			rhs.setRequiresCast(true);
+			rhs.setCastTo(EcorePackage.Literals.EDOUBLE);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			production.setType(rhs.getType());
+			lhs.setRequiresCast(true);
+			lhs.setCastTo(EcorePackage.Literals.EDOUBLE);
+		}
 	}
 	
 	private ArithmeticValue transform(org.emoflon.cep.grapel.AttributeExpressionOperand gOperand) {
@@ -486,20 +530,24 @@ public class GrapelToGrapelModelTransformer {
 			if(gLiteral instanceof org.emoflon.cep.grapel.DoubleLiteral) {
 				DoubleLiteral literal = factory.createDoubleLiteral();
 				literal.setValue(((org.emoflon.cep.grapel.DoubleLiteral) gLiteral).getValue());
+				literal.setType(EcorePackage.Literals.EDOUBLE);
 				return literal;
 			}else {
 				IntegerLiteral literal = factory.createIntegerLiteral();
 				literal.setValue(((org.emoflon.cep.grapel.IntegerLiteral) gLiteral).getValue());
+				literal.setType(EcorePackage.Literals.EINT);
 				return literal;
 			}
 			
 		}else if(gLiteral instanceof org.emoflon.cep.grapel.StringLiteral) {
 			StringLiteral literal = factory.createStringLiteral();
 			literal.setValue(((org.emoflon.cep.grapel.StringLiteral) gLiteral).getValue());
+			literal.setType(EcorePackage.Literals.ESTRING);
 			return literal;
 		}else {
 			BooleanLiteral literal = factory.createBooleanLiteral();
 			literal.setValue(((org.emoflon.cep.grapel.BooleanLiteral)gLiteral).isValue());
+			literal.setType(EcorePackage.Literals.EBOOLEAN);
 			return literal;
 		}
 	}
@@ -512,6 +560,7 @@ public class GrapelToGrapelModelTransformer {
 		}
 		AttributeExpressionLiteral ael = factory.createAttributeExpressionLiteral();
 		expression.setAttributeExpression(ael);
+		expression.setType(gExpression.getField().getEAttributeType());
 		ael.setAttribute(gExpression.getField());
 		ael.setClass(gExpression.getField().getEContainingClass());
 		createVirtualField(ael, expression.getNodeExpression());
