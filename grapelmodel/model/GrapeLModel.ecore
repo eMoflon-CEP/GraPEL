@@ -188,11 +188,27 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" lowerBound="1" eType="#//ArithmeticExpressionOperator"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArithmeticExpressionUnary" eSuperTypes="#//ArithmeticExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isNegative" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
+        eType="#//ArithmeticExpressionUnaryOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operand" lowerBound="1"
+        eType="#//ArithmeticExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ArithmeticExpressionUnaryOperator">
+    <eLiterals name="BRACKETS"/>
+    <eLiterals name="ABS" value="1"/>
+    <eLiterals name="SQRT" value="2"/>
+    <eLiterals name="SIN" value="3"/>
+    <eLiterals name="COS" value="4"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ArithmeticExpressionOperator">
-    <eLiterals name="PLUS"/>
-    <eLiterals name="MINUS" value="1"/>
+    <eLiterals name="ADD"/>
+    <eLiterals name="SUBTRACT" value="1"/>
     <eLiterals name="MULTIPLY" value="2"/>
     <eLiterals name="DIVIDE" value="3"/>
+    <eLiterals name="EXPONENTIATE" value="4"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArithmeticValue" abstract="true" interface="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EDataType"/>

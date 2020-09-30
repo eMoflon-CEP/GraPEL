@@ -6,7 +6,7 @@ monitor testEvent2 {
 		
 		on all p1() as event1 {
 			if(attributeCheck(event1)) {
-				sendAction(event1);
+				sendAction();
 			}
 		}
 		
@@ -17,7 +17,7 @@ monitor testEvent2 {
 		return event1.p1airportID = "Frankfurt";
 	}
 			
-	action sendAction(p1 event1) {
+	action sendAction() {
 		send e1(event1.airport, "found with constraint!") to eventChannel;
 	}
 }

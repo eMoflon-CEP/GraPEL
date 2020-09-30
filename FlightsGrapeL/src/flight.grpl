@@ -87,7 +87,7 @@ event_pattern testEvent spawns flightDelayed {
 	          
 	event1 {
 		event1.arrival.time > event1.routex.duration + event1.departure.time
-	}             
+	}               
 	 
 	spawn flightDelayed(event1.flight, event1.arrival)           
 }
@@ -99,7 +99,7 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	delayed.flight == connecting.flight
 	
 	connecting -> delayed {
-		delayed.arrival + connecting.departingGate.position - connecting.arrivalGate.position * connecting.transitAirport.size > connecting.connectingFlight
+		delayed.arrival + abs(connecting.departingGate.position - connecting.arrivalGate.position) * connecting.transitAirport.size > connecting.connectingFlight
 	}
 	
 	spawn connectingFlightNotReachable(connecting.flight,connecting.travel)

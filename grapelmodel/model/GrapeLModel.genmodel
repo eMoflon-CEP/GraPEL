@@ -35,11 +35,19 @@
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintRelation/SMALLER_OR_EQUAL"/>
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintRelation/SMALLER"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//ArithmeticExpressionUnaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionUnaryOperator/BRACKETS"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionUnaryOperator/ABS"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionUnaryOperator/SQRT"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionUnaryOperator/SIN"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionUnaryOperator/COS"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//ArithmeticExpressionOperator">
-      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/PLUS"/>
-      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/MINUS"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/ADD"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/SUBTRACT"/>
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/MULTIPLY"/>
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/DIVIDE"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//ArithmeticExpressionOperator/EXPONENTIATE"/>
     </genEnums>
     <genClasses ecoreClass="GrapeLModel.ecore#//GrapeLModelContainer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//GrapeLModelContainer/events"/>
@@ -154,6 +162,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticExpressionProduction/lhs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticExpressionProduction/rhs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ArithmeticExpressionProduction/op"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticExpressionUnary">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ArithmeticExpressionUnary/isNegative"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//ArithmeticExpressionUnary/operator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticExpressionUnary/operand"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//ArithmeticValue">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValue/type"/>

@@ -39,6 +39,8 @@ import GrapeLModel.RelationalExpressionProduction
 import GrapeLModel.RelationalExpressionOperator
 import GrapeLModel.EventNodeExpression
 import GrapeLModel.IBeXPatternNodeExpression
+import GrapeLModel.ArithmeticExpressionUnary
+import GrapeLModel.ArithmeticExpressionUnaryOperator
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -251,15 +253,25 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	
 	def String arithmeticExpr2Apama(ArithmeticExpression expr) {
 		if(expr instanceof ArithmeticExpressionLiteral) {
-			val literal = expr as ArithmeticExpressionLiteral;
+			val literal = expr as ArithmeticExpressionLiteral
 			if(expr.requiresCast)
 				return  '''«arithmeticVal2Apama(literal.value)».to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
 			else
 				return  arithmeticVal2Apama(literal.value)
-		}else {
-			val production = expr as ArithmeticExpressionProduction;
-			return arithmeticExpr2Apama(production.lhs) + " "+ arithmeticOp2Apama(production.op) + " " + arithmeticExpr2Apama(production.rhs)
+		}else if(expr instanceof ArithmeticExpressionProduction){
+			val production = expr as ArithmeticExpressionProduction
+			return '''«arithmeticExpr2Apama(production.lhs)» «arithmeticOp2Apama(production.op)» «arithmeticExpr2Apama(production.rhs)»«IF production.op == ArithmeticExpressionOperator.EXPONENTIATE»)«ENDIF»'''
+		} else {
+			val unary = expr as ArithmeticExpressionUnary
+			return unaryExpression2Apama(unary);
 		}
+	}
+	
+	def String unaryExpression2Apama(ArithmeticExpressionUnary expr) {
+		if(expr.operator == ArithmeticExpressionUnaryOperator.BRACKETS)
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»)'''
+		else
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»).«arithmeticUnaryOp2Apama(expr.operator)»'''
 	}
 	
 	def String eventPatternNode2param(EventPatternNode eventPatternNode) {
@@ -276,18 +288,41 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	def String arithmeticOp2Apama(ArithmeticExpressionOperator op) {
 		switch(op) {
 			case DIVIDE: {
-				return "/"
+				return '/'
 			}
-			case MINUS: {
-				return "-"
+			case SUBTRACT: {
+				return '-'
 			}
 			case MULTIPLY: {
-				return "*"
+				return '*'
 			}
-			case PLUS: {
-				return "+"
+			case ADD: {
+				return '+'
+			}
+			case EXPONENTIATE: {
+				return '.pow('
 			}
 			
+		}
+	}
+	
+	def String arithmeticUnaryOp2Apama(ArithmeticExpressionUnaryOperator op) {
+		switch(op) {
+			case ABS: {
+				return 'abs()'
+			}
+			case BRACKETS: {
+				throw new RuntimeException("Brackets are not a proper operator.");
+			}
+			case COS: {
+				return 'cos()'
+			}
+			case SIN: {
+				return 'sin()'
+			}
+			case SQRT: {
+				return 'sqrt()'
+			}
 		}
 	}
 	
