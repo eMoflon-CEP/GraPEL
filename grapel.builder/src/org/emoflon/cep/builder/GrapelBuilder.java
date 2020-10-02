@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.jar.Manifest;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -35,7 +34,6 @@ import org.emoflon.ibex.gt.codegen.EClassifiersManager;
 import org.emoflon.ibex.gt.codegen.GTEngineBuilderExtension;
 import org.emoflon.ibex.gt.codegen.GTEngineExtension;
 import org.emoflon.ibex.gt.codegen.JavaFileGenerator;
-import org.emoflon.ibex.gt.editor.ui.builder.GTBuilderExtension;
 import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXModel;
 import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXPattern;
 import org.gervarro.eclipse.workspace.util.AntPatternCondition;
@@ -50,9 +48,9 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 
 	@Override
 	public void run(IProject project, Resource resource) {
-		System.out.println("Running extension: " + this.getClass().getSimpleName());
-		System.out.println("Given project: " + project.getName());
-		System.out.println("Given resource: " + resource.getURI());
+//		System.out.println("Running extension: " + this.getClass().getSimpleName());
+//		System.out.println("Given project: " + project.getName());
+//		System.out.println("Given resource: " + resource.getURI());
 		
 		// clean old code and create folders
 		try {
@@ -243,7 +241,7 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("GrapeLModel model saved to: "+output.getURI().path());
+//		System.out.println("GrapeLModel model saved to: "+output.getURI().path());
 	}
 
 }

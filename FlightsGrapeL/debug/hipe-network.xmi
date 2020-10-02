@@ -288,12 +288,12 @@
   <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_27_junction" inputPort="//@networknode.27/@ports/@port.0 //@networknode.27/@ports/@port.1" patternName="travelHasConnectingFlight_27" overlaps="//@networknode.28/@allOverlaps.0" mappings="//@networknode.28/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:ConstraintPort" portSlot="RIGHT" portTarget="//@networknode.29" patternName="travelHasConnectingFlight_27" initializationCode="" constraintName="check_constraint_2" predicateCode="!arrivalGate.equals(departingGate)">
-        <indices>1</indices>
         <indices>2</indices>
+        <indices>1</indices>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Gate"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Gate"/>
-        <nodeNames>arrivalGate</nodeNames>
         <nodeNames>departingGate</nodeNames>
+        <nodeNames>arrivalGate</nodeNames>
         <pattern xmi:type="HiPEPattern:HiPEPartialPattern" href="hipe-patterns.xmi#//@patterns.28"/>
       </port>
     </ports>
@@ -353,18 +353,18 @@
   <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_13_junction" inputPort="//@networknode.22/@ports/@port.0 //@networknode.30/@ports/@port.0" patternName="travelHasConnectingFlight_13" overlaps="//@networknode.31/@allOverlaps.0" mappings="//@networknode.31/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:ConstraintPort" portSlot="CENTER" portTarget="//@networknode.32" patternName="travelHasConnectingFlight_13" initializationCode="" constraintName="check_constraint_3" predicateCode="!connectingFlight.equals(flight) &amp;&amp; !connectingRoute.equals(routex)">
-        <indices>6</indices>
+        <indices>1</indices>
         <indices>0</indices>
         <indices>7</indices>
-        <indices>1</indices>
+        <indices>6</indices>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
-        <nodeNames>routex</nodeNames>
+        <nodeNames>connectingRoute</nodeNames>
         <nodeNames>connectingFlight</nodeNames>
         <nodeNames>flight</nodeNames>
-        <nodeNames>connectingRoute</nodeNames>
+        <nodeNames>routex</nodeNames>
         <pattern xmi:type="HiPEPattern:HiPEPartialPattern" href="hipe-patterns.xmi#//@patterns.14"/>
       </port>
     </ports>
