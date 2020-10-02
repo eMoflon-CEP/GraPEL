@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hipe.network:HiPENetwork xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:HiPEPattern="platform:/resource/hipe.pattern/model/HiPEPattern" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:hipe.network="platform:/resource/hipe.network/model/hiPENetwork" xsi:schemaLocation="platform:/resource/hipe.pattern/model/HiPEPattern java://hipe.pattern.HiPEPatternPackage http://www.eclipse.org/emf/2002/Ecore java://org.eclipse.emf.ecore.EcorePackage platform:/resource/hipe.network/model/hiPENetwork java://hipe.network.NetworkPackage">
-  <networknode xmi:type="hipe.network:DispatchNode" name="DispatchNode" objectNodes="//@networknode.3 //@networknode.7 //@networknode.9 //@networknode.14 //@networknode.20 //@networknode.22 //@networknode.32 //@networknode.33" notificationNode="//@networknode.1">
+  <networknode xmi:type="hipe.network:DispatchNode" name="DispatchNode" objectNodes="//@networknode.3 //@networknode.7 //@networknode.9 //@networknode.14 //@networknode.17 //@networknode.19 //@networknode.33 //@networknode.34" notificationNode="//@networknode.1">
     <metamodels xmi:type="ecore:EPackage" href="platform:/resource/Flights/model/Flights.ecore#/"/>
   </networknode>
   <networknode xmi:type="hipe.network:NotificationNode" name="NotificationNode" dispatchNode="//@networknode.0"/>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_arrival_0_reference" inputPort="//@networknode.32/@ports/@port.0 //@networknode.3/@ports/@port.0">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_arrival_0_reference" inputPort="//@networknode.33/@ports/@port.0 //@networknode.3/@ports/@port.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.5" patternName="flightWithArrival_4"/>
     </ports>
@@ -17,9 +17,10 @@
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//TimeStamp"/>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_departure_0_reference" inputPort="//@networknode.33/@ports/@port.0 //@networknode.3/@ports/@port.1">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_departure_0_reference" inputPort="//@networknode.34/@ports/@port.0 //@networknode.3/@ports/@port.1">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.5" patternName="flightWithArrival_5"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.20" patternName="travelHasConnectingFlight_32"/>
     </ports>
     <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Flight/departure"/>
   </networknode>
@@ -47,7 +48,7 @@
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_plane_0_reference" inputPort="//@networknode.32/@ports/@port.1 //@networknode.7/@ports/@port.0">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_plane_0_reference" inputPort="//@networknode.33/@ports/@port.1 //@networknode.7/@ports/@port.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.10" patternName="flightWithArrival_6"/>
     </ports>
@@ -59,11 +60,11 @@
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Plane"/>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_route_0_reference" inputPort="//@networknode.33/@ports/@port.1 //@networknode.9/@ports/@port.0">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_route_0_reference" inputPort="//@networknode.34/@ports/@port.1 //@networknode.9/@ports/@port.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.10" patternName="flightWithArrival_7"/>
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.15" patternName="travelHasConnectingFlight_20"/>
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.17" patternName="travelHasConnectingFlight_22"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.24" patternName="travelHasConnectingFlight_36"/>
     </ports>
     <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Flight/route"/>
   </networknode>
@@ -71,7 +72,7 @@
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.8" patternName="flightWithArrival_12"/>
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.13" patternName="travelHasConnectingFlight_29"/>
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.16" patternName="travelHasConnectingFlight_32"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.23" patternName="travelHasConnectingFlight_34"/>
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
   </networknode>
@@ -118,23 +119,23 @@
     <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="plane" value="3"/>
     <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="routex" value="4"/>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Route_trg_0_reference" inputPort="//@networknode.9/@ports/@port.1 //@networknode.14/@ports/@port.0">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Route_src_0_reference" inputPort="//@networknode.9/@ports/@port.1 //@networknode.14/@ports/@port.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.15" patternName="travelHasConnectingFlight_21"/>
     </ports>
-    <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Route/trg"/>
+    <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Route/src"/>
   </networknode>
   <networknode xmi:type="hipe.network:ObjectNode" name="Airport_object" dispatchnode="//@networknode.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.13" patternName="travelHasConnectingFlight_30"/>
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.16" patternName="travelHasConnectingFlight_30"/>
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.26" patternName="travelHasConnectingFlight_30"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.23" patternName="travelHasConnectingFlight_30"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.27" patternName="travelHasConnectingFlight_30"/>
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Airport"/>
   </networknode>
   <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_16_junction" inputPort="//@networknode.8/@ports/@port.1 //@networknode.13/@ports/@port.0" patternName="travelHasConnectingFlight_16" overlaps="//@networknode.15/@allOverlaps.0" mappings="//@networknode.15/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.18" patternName="travelHasConnectingFlight_16"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.22" patternName="travelHasConnectingFlight_16"/>
     </ports>
     <allOverlaps xmi:type="hipe.network:Overlaps">
       <overlap xmi:type="hipe.network:Overlap" leftIndex="1"/>
@@ -148,94 +149,52 @@
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Route_src_0_reference" inputPort="//@networknode.9/@ports/@port.2 //@networknode.14/@ports/@port.1">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_src_0_reference" inputPort="//@networknode.33/@ports/@port.2 //@networknode.17/@ports/@port.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.17" patternName="travelHasConnectingFlight_23"/>
-    </ports>
-    <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Route/src"/>
-  </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_17_junction" inputPort="//@networknode.8/@ports/@port.2 //@networknode.16/@ports/@port.0" patternName="travelHasConnectingFlight_17" overlaps="//@networknode.17/@allOverlaps.0" mappings="//@networknode.17/@allMappings.0">
-    <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.18" patternName="travelHasConnectingFlight_17"/>
-    </ports>
-    <allOverlaps xmi:type="hipe.network:Overlaps">
-      <overlap xmi:type="hipe.network:Overlap" leftIndex="1"/>
-    </allOverlaps>
-    <allMappings xmi:type="hipe.network:Mappings">
-      <mapping xmi:type="hipe.network:Mapping"/>
-      <mapping xmi:type="hipe.network:Mapping" index="1"/>
-      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-      <signatureMapping xmi:type="hipe.network:Mapping"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-    </allMappings>
-  </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_14_junction" inputPort="//@networknode.15/@ports/@port.0 //@networknode.17/@ports/@port.0" patternName="travelHasConnectingFlight_14" overlaps="//@networknode.18/@allOverlaps.0" mappings="//@networknode.18/@allMappings.0">
-    <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:ConstraintPort" portTarget="//@networknode.30" patternName="travelHasConnectingFlight_14" initializationCode="" constraintName="check_constraint_4" predicateCode="!connectingRoute.equals(routex)">
-        <indices>4</indices>
-        <indices>1</indices>
-        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
-        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
-        <nodeNames>connectingRoute</nodeNames>
-        <nodeNames>routex</nodeNames>
-        <pattern xmi:type="HiPEPattern:HiPEPartialPattern" href="hipe-patterns.xmi#//@patterns.15"/>
-      </port>
-    </ports>
-    <allOverlaps xmi:type="hipe.network:Overlaps">
-      <overlap xmi:type="hipe.network:Overlap" leftIndex="2" rightIndex="2"/>
-    </allOverlaps>
-    <allMappings xmi:type="hipe.network:Mappings">
-      <mapping xmi:type="hipe.network:Mapping"/>
-      <mapping xmi:type="hipe.network:Mapping" index="1"/>
-      <mapping xmi:type="hipe.network:Mapping" index="2"/>
-      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT"/>
-      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-      <signatureMapping xmi:type="hipe.network:Mapping"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" index="2"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-    </allMappings>
-  </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_src_0_reference" inputPort="//@networknode.32/@ports/@port.2 //@networknode.20/@ports/@port.0">
-    <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.24" patternName="travelHasConnectingFlight_24"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.21" patternName="travelHasConnectingFlight_22"/>
     </ports>
     <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Flight/src"/>
   </networknode>
   <networknode xmi:type="hipe.network:ObjectNode" name="Gate_object" dispatchnode="//@networknode.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.19" patternName="travelHasConnectingFlight_33"/>
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.25" patternName="travelHasConnectingFlight_36"/>
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.26" patternName="travelHasConnectingFlight_36"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.16" patternName="travelHasConnectingFlight_31"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.26" patternName="travelHasConnectingFlight_38"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.27" patternName="travelHasConnectingFlight_38"/>
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Gate"/>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Travel_flights_0_reference" inputPort="//@networknode.22/@ports/@port.0 //@networknode.33/@ports/@port.2">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Travel_flights_0_reference" inputPort="//@networknode.19/@ports/@port.0 //@networknode.34/@ports/@port.2">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.23" patternName="travelHasConnectingFlight_34"/>
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.23" patternName="travelHasConnectingFlight_35"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.20" patternName="travelHasConnectingFlight_33"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.24" patternName="travelHasConnectingFlight_35"/>
     </ports>
     <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Travel/flights"/>
   </networknode>
   <networknode xmi:type="hipe.network:ObjectNode" name="Travel_object" dispatchnode="//@networknode.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.21" patternName="travelHasConnectingFlight_39"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.18" patternName="travelHasConnectingFlight_42"/>
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Travel"/>
   </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_25_junction" inputPort="//@networknode.21/@ports/@port.0 //@networknode.21/@ports/@port.1" patternName="travelHasConnectingFlight_25" overlaps="//@networknode.23/@allOverlaps.0" mappings="//@networknode.23/@allMappings.0">
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_23_junction" inputPort="//@networknode.4/@ports/@port.1 //@networknode.18/@ports/@port.0" patternName="travelHasConnectingFlight_23" overlaps="//@networknode.20/@allOverlaps.0" mappings="//@networknode.20/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:ConstraintPort" portSlot="RIGHT" portTarget="//@networknode.24" patternName="travelHasConnectingFlight_25" initializationCode="" constraintName="check_constraint_2" predicateCode="!connectingFlight.equals(flight)">
-        <indices>2</indices>
-        <indices>1</indices>
-        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
-        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
-        <nodeNames>connectingFlight</nodeNames>
-        <nodeNames>flight</nodeNames>
-        <pattern xmi:type="HiPEPattern:HiPEPartialPattern" href="hipe-patterns.xmi#//@patterns.26"/>
-      </port>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.21" patternName="travelHasConnectingFlight_23"/>
+    </ports>
+    <allOverlaps xmi:type="hipe.network:Overlaps">
+      <overlap xmi:type="hipe.network:Overlap" rightIndex="1"/>
+    </allOverlaps>
+    <allMappings xmi:type="hipe.network:Mappings">
+      <mapping xmi:type="hipe.network:Mapping"/>
+      <mapping xmi:type="hipe.network:Mapping" index="1"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT"/>
+      <signatureMapping xmi:type="hipe.network:Mapping"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT"/>
+    </allMappings>
+  </networknode>
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_17_junction" inputPort="//@networknode.16/@ports/@port.0 //@networknode.20/@ports/@port.0" patternName="travelHasConnectingFlight_17" overlaps="//@networknode.21/@allOverlaps.0" mappings="//@networknode.21/@allMappings.0">
+    <ports xmi:type="hipe.network:Ports">
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.22" patternName="travelHasConnectingFlight_17"/>
     </ports>
     <allOverlaps xmi:type="hipe.network:Overlaps">
       <overlap xmi:type="hipe.network:Overlap"/>
@@ -244,14 +203,60 @@
       <mapping xmi:type="hipe.network:Mapping"/>
       <mapping xmi:type="hipe.network:Mapping" index="1"/>
       <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+      <signatureMapping xmi:type="hipe.network:Mapping"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+    </allMappings>
+  </networknode>
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_14_junction" inputPort="//@networknode.15/@ports/@port.0 //@networknode.21/@ports/@port.0" patternName="travelHasConnectingFlight_14" overlaps="//@networknode.22/@allOverlaps.0" mappings="//@networknode.22/@allMappings.0">
+    <ports xmi:type="hipe.network:Ports">
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.31" patternName="travelHasConnectingFlight_14"/>
+    </ports>
+    <allOverlaps xmi:type="hipe.network:Overlaps">
+      <overlap xmi:type="hipe.network:Overlap"/>
+    </allOverlaps>
+    <allMappings xmi:type="hipe.network:Mappings">
+      <mapping xmi:type="hipe.network:Mapping"/>
+      <mapping xmi:type="hipe.network:Mapping" index="1"/>
+      <mapping xmi:type="hipe.network:Mapping" index="2"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="3"/>
+      <signatureMapping xmi:type="hipe.network:Mapping"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" index="2"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="3"/>
+    </allMappings>
+  </networknode>
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Route_trg_0_reference" inputPort="//@networknode.9/@ports/@port.2 //@networknode.14/@ports/@port.1">
+    <ports xmi:type="hipe.network:Ports">
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.25" patternName="travelHasConnectingFlight_24"/>
+    </ports>
+    <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Route/trg"/>
+  </networknode>
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_25_junction" inputPort="//@networknode.18/@ports/@port.1 //@networknode.8/@ports/@port.2" patternName="travelHasConnectingFlight_25" overlaps="//@networknode.24/@allOverlaps.0" mappings="//@networknode.24/@allMappings.0">
+    <ports xmi:type="hipe.network:Ports">
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.25" patternName="travelHasConnectingFlight_25"/>
+    </ports>
+    <allOverlaps xmi:type="hipe.network:Overlaps">
+      <overlap xmi:type="hipe.network:Overlap" leftIndex="1"/>
+    </allOverlaps>
+    <allMappings xmi:type="hipe.network:Mappings">
+      <mapping xmi:type="hipe.network:Mapping"/>
+      <mapping xmi:type="hipe.network:Mapping" index="1"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
       <signatureMapping xmi:type="hipe.network:Mapping"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_18_junction" inputPort="//@networknode.19/@ports/@port.0 //@networknode.23/@ports/@port.0" patternName="travelHasConnectingFlight_18" overlaps="//@networknode.24/@allOverlaps.0" mappings="//@networknode.24/@allMappings.0">
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_18_junction" inputPort="//@networknode.23/@ports/@port.0 //@networknode.24/@ports/@port.0" patternName="travelHasConnectingFlight_18" overlaps="//@networknode.25/@allOverlaps.0" mappings="//@networknode.25/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.29" patternName="travelHasConnectingFlight_18"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.30" patternName="travelHasConnectingFlight_18"/>
     </ports>
     <allOverlaps xmi:type="hipe.network:Overlaps">
       <overlap xmi:type="hipe.network:Overlap" rightIndex="2"/>
@@ -267,22 +272,22 @@
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_trg_0_reference" inputPort="//@networknode.32/@ports/@port.3 //@networknode.20/@ports/@port.1">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Flight_trg_0_reference" inputPort="//@networknode.33/@ports/@port.3 //@networknode.17/@ports/@port.1">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.28" patternName="travelHasConnectingFlight_26"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.29" patternName="travelHasConnectingFlight_26"/>
     </ports>
     <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Flight/trg"/>
   </networknode>
-  <networknode xmi:type="hipe.network:ReferenceNode" name="Airport_gates_0_reference" inputPort="//@networknode.14/@ports/@port.2 //@networknode.20/@ports/@port.2">
+  <networknode xmi:type="hipe.network:ReferenceNode" name="Airport_gates_0_reference" inputPort="//@networknode.14/@ports/@port.2 //@networknode.17/@ports/@port.2">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.27" patternName="travelHasConnectingFlight_37"/>
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.27" patternName="travelHasConnectingFlight_38"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.28" patternName="travelHasConnectingFlight_39"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.28" patternName="travelHasConnectingFlight_40"/>
     </ports>
     <type xmi:type="ecore:EReference" href="platform:/resource/Flights/model/Flights.ecore#//Airport/gates"/>
   </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_27_junction" inputPort="//@networknode.26/@ports/@port.0 //@networknode.26/@ports/@port.1" patternName="travelHasConnectingFlight_27" overlaps="//@networknode.27/@allOverlaps.0" mappings="//@networknode.27/@allMappings.0">
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_27_junction" inputPort="//@networknode.27/@ports/@port.0 //@networknode.27/@ports/@port.1" patternName="travelHasConnectingFlight_27" overlaps="//@networknode.28/@allOverlaps.0" mappings="//@networknode.28/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:ConstraintPort" portSlot="RIGHT" portTarget="//@networknode.28" patternName="travelHasConnectingFlight_27" initializationCode="" constraintName="check_constraint_3" predicateCode="!arrivalGate.equals(departingGate)">
+      <port xmi:type="hipe.network:ConstraintPort" portSlot="RIGHT" portTarget="//@networknode.29" patternName="travelHasConnectingFlight_27" initializationCode="" constraintName="check_constraint_2" predicateCode="!arrivalGate.equals(departingGate)">
         <indices>1</indices>
         <indices>2</indices>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Gate"/>
@@ -304,9 +309,9 @@
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_19_junction" inputPort="//@networknode.25/@ports/@port.0 //@networknode.27/@ports/@port.0" patternName="travelHasConnectingFlight_19" overlaps="//@networknode.28/@allOverlaps.0" mappings="//@networknode.28/@allMappings.0">
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_19_junction" inputPort="//@networknode.26/@ports/@port.0 //@networknode.28/@ports/@port.0" patternName="travelHasConnectingFlight_19" overlaps="//@networknode.29/@allOverlaps.0" mappings="//@networknode.29/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.29" patternName="travelHasConnectingFlight_19"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.30" patternName="travelHasConnectingFlight_19"/>
     </ports>
     <allOverlaps xmi:type="hipe.network:Overlaps">
       <overlap xmi:type="hipe.network:Overlap" leftIndex="1" rightIndex="1"/>
@@ -322,12 +327,12 @@
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_15_junction" inputPort="//@networknode.24/@ports/@port.0 //@networknode.28/@ports/@port.0" patternName="travelHasConnectingFlight_15" overlaps="//@networknode.29/@allOverlaps.0" mappings="//@networknode.29/@allMappings.0">
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_15_junction" inputPort="//@networknode.25/@ports/@port.0 //@networknode.29/@ports/@port.0" patternName="travelHasConnectingFlight_15" overlaps="//@networknode.30/@allOverlaps.0" mappings="//@networknode.30/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.30" patternName="travelHasConnectingFlight_15"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.31" patternName="travelHasConnectingFlight_15"/>
     </ports>
     <allOverlaps xmi:type="hipe.network:Overlaps">
-      <overlap xmi:type="hipe.network:Overlap" leftIndex="1" rightIndex="3"/>
+      <overlap xmi:type="hipe.network:Overlap" leftIndex="1" rightIndex="2"/>
       <overlap xmi:type="hipe.network:Overlap" leftIndex="3"/>
     </allOverlaps>
     <allMappings xmi:type="hipe.network:Mappings">
@@ -336,23 +341,37 @@
       <mapping xmi:type="hipe.network:Mapping" index="2"/>
       <mapping xmi:type="hipe.network:Mapping" index="3"/>
       <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="3"/>
       <signatureMapping xmi:type="hipe.network:Mapping"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="2"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="3"/>
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="3"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_13_junction" inputPort="//@networknode.18/@ports/@port.0 //@networknode.29/@ports/@port.0" patternName="travelHasConnectingFlight_13" overlaps="//@networknode.30/@allOverlaps.0" mappings="//@networknode.30/@allMappings.0">
+  <networknode xmi:type="hipe.network:JunctionNode" name="travelHasConnectingFlight_13_junction" inputPort="//@networknode.22/@ports/@port.0 //@networknode.30/@ports/@port.0" patternName="travelHasConnectingFlight_13" overlaps="//@networknode.31/@allOverlaps.0" mappings="//@networknode.31/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
-      <port xmi:type="hipe.network:SimplePort" portSlot="CENTER" portTarget="//@networknode.31" patternName="travelHasConnectingFlight_13"/>
+      <port xmi:type="hipe.network:ConstraintPort" portSlot="CENTER" portTarget="//@networknode.32" patternName="travelHasConnectingFlight_13" initializationCode="" constraintName="check_constraint_3" predicateCode="!connectingFlight.equals(flight) &amp;&amp; !connectingRoute.equals(routex)">
+        <indices>1</indices>
+        <indices>0</indices>
+        <indices>6</indices>
+        <indices>7</indices>
+        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
+        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
+        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
+        <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
+        <nodeNames>connectingRoute</nodeNames>
+        <nodeNames>connectingFlight</nodeNames>
+        <nodeNames>routex</nodeNames>
+        <nodeNames>flight</nodeNames>
+        <pattern xmi:type="HiPEPattern:HiPEPartialPattern" href="hipe-patterns.xmi#//@patterns.14"/>
+      </port>
     </ports>
     <allOverlaps xmi:type="hipe.network:Overlaps">
-      <overlap xmi:type="hipe.network:Overlap" rightIndex="3"/>
-      <overlap xmi:type="hipe.network:Overlap" leftIndex="2" rightIndex="5"/>
-      <overlap xmi:type="hipe.network:Overlap" leftIndex="3"/>
+      <overlap xmi:type="hipe.network:Overlap" leftIndex="2" rightIndex="1"/>
+      <overlap xmi:type="hipe.network:Overlap" leftIndex="3" rightIndex="5"/>
+      <overlap xmi:type="hipe.network:Overlap" leftIndex="5" rightIndex="2"/>
     </allOverlaps>
     <allMappings xmi:type="hipe.network:Mappings">
       <mapping xmi:type="hipe.network:Mapping"/>
@@ -360,35 +379,38 @@
       <mapping xmi:type="hipe.network:Mapping" index="2"/>
       <mapping xmi:type="hipe.network:Mapping" index="3"/>
       <mapping xmi:type="hipe.network:Mapping" index="4"/>
-      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+      <mapping xmi:type="hipe.network:Mapping" index="5"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT"/>
+      <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="3"/>
       <mapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="4"/>
       <signatureMapping xmi:type="hipe.network:Mapping"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="1"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="2"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="3"/>
       <signatureMapping xmi:type="hipe.network:Mapping" index="4"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="1"/>
-      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="2"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" index="5"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT"/>
+      <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="3"/>
       <signatureMapping xmi:type="hipe.network:Mapping" origin="RIGHT" index="4"/>
     </allMappings>
   </networknode>
-  <networknode xmi:type="hipe.network:ProductionNode" name="travelHasConnectingFlight_production" inputPort="//@networknode.30/@ports/@port.0" patternName="travelHasConnectingFlight">
-    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="flight" value="0"/>
-    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="routex" value="1"/>
+  <networknode xmi:type="hipe.network:ProductionNode" name="travelHasConnectingFlight_production" inputPort="//@networknode.31/@ports/@port.0" patternName="travelHasConnectingFlight">
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="connectingFlight" value="0"/>
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="connectingRoute" value="1"/>
     <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="transitAirport" value="2"/>
-    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="connectingFlight" value="3"/>
-    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="connectingRoute" value="4"/>
-    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="departingGate" value="5"/>
-    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="travel" value="6"/>
-    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="arrivalGate" value="7"/>
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="departingGate" value="3"/>
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="connectionDeparture" value="4"/>
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="travel" value="5"/>
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="routex" value="6"/>
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="flight" value="7"/>
+    <labelToIndex xmi:type="hipe.network:StringToIntegerMapEntry" key="arrivalGate" value="8"/>
   </networknode>
   <networknode xmi:type="hipe.network:ObjectNode" name="Flight_object_SP0" dispatchnode="//@networknode.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.2" patternName="flightWithArrival_8"/>
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.6" patternName="flightWithArrival_8"/>
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.19" patternName="travelHasConnectingFlight_31"/>
-      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.25" patternName="travelHasConnectingFlight_28"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.16" patternName="travelHasConnectingFlight_28"/>
+      <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.26" patternName="travelHasConnectingFlight_37"/>
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
   </networknode>
@@ -396,7 +418,7 @@
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.4" patternName="flightWithArrival_8"/>
       <port xmi:type="hipe.network:SimplePort" portTarget="//@networknode.8" patternName="flightWithArrival_8"/>
-      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.21" patternName="travelHasConnectingFlight_28"/>
+      <port xmi:type="hipe.network:SimplePort" portSlot="RIGHT" portTarget="//@networknode.18" patternName="travelHasConnectingFlight_28"/>
     </ports>
     <type xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
   </networknode>

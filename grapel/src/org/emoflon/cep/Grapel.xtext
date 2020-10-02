@@ -109,12 +109,18 @@ enum AttributeRelation:
   SMALLER='<'
 ;
 
-AttributeExpression:
-	operands+=AttributeExpressionOperand 
-		(operators+= ArithmeticOperator
-			operands+=AttributeExpressionOperand
-		)*
+AttributeExpression: 
+	BinaryAttributeExpression
 ;
+
+BinaryAttributeExpression returns AttributeExpression: 
+	UnaryAttributeExpression ({BinaryAttributeExpression.left = current} operator=ArithmeticOperator right=UnaryAttributeExpression)*
+;
+
+UnaryAttributeExpression returns AttributeExpression: {UnaryAttributeExpression}
+	(negative?="-")? (operator = UnaryOperator)? '('operand=AttributeExpression')' | AttributeExpressionOperand
+;
+
 
 AttributeExpressionOperand:
 	AttributeExpressionLiteral | EventPatternNodeAttributeExpression
@@ -175,8 +181,16 @@ terminal FALSE returns ecore::EBoolean:
 ;
 
 enum ArithmeticOperator:
-  PLUS='+' |
-  MINUS='-' |
-  MULTIPLY='*' |
-  DIVIDE='/'
+	PLUS='+' 	|
+	MINUS='-' 	|
+	MULTIPLY='*'|
+ 	DIVIDE='/' 	|
+ 	POW='^'
+;
+
+enum UnaryOperator:
+	ABS='abs'	|
+	SQRT='sqrt' |
+	sin='sin'	|
+	cos='cos'	
 ;

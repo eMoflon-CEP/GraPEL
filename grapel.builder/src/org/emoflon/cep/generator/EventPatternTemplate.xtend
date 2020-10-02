@@ -39,19 +39,23 @@ import GrapeLModel.RelationalExpressionProduction
 import GrapeLModel.RelationalExpressionOperator
 import GrapeLModel.EventNodeExpression
 import GrapeLModel.IBeXPatternNodeExpression
+import GrapeLModel.ArithmeticExpressionUnary
+import GrapeLModel.ArithmeticExpressionUnaryOperator
 
 class EventPatternTemplate extends AbstractTemplate{
 	
 	String eventPatternName;
 	EventPattern pattern;
+	ModelManager model;
 	String contextConstraint = "contextCheck";
 	String attributeConstraint = "attributeCheck";
 	String sendActionName = "sendAction";
 	
 	new(String eventPatternName, ImportManager imports, NSManager names, PathManager paths, ModelManager model) {
 		super(imports, names, paths)
-		this.eventPatternName = eventPatternName;
-		this.pattern = model.getEventPattern(eventPatternName);
+		this.eventPatternName = eventPatternName
+		this.pattern = model.getEventPattern(eventPatternName)
+		this.model = model
 	}
 	
 	override String generate() {
@@ -165,13 +169,13 @@ action «attributeConstraint»(«FOR param : constraint.params.map[param | event
 	}
 	
 	def String getSendActionParams(ReturnStatement returnStatement) {
-		return '''«FOR param : returnStatement.parameters.flatMap[param | param.params].map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
+		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
 	def String getSendAction(ReturnStatement returnStatement) {
 		return '''
-action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param | param.params].map[param | eventPatternNode2param(param)].toSet SEPARATOR ', '»«param»«ENDFOR») {
-	send «returnStatement.returnType.name»(«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param)].toSet SEPARATOR ', '»«param»«ENDFOR») to eventChannel;
+action «sendActionName»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
+	send «returnStatement.returnType.name»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«param.name»«ENDFOR») to eventChannel;
 }
 '''		
 	}
@@ -249,17 +253,32 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 		}
 	}
 	
-	def String arithmeticExpr2Apama(ArithmeticExpression expr) {
+	def String arithmeticExpr2ApamaInternal(ArithmeticExpression expr) {
 		if(expr instanceof ArithmeticExpressionLiteral) {
-			val literal = expr as ArithmeticExpressionLiteral;
-			if(expr.requiresCast)
-				return  '''«arithmeticVal2Apama(literal.value)».to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
-			else
+			val literal = expr as ArithmeticExpressionLiteral
 				return  arithmeticVal2Apama(literal.value)
-		}else {
-			val production = expr as ArithmeticExpressionProduction;
-			return arithmeticExpr2Apama(production.lhs) + " "+ arithmeticOp2Apama(production.op) + " " + arithmeticExpr2Apama(production.rhs)
+		}else if(expr instanceof ArithmeticExpressionProduction){
+			val production = expr as ArithmeticExpressionProduction
+			return '''«arithmeticExpr2Apama(production.lhs)» «arithmeticOp2Apama(production.op)» «arithmeticExpr2Apama(production.rhs)»«IF production.op == ArithmeticExpressionOperator.EXPONENTIATE»)«ENDIF»'''
+		} else {
+			val unary = expr as ArithmeticExpressionUnary
+			return unaryExpression2Apama(unary);
 		}
+	}
+	
+	def String arithmeticExpr2Apama(ArithmeticExpression expr) {
+		if(expr.requiresCast && expr instanceof ArithmeticExpressionProduction)
+			return '''(«arithmeticExpr2ApamaInternal(expr)»).to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
+		else if(expr.requiresCast && (expr instanceof ArithmeticExpressionLiteral || expr instanceof ArithmeticExpressionUnary))
+			return '''«arithmeticExpr2ApamaInternal(expr)».to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
+		else return arithmeticExpr2ApamaInternal(expr)
+	}
+	
+	def String unaryExpression2Apama(ArithmeticExpressionUnary expr) {
+		if(expr.operator == ArithmeticExpressionUnaryOperator.BRACKETS)
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»)'''
+		else
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»).«arithmeticUnaryOp2Apama(expr.operator)»'''
 	}
 	
 	def String eventPatternNode2param(EventPatternNode eventPatternNode) {
@@ -276,18 +295,41 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	def String arithmeticOp2Apama(ArithmeticExpressionOperator op) {
 		switch(op) {
 			case DIVIDE: {
-				return "/"
+				return '/'
 			}
-			case MINUS: {
-				return "-"
+			case SUBTRACT: {
+				return '-'
 			}
 			case MULTIPLY: {
-				return "*"
+				return '*'
 			}
-			case PLUS: {
-				return "+"
+			case ADD: {
+				return '+'
+			}
+			case EXPONENTIATE: {
+				return '.pow('
 			}
 			
+		}
+	}
+	
+	def String arithmeticUnaryOp2Apama(ArithmeticExpressionUnaryOperator op) {
+		switch(op) {
+			case ABS: {
+				return 'abs()'
+			}
+			case BRACKETS: {
+				throw new RuntimeException("Brackets are not a proper operator.");
+			}
+			case COS: {
+				return 'cos()'
+			}
+			case SIN: {
+				return 'sin()'
+			}
+			case SQRT: {
+				return 'sqrt()'
+			}
 		}
 	}
 	

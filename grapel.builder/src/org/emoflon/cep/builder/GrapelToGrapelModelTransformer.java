@@ -48,6 +48,8 @@ import GrapeLModel.ArithmeticExpression;
 import GrapeLModel.ArithmeticExpressionLiteral;
 import GrapeLModel.ArithmeticExpressionOperator;
 import GrapeLModel.ArithmeticExpressionProduction;
+import GrapeLModel.ArithmeticExpressionUnary;
+import GrapeLModel.ArithmeticExpressionUnaryOperator;
 import GrapeLModel.ArithmeticValue;
 import GrapeLModel.ArithmeticValueExpression;
 import GrapeLModel.ArithmeticValueLiteral;
@@ -444,14 +446,16 @@ public class GrapelToGrapelModelTransformer {
 	}
 	
 	private ArithmeticExpression transform(org.emoflon.cep.grapel.AttributeExpression gExpression) {
-		List<org.emoflon.cep.grapel.AttributeExpressionOperand> gOperands = new LinkedList<>();
-		gOperands.addAll(gExpression.getOperands());
-		List<org.emoflon.cep.grapel.ArithmeticOperator> gOperators = new LinkedList<>();
-		gOperators.addAll(gExpression.getOperators());
-		
-		ArithmeticExpression expr = transformAE(gOperands, gOperators);
-		expr.getParams().addAll(getArithmeticExpressionParams(expr));
-		return expr;
+		if(gExpression instanceof org.emoflon.cep.grapel.BinaryAttributeExpression)
+			return transform((org.emoflon.cep.grapel.BinaryAttributeExpression)gExpression);
+		else if(gExpression instanceof org.emoflon.cep.grapel.UnaryAttributeExpression)
+			return transform((org.emoflon.cep.grapel.UnaryAttributeExpression)gExpression);
+		else {
+			ArithmeticExpressionLiteral ael = factory.createArithmeticExpressionLiteral();
+			ael.setValue(transform((org.emoflon.cep.grapel.AttributeExpressionOperand)gExpression));
+			ael.setType(ael.getValue().getType());
+			return ael;
+		}
 	}
 	
 	private Set<EventPatternNode> getArithmeticExpressionParams(ArithmeticExpression root) {
@@ -466,36 +470,72 @@ public class GrapelToGrapelModelTransformer {
 			return params;
 		}
 		
-		ArithmeticExpressionProduction production = (ArithmeticExpressionProduction)root;
 		Set<EventPatternNode> params = new LinkedHashSet<>();
-		params.addAll(getArithmeticExpressionParams(production.getLhs()));
-		params.addAll(getArithmeticExpressionParams(production.getRhs()));
+		if(root instanceof ArithmeticExpressionProduction) {
+			ArithmeticExpressionProduction production = (ArithmeticExpressionProduction)root;
+			params.addAll(getArithmeticExpressionParams(production.getLhs()));
+			params.addAll(getArithmeticExpressionParams(production.getRhs()));
+		} else {
+			ArithmeticExpressionUnary unary = (ArithmeticExpressionUnary)root;
+			params.addAll(getArithmeticExpressionParams(unary.getOperand()));
+		}
 		
 		return params;
 	}
 	
-	private ArithmeticExpression transformAE(List<org.emoflon.cep.grapel.AttributeExpressionOperand> gOperands, List<org.emoflon.cep.grapel.ArithmeticOperator> gOperators) {
-		if(gOperands.size()<2) {
-			org.emoflon.cep.grapel.AttributeExpressionOperand gOperand = gOperands.remove(0);
+	private ArithmeticExpression transform(org.emoflon.cep.grapel.BinaryAttributeExpression gExpression) {
+		ArithmeticExpressionProduction aep = factory.createArithmeticExpressionProduction();
+		aep.setOp(transform(gExpression.getOperator()));
+		
+		if(gExpression.getLeft() instanceof org.emoflon.cep.grapel.BinaryAttributeExpression)
+			aep.setLhs(transform((org.emoflon.cep.grapel.BinaryAttributeExpression) gExpression.getLeft()));
+		else if(gExpression.getLeft() instanceof org.emoflon.cep.grapel.UnaryAttributeExpression)
+			aep.setLhs(transform((org.emoflon.cep.grapel.UnaryAttributeExpression) gExpression.getLeft()));
+		else {
 			ArithmeticExpressionLiteral ael = factory.createArithmeticExpressionLiteral();
-			ael.setValue(transform(gOperand));
+			ael.setValue(transform((org.emoflon.cep.grapel.AttributeExpressionOperand)gExpression.getLeft()));
+			ael.setType(ael.getValue().getType());
+			aep.setLhs(ael);
+		}
+		
+		if(gExpression.getRight() instanceof org.emoflon.cep.grapel.BinaryAttributeExpression)
+			aep.setRhs(transform((org.emoflon.cep.grapel.BinaryAttributeExpression) gExpression.getRight()));
+		else if(gExpression.getRight() instanceof org.emoflon.cep.grapel.UnaryAttributeExpression)
+			aep.setRhs(transform((org.emoflon.cep.grapel.UnaryAttributeExpression) gExpression.getRight()));
+		else {
+			ArithmeticExpressionLiteral ael = factory.createArithmeticExpressionLiteral();
+			ael.setValue(transform((org.emoflon.cep.grapel.AttributeExpressionOperand)gExpression.getRight()));
+			ael.setType(ael.getValue().getType());
+			aep.setRhs(ael);
+		}
+		
+		setBinaryTypeAndCast(aep, aep.getLhs(), aep.getRhs());
+		return aep;
+	}
+	
+	private ArithmeticExpression transform(org.emoflon.cep.grapel.UnaryAttributeExpression gExpression) {
+		if(gExpression instanceof org.emoflon.cep.grapel.AttributeExpressionOperand) {
+			ArithmeticExpressionLiteral ael = factory.createArithmeticExpressionLiteral();
+			ael.setValue(transform((org.emoflon.cep.grapel.AttributeExpressionOperand)gExpression));
 			ael.setType(ael.getValue().getType());
 			return ael;
 		}
 		
-		ArithmeticExpressionProduction aep = factory.createArithmeticExpressionProduction();
-		aep.setOp(transform(gOperators.remove(0)));
+		ArithmeticExpressionUnary aeu = factory.createArithmeticExpressionUnary();
+		aeu.setIsNegative(gExpression.isNegative());
+		if(gExpression.getOperator() != null) {
+			aeu.setOperator(transform(gExpression.getOperator()));
+			aeu.setOperand(transform(gExpression.getOperand()));
+		} else {
+			aeu.setOperator(ArithmeticExpressionUnaryOperator.BRACKETS);
+			aeu.setOperand(transform(gExpression.getOperand()));
+		}
 		
-		List<org.emoflon.cep.grapel.AttributeExpressionOperand> leftConstraint = new LinkedList<>();
-		leftConstraint.add(gOperands.remove(0));
-		aep.setLhs(transformAE(leftConstraint, new LinkedList<>()));
-		aep.setRhs(transformAE(gOperands, gOperators));
-		//TODO: This will fail spectacularly if anyone decides to use Strings and Numbers in the same expression!
-		setAETypeAndCast(aep, aep.getLhs(), aep.getRhs());
-		return aep;
+		setUnaryTypeAndCast(aeu, aeu.getOperand());
+		return aeu;
 	}
 	
-	private void setAETypeAndCast(ArithmeticExpressionProduction production, ArithmeticExpression lhs, ArithmeticExpression rhs) {
+	private void setBinaryTypeAndCast(ArithmeticExpressionProduction production, ArithmeticExpression lhs, ArithmeticExpression rhs) {
 		if(lhs.getType() == rhs.getType()) {
 			production.setType(lhs.getType());
 			lhs.setRequiresCast(false);
@@ -516,6 +556,12 @@ public class GrapelToGrapelModelTransformer {
 			lhs.setCastTo(EcorePackage.Literals.EDOUBLE);
 		}
 	}
+	
+	private void setUnaryTypeAndCast(ArithmeticExpressionUnary production, ArithmeticExpression operand) {
+		production.setType(operand.getType());
+		operand.setRequiresCast(false);
+	}
+	
 	
 	private ArithmeticValue transform(org.emoflon.cep.grapel.AttributeExpressionOperand gOperand) {
 		if(gOperand instanceof org.emoflon.cep.grapel.AttributeExpressionLiteral) {
@@ -645,14 +691,30 @@ public class GrapelToGrapelModelTransformer {
 		case DIVIDE:
 			return ArithmeticExpressionOperator.DIVIDE;
 		case MINUS:
-			return ArithmeticExpressionOperator.MINUS;
+			return ArithmeticExpressionOperator.SUBTRACT;
 		case MULTIPLY:
 			return ArithmeticExpressionOperator.MULTIPLY;
 		case PLUS:
-			return ArithmeticExpressionOperator.PLUS;
+			return ArithmeticExpressionOperator.ADD;
+		case POW:
+			return ArithmeticExpressionOperator.EXPONENTIATE;
 		default:
 			return null;
-		
+		}
+	}
+	
+	private ArithmeticExpressionUnaryOperator transform(org.emoflon.cep.grapel.UnaryOperator gOperator) {
+		switch(gOperator) {
+		case ABS:
+			return ArithmeticExpressionUnaryOperator.ABS;
+		case COS:
+			return ArithmeticExpressionUnaryOperator.COS;
+		case SIN:
+			return ArithmeticExpressionUnaryOperator.SIN;
+		case SQRT:
+			return ArithmeticExpressionUnaryOperator.SQRT;
+		default:
+			return null;
 		}
 	}
 	
@@ -660,6 +722,23 @@ public class GrapelToGrapelModelTransformer {
 		ReturnStatement returnState = factory.createReturnStatement();
 		returnState.setReturnType(gEvent2Events.get(gReturn.getReturnArg()));
 		returnState.getParameters().addAll(gReturn.getReturnParams().stream().map(param -> transform(param)).collect(Collectors.toList()));
+		for(int i = 0; i<returnState.getParameters().size(); i++) {
+			ArithmeticExpression ae = returnState.getParameters().get(i);
+			EventAttribute ea = returnState.getReturnType().getAttributes().get(i);
+			EDataType eaDataType = null;
+			if(ea instanceof SimpleAttribute) {
+				eaDataType = ((SimpleAttribute)ea).getType();
+			} else if(ea instanceof VirtualEventAttribute) {
+				eaDataType = ((VirtualEventAttribute)ea).getType();
+			} else {
+				continue;
+			}
+			
+			if(eaDataType != ae.getType()) {
+				ae.setRequiresCast(true);
+				ae.setCastTo(eaDataType);
+			}
+		}
 		return returnState;
 	}
 	

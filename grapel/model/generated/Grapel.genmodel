@@ -36,6 +36,13 @@
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/MINUS"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/MULTIPLY"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/DIVIDE"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/POW"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//UnaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/ABS"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/SQRT"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/sin"/>
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/cos"/>
     </genEnums>
     <genClasses ecoreClass="Grapel.ecore#//EditorGTFile">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EditorGTFile/events"/>
@@ -93,10 +100,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeConstraint/relation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeConstraint/rhs"/>
     </genClasses>
-    <genClasses ecoreClass="Grapel.ecore#//AttributeExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//AttributeExpression/operands"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//AttributeExpression/operators"/>
-    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//AttributeExpression"/>
     <genClasses ecoreClass="Grapel.ecore#//AttributeExpressionOperand"/>
     <genClasses ecoreClass="Grapel.ecore#//AttributeExpressionLiteral"/>
     <genClasses ecoreClass="Grapel.ecore#//NumberLiteral"/>
@@ -111,6 +115,16 @@
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//BooleanLiteral">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//BooleanLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//BinaryAttributeExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//BinaryAttributeExpression/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//BinaryAttributeExpression/operator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//BinaryAttributeExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//UnaryAttributeExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//UnaryAttributeExpression/negative"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//UnaryAttributeExpression/operator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//UnaryAttributeExpression/operand"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
