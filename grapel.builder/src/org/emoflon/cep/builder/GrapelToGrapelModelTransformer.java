@@ -722,6 +722,23 @@ public class GrapelToGrapelModelTransformer {
 		ReturnStatement returnState = factory.createReturnStatement();
 		returnState.setReturnType(gEvent2Events.get(gReturn.getReturnArg()));
 		returnState.getParameters().addAll(gReturn.getReturnParams().stream().map(param -> transform(param)).collect(Collectors.toList()));
+		for(int i = 0; i<returnState.getParameters().size(); i++) {
+			ArithmeticExpression ae = returnState.getParameters().get(i);
+			EventAttribute ea = returnState.getReturnType().getAttributes().get(i);
+			EDataType eaDataType = null;
+			if(ea instanceof SimpleAttribute) {
+				eaDataType = ((SimpleAttribute)ea).getType();
+			} else if(ea instanceof VirtualEventAttribute) {
+				eaDataType = ((VirtualEventAttribute)ea).getType();
+			} else {
+				continue;
+			}
+			
+			if(eaDataType != ae.getType()) {
+				ae.setRequiresCast(true);
+				ae.setCastTo(eaDataType);
+			}
+		}
 		return returnState;
 	}
 	

@@ -5,15 +5,15 @@ monitor testEvent {
 		monitor.subscribe(eventChannel);
 		
 		on all p1() as event1 {
-			sendAction();
+			sendAction(event1.airport, "found!");
 		}
 		
 	}
 	
 					
 			
-	action sendAction() {
-		send e1(event1.airport, "found!") to eventChannel;
+	action sendAction(integer airport, string str) {
+		send e1(airport, str) to eventChannel;
 	}
 }
 

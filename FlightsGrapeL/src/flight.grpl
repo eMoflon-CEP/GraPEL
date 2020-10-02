@@ -53,7 +53,9 @@ pattern travelHasConnectingFlight {
 	connectingFlight: Flight {
 		-route -> connectingRoute
 		-src -> departingGate
+		-departure -> connectionDeparture
 	}
+	connectionDeparture : TimeStamp
 	travel: Travel {
 		-flights -> flight
 		-flights -> connectingFlight
@@ -99,7 +101,7 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	delayed.flight == connecting.flight
 	
 	connecting -> delayed {
-		delayed.arrival + abs(connecting.departingGate.position - connecting.arrivalGate.position) * connecting.transitAirport.size > connecting.connectingFlight
+		delayed.arrival + abs(connecting.departingGate.position - connecting.arrivalGate.position) * connecting.transitAirport.size > connecting.connectionDeparture.time
 	}
 	
 	spawn connectingFlightNotReachable(connecting.flight,connecting.travel)
