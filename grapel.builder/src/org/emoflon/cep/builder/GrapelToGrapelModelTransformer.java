@@ -543,17 +543,26 @@ public class GrapelToGrapelModelTransformer {
 			return;
 		}
 		
-		if(lhs.getType() == EcorePackage.Literals.EDOUBLE) {
+		if(lhs.getType() == EcorePackage.Literals.EDOUBLE && rhs.getType() != EcorePackage.Literals.ESTRING) {
 			production.setType(lhs.getType());
 			rhs.setRequiresCast(true);
 			rhs.setCastTo(EcorePackage.Literals.EDOUBLE);
 			return;
+		} else if(lhs.getType() == EcorePackage.Literals.ESTRING) {
+			production.setType(lhs.getType());
+			rhs.setRequiresCast(true);
+			rhs.setCastTo(EcorePackage.Literals.ESTRING);
+			return;
 		}
 		
-		if(rhs.getType() == EcorePackage.Literals.EDOUBLE) {
+		if(rhs.getType() == EcorePackage.Literals.EDOUBLE && lhs.getType() != EcorePackage.Literals.ESTRING) {
 			production.setType(rhs.getType());
 			lhs.setRequiresCast(true);
 			lhs.setCastTo(EcorePackage.Literals.EDOUBLE);
+		} else if(rhs.getType() == EcorePackage.Literals.ESTRING) {
+			production.setType(rhs.getType());
+			lhs.setRequiresCast(true);
+			lhs.setCastTo(EcorePackage.Literals.ESTRING);
 		}
 	}
 	
