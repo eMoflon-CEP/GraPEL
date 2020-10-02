@@ -13,6 +13,7 @@ import org.emoflon.cep.grapel.Event;
 import org.emoflon.cep.grapel.EventPattern;
 import org.emoflon.cep.grapel.EventPatternNode;
 import org.emoflon.cep.grapel.GrapelPackage;
+import org.emoflon.cep.grapel.ReturnStatement;
 
 /**
  * This class contains custom validation rules. 
@@ -35,27 +36,51 @@ public class GrapelValidator extends AbstractGrapelValidator {
 
 	public static final String CODE_PREFIX = "org.emoflon.cep.";
 	
+	// Errors for events
+	public static final String EVENT_NAME_FORBIDDEN_MESSAGE = "Event cannot be named '%s'. Use a different name.";
+	public static final String EVENT_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event '%s' must not be declared multiple times.";
+	
 	// Errors for event_patterns
 	public static final String EVENT_PATTERN_NAME_FORBIDDEN_MESSAGE = "Event_pattern cannot be named '%s'. Use a different name.";
 	public static final String EVENT_PATTERN_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event_pattern '%s' must not be declared multiple times.";
 	
 	public static final String EVENT_PATTERN_INVALID_RETURN = CODE_PREFIX +  "event_pattern.returnStatement.invalid";
 	public static final String SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE = "Event_pattern %s spawns a different event than indicated.";
+	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with the wrong number of parameters.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with wrong parameters.";
 	
 	// Errors for event pattern nodes
 	public static final String EVENT_PATTERN_NODE_NAME_FORBIDDEN_MESSAGE = "Event_pattern node cannot be named '%s'. Use a different name.";
 	public static final String EVENT_PATTERN_NODE_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event_pattern node '%s' must not be declared multiple times.";
-	
-	
-	// Errors for events
-	public static final String EVENT_NAME_FORBIDDEN_MESSAGE = "Event cannot be named '%s'. Use a different name.";
-	public static final String EVENT_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event '%s' must not be declared multiple times.";
 
 	@Check
 	public void checkEvent(Event event) {
 		checkEventNameValid(event);
 		checkEventNameUnique(event);
+	}
+	
+	@Check
+	public void checkEventPattern(EventPattern pattern) {
+		checkEventPatternNameValid(pattern);
+		checkEventPatternNameUnique(pattern);
+	}
+	
+	@Check
+	public void checkEventPatternNode(EventPatternNode node) {
+		checkEventPatternNodeNameValid(node);
+		checkEventPatternNodeNameUnique(node);
+	}
+	
+	@Check
+	public void checkReturnStatement(ReturnStatement statement) {
+		EventPattern pattern = (EventPattern)statement.eContainer();
+		
+		if(!statement.getReturnArg().getName().equals(pattern.getReturnType().getReturnType().getName()))
+			error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
+					EVENT_PATTERN_INVALID_RETURN);
+		
+		checkReturnStatementParameters(pattern,  statement);
 	}
 	
 	public void checkEventNameValid(Event event) {
@@ -68,17 +93,13 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		// any style rules?
 	}
 	
-	@Check
-	public void checkEventPattern(EventPattern pattern) {
-		checkEventPatternNameValid(pattern);
-		checkEventPatternNameUnique(pattern);
-		checkEventPatternReturnStatement(pattern);
-	}
-	
-	@Check
-	public void checkEventPatternNode(EventPatternNode node) {
-		checkEventPatternNodeNameValid(node);
-		checkEventPatternNodeNameUnique(node);
+	public void checkEventNameUnique(Event event) {
+		EditorGTFile file = (EditorGTFile) event.eContainer();
+		long count = file.getEvents().stream().filter(e -> e.getName() !=  null && e.getName().equals(event.getName())).count();
+		if (count != 1)
+			error(String.format(EVENT_NAME_MULTIPLE_DECLARATIONS_MESSAGE, event.getName()),
+					GrapelPackage.Literals.EVENT__NAME,
+					NAME_EXPECT_UNIQUE);
 	}
 	
 	public void checkEventPatternNameValid(EventPattern pattern) {
@@ -100,27 +121,6 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					NAME_EXPECT_UNIQUE);
 	}
 	
-	public void checkEventPatternReturnStatement(EventPattern pattern) {
-		Event returnType = pattern.getReturnType().getReturnType();
-		Event returnArg = pattern.getReturnStatement().getReturnArg();
-		if(returnType.getName() != null && returnArg.getName() != null) {
-			if(!returnType.getName().equals(returnArg.getName()))
-				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
-						GrapelPackage.Literals.EVENT_PATTERN__NAME,
-						EVENT_PATTERN_INVALID_RETURN);
-			// else TODO: CHECKING FOR PARAMETERS
-		}
-	}
-	
-	public void checkEventNameUnique(Event event) {
-		EditorGTFile file = (EditorGTFile) event.eContainer();
-		long count = file.getEvents().stream().filter(e -> e.getName() !=  null && e.getName().equals(event.getName())).count();
-		if (count != 1)
-			error(String.format(EVENT_NAME_MULTIPLE_DECLARATIONS_MESSAGE, event.getName()),
-					GrapelPackage.Literals.EVENT__NAME,
-					NAME_EXPECT_UNIQUE);
-	}
-	
 	public void checkEventPatternNodeNameValid(EventPatternNode node) {
 		if(node.getName() == null)
 			return;
@@ -139,4 +139,21 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					GrapelPackage.Literals.EVENT_PATTERN_NODE__NAME,
 					NAME_EXPECT_UNIQUE);
 	}
+	
+	public void checkReturnStatementParameters(EventPattern pattern, ReturnStatement statement) {
+		if(statement.getReturnParams().size() != statement.getReturnArg().getAttributes().size()) {
+			error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE , pattern.getName()),
+					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS,
+					EVENT_PATTERN_INVALID_RETURN);
+			return;
+		}
+		
+		//TODO: check parameter types!
+//		for(int i = 0; i < statement.getReturnParams().size(); i++) {
+//			
+//		}
+			
+		
+	}
+
 }
