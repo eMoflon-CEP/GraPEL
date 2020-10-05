@@ -22,7 +22,7 @@ pattern flightWithArrival() {
   		-route->routex
 		-arrival->arrival
 		-departure->departure
-  		-plane->plane
+  		-plane->plane 
   	}
 	arrival: TimeStamp
 	departure: TimeStamp
