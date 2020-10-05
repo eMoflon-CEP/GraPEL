@@ -7,13 +7,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.validation.Check;
+import org.emoflon.cep.grapel.AttributeExpression;
+import org.emoflon.cep.grapel.AttributeExpressionLiteral;
+import org.emoflon.cep.grapel.BinaryAttributeExpression;
+import org.emoflon.cep.grapel.DoubleLiteral;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.cep.grapel.Event;
+import org.emoflon.cep.grapel.EventAttribute;
 import org.emoflon.cep.grapel.EventPattern;
 import org.emoflon.cep.grapel.EventPatternNode;
+import org.emoflon.cep.grapel.EventPatternNodeAttributeExpression;
+import org.emoflon.cep.grapel.EventPatternNodeExpression;
 import org.emoflon.cep.grapel.GrapelPackage;
+import org.emoflon.cep.grapel.IntegerLiteral;
 import org.emoflon.cep.grapel.ReturnStatement;
+import org.emoflon.cep.grapel.StringLiteral;
+import org.emoflon.cep.grapel.UnaryAttributeExpression;
+import org.emoflon.ibex.gt.editor.gT.EditorNode;
 
 /**
  * This class contains custom validation rules. 
@@ -48,6 +64,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public static final String SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE = "Event_pattern %s spawns a different event than indicated.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with the wrong number of parameters.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with wrong parameters.";
+	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING = "Event_pattern %s spawns an event without matching parameters. Will be cast automatically...";
 	
 	// Errors for event pattern nodes
 	public static final String EVENT_PATTERN_NODE_NAME_FORBIDDEN_MESSAGE = "Event_pattern node cannot be named '%s'. Use a different name.";
@@ -75,11 +92,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public void checkReturnStatement(ReturnStatement statement) {
 		EventPattern pattern = (EventPattern)statement.eContainer();
 		
-		if(!statement.getReturnArg().getName().equals(pattern.getReturnType().getReturnType().getName()))
+		if(!statement.getReturnArg().equals(pattern.getReturnType().getReturnType()))
 			error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
 					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
 					EVENT_PATTERN_INVALID_RETURN);
-		
 		checkReturnStatementParameters(pattern,  statement);
 	}
 	
@@ -143,17 +159,125 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public void checkReturnStatementParameters(EventPattern pattern, ReturnStatement statement) {
 		if(statement.getReturnParams().size() != statement.getReturnArg().getAttributes().size()) {
 			error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE , pattern.getName()),
-					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS,
+					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
 					EVENT_PATTERN_INVALID_RETURN);
 			return;
 		}
 		
-		//TODO: check parameter types!
-//		for(int i = 0; i < statement.getReturnParams().size(); i++) {
-//			
-//		}
+		for(int i = 0; i < statement.getReturnParams().size(); i++) {
+			EventAttribute expected = statement.getReturnArg().getAttributes().get(i);
+			AttributeExpression given = statement.getReturnParams().get(i);
+			if(expected.getType() instanceof EClass) {
+				if(!(given instanceof EventPatternNodeAttributeExpression)) {
+					error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+							GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+							EVENT_PATTERN_INVALID_RETURN);
+					continue;
+				}
+				
+				EventPatternNodeAttributeExpression expr = (EventPatternNodeAttributeExpression) given;
+				if(expr.getField() != null) {
+					error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+							GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+							EVENT_PATTERN_INVALID_RETURN);
+					continue;
+				}
+				EventPatternNodeExpression nodeExpr = (EventPatternNodeExpression) expr.getNodeExpression();
+				if(nodeExpr.getAttribute() instanceof EventAttribute) {
+					if(expected != nodeExpr.getAttribute())
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+				} else {
+					EditorNode gtNode = (EditorNode)nodeExpr.getAttribute();
+					if(expected.getType() != gtNode.getType())
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+				}
+			}else {
+				if((given instanceof EventPatternNodeAttributeExpression)) {
+					EventPatternNodeAttributeExpression expr = (EventPatternNodeAttributeExpression) given;
+					if(expr.getField() == null) {
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+					EAttribute attribute = expr.getField();
+					if(expected.getType() != attribute.getEType()) {
+						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+				} else {
+					EClassifier givenType = getTypeOfExpression(given);
+					if(givenType == null) {
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+					if(!(givenType instanceof EDataType)) {
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+					if(givenType != expected.getType()) {
+						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+					}
+				}
+			}
+		}
 			
 		
+	}
+	
+	public static EClassifier getTypeOfExpression(AttributeExpression expr) {
+		if(expr instanceof AttributeExpressionLiteral) {
+			AttributeExpressionLiteral literal = (AttributeExpressionLiteral)expr;
+			if(literal instanceof DoubleLiteral) {
+				return EcorePackage.Literals.EDOUBLE;
+			} else if(literal instanceof IntegerLiteral) {
+				return EcorePackage.Literals.EINT;
+			} else if(literal instanceof StringLiteral) {
+				return EcorePackage.Literals.ESTRING;
+			} else {
+				return EcorePackage.Literals.EBOOLEAN;
+			}
+		}
+		
+		if(expr instanceof EventPatternNodeAttributeExpression) {
+			EventPatternNodeAttributeExpression epnExpr = (EventPatternNodeAttributeExpression) expr;
+			return epnExpr.getField().getEType();
+		}
+		
+		if(expr instanceof UnaryAttributeExpression) {
+			UnaryAttributeExpression uexpr = (UnaryAttributeExpression)expr;
+			return getTypeOfExpression(uexpr.getOperand());
+		}
+		
+		BinaryAttributeExpression biexpr = (BinaryAttributeExpression)expr;
+		EClassifier lhsType = getTypeOfExpression(biexpr.getLeft());
+		EClassifier rhsType = getTypeOfExpression(biexpr.getRight());
+		if(lhsType == rhsType)
+			return lhsType;
+		
+		if(lhsType == EcorePackage.Literals.ESTRING || rhsType == EcorePackage.Literals.ESTRING) {
+			return EcorePackage.Literals.ESTRING;
+		}
+		
+		if(lhsType == EcorePackage.Literals.EDOUBLE || rhsType == EcorePackage.Literals.EDOUBLE) {
+			return EcorePackage.Literals.EDOUBLE;
+		}
+		
+		return null;
 	}
 
 }

@@ -79,7 +79,7 @@ public class GrapelAPIGenerator {
 		files.entrySet().parallelStream().forEach(entry -> {
 			try {
 				Files.write(Paths.get(entry.getKey()), Arrays.asList(entry.getValue()));
-				System.out.println("Saved file: "+entry.getKey());
+//				System.out.println("Saved file: "+entry.getKey());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
