@@ -29,6 +29,14 @@ pattern flightWithArrival() {
   	plane: Plane
 }
 
+pattern container {
+	model: FlightModel
+}
+
+event modelContainer {
+	FlightModel model;
+}
+
 /*
  * find travels with connecting flights
  */
@@ -53,11 +61,13 @@ pattern travelHasConnectingFlight {
 	connectingFlight: Flight {
 		-route -> connectingRoute
 		-src -> departingGate
+		-departure->connectingDeparture
 	}
 	travel: Travel {
 		-flights -> flight
 		-flights -> connectingFlight
 	}
+	connectingDeparture: TimeStamp
 }
    
 //event_pattern testEvent spawns e1{        
@@ -80,7 +90,16 @@ pattern travelHasConnectingFlight {
 //	}     
 //	     
 //	spawn e1(dot.airport.ID,dot2.airport.size)                        
-//}  
+//} 
+
+event_pattern hasContainer spawns modelContainer {
+	event1: container
+	
+	event1 {
+	}
+	
+	spawn modelContainer(event1.model)
+}
 
 event_pattern testEvent spawns flightDelayed {
 	event1 : flightWithArrival      
@@ -98,8 +117,8 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	
 	delayed.flight == connecting.flight
 	
-	connecting {
-		delayed.arrival + connecting.departingGate.position - connecting.arrivalGate.position * connecting.transitAirport.size > connecting.connectingFlight
+	connecting -> delayed {
+		delayed.arrival + connecting.departingGate.position - connecting.arrivalGate.position > connecting.connectingDeparture
 	}
 	
 	spawn connectingFlightNotReachable(connecting.flight,connecting.travel)
