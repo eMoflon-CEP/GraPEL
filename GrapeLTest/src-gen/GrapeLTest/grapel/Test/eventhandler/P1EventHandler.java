@@ -20,7 +20,7 @@ public class P1EventHandler extends EMoflonEventHandler<P1Event, P1Match, P1Patt
 	
 	final public static String HANDLER_NAME = "P1EventHandler";
 	final public static String[] CHANNELS = {"channel1"};
-	final public static String EPL_PATH = "C:/Users/sebas/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/eventmonitors/P1Event.mon";
+	final public static String EPL_PATH = "D:/Eclipse Workspaces/emoflon-ibex-devel3/git/GraPEL/GrapeLTest/src-gen/GrapeLTest/grapel/Test/eventmonitors/P1Event.mon";
 
 	public P1EventHandler(GrapeEngine engine) {
 		super(engine);

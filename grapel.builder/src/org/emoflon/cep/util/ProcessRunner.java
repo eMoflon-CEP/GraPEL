@@ -66,7 +66,16 @@ public class ProcessRunner extends Thread{
 			return;
 		}
 //		System.out.println("Killing: "+pr.toString()+" status: "+pr.isAlive());
+		
 		pr.destroy();
+		while(pr.isAlive()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 //		System.out.println("Exited with: "+pr.exitValue());
 		running = false;
 	}

@@ -55,11 +55,11 @@ public class ModelManager {
 	}
 	
 	public Collection<EventAttribute> getNonVirtualFields(String eventName) {
-		return fields.get(eventName).values().stream().filter(eatr -> !(eatr instanceof VirtualEventAttribute)).collect(Collectors.toList());
+		return fields.get(eventName).values().stream().filter(eatr -> !(eatr instanceof VirtualEventAttribute)).distinct().collect(Collectors.toList());
 	}
 	
 	public Collection<EventAttribute> getComplexFields(String eventName) {
-		return getFields(eventName).stream().filter(field -> (field instanceof ComplexAttribute)).collect(Collectors.toList());
+		return getFields(eventName).stream().filter(field -> (field instanceof ComplexAttribute)).distinct().collect(Collectors.toList());
 	}
 	
 	public EventPattern getEventPattern(String eventPattern) {
@@ -113,5 +113,19 @@ public class ModelManager {
 			throw new RuntimeException("Unsupported type: "+type.getName());
 		}
 
+	}
+	
+	public static String eDataTypeAsApamaType(final EDataType type) {
+		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
+			return "integer";
+		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
+			return "float";
+		}else if(type.getName().equals("EString") || type.getName().equals("EChar")) {
+			return "string";
+		}else if(type.getName().equals("EBoolean")) {
+			return "boolean";
+		}else {
+			throw new RuntimeException("Unsupported type: "+type.getName());
+		}
 	}
 }

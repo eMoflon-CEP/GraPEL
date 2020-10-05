@@ -102,13 +102,8 @@
     <eLiterals name="SMALLER_OR_EQUAL" value="4" literal="&lt;="/>
     <eLiterals name="SMALLER" value="5" literal="&lt;"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-        eType="#//AttributeExpressionOperand" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"
-        upperBound="-1" eType="#//ArithmeticOperator"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionOperand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionOperand" eSuperTypes="#//AttributeExpression"/>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeExpressionLiteral" eSuperTypes="#//AttributeExpressionOperand"/>
   <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" eSuperTypes="#//AttributeExpressionLiteral"/>
   <eClassifiers xsi:type="ecore:EClass" name="DoubleLiteral" eSuperTypes="#//NumberLiteral">
@@ -128,5 +123,25 @@
     <eLiterals name="MINUS" value="1" literal="-"/>
     <eLiterals name="MULTIPLY" value="2" literal="*"/>
     <eLiterals name="DIVIDE" value="3" literal="/"/>
+    <eLiterals name="POW" value="4" literal="^"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
+    <eLiterals name="ABS" literal="abs"/>
+    <eLiterals name="SQRT" value="1" literal="sqrt"/>
+    <eLiterals name="sin" value="2" literal="sin"/>
+    <eLiterals name="cos" value="3" literal="cos"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryAttributeExpression" eSuperTypes="#//AttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//AttributeExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//ArithmeticOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//AttributeExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnaryAttributeExpression" eSuperTypes="#//AttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negative" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//UnaryOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operand" eType="#//AttributeExpression"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -4,6 +4,7 @@ import Flights.Airport;
 import GrapeLTest.api.GrapeLTestAPI;
 import GrapeLTest.api.matches.P1Match;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,9 +14,10 @@ import org.emoflon.ibex.gt.api.GraphTransformationPattern;
 import org.emoflon.ibex.gt.engine.GraphTransformationInterpreter;
 
 /**
- * The pattern <code>p1()</code> which does the following:
+ * The pattern [org.emoflon.ibex.patternmodel.IBeXPatternModel.impl.IBeXNodeImpl@1719ef49 (name: airport)] which does the following:
  * If this pattern is not self-explaining, you really should add some comment in the specification.
  */
+@SuppressWarnings("unused")
 public class P1Pattern extends GraphTransformationPattern<P1Match, P1Pattern> {
 	private static String patternName = "p1";
 
@@ -27,10 +29,9 @@ public class P1Pattern extends GraphTransformationPattern<P1Match, P1Pattern> {
 	 * @param interpreter
 	 *            the interpreter
 	 */
-	 
 	
 	public P1Pattern(final GrapeLTestAPI api, final GraphTransformationInterpreter interpreter) {
-		super(api, interpreter, patternName );
+		super(api, interpreter, patternName);
 	}
 
 	@Override

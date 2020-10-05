@@ -15,7 +15,6 @@ import GrapeLModel.ArithmeticValueExpression
 import GrapeLModel.EventPatternNodeExpression
 import GrapeLModel.AttributeExpression
 import GrapeLModel.AttributeExpressionLiteral
-import GrapeLModel.AttributeExpressionProduction
 import GrapeLModel.AttributeConstraint
 import GrapeLModel.EventNode
 import GrapeLModel.EventPatternNode
@@ -40,19 +39,23 @@ import GrapeLModel.RelationalExpressionProduction
 import GrapeLModel.RelationalExpressionOperator
 import GrapeLModel.EventNodeExpression
 import GrapeLModel.IBeXPatternNodeExpression
+import GrapeLModel.ArithmeticExpressionUnary
+import GrapeLModel.ArithmeticExpressionUnaryOperator
 
 class EventPatternTemplate extends AbstractTemplate{
 	
 	String eventPatternName;
 	EventPattern pattern;
+	ModelManager model;
 	String contextConstraint = "contextCheck";
 	String attributeConstraint = "attributeCheck";
 	String sendActionName = "sendAction";
 	
 	new(String eventPatternName, ImportManager imports, NSManager names, PathManager paths, ModelManager model) {
 		super(imports, names, paths)
-		this.eventPatternName = eventPatternName;
-		this.pattern = model.getEventPattern(eventPatternName);
+		this.eventPatternName = eventPatternName
+		this.pattern = model.getEventPattern(eventPatternName)
+		this.model = model
 	}
 	
 	override String generate() {
@@ -90,10 +93,10 @@ class EventPatternTemplate extends AbstractTemplate{
 	def String relationalConstraintOp2Apama(RelationalConstraintOperator op) {
 		switch(op) {
 			case AND: {
-				return "AND"
+				return "and"
 			}
 			case OR: {
-				return "OR"
+				return "or"
 			}
 			
 		}
@@ -134,7 +137,7 @@ class EventPatternTemplate extends AbstractTemplate{
 		if(context === null && constraint === null) {
 			return '''«sendActionName»(«getSendActionParams(pattern.returnStatement)»);'''
 		} else {
-			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» && «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
+			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» and «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
 	«sendActionName»(«getSendActionParams(pattern.returnStatement)»);
 }'''
 		}
@@ -142,37 +145,37 @@ class EventPatternTemplate extends AbstractTemplate{
 	}
 	
 	def String getContextConstraintParams(Context context) {
-		return '''«FOR param : context.params SEPARATOR ', '»«param.name»«ENDFOR»'''
+		return '''«FOR param : context.params.map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 
 	def String getContextConstraint(Context context) {	
 		return '''
-action «contextConstraint»(«FOR param : context.params SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») returns boolean {
-	return «FOR constraint : context.contextConstraints SEPARATOR ' &&\n'»«contextConstraint2Apama(constraint)»«ENDFOR»;
+action «contextConstraint»(«FOR param : context.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
+	return «FOR constraint : context.contextConstraints.map[constraint | contextConstraint2Apama(constraint)] SEPARATOR ' AND\n'»«constraint»«ENDFOR»;
 }
 '''
 	}
 	
 	def String getAttributeConstraintParams(AttributeConstraint constraint) {
-		return '''«FOR param : constraint.params SEPARATOR ', '»«param.name»«ENDFOR»'''
+		return '''«FOR param : constraint.params.map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
 	def String getAttributeConstraint(AttributeConstraint constraint) {
 		return '''
-action «attributeConstraint»(«FOR param : constraint.params SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») returns boolean {
+action «attributeConstraint»(«FOR param : constraint.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
 	return «attributeConstraint2Apama(constraint)»;
 }
 '''
 	}
 	
 	def String getSendActionParams(ReturnStatement returnStatement) {
-		return '''«FOR param : returnStatement.parameters.flatMap[param | param.params] SEPARATOR ', '»«param.name»«ENDFOR»'''
+		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
 	def String getSendAction(ReturnStatement returnStatement) {
 		return '''
-action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param | param.params] SEPARATOR ', '»«eventPatternNode2param(param)»«ENDFOR») {
-	send «returnStatement.returnType.name»(«FOR param : returnStatement.parameters SEPARATOR ', '»«arithmeticExpr2Apama(param)»«ENDFOR») to eventChannel;
+action «sendActionName»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
+	send «returnStatement.returnType.name»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«param.name»«ENDFOR») to eventChannel;
 }
 '''		
 	}
@@ -223,6 +226,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	
 	def String attributeConstrExpr2Apama(AttributeConstraintExpression expr) {
 		return '''«arithmeticExpr2Apama(expr.lhs)» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»'''
+//		return '''«arithmeticExpr2Apama(expr.lhs)»«IF expr.lhs.requiresCast».to«ModelManager.eDataTypeAsApamaType(expr.lhs.castTo).toFirstUpper»«ENDIF» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»«IF expr.rhs.requiresCast».to«ModelManager.eDataTypeAsApamaType(expr.rhs.castTo).toFirstUpper»«ENDIF»'''
 	}
 	
 	def String attributeConstraintRelation2Apama(AttributeConstraintRelation op) {
@@ -249,14 +253,32 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 		}
 	}
 	
-	def String arithmeticExpr2Apama(ArithmeticExpression expr) {
+	def String arithmeticExpr2ApamaInternal(ArithmeticExpression expr) {
 		if(expr instanceof ArithmeticExpressionLiteral) {
-			val literal = expr as ArithmeticExpressionLiteral;
-			return arithmeticVal2Apama(literal.value)
-		}else {
-			val production = expr as ArithmeticExpressionProduction;
-			return arithmeticExpr2Apama(production.lhs) + " "+ arithmeticOp2Apama(production.op) + " " + arithmeticExpr2Apama(production.rhs)
+			val literal = expr as ArithmeticExpressionLiteral
+				return  arithmeticVal2Apama(literal.value)
+		}else if(expr instanceof ArithmeticExpressionProduction){
+			val production = expr as ArithmeticExpressionProduction
+			return '''«arithmeticExpr2Apama(production.lhs)» «arithmeticOp2Apama(production.op)» «arithmeticExpr2Apama(production.rhs)»«IF production.op == ArithmeticExpressionOperator.EXPONENTIATE»)«ENDIF»'''
+		} else {
+			val unary = expr as ArithmeticExpressionUnary
+			return unaryExpression2Apama(unary);
 		}
+	}
+	
+	def String arithmeticExpr2Apama(ArithmeticExpression expr) {
+		if(expr.requiresCast && expr instanceof ArithmeticExpressionProduction)
+			return '''(«arithmeticExpr2ApamaInternal(expr)»).to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
+		else if(expr.requiresCast && (expr instanceof ArithmeticExpressionLiteral || expr instanceof ArithmeticExpressionUnary))
+			return '''«arithmeticExpr2ApamaInternal(expr)».to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
+		else return arithmeticExpr2ApamaInternal(expr)
+	}
+	
+	def String unaryExpression2Apama(ArithmeticExpressionUnary expr) {
+		if(expr.operator == ArithmeticExpressionUnaryOperator.BRACKETS)
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»)'''
+		else
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»).«arithmeticUnaryOp2Apama(expr.operator)»'''
 	}
 	
 	def String eventPatternNode2param(EventPatternNode eventPatternNode) {
@@ -273,18 +295,41 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 	def String arithmeticOp2Apama(ArithmeticExpressionOperator op) {
 		switch(op) {
 			case DIVIDE: {
-				return "/"
+				return '/'
 			}
-			case MINUS: {
-				return "-"
+			case SUBTRACT: {
+				return '-'
 			}
 			case MULTIPLY: {
-				return "*"
+				return '*'
 			}
-			case PLUS: {
-				return "-"
+			case ADD: {
+				return '+'
+			}
+			case EXPONENTIATE: {
+				return '.pow('
 			}
 			
+		}
+	}
+	
+	def String arithmeticUnaryOp2Apama(ArithmeticExpressionUnaryOperator op) {
+		switch(op) {
+			case ABS: {
+				return 'abs()'
+			}
+			case BRACKETS: {
+				throw new RuntimeException("Brackets are not a proper operator.");
+			}
+			case COS: {
+				return 'cos()'
+			}
+			case SIN: {
+				return 'sin()'
+			}
+			case SQRT: {
+				return 'sqrt()'
+			}
 		}
 	}
 	
@@ -306,7 +351,7 @@ action «sendActionName»(«FOR param : returnStatement.parameters.flatMap[param
 			}
 		}else {
 			val expr = value as ArithmeticValueExpression;
-			return arithmeticValExpr2Apama(expr)
+				return arithmeticValExpr2Apama(expr)
 		}
 	}
 	

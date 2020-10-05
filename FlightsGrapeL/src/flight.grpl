@@ -15,7 +15,7 @@ event connectingFlightNotReachable {
 	Flight connectingFlight;
 	Travel travel;
 }
-
+ 
 pattern flightWithArrival() {       
   	routex: Route
   	flight: Flight {
@@ -61,13 +61,13 @@ pattern travelHasConnectingFlight {
 	connectingFlight: Flight {
 		-route -> connectingRoute
 		-src -> departingGate
-		-departure->connectingDeparture
+		-departure -> connectionDeparture
 	}
+	connectionDeparture : TimeStamp
 	travel: Travel {
 		-flights -> flight
 		-flights -> connectingFlight
 	}
-	connectingDeparture: TimeStamp
 }
    
 //event_pattern testEvent spawns e1{        
@@ -106,7 +106,7 @@ event_pattern testEvent spawns flightDelayed {
 	          
 	event1 {
 		event1.arrival.time > event1.routex.duration + event1.departure.time
-	}             
+	}               
 	 
 	spawn flightDelayed(event1.flight, event1.arrival)           
 }
@@ -116,9 +116,9 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	connecting: travelHasConnectingFlight
 	
 	delayed.flight == connecting.flight
-	
+	         
 	connecting -> delayed {
-		delayed.arrival + connecting.departingGate.position - connecting.arrivalGate.position > connecting.connectingDeparture
+		delayed.arrival + abs(connecting.departingGate.position - connecting.arrivalGate.position) * connecting.transitAirport.size > connecting.connectionDeparture.time
 	}
 	
 	spawn connectingFlightNotReachable(connecting.flight,connecting.travel)
