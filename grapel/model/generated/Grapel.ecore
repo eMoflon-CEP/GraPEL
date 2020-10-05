@@ -126,10 +126,11 @@
     <eLiterals name="POW" value="4" literal="^"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
-    <eLiterals name="ABS" literal="abs"/>
-    <eLiterals name="SQRT" value="1" literal="sqrt"/>
-    <eLiterals name="sin" value="2" literal="sin"/>
-    <eLiterals name="cos" value="3" literal="cos"/>
+    <eLiterals name="NONE" literal="g9%db3ß2Qx4psQtt_1:23nfp"/>
+    <eLiterals name="ABS" value="1" literal="abs"/>
+    <eLiterals name="SQRT" value="2" literal="sqrt"/>
+    <eLiterals name="sin" value="3" literal="sin"/>
+    <eLiterals name="cos" value="4" literal="cos"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BinaryAttributeExpression" eSuperTypes="#//AttributeExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//AttributeExpression"

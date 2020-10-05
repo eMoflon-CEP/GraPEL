@@ -212,7 +212,7 @@
       <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">
         <lhs xmi:type="grapelmodel:ArithmeticExpressionProduction" op="MULTIPLY">
           <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-          <lhs xmi:type="grapelmodel:ArithmeticExpressionProduction" requiresCast="true">
+          <lhs xmi:type="grapelmodel:ArithmeticExpressionUnary" requiresCast="true">
             <castTo xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
             <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
               <value xmi:type="grapelmodel:ArithmeticValueExpression">
@@ -223,9 +223,9 @@
               <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
               <operand xmi:type="grapelmodel:ArithmeticExpressionProduction" op="SUBTRACT">
                 <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-                <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+                <operand xmi:type="grapelmodel:ArithmeticExpressionProduction" op="SUBTRACT">
                   <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-                  <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                  <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
                     <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
                     <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.5"/>
                     <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.9">

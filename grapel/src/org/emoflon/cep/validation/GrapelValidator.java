@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.validation.Check;
+import org.emoflon.cep.grapel.ArithmeticOperator;
 import org.emoflon.cep.grapel.AttributeExpression;
 import org.emoflon.cep.grapel.AttributeExpressionLiteral;
 import org.emoflon.cep.grapel.BinaryAttributeExpression;
@@ -29,6 +30,7 @@ import org.emoflon.cep.grapel.IntegerLiteral;
 import org.emoflon.cep.grapel.ReturnStatement;
 import org.emoflon.cep.grapel.StringLiteral;
 import org.emoflon.cep.grapel.UnaryAttributeExpression;
+import org.emoflon.cep.grapel.UnaryOperator;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 
 /**
@@ -56,6 +58,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public static final String EVENT_NAME_FORBIDDEN_MESSAGE = "Event cannot be named '%s'. Use a different name.";
 	public static final String EVENT_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event '%s' must not be declared multiple times.";
 	
+	// Errors for event_attributes
+	public static final String EVENT_ATTRIBUTE_FORBIDDEN_TYPE = "Event attribute cannot be of type '%s'. Please use one of the following: EDouble, EInt, EBoolan, EString.";
+	public static final String EVENT_ATTRIBUTE_INVALID = CODE_PREFIX +  "event_pattern.attribute.invalid";
+	
 	// Errors for event_patterns
 	public static final String EVENT_PATTERN_NAME_FORBIDDEN_MESSAGE = "Event_pattern cannot be named '%s'. Use a different name.";
 	public static final String EVENT_PATTERN_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event_pattern '%s' must not be declared multiple times.";
@@ -69,6 +75,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	// Errors for event pattern nodes
 	public static final String EVENT_PATTERN_NODE_NAME_FORBIDDEN_MESSAGE = "Event_pattern node cannot be named '%s'. Use a different name.";
 	public static final String EVENT_PATTERN_NODE_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event_pattern node '%s' must not be declared multiple times.";
+	
+	// Errors for arithmetic expressions
+	public static final String ARITHMETIC_EXPRESSION_INVALID = CODE_PREFIX +  "event_pattern.arithmetic_expression.invalid";
+	public static final String ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION = "Operation '%s' can not be used on data type '%s'.";
 
 	@Check
 	public void checkEvent(Event event) {
@@ -76,6 +86,17 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		checkEventNameUnique(event);
 	}
 	
+	@Check void checkEventAttribute(EventAttribute eventAttribute) {
+		if(eventAttribute.getType() instanceof EDataType) {
+			EDataType type  = (EDataType) eventAttribute.getType();
+			if(!(type == EcorePackage.Literals.EDOUBLE || type == EcorePackage.Literals.EINT || type == EcorePackage.Literals.EBOOLEAN || type == EcorePackage.Literals.ESTRING)) {
+				error(String.format(EVENT_ATTRIBUTE_FORBIDDEN_TYPE, type.getName()),
+						GrapelPackage.Literals.EVENT_ATTRIBUTE__TYPE,
+						EVENT_ATTRIBUTE_INVALID);
+			}
+		}
+	}
+
 	@Check
 	public void checkEventPattern(EventPattern pattern) {
 		checkEventPatternNameValid(pattern);
@@ -97,6 +118,11 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
 					EVENT_PATTERN_INVALID_RETURN);
 		checkReturnStatementParameters(pattern,  statement);
+	}
+	
+	@Check
+	public void attributeExpressions(AttributeExpression expr) {
+		checkStringExpressions(expr);
 	}
 	
 	public void checkEventNameValid(Event event) {
@@ -237,6 +263,40 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		}
 			
 		
+	}
+	
+	public void checkStringExpressions(AttributeExpression expr) {
+		if(expr instanceof AttributeExpressionLiteral) {
+			return;
+		}
+		
+		if(expr instanceof EventPatternNodeAttributeExpression) {
+			return;
+		}
+		
+		if(expr instanceof UnaryAttributeExpression) {
+			UnaryAttributeExpression uexpr = (UnaryAttributeExpression)expr;
+			EClassifier classifier = getTypeOfExpression(uexpr.getOperand());
+			if(classifier == EcorePackage.Literals.ESTRING && uexpr.getOperator() != UnaryOperator.NONE) {
+				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION , uexpr.getOperator().getName(), classifier.getName()),
+						GrapelPackage.Literals.UNARY_ATTRIBUTE_EXPRESSION__OPERATOR,
+						ARITHMETIC_EXPRESSION_INVALID);
+			}
+			return;
+		}
+		
+		BinaryAttributeExpression biexpr = (BinaryAttributeExpression)expr;
+		EClassifier lhsType = getTypeOfExpression(biexpr.getLeft());
+		EClassifier rhsType = getTypeOfExpression(biexpr.getRight());	
+		if(lhsType != rhsType && (lhsType == EcorePackage.Literals.ESTRING || rhsType == EcorePackage.Literals.ESTRING)) {
+			if(biexpr.getOperator() != ArithmeticOperator.PLUS) {
+				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION , biexpr.getOperator().getName(), EcorePackage.Literals.ESTRING.getName()),
+						GrapelPackage.Literals.BINARY_ATTRIBUTE_EXPRESSION__OPERATOR,
+						ARITHMETIC_EXPRESSION_INVALID);
+			}
+		}
+		
+		return;
 	}
 	
 	public static EClassifier getTypeOfExpression(AttributeExpression expr) {

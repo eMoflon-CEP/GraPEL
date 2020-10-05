@@ -115,12 +115,12 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	delayed: flightDelayed
 	connecting: travelHasConnectingFlight
 	
-	delayed.flight == connecting.flight
+	delayed.flight == connecting.flight 
 	            
-	connecting -> delayed {
-		delayed.arrival + abs(connecting.departingGate.position - connecting.arrivalGate.position) * connecting.transitAirport.size > connecting.connectionDeparture.time
+	connecting -> delayed { 
+		(delayed.arrival + abs(connecting.departingGate.position - connecting.arrivalGate.position)) * connecting.transitAirport.size > connecting.connectionDeparture.time
 	}   
 	  
-	spawn connectingFlightNotReachable(connecting.flight, connecting.travel) 
+	spawn connectingFlightNotReachable(connecting.flight, connecting.travel)
 }
       

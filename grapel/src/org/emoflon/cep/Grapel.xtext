@@ -118,7 +118,7 @@ BinaryAttributeExpression returns AttributeExpression:
 ;
 
 UnaryAttributeExpression returns AttributeExpression: {UnaryAttributeExpression}
-	(negative?="-")? (operator = UnaryOperator)? '('operand=AttributeExpression')' | AttributeExpressionOperand
+	(negative?="-")? (operator=UnaryOperator'(' | '(') operand=AttributeExpression')' | AttributeExpressionOperand
 ;
 
 
@@ -189,6 +189,7 @@ enum ArithmeticOperator:
 ;
 
 enum UnaryOperator:
+	NONE='g9%db3ß2Qx4psQtt_1:23nfp'     |
 	ABS='abs'	|
 	SQRT='sqrt' |
 	sin='sin'	|
