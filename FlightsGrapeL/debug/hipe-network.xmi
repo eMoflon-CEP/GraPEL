@@ -36,12 +36,12 @@
   <networknode xmi:type="hipe.network:JunctionNode" name="flightWithArrival_3_junction" inputPort="//@networknode.4/@ports/@port.0 //@networknode.6/@ports/@port.0" patternName="flightWithArrival_3" overlaps="//@networknode.7/@allOverlaps.0" mappings="//@networknode.7/@allMappings.0">
     <ports xmi:type="hipe.network:Ports">
       <port xmi:type="hipe.network:ConstraintPort" portTarget="//@networknode.13" patternName="flightWithArrival_3" initializationCode="" constraintName="check_constraint_1" predicateCode="!arrival.equals(departure)">
-        <indices>1</indices>
         <indices>2</indices>
+        <indices>1</indices>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//TimeStamp"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//TimeStamp"/>
-        <nodeNames>arrival</nodeNames>
         <nodeNames>departure</nodeNames>
+        <nodeNames>arrival</nodeNames>
         <pattern xmi:type="HiPEPattern:HiPEPartialPattern" href="hipe-patterns.xmi#//@patterns.5"/>
       </port>
     </ports>
@@ -364,16 +364,16 @@
       <port xmi:type="hipe.network:ConstraintPort" portSlot="CENTER" portTarget="//@networknode.34" patternName="travelHasConnectingFlight_14" initializationCode="" constraintName="check_constraint_3" predicateCode="!connectingFlight.equals(flight) &amp;&amp; !connectingRoute.equals(routex)">
         <indices>1</indices>
         <indices>6</indices>
-        <indices>7</indices>
         <indices>0</indices>
+        <indices>7</indices>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Route"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
         <types xmi:type="ecore:EClass" href="platform:/resource/Flights/model/Flights.ecore#//Flight"/>
         <nodeNames>connectingRoute</nodeNames>
         <nodeNames>routex</nodeNames>
-        <nodeNames>flight</nodeNames>
         <nodeNames>connectingFlight</nodeNames>
+        <nodeNames>flight</nodeNames>
         <pattern xmi:type="HiPEPattern:HiPEPartialPattern" href="hipe-patterns.xmi#//@patterns.16"/>
       </port>
     </ports>
