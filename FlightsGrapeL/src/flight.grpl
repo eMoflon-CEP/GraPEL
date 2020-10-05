@@ -90,7 +90,7 @@ pattern travelHasConnectingFlight {
 //	}     
 //	     
 //	spawn e1(dot.airport.ID,dot2.airport.size)                        
-//} 
+//}  
 
 event_pattern hasContainer spawns modelContainer {
 	event1: container
