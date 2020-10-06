@@ -80,7 +80,9 @@ public abstract class EventHandler <E extends Event> implements IEventListener{
 	
 	public void sendEvent(E event) {
 		try {
-			engineClient.sendEvents(event.toApamaEvent(registry));
+			com.apama.event.Event apamaEvent = event.toApamaEvent(registry);
+			handleEvent(apamaEvent);
+			engineClient.sendEvents(apamaEvent);
 		} catch (EngineException e) {
 			e.printStackTrace();
 		}
