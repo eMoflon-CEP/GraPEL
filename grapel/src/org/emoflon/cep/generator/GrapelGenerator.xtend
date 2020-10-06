@@ -41,7 +41,7 @@ class GrapelGenerator extends AbstractGenerator {
 		val output = rs.createResource(URI.createURI(resource.URI.trimFileExtension+".xmi"))
 		output.contents.add(model)
 		EcoreUtil.resolveAll(output)
-		println(resource.URI)
+//		println(resource.URI)
 
 		val saveOptions = (output as XMIResource).getDefaultSaveOptions()
 		saveOptions.put(XMIResource.OPTION_ENCODING,"UTF-8");
@@ -49,9 +49,9 @@ class GrapelGenerator extends AbstractGenerator {
 		saveOptions.put(XMIResource.OPTION_SAVE_TYPE_INFORMATION,Boolean.TRUE);
 		saveOptions.put(XMIResource.OPTION_SCHEMA_LOCATION_IMPLEMENTATION, Boolean.TRUE);
 		(output as XMIResource).save(saveOptions)
-		System.out.println("Xtext model saved to: "+output.URI.path)
+//		System.out.println("Xtext model saved to: "+output.URI.path)
 		
-		println("Running Builder extensions...")
+//		println("Running Builder extensions...")
 		val workspace = getWorkspace()
 		val project = getProjectOfResource(workspace, output)
 		if(project === null)

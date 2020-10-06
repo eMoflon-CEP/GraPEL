@@ -39,6 +39,7 @@
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//ArithmeticOperator/POW"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Grapel.ecore#//UnaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/NONE"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/ABS"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/SQRT"/>
       <genEnumLiterals ecoreEnumLiteral="Grapel.ecore#//UnaryOperator/sin"/>

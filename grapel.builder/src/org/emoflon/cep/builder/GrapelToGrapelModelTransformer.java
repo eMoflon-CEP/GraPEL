@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.emoflon.cep.grapel.EditorGTFile;
+import org.emoflon.cep.grapel.UnaryOperator;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.transformations.EditorToIBeXPatternTransformation;
@@ -523,7 +524,7 @@ public class GrapelToGrapelModelTransformer {
 		
 		ArithmeticExpressionUnary aeu = factory.createArithmeticExpressionUnary();
 		aeu.setIsNegative(gExpression.isNegative());
-		if(gExpression.getOperator() != null) {
+		if(gExpression.getOperator() != UnaryOperator.NONE) {
 			aeu.setOperator(transform(gExpression.getOperator()));
 			aeu.setOperand(transform(gExpression.getOperand()));
 		} else {
