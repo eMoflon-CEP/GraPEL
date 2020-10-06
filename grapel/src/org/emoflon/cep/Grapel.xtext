@@ -112,7 +112,7 @@ AttributeRelation:
 ;
 
 MatchEventState:
-		'vanished(' event=[EventPatternNode] ')'
+		'vanished' '(' event=[EventPatternNode] ')'
 ;
 
 enum AttributeRelationOperator:

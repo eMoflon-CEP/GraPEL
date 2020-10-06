@@ -105,7 +105,7 @@ event_pattern testEvent spawns flightDelayed {
 	event1 : flightWithArrival      
 	          
 	event1 {
-		event1.arrival.time > event1.routex.duration + event1.departure.time && !vanished(event1)     
+		event1.arrival.time > event1.routex.duration + event1.departure.time && !vanished(event1)  
 	}               
 	 
 	spawn flightDelayed(event1.flight, event1.arrival)           

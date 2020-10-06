@@ -225,10 +225,10 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 	def String attributeConstrOp2Apama(AttributeConstraintOperator op) {
 		switch(op) {
 			case AND: {
-				return "&&"
+				return 'and'
 			}
 			case OR: {
-				return "||"
+				return 'or'
 			}
 			
 		}
