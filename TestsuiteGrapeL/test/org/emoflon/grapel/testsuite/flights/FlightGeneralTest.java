@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Flights.FlightModel;
+import FlightsGrapeL.grapel.Flight.eventhandler.ContainerEventHandler;
 import FlightsGrapeL.grapel.Flight.eventhandler.ModelContainerEventHandler;
 
 public class FlightGeneralTest extends FlightAbstractTest {
@@ -18,6 +19,14 @@ public class FlightGeneralTest extends FlightAbstractTest {
 	@Test
 	public void includes1Model() {
 		ModelContainerEventHandler containerHandler = api.getModelContainerEventHandler();
+
+		api.update();
+		assertEquals(1, containerHandler.getAllEvents().size());
+	}
+	
+	@Test
+	public void includes1ModelwoCEP() {
+		ContainerEventHandler containerHandler = api.getContainerEventHandler();
 
 		api.update();
 		assertEquals(1, containerHandler.getAllEvents().size());
