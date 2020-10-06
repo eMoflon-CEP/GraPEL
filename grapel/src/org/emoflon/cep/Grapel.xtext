@@ -33,8 +33,7 @@ EventPattern:
 	relationalConstraints += EventPatternRelationalConstraint 
 		(relConstraintRelations += RelationalConstraintRelation 
 			relationalConstraints += EventPatternRelationalConstraint)* '{'
-	(constraints += AttributeConstraint (relations += AttributeConstraintRelation 
-			constraints += AttributeConstraint)*)?
+	(attributeConstraint = AttributeConstraint)?
 	'}'
 	
 	returnStatement = ReturnStatement
@@ -91,8 +90,16 @@ enum RelationalOperator:
   	FOLLOWS='->' 
 ;
 
+
 AttributeConstraint:
-	 lhs = AttributeExpression relation = AttributeRelation rhs = AttributeExpression
+	BinaryAttributeConstraint 
+;
+BinaryAttributeConstraint returns AttributeConstraint: 
+	UnaryAttributeConstraint({BinaryAttributeConstraint.left = current} operator=AttributeConstraintRelation right=UnaryAttributeConstraint)*
+;
+
+UnaryAttributeConstraint returns AttributeConstraint: {UnaryAttributeConstraint}
+	(negated?="!")? ('['operand=AttributeConstraint']' |  operand=AttributeRelation | operand=MatchEventState)
 ;
 
 enum AttributeConstraintRelation:
@@ -100,7 +107,15 @@ enum AttributeConstraintRelation:
   	OR='||' 
 ;
 
-enum AttributeRelation:
+AttributeRelation:
+	 lhs = AttributeExpression relation = AttributeRelationOperator rhs = AttributeExpression
+;
+
+MatchEventState:
+		'vanished(' event=[EventPatternNode] ')'
+;
+
+enum AttributeRelationOperator:
   GREATER='>' |
   GREATER_OR_EQUAL='>=' |
   EQUAL='==' |
@@ -114,7 +129,7 @@ AttributeExpression:
 ;
 
 BinaryAttributeExpression returns AttributeExpression: 
-	UnaryAttributeExpression ({BinaryAttributeExpression.left = current} operator=ArithmeticOperator right=UnaryAttributeExpression)*
+	UnaryAttributeExpression({BinaryAttributeExpression.left = current} operator=ArithmeticOperator right=UnaryAttributeExpression)*
 ;
 
 UnaryAttributeExpression returns AttributeExpression: {UnaryAttributeExpression}

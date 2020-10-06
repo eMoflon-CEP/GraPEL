@@ -41,6 +41,9 @@ import GrapeLModel.EventNodeExpression
 import GrapeLModel.IBeXPatternNodeExpression
 import GrapeLModel.ArithmeticExpressionUnary
 import GrapeLModel.ArithmeticExpressionUnaryOperator
+import GrapeLModel.MatchVanishedConstraint
+import GrapeLModel.AttributeConstraintUnary
+import GrapeLModel.AttributeConstraintUnaryOperator
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -206,7 +209,14 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 		if(constraint instanceof AttributeConstraintLiteral) {
 			val literal = constraint as AttributeConstraintLiteral;
 			return attributeConstrExpr2Apama(literal.constraintExpression)
-		}else {
+		} else if(constraint instanceof MatchVanishedConstraint) {
+			val mvc = constraint as MatchVanishedConstraint
+			return '''«mvc.eventPatternNode.name».vanished'''
+		} else if(constraint instanceof AttributeConstraintUnary) {
+			val acu = constraint as AttributeConstraintUnary
+			return'''«IF acu.operator == AttributeConstraintUnaryOperator.NOT»not «attributeConstraint2Apama(acu.operand)»«ELSE»(«attributeConstraint2Apama(acu.operand)»)«ENDIF»'''
+		}
+		else {
 			val production = constraint as AttributeConstraintProduction
 			return '''«attributeConstraint2Apama(production.lhs)» «attributeConstrOp2Apama(production.op)» «attributeConstraint2Apama(production.rhs)»'''
 		}

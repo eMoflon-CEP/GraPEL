@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.emoflon.cep.grapel.EditorGTFile;
+import org.emoflon.cep.grapel.UnaryAttributeConstraint;
 import org.emoflon.cep.grapel.UnaryOperator;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
@@ -32,6 +33,7 @@ import GrapeLModel.IBeXPatternNode;
 import GrapeLModel.IBeXPatternNodeExpression;
 import GrapeLModel.IntegerLiteral;
 import GrapeLModel.MatchEvent;
+import GrapeLModel.MatchVanishedConstraint;
 import GrapeLModel.NodeContextConstraint;
 import GrapeLModel.RelationalConstraint;
 import GrapeLModel.RelationalConstraintLiteral;
@@ -60,6 +62,8 @@ import GrapeLModel.AttributeConstraintLiteral;
 import GrapeLModel.AttributeConstraintOperator;
 import GrapeLModel.AttributeConstraintProduction;
 import GrapeLModel.AttributeConstraintRelation;
+import GrapeLModel.AttributeConstraintUnary;
+import GrapeLModel.AttributeConstraintUnaryOperator;
 import GrapeLModel.AttributeExpression;
 import GrapeLModel.AttributeExpressionLiteral;
 import GrapeLModel.AttributeExpressionProduction;
@@ -203,14 +207,14 @@ public class GrapelToGrapelModelTransformer {
 		pattern.setRelationalConstraint(relConstraint);
 		
 		// transform attribute constraints
-		List<org.emoflon.cep.grapel.AttributeConstraint> gConstraints = new LinkedList<>();
-		gConstraints.addAll(gEventPattern.getConstraints());
+//		List<org.emoflon.cep.grapel.AttributeConstraint> gConstraints = new LinkedList<>();
+//		gConstraints.addAll(gEventPattern.getConstraints());
+//		
+//		List<org.emoflon.cep.grapel.AttributeConstraintRelation> gSubRelations = new LinkedList<>();
+//		gSubRelations.addAll(gEventPattern.getRelations());
 		
-		List<org.emoflon.cep.grapel.AttributeConstraintRelation> gSubRelations = new LinkedList<>();
-		gSubRelations.addAll(gEventPattern.getRelations());
-		
-		if(!gConstraints.isEmpty()) {
-			AttributeConstraint atrConstraint = transformAC(gConstraints, gSubRelations);
+		if(gEventPattern.getAttributeConstraint()!=null) {
+			AttributeConstraint atrConstraint = transform(gEventPattern.getAttributeConstraint());
 			pattern.setAttributeConstraint(atrConstraint);
 			atrConstraint.getParams().addAll(getAttributeConstraintParams(atrConstraint));
 		}
@@ -351,31 +355,12 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
-	private AttributeConstraint transformAC(List<org.emoflon.cep.grapel.AttributeConstraint> gConstraints, List<org.emoflon.cep.grapel.AttributeConstraintRelation> gRelations) {
-		if(gConstraints.size()<2) {
-			org.emoflon.cep.grapel.AttributeConstraint gConstraint = gConstraints.remove(0);
-			AttributeConstraintLiteral acl = factory.createAttributeConstraintLiteral();
-			AttributeConstraintExpression ace = factory.createAttributeConstraintExpression();
-			acl.setConstraintExpression(ace);
-			
-			ace.setOp(transform(gConstraint.getRelation()));
-			ace.setLhs(transform(gConstraint.getLhs()));
-			ace.setRhs(transform(gConstraint.getRhs()));
-			checkACCast(ace.getLhs(), ace.getRhs());
-			
-			return acl;
+	private AttributeConstraint transform(org.emoflon.cep.grapel.AttributeConstraint gConstraint) {
+		if(gConstraint instanceof org.emoflon.cep.grapel.BinaryAttributeConstraint) {
+			return transform((org.emoflon.cep.grapel.BinaryAttributeConstraint)gConstraint);
+		} else {
+			return transform((org.emoflon.cep.grapel.UnaryAttributeConstraint)gConstraint);
 		}
-		
-		AttributeConstraintProduction acp = factory.createAttributeConstraintProduction();
-		acp.setOp(transform(gRelations.remove(0)));
-		
-		List<org.emoflon.cep.grapel.AttributeConstraint> leftConstraint = new LinkedList<>();
-		leftConstraint.add(gConstraints.remove(0));
-		acp.setLhs(transformAC(leftConstraint, new LinkedList<>()));
-		
-		acp.setRhs(transformAC(gConstraints, gRelations));
-		
-		return acp;
 	}
 	
 	private void checkACCast(ArithmeticExpression lhs, ArithmeticExpression rhs) {
@@ -406,6 +391,13 @@ public class GrapelToGrapelModelTransformer {
 			params.addAll(getArithmeticExpressionParams(expr.getLhs()));
 			params.addAll(getArithmeticExpressionParams(expr.getRhs()));
 			return params;
+		} else if(root instanceof MatchVanishedConstraint) {
+			Set<EventPatternNode> params = new LinkedHashSet<>();
+			params.add(((MatchVanishedConstraint)root).getEventPatternNode());
+			return params;
+		} else if(root instanceof AttributeConstraintUnary) {
+			AttributeConstraintUnary acu = (AttributeConstraintUnary)root;
+			return getAttributeConstraintParams(acu.getOperand());
 		}
 		
 		AttributeConstraintProduction production = (AttributeConstraintProduction)root;
@@ -414,6 +406,72 @@ public class GrapelToGrapelModelTransformer {
 		params.addAll(getAttributeConstraintParams(production.getRhs()));
 		
 		return params;
+	}
+	
+	private AttributeConstraint transform(org.emoflon.cep.grapel.BinaryAttributeConstraint gConstraint) {
+		AttributeConstraintProduction acp = factory.createAttributeConstraintProduction();
+		acp.setLhs(transform(gConstraint.getLeft()));
+		acp.setOp(transform(gConstraint.getOperator()));
+		acp.setRhs(transform(gConstraint.getRight()));
+		return acp;
+	}
+	
+	private AttributeConstraint transform(org.emoflon.cep.grapel.UnaryAttributeConstraint gConstraint) {
+		AttributeConstraintUnary acu = factory.createAttributeConstraintUnary();
+		
+		if(gConstraint.isNegated() && gConstraint.getOperand() instanceof org.emoflon.cep.grapel.AttributeConstraint) {
+			acu.setOperator(AttributeConstraintUnaryOperator.NOT);
+			AttributeConstraintUnary acuBracket = factory.createAttributeConstraintUnary();
+			acu.setOperand(acuBracket);
+			acuBracket.setOperator(AttributeConstraintUnaryOperator.BRACKET);
+			acuBracket.setOperand(transform((org.emoflon.cep.grapel.AttributeConstraint)gConstraint.getOperand()));
+		} else if(!gConstraint.isNegated() && gConstraint.getOperand() instanceof org.emoflon.cep.grapel.AttributeConstraint) {
+			acu.setOperator(AttributeConstraintUnaryOperator.BRACKET);
+			acu.setOperand(transform((org.emoflon.cep.grapel.AttributeConstraint)gConstraint.getOperand()));
+		} else {
+			if(gConstraint.isNegated()) {
+				acu.setOperator(AttributeConstraintUnaryOperator.NOT);
+				if(gConstraint.getOperand() instanceof org.emoflon.cep.grapel.AttributeRelation) {
+					AttributeConstraintLiteral acl = factory.createAttributeConstraintLiteral();
+					acu.setOperand(acl);
+					AttributeConstraintExpression ace = factory.createAttributeConstraintExpression();
+					acl.setConstraintExpression(ace);
+					
+					org.emoflon.cep.grapel.AttributeRelation relation = (org.emoflon.cep.grapel.AttributeRelation) gConstraint.getOperand();
+					ace.setOp(transform(relation.getRelation()));
+					ace.setLhs(transform(relation.getLhs()));
+					ace.setRhs(transform(relation.getRhs()));
+					checkACCast(ace.getLhs(), ace.getRhs());
+				} else {
+					MatchVanishedConstraint mvc = factory.createMatchVanishedConstraint();
+					acu.setOperand(mvc);
+					
+					org.emoflon.cep.grapel.MatchEventState state = (org.emoflon.cep.grapel.MatchEventState) gConstraint.getOperand();
+					mvc.setEventPatternNode(gNode2Nodes.get(state.getEvent()));
+				}
+			} else {
+				if(gConstraint.getOperand() instanceof org.emoflon.cep.grapel.AttributeRelation) {
+					AttributeConstraintLiteral acl = factory.createAttributeConstraintLiteral();
+					AttributeConstraintExpression ace = factory.createAttributeConstraintExpression();
+					acl.setConstraintExpression(ace);
+					
+					org.emoflon.cep.grapel.AttributeRelation relation = (org.emoflon.cep.grapel.AttributeRelation) gConstraint.getOperand();
+					ace.setOp(transform(relation.getRelation()));
+					ace.setLhs(transform(relation.getLhs()));
+					ace.setRhs(transform(relation.getRhs()));
+					checkACCast(ace.getLhs(), ace.getRhs());
+					return acl;
+				} else {
+					MatchVanishedConstraint mvc = factory.createMatchVanishedConstraint();
+					org.emoflon.cep.grapel.MatchEventState state = (org.emoflon.cep.grapel.MatchEventState) gConstraint.getOperand();
+					mvc.setEventPatternNode(gNode2Nodes.get(state.getEvent()));
+					return mvc;
+				}
+			}
+			
+		}
+		
+		return acu;
 	}
 	
 	private AttributeConstraintOperator transform(org.emoflon.cep.grapel.AttributeConstraintRelation gRelation) {
@@ -427,7 +485,7 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
-	private AttributeConstraintRelation transform(org.emoflon.cep.grapel.AttributeRelation gRelation) {
+	private AttributeConstraintRelation transform(org.emoflon.cep.grapel.AttributeRelationOperator gRelation) {
 		switch(gRelation) {
 		case EQUAL:
 			return AttributeConstraintRelation.EQUAL;
