@@ -53,7 +53,7 @@ public class FlightDelayedTest extends FlightAbstractTest {
 			//delay muc_fra_1 flights
 			delayFlight(flight);
 			api.update();
-			assertEquals(1, delayedHandler.getAllEvents().size());
+			assertEquals(i+1, delayedHandler.getAllEvents().size());
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class FlightDelayedTest extends FlightAbstractTest {
 		//hurry muc_fra_1 flights
 		hurryFlight(flight);
 		api.update();
-		assertEquals(0, delayedHandler.getAllEvents().size());
+		assertEquals(1, delayedHandler.getAllEvents().size());
 	}
 	
 	@Test
@@ -94,11 +94,11 @@ public class FlightDelayedTest extends FlightAbstractTest {
 			//delay muc_fra_1 flights
 			delayFlight(flight);
 			api.update();
-			assertEquals(1, delayedHandler.getAllEvents().size());
+			assertEquals(i+1, delayedHandler.getAllEvents().size());
 			//hurry muc_fra_1 flights
 			hurryFlight(flight);
 			api.update();
-			assertEquals(0, delayedHandler.getAllEvents().size());
+			assertEquals(i+1, delayedHandler.getAllEvents().size());
 		}
 	}
 	
