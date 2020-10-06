@@ -25,10 +25,10 @@ import org.emoflon.cep.grapel.EventPatternNodeAttributeExpression;
 import org.emoflon.cep.grapel.EventPatternNodeExpression;
 import org.emoflon.cep.grapel.EventPatternRelationalConstraint;
 import org.emoflon.cep.grapel.GrapelPackage;
+import org.emoflon.cep.grapel.MatchEventState;
 import org.emoflon.cep.grapel.impl.EventPatternImpl;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
-import org.emoflon.ibex.gt.editor.gT.GTPackage;
 import org.emoflon.ibex.gt.editor.utils.GTEditorModelUtils;
 
 /**
@@ -76,6 +76,10 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    if (isEventPatternRelationalConstraint(context, reference)) {
 	    	return getScopeForEventPatternRelationalConstraints((EventPatternRelationalConstraint)context, reference);
 		}
+	    // MatchEventState
+	    if(context instanceof MatchEventState) {
+	    	return getScopeForMatchEventState((MatchEventState)context);
+	    }
 	    // AttributeConstraint
 	    if (isAttributeConstraint(context, reference)) {
 	    	return getScopeForAttributeConstraints((AttributeConstraint)context, reference);
@@ -85,6 +89,14 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    	return getScopeForAttributeExpressions((AttributeExpression)context, reference);
 		}
 	    return super.getScope(context, reference);
+	}
+	
+	private IScope getScopeForMatchEventState(MatchEventState context) {
+		Collection<EObject> scope = new HashSet<>();
+		scope.addAll(getContainer(context, EventPatternImpl.class).getNodes().stream()
+				.filter(node -> (node.getType() instanceof EditorPattern))
+				.collect(Collectors.toList()));
+		return Scopes.scopeFor(scope);
 	}
 	
 	private IScope getScopeForEventPatternNodeExpressions(EventPatternNodeExpression context, EReference reference) {
