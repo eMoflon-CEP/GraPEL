@@ -32,8 +32,8 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 	final public static String EVENT_NAME = "«eventName»";
 	final public static EventType EVENT_TYPE = createEventType();
 	
-	public «names.getEventName(eventName)»(final «names.getPatternName(eventName, true)» pattern, final «names.getMatchName(eventName)» match) {
-		super(pattern, match);
+	public «names.getEventName(eventName)»(final «names.getPatternName(eventName, true)» pattern, final «names.getMatchName(eventName)» match, boolean vanished) {
+		super(pattern, match, vanished);
 	}
 			
 	public «names.getEventName(eventName)»(final com.apama.event.Event apamaEvent, final TypeRegistry registry, final «names.getPatternName(eventName, true)» pattern) {
@@ -48,6 +48,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 
 	@Override
 	public void assignFields() {
+		fields.put("vanished", vanished);
 		«FOR field : model.getFields(eventName)»
 		fields.put("«field.name»", «getAccessAttribute(field)»);
 		«ENDFOR»

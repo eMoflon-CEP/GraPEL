@@ -49,8 +49,8 @@ public class «names.getMatchEventHandlerName(eventName)» extends EMoflonEventH
 	}
 
 	@Override
-	public «names.getMatchEventName(eventName)» matchToEvent(«names.getMatchName(eventName)» match) {
-		return new «names.getMatchEventName(eventName)»(pattern, match);
+	public «names.getMatchEventName(eventName)» matchToEvent(«names.getMatchName(eventName)» match, boolean vanished) {
+		return new «names.getMatchEventName(eventName)»(pattern, match, vanished);
 	}
 
 	@Override

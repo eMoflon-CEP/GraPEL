@@ -26,16 +26,16 @@ public abstract class EMoflonEventHandler <E extends EMoflonEvent<M,P>, M extend
 	
 	protected abstract void subscribeToPattern(Consumer<M> appearing, Consumer<M> disappearing);
 	
-	protected abstract E matchToEvent(M match);
+	protected abstract E matchToEvent(M match, boolean vanished);
 	
 	protected void sendAppearingMatchToApama(M match) {
 		//TODO
-		sendEvent(matchToEvent(match));
+		sendEvent(matchToEvent(match, false));
 	}
 	
 	protected void sendDisappearingMatchToApama(M match) {
 		//TODO
-		sendEvent(matchToEvent(match));
+		sendEvent(matchToEvent(match, true));
 	}
 
 }

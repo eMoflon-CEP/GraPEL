@@ -7,10 +7,12 @@ public abstract class EMoflonEvent <M extends GraphTransformationMatch<M, P>, P 
 	
 	protected P pattern;
 	protected M match;
+	protected boolean vanished;
 
-	public EMoflonEvent(final P pattern, final M match) {
+	public EMoflonEvent(final P pattern, final M match, boolean vanished) {
 		this.pattern = pattern;
 		this.match = match;
+		this.vanished = vanished;
 		assignFields();
 	}
 	
