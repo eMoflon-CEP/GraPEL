@@ -3,6 +3,8 @@
  */
 package org.emoflon.cep.validation;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +43,7 @@ import org.emoflon.ibex.gt.editor.gT.EditorNode;
 public class GrapelValidator extends AbstractGrapelValidator {
 	
 	// blacklisted names not liked by Apama or Java
-	public static final Set<String> keywordBlacklist = Set.of("abstract", "action", "aggregate", "all", "and", "as", "assert", "at", "between", "boolean", "bounded", 
+	public static final Set<String> keywordBlacklist = new HashSet<>(Arrays.asList("abstract", "action", "aggregate", "all", "and", "as", "assert", "at", "between", "boolean", "bounded", 
 			"break", "by", "byte", "case", "catch", "char", "chunk", "class", "completed", "const", "constant", "context", "continue", "currentTime", "decimal", "day", 
 			"days", "default", "dictionary", "die", "do", "double", "EAttribute", "EBoolean", "EDataType", "EClass", "EClassifier", "EDouble", "EFloat", "EInt", "else", 
 			"emit", "enqueue", "enum", "EPackage", "EReference", "EString", "event", "every", "export", "extends", "false", "final", "finally",
@@ -50,7 +52,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 			"on", "onBeginRecovery", "onConcludeRecovery", "ondie", "onload", "onunload", "optional", "or", "package", "parameters", "partition", "persistent", "print", "private",
 			"protected", "public", "query", "requires", "retain", "return", "returns", "route", "rstream", "second", "seconds", "sec", "select", "send", "sequence", "short",
 			"smallest", "spawn", "static", "stream", "streamsource", "strictfp", "string", "super", "switch", "synchronized", "then", "this", "throw", "throws", "to", "transient",
-			"true", "try", "unbounded", "unique", "unmatched", "using", "var", "void", "volatile", "wait", "where", "while", "wildcard", "with", "within", "without", "xor", "#");
+			"true", "try", "unbounded", "unique", "unmatched", "using", "var", "void", "volatile", "wait", "where", "while", "wildcard", "with", "within", "without", "xor", "#"));
 
 	public static final String CODE_PREFIX = "org.emoflon.cep.";
 	
