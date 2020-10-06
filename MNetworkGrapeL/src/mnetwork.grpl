@@ -1,0 +1,2 @@
+import "platform:/resource/MNetwork/model/mNetwork.ecore"
+import "http://www.eclipse.org/emf/2002/Ecore"
