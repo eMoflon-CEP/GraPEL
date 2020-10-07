@@ -44,6 +44,8 @@ import GrapeLModel.ArithmeticExpressionUnaryOperator
 import GrapeLModel.MatchVanishedConstraint
 import GrapeLModel.AttributeConstraintUnary
 import GrapeLModel.AttributeConstraintUnaryOperator
+import org.eclipse.emf.ecore.EDataType
+import org.eclipse.emf.ecore.EcorePackage
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -172,7 +174,7 @@ action «attributeConstraint»(«FOR param : constraint.params.map[param | event
 	}
 	
 	def String getSendActionParams(ReturnStatement returnStatement) {
-		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
+		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
 	def String getSendAction(ReturnStatement returnStatement) {
@@ -235,7 +237,7 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 	}
 	
 	def String attributeConstrExpr2Apama(AttributeConstraintExpression expr) {
-		return '''«arithmeticExpr2Apama(expr.lhs)»«IF expr.rhs !== null» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»«ENDIF»'''
+		return '''«arithmeticExpr2Apama(expr.lhs, false)»«IF expr.rhs !== null» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs, false)»«ENDIF»'''
 	}
 	
 	def String attributeConstraintRelation2Apama(AttributeConstraintRelation op) {
@@ -262,32 +264,40 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 		}
 	}
 	
-	def String arithmeticExpr2ApamaInternal(ArithmeticExpression expr) {
+	def String arithmeticExpr2ApamaInternal(ArithmeticExpression expr, boolean isAssignment) {
 		if(expr instanceof ArithmeticExpressionLiteral) {
 			val literal = expr as ArithmeticExpressionLiteral
 				return  arithmeticVal2Apama(literal.value)
 		}else if(expr instanceof ArithmeticExpressionProduction){
 			val production = expr as ArithmeticExpressionProduction
-			return '''«arithmeticExpr2Apama(production.lhs)» «arithmeticOp2Apama(production.op)» «arithmeticExpr2Apama(production.rhs)»«IF production.op == ArithmeticExpressionOperator.EXPONENTIATE»)«ENDIF»'''
+			return '''«arithmeticExpr2Apama(production.lhs, isAssignment)» «arithmeticOp2Apama(production.op)» «arithmeticExpr2Apama(production.rhs, isAssignment)»«IF production.op == ArithmeticExpressionOperator.EXPONENTIATE»)«ENDIF»'''
 		} else {
 			val unary = expr as ArithmeticExpressionUnary
-			return unaryExpression2Apama(unary);
+			return unaryExpression2Apama(unary, isAssignment);
 		}
 	}
 	
-	def String arithmeticExpr2Apama(ArithmeticExpression expr) {
+	def String arithmeticExpr2Apama(ArithmeticExpression expr, boolean isAssignment) {
 		if(expr.requiresCast && expr instanceof ArithmeticExpressionProduction)
-			return '''(«arithmeticExpr2ApamaInternal(expr)»).to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
+			return '''«castTo('''(«arithmeticExpr2ApamaInternal(expr, isAssignment)»)''', expr.type, expr.castTo, isAssignment)»'''
 		else if(expr.requiresCast && (expr instanceof ArithmeticExpressionLiteral || expr instanceof ArithmeticExpressionUnary))
-			return '''«arithmeticExpr2ApamaInternal(expr)».to«ModelManager.eDataTypeAsApamaType(expr.castTo).toFirstUpper»()'''
-		else return arithmeticExpr2ApamaInternal(expr)
+			return '''«castTo(arithmeticExpr2ApamaInternal(expr, isAssignment), expr.type, expr.castTo, isAssignment)»'''
+		else return arithmeticExpr2ApamaInternal(expr, isAssignment)
 	}
 	
-	def String unaryExpression2Apama(ArithmeticExpressionUnary expr) {
+	def String castTo(String expr, EDataType from, EDataType to, boolean isAssignment) {
+		if(isAssignment && from == EcorePackage.Literals.ESTRING && to != EcorePackage.Literals.ESTRING) {
+			return '''«ModelManager.eDataTypeAsApamaType(to)».parse(«expr»)'''
+		}else {
+			return '''«expr».to«ModelManager.eDataTypeAsApamaType(to).toFirstUpper»()'''
+		}
+	}
+	
+	def String unaryExpression2Apama(ArithmeticExpressionUnary expr, boolean isAssignment) {
 		if(expr.operator == ArithmeticExpressionUnaryOperator.BRACKETS)
-			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»)'''
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand, isAssignment)»)'''
 		else
-			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand)»).«arithmeticUnaryOp2Apama(expr.operator)»'''
+			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand, isAssignment)»).«arithmeticUnaryOp2Apama(expr.operator)»'''
 	}
 	
 	def String eventPatternNode2param(EventPatternNode eventPatternNode) {

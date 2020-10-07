@@ -714,6 +714,15 @@ public class GrapelToGrapelModelTransformer {
 	private ArithmeticValue transform(org.emoflon.cep.grapel.EventPatternNodeAttributeExpression gExpression) {
 		ArithmeticValueExpression expression = factory.createArithmeticValueExpression();
 		expression.setNodeExpression(transform(gExpression.getNodeExpression()));
+		//Set type if simple:
+		if(expression.getNodeExpression() instanceof EventNodeExpression) {
+			EventNodeExpression ene = (EventNodeExpression)expression.getNodeExpression();
+			if(ene.getEventAttribute() instanceof SimpleAttribute) {
+				SimpleAttribute sa = (SimpleAttribute)ene.getEventAttribute();
+				expression.setType(sa.getType());
+			}
+		}
+		
 		if(gExpression.getField() == null) {
 			return expression;
 		}

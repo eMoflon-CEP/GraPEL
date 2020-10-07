@@ -74,6 +74,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with the wrong number of parameters.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with wrong parameters.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING = "Event_pattern %s spawns an event without matching parameters. Will be cast automatically...";
+	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR = "Event_pattern %s spawns an event without matching parameters. \nOnly EString attributes and EString literals can be parsed to numeric values.";
 	
 	// Errors for event pattern nodes
 	public static final String EVENT_PATTERN_NODE_NAME_FORBIDDEN_MESSAGE = "Event_pattern node cannot be named '%s'. Use a different name.";
@@ -95,63 +96,97 @@ public class GrapelValidator extends AbstractGrapelValidator {
 
 	@Check
 	public void checkEvent(Event event) {
-		checkEventNameValid(event);
-		checkEventNameUnique(event);
+		try {
+			checkEventNameValid(event);
+			checkEventNameUnique(event);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@Check void checkEventAttribute(EventAttribute eventAttribute) {
-		if(eventAttribute.getType() instanceof EDataType) {
-			EDataType type  = (EDataType) eventAttribute.getType();
-			if(!(type == EcorePackage.Literals.EDOUBLE || type == EcorePackage.Literals.EINT || type == EcorePackage.Literals.EBOOLEAN || type == EcorePackage.Literals.ESTRING)) {
-				error(String.format(EVENT_ATTRIBUTE_FORBIDDEN_TYPE, type.getName()),
-						GrapelPackage.Literals.EVENT_ATTRIBUTE__TYPE,
-						EVENT_ATTRIBUTE_INVALID);
-			}
+		try {
+			if(eventAttribute.getType() instanceof EDataType) {
+				EDataType type  = (EDataType) eventAttribute.getType();
+				if(!(type == EcorePackage.Literals.EDOUBLE || type == EcorePackage.Literals.EINT || type == EcorePackage.Literals.EBOOLEAN || type == EcorePackage.Literals.ESTRING)) {
+					error(String.format(EVENT_ATTRIBUTE_FORBIDDEN_TYPE, type.getName()),
+							GrapelPackage.Literals.EVENT_ATTRIBUTE__TYPE,
+							EVENT_ATTRIBUTE_INVALID);
+				}
+			}	
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
+
+		
 	}
 
 	@Check
 	public void checkEventPattern(EventPattern pattern) {
-		checkEventPatternNameValid(pattern);
-		checkEventPatternNameUnique(pattern);
+		try {
+			checkEventPatternNameValid(pattern);
+			checkEventPatternNameUnique(pattern);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@Check
 	public void checkEventPatternNode(EventPatternNode node) {
-		checkEventPatternNodeNameValid(node);
-		checkEventPatternNodeNameUnique(node);
+		try {
+			checkEventPatternNodeNameValid(node);
+			checkEventPatternNodeNameUnique(node);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@Check
 	public void checkReturnStatement(ReturnStatement statement) {
-		EventPattern pattern = (EventPattern)statement.eContainer();
+		try {
+			EventPattern pattern = (EventPattern)statement.eContainer();
+
+			if(!statement.getReturnArg().equals(pattern.getReturnType().getReturnType()))
+				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+						GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
+						EVENT_PATTERN_INVALID_RETURN);
+			checkReturnStatementParameters(pattern,  statement);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
-		if(!statement.getReturnArg().equals(pattern.getReturnType().getReturnType()))
-			error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
-					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
-					EVENT_PATTERN_INVALID_RETURN);
-		checkReturnStatementParameters(pattern,  statement);
 	}
 	
 	@Check
 	public void attributeExpressions(AttributeExpression expr) {
-		if(!(expr.eContainer() instanceof ReturnStatement && expr instanceof EventPatternNodeAttributeExpression)) {
-			checkObjectExpressions(expr);
+		try {
+			if(!(expr.eContainer() instanceof ReturnStatement && expr instanceof EventPatternNodeAttributeExpression)) {
+				checkObjectExpressions(expr);
+			}
+			checkBooleanExpressions(expr);
+			checkStringExpressions(expr);
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-		checkBooleanExpressions(expr);
-		checkStringExpressions(expr);
+		
 	}
 
 
 	@Check 
 	public void attributeRelations(AttributeRelation relation) {
-		checkBooleanComparisons(relation);
-		checkStringComparisons(relation);
-		checkFloatComparisons(relation);
+		try {
+			checkBooleanComparisons(relation);
+			checkStringComparisons(relation);
+			checkFloatComparisons(relation);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
-	
-
 	private void checkBooleanComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
 		if(relation.getRhs() == null) {
@@ -340,20 +375,21 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				}
 			}else {
 				if((given instanceof EventPatternNodeAttributeExpression)) {
-					EventPatternNodeAttributeExpression expr = (EventPatternNodeAttributeExpression) given;
-					if(expr.getField() == null) {
+					EClassifier givenType = getTypeOfExpression(given);
+					if(!(givenType instanceof EDataType)) {
 						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
 					}
-					EAttribute attribute = expr.getField();
-					if(expected.getType() != attribute.getEType()) {
+					
+					if(expected.getType() != givenType) {
 						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
 					}
+					
 				} else {
 					EClassifier givenType = getTypeOfExpression(given);
 					if(givenType == null) {
@@ -368,6 +404,44 @@ public class GrapelValidator extends AbstractGrapelValidator {
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
 					}
+					
+					if(givenType == EcorePackage.Literals.ESTRING && expected.getType() != EcorePackage.Literals.ESTRING) {
+						if(!(given instanceof AttributeExpressionLiteral)) {
+							error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+									GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+									EVENT_PATTERN_INVALID_RETURN);
+							continue;
+						} else {
+							StringLiteral val = (StringLiteral)given;
+							if(expected.getType() == EcorePackage.Literals.EDOUBLE) {
+								try {
+									Double.parseDouble(val.getValue());
+								}catch(Exception e) {
+									error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+											GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+											EVENT_PATTERN_INVALID_RETURN);
+									continue;
+								}
+								
+							} else if (expected.getType() == EcorePackage.Literals.EINT || expected.getType() == EcorePackage.Literals.ELONG) {
+								try {
+									Integer.parseInt(val.getValue());
+								}catch(Exception e) {
+									error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+											GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+											EVENT_PATTERN_INVALID_RETURN);
+									continue;
+								}
+							} else {
+								error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+										GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+										EVENT_PATTERN_INVALID_RETURN);
+								continue;
+							}
+						}
+						
+					}
+					
 					if(givenType != expected.getType()) {
 						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
