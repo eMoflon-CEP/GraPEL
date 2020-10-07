@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.xtext.parser.ParseException;
 import org.eclipse.xtext.validation.Check;
 import org.emoflon.cep.grapel.ArithmeticOperator;
 import org.emoflon.cep.grapel.AttributeExpression;
@@ -83,6 +84,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	// Errors for arithmetic expressions
 	public static final String ARITHMETIC_EXPRESSION_INVALID = CODE_PREFIX +  "event_pattern.arithmetic_expression.invalid";
 	public static final String ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION = "Operation '%s' can not be used on data type '%s'.";
+	public static final String ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS = "Cannot perform arithmetic operations on EClass objects.";
 	
 	// Errors for attribute relations
 	public static final String ATTRIBUTE_RELATION_INVALID = CODE_PREFIX +  "event_pattern.attribute_relation.invalid";
@@ -135,14 +137,15 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	
 	@Check
 	public void attributeExpressions(AttributeExpression expr) {
-//		checkObjectExpressions(expr);
+		if(!(expr.eContainer() instanceof ReturnStatement && expr instanceof EventPatternNodeAttributeExpression)) {
+			checkObjectExpressions(expr);
+		}
 		checkStringExpressions(expr);
 	}
 
 	@Check 
 	public void attributeRelations(AttributeRelation relation) {
 		checkBooleanComparisons(relation);
-		checkObjectComparisons(relation);
 		checkStringComparisons(relation);
 		checkFloatComparisons(relation);
 	}
@@ -168,30 +171,6 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 		if(lhsType!=rhsType && rhsType==EcorePackage.Literals.EBOOLEAN) {
 			error(String.format(ATTRIBUTE_RELATION_BOOLEAN_COMPARISON, lhsType.getName()),
-					GrapelPackage.Literals.ATTRIBUTE_RELATION__LHS,
-					ATTRIBUTE_RELATION_INVALID);
-		}
-	}
-
-	private void checkObjectComparisons(AttributeRelation relation) {
-		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
-		EClassifier rhsType = getTypeOfExpression(relation.getRhs());
-		
-		if(lhsType instanceof EClass && rhsType instanceof EClass &&
-				!(relation.getRelation()==AttributeRelationOperator.EQUAL || relation.getRelation()==AttributeRelationOperator.UNEQUAL)) {
-			error(String.format(ATTRIBUTE_RELATION_FORBIDDEN_OPERATION, relation.getRelation().getName(), EClass.class.getSimpleName()),
-					GrapelPackage.Literals.ATTRIBUTE_RELATION__RELATION,
-					ATTRIBUTE_RELATION_INVALID);
-		}
-		
-		if(lhsType!=rhsType && lhsType instanceof EClass) {
-			error(String.format(ATTRIBUTE_RELATION_OBJECT_COMPARISON, rhsType.getName()),
-					GrapelPackage.Literals.ATTRIBUTE_RELATION__RHS,
-					ATTRIBUTE_RELATION_INVALID);
-		}
-		
-		if(lhsType!=rhsType && rhsType instanceof EClass) {
-			error(String.format(ATTRIBUTE_RELATION_OBJECT_COMPARISON, lhsType.getName()),
 					GrapelPackage.Literals.ATTRIBUTE_RELATION__LHS,
 					ATTRIBUTE_RELATION_INVALID);
 		}
@@ -383,40 +362,48 @@ public class GrapelValidator extends AbstractGrapelValidator {
 			
 		
 	}
-//	TODO:
-//	private void checkObjectExpressions(AttributeExpression expr) {
-//		if(expr instanceof AttributeExpressionLiteral) {
-//			return;
-//		}
-//		
-//		if(expr instanceof EventPatternNodeAttributeExpression) {
-//			return;
-//		}
-//		
-//		if(expr instanceof UnaryAttributeExpression) {
-//			UnaryAttributeExpression uexpr = (UnaryAttributeExpression)expr;
-//			EClassifier classifier = getTypeOfExpression(uexpr.getOperand());
-//			if(classifier == EcorePackage.Literals.ESTRING && uexpr.getOperator() != UnaryOperator.NONE) {
-//				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION , uexpr.getOperator().getName(), classifier.getName()),
-//						GrapelPackage.Literals.UNARY_ATTRIBUTE_EXPRESSION__OPERATOR,
-//						ARITHMETIC_EXPRESSION_INVALID);
-//			}
-//			return;
-//		}
-//		
-//		BinaryAttributeExpression biexpr = (BinaryAttributeExpression)expr;
-//		EClassifier lhsType = getTypeOfExpression(biexpr.getLeft());
-//		EClassifier rhsType = getTypeOfExpression(biexpr.getRight());	
-//		if(lhsType != rhsType && (lhsType == EcorePackage.Literals.ESTRING || rhsType == EcorePackage.Literals.ESTRING)) {
-//			if(biexpr.getOperator() != ArithmeticOperator.PLUS) {
-//				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION , biexpr.getOperator().getName(), EcorePackage.Literals.ESTRING.getName()),
-//						GrapelPackage.Literals.BINARY_ATTRIBUTE_EXPRESSION__OPERATOR,
-//						ARITHMETIC_EXPRESSION_INVALID);
-//			}
-//		}
-//		
-//		return;
-//	}
+	
+	private void checkObjectExpressions(AttributeExpression expr) {
+		if(expr instanceof AttributeExpressionLiteral) {
+			return;
+		}
+		
+		if(expr instanceof EventPatternNodeAttributeExpression) {
+			if(((EventPatternNodeAttributeExpression)expr).getField() == null) {
+				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS),
+						GrapelPackage.Literals.EVENT_PATTERN_NODE_ATTRIBUTE_EXPRESSION__NODE_EXPRESSION,
+						ARITHMETIC_EXPRESSION_INVALID);
+			}
+			return;
+		}
+		
+		if(expr instanceof UnaryAttributeExpression) {
+			UnaryAttributeExpression uexpr = (UnaryAttributeExpression)expr;
+			EClassifier classifier = getTypeOfExpression(uexpr.getOperand());
+			if(!(classifier instanceof EDataType)) {
+				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS),
+						GrapelPackage.Literals.UNARY_ATTRIBUTE_EXPRESSION__OPERAND,
+						ARITHMETIC_EXPRESSION_INVALID);
+			}
+			return;
+		}
+		
+		BinaryAttributeExpression biexpr = (BinaryAttributeExpression)expr;
+		EClassifier lhsType = getTypeOfExpression(biexpr.getLeft());
+		EClassifier rhsType = getTypeOfExpression(biexpr.getRight());	
+		if(!(lhsType instanceof EDataType)) {
+			error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS),
+					GrapelPackage.Literals.BINARY_ATTRIBUTE_EXPRESSION__LEFT,
+					ARITHMETIC_EXPRESSION_INVALID);
+		}
+		if(!(rhsType instanceof EDataType)) {
+			error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS),
+					GrapelPackage.Literals.BINARY_ATTRIBUTE_EXPRESSION__RIGHT,
+					ARITHMETIC_EXPRESSION_INVALID);
+		}
+		
+		return;
+	}
 	
 	public void checkStringExpressions(AttributeExpression expr) {
 		if(expr instanceof AttributeExpressionLiteral) {
@@ -452,7 +439,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		return;
 	}
 	
-	public static EClassifier getTypeOfExpression(AttributeExpression expr) {
+	public static EClassifier getTypeOfExpression(AttributeExpression expr) throws ParseException{
 		if(expr instanceof AttributeExpressionLiteral) {
 			AttributeExpressionLiteral literal = (AttributeExpressionLiteral)expr;
 			if(literal instanceof DoubleLiteral) {
@@ -468,7 +455,22 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 		if(expr instanceof EventPatternNodeAttributeExpression) {
 			EventPatternNodeAttributeExpression epnExpr = (EventPatternNodeAttributeExpression) expr;
-			return epnExpr.getField().getEType();
+			if(epnExpr.getField()!= null) {
+				return epnExpr.getField().getEType();
+			}
+			else {
+				EventPatternNodeExpression epne = epnExpr.getNodeExpression();
+				if(epne == null)
+					throw new ParseException("Parse error in "+expr.getClass().getName()+", token is null.");
+				
+				if(epne.getAttribute() instanceof EventAttribute) {
+					EventAttribute ea = (EventAttribute)epne.getAttribute();
+					return ea.getType();
+				}else {
+					EditorNode en = (EditorNode)epne.getAttribute();
+					return en.getType();
+				}
+			}	
 		}
 		
 		if(expr instanceof UnaryAttributeExpression) {
@@ -481,6 +483,12 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		EClassifier rhsType = getTypeOfExpression(biexpr.getRight());
 		if(lhsType == rhsType)
 			return lhsType;
+		
+		if(lhsType == EcorePackage.Literals.ELONG && rhsType == EcorePackage.Literals.EINT)
+			return EcorePackage.Literals.EINT;
+		
+		if(rhsType == EcorePackage.Literals.ELONG && lhsType == EcorePackage.Literals.EINT)
+			return EcorePackage.Literals.EINT;
 		
 		if(lhsType == EcorePackage.Literals.ESTRING || rhsType == EcorePackage.Literals.ESTRING) {
 			return EcorePackage.Literals.ESTRING;
