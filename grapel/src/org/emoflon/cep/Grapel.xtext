@@ -108,7 +108,7 @@ enum AttributeConstraintRelation:
 ;
 
 AttributeRelation:
-	 lhs = AttributeExpression relation = AttributeRelationOperator rhs = AttributeExpression
+	 lhs = AttributeExpression (relation = AttributeRelationOperator rhs = AttributeExpression)?
 ;
 
 MatchEventState:

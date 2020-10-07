@@ -140,8 +140,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		if(!(expr.eContainer() instanceof ReturnStatement && expr instanceof EventPatternNodeAttributeExpression)) {
 			checkObjectExpressions(expr);
 		}
+		checkBooleanExpressions(expr);
 		checkStringExpressions(expr);
 	}
+
 
 	@Check 
 	public void attributeRelations(AttributeRelation relation) {
@@ -154,6 +156,15 @@ public class GrapelValidator extends AbstractGrapelValidator {
 
 	private void checkBooleanComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
+		if(relation.getRhs() == null) {
+			if(lhsType!=EcorePackage.Literals.EBOOLEAN) {
+				error(String.format("Non-EBoolean data types may not be used in boolean expressions."),
+						GrapelPackage.Literals.ATTRIBUTE_RELATION__LHS,
+						ATTRIBUTE_RELATION_INVALID);
+				return;
+			}
+		}
+		
 		EClassifier rhsType = getTypeOfExpression(relation.getRhs());
 		
 		if(lhsType==rhsType && lhsType==EcorePackage.Literals.EBOOLEAN && 
@@ -178,6 +189,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 
 	private void checkStringComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
+		if(relation.getRhs() == null) {
+			return;
+		}
+		
 		EClassifier rhsType = getTypeOfExpression(relation.getRhs());
 		if(lhsType==rhsType && lhsType==EcorePackage.Literals.ESTRING && 
 				!(relation.getRelation()==AttributeRelationOperator.EQUAL || relation.getRelation()==AttributeRelationOperator.UNEQUAL)) {
@@ -201,6 +216,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	
 	private void checkFloatComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
+		if(relation.getRhs() == null) {
+			return;
+		}
+		
 		EClassifier rhsType = getTypeOfExpression(relation.getRhs());
 		
 		if(lhsType==rhsType && lhsType==EcorePackage.Literals.EFLOAT && 
@@ -369,7 +388,8 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		}
 		
 		if(expr instanceof EventPatternNodeAttributeExpression) {
-			if(((EventPatternNodeAttributeExpression)expr).getField() == null) {
+			EClassifier classifier = getTypeOfExpression(expr);
+			if(!(classifier instanceof EDataType)) {
 				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS),
 						GrapelPackage.Literals.EVENT_PATTERN_NODE_ATTRIBUTE_EXPRESSION__NODE_EXPRESSION,
 						ARITHMETIC_EXPRESSION_INVALID);
@@ -399,6 +419,38 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		if(!(rhsType instanceof EDataType)) {
 			error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS),
 					GrapelPackage.Literals.BINARY_ATTRIBUTE_EXPRESSION__RIGHT,
+					ARITHMETIC_EXPRESSION_INVALID);
+		}
+		
+		return;
+	}
+	
+	private void checkBooleanExpressions(AttributeExpression expr) {
+		if(expr instanceof AttributeExpressionLiteral) {
+			return;
+		}
+		
+		if(expr instanceof EventPatternNodeAttributeExpression) {
+			return;
+		}
+		
+		if(expr instanceof UnaryAttributeExpression) {
+			UnaryAttributeExpression uexpr = (UnaryAttributeExpression)expr;
+			EClassifier classifier = getTypeOfExpression(uexpr.getOperand());
+			if(classifier == EcorePackage.Literals.EBOOLEAN) {
+				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION , uexpr.getOperator().getName(), classifier.getName()),
+						GrapelPackage.Literals.UNARY_ATTRIBUTE_EXPRESSION__OPERATOR,
+						ARITHMETIC_EXPRESSION_INVALID);
+			}
+			return;
+		}
+		
+		BinaryAttributeExpression biexpr = (BinaryAttributeExpression)expr;
+		EClassifier lhsType = getTypeOfExpression(biexpr.getLeft());
+		EClassifier rhsType = getTypeOfExpression(biexpr.getRight());	
+		if(lhsType != rhsType && (lhsType == EcorePackage.Literals.EBOOLEAN || rhsType == EcorePackage.Literals.EBOOLEAN)) {
+			error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_OPERATION , biexpr.getOperator().getName(), EcorePackage.Literals.EBOOLEAN.getName()),
+					GrapelPackage.Literals.BINARY_ATTRIBUTE_EXPRESSION__OPERATOR,
 					ARITHMETIC_EXPRESSION_INVALID);
 		}
 		

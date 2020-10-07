@@ -364,6 +364,11 @@ public class GrapelToGrapelModelTransformer {
 	}
 	
 	private void checkACCast(ArithmeticExpression lhs, ArithmeticExpression rhs) {
+		if(rhs == null) {
+			lhs.setRequiresCast(false);
+			return;
+		}
+		
 		if(lhs.getType() == rhs.getType()) {
 			lhs.setRequiresCast(false);
 			rhs.setRequiresCast(false);
@@ -389,7 +394,9 @@ public class GrapelToGrapelModelTransformer {
 			
 			Set<EventPatternNode> params = new LinkedHashSet<>();
 			params.addAll(getArithmeticExpressionParams(expr.getLhs()));
-			params.addAll(getArithmeticExpressionParams(expr.getRhs()));
+			if(expr.getRhs() != null)
+				params.addAll(getArithmeticExpressionParams(expr.getRhs()));
+			
 			return params;
 		} else if(root instanceof MatchVanishedConstraint) {
 			Set<EventPatternNode> params = new LinkedHashSet<>();
@@ -438,9 +445,11 @@ public class GrapelToGrapelModelTransformer {
 					acl.setConstraintExpression(ace);
 					
 					org.emoflon.cep.grapel.AttributeRelation relation = (org.emoflon.cep.grapel.AttributeRelation) gConstraint.getOperand();
-					ace.setOp(transform(relation.getRelation()));
 					ace.setLhs(transform(relation.getLhs()));
-					ace.setRhs(transform(relation.getRhs()));
+					if(relation.getRhs() != null) {
+						ace.setOp(transform(relation.getRelation()));
+						ace.setRhs(transform(relation.getRhs()));
+					}
 					checkACCast(ace.getLhs(), ace.getRhs());
 				} else {
 					MatchVanishedConstraint mvc = factory.createMatchVanishedConstraint();
@@ -456,9 +465,11 @@ public class GrapelToGrapelModelTransformer {
 					acl.setConstraintExpression(ace);
 					
 					org.emoflon.cep.grapel.AttributeRelation relation = (org.emoflon.cep.grapel.AttributeRelation) gConstraint.getOperand();
-					ace.setOp(transform(relation.getRelation()));
 					ace.setLhs(transform(relation.getLhs()));
-					ace.setRhs(transform(relation.getRhs()));
+					if(relation.getRhs() != null) {
+						ace.setOp(transform(relation.getRelation()));
+						ace.setRhs(transform(relation.getRhs()));
+					}
 					checkACCast(ace.getLhs(), ace.getRhs());
 					return acl;
 				} else {

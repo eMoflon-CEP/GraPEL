@@ -235,8 +235,7 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 	}
 	
 	def String attributeConstrExpr2Apama(AttributeConstraintExpression expr) {
-		return '''«arithmeticExpr2Apama(expr.lhs)» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»'''
-//		return '''«arithmeticExpr2Apama(expr.lhs)»«IF expr.lhs.requiresCast».to«ModelManager.eDataTypeAsApamaType(expr.lhs.castTo).toFirstUpper»«ENDIF» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»«IF expr.rhs.requiresCast».to«ModelManager.eDataTypeAsApamaType(expr.rhs.castTo).toFirstUpper»«ENDIF»'''
+		return '''«arithmeticExpr2Apama(expr.lhs)»«IF expr.rhs !== null» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs)»«ENDIF»'''
 	}
 	
 	def String attributeConstraintRelation2Apama(AttributeConstraintRelation op) {
