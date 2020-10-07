@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.emoflon.cep.grapel.EditorGTFile;
-import org.emoflon.cep.grapel.UnaryAttributeConstraint;
 import org.emoflon.cep.grapel.UnaryOperator;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
@@ -88,6 +87,7 @@ public class GrapelToGrapelModelTransformer {
 	private Map<org.emoflon.cep.grapel.EventPatternNode, EventPatternNode> gNode2Nodes = Collections.synchronizedMap(new HashMap<>());
 	private Map<Event, Map<String, EventAttribute>> nonVirtualFields = Collections.synchronizedMap(new HashMap<>());
 	private Map<Event, Map<String, VirtualEventAttribute>> virtualFields = Collections.synchronizedMap(new HashMap<>());
+	private Map<EventPattern, org.emoflon.cep.grapel.EventPattern> eventPattern2gEventPattern= Collections.synchronizedMap(new HashMap<>());
 	
 	public GrapeLModelContainer transform(EditorGTFile grapelFile) {
 		container = factory.createGrapeLModelContainer();
@@ -105,6 +105,22 @@ public class GrapelToGrapelModelTransformer {
 		container.getEventPatterns().addAll(grapelFile.getEventPatterns().parallelStream()
 				.map(pattern -> transform(pattern))
 				.collect(Collectors.toList()));
+		
+		//scan through spawn parameters, look for and create required virtual fields
+		int vFields = (int) virtualFields.values().stream().flatMap(map -> map.values().stream()).count();
+		do {
+			vFields = (int)virtualFields.values().stream().flatMap(map -> map.values().stream()).count();
+			container.getEventPatterns().forEach(pattern -> {
+				// transform return statement
+				transform(eventPattern2gEventPattern.get(pattern).getReturnStatement());
+			});
+		}while((int)virtualFields.values().stream().flatMap(map -> map.values().stream()).count() != vFields);
+		
+		//do the final transformation and creation of spawn parameters
+		container.getEventPatterns().forEach(pattern -> {
+			// transform return statement
+			pattern.setReturnStatement(transform(eventPattern2gEventPattern.get(pattern).getReturnStatement()));
+		});
 		
 		return container;
 	}
@@ -206,21 +222,13 @@ public class GrapelToGrapelModelTransformer {
 		RelationalConstraint relConstraint = transform(gRelationalConstraints, gRelations);
 		pattern.setRelationalConstraint(relConstraint);
 		
-		// transform attribute constraints
-//		List<org.emoflon.cep.grapel.AttributeConstraint> gConstraints = new LinkedList<>();
-//		gConstraints.addAll(gEventPattern.getConstraints());
-//		
-//		List<org.emoflon.cep.grapel.AttributeConstraintRelation> gSubRelations = new LinkedList<>();
-//		gSubRelations.addAll(gEventPattern.getRelations());
-		
 		if(gEventPattern.getAttributeConstraint()!=null) {
 			AttributeConstraint atrConstraint = transform(gEventPattern.getAttributeConstraint());
 			pattern.setAttributeConstraint(atrConstraint);
 			atrConstraint.getParams().addAll(getAttributeConstraintParams(atrConstraint));
 		}
 		
-		// transform return statement
-		pattern.setReturnStatement(transform(gEventPattern.getReturnStatement()));
+		eventPattern2gEventPattern.put(pattern, gEventPattern);
 		
 		return pattern;
 	}
@@ -370,6 +378,18 @@ public class GrapelToGrapelModelTransformer {
 		}
 		
 		if(lhs.getType() == rhs.getType()) {
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(lhs.getType() == EcorePackage.Literals.ELONG && rhs.getType() == EcorePackage.Literals.EINT) {
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.ELONG && lhs.getType() == EcorePackage.Literals.EINT) {
 			lhs.setRequiresCast(false);
 			rhs.setRequiresCast(false);
 			return;
@@ -613,6 +633,20 @@ public class GrapelToGrapelModelTransformer {
 			return;
 		}
 		
+		if(lhs.getType() == EcorePackage.Literals.ELONG && rhs.getType() == EcorePackage.Literals.EINT) {
+			production.setType(rhs.getType());
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.ELONG && lhs.getType() == EcorePackage.Literals.EINT) {
+			production.setType(lhs.getType());
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
 		if(lhs.getType() == EcorePackage.Literals.EDOUBLE && rhs.getType() != EcorePackage.Literals.ESTRING) {
 			production.setType(lhs.getType());
 			rhs.setRequiresCast(true);
@@ -799,8 +833,78 @@ public class GrapelToGrapelModelTransformer {
 	
 	private ReturnStatement transform(org.emoflon.cep.grapel.ReturnStatement gReturn) {
 		ReturnStatement returnState = factory.createReturnStatement();
-		returnState.setReturnType(gEvent2Events.get(gReturn.getReturnArg()));
-		returnState.getParameters().addAll(gReturn.getReturnParams().stream().map(param -> transform(param)).collect(Collectors.toList()));
+		Event returnType = gEvent2Events.get(gReturn.getReturnArg());
+		returnState.setReturnType(returnType);
+		
+		Map<EventAttribute, Integer> baseExpressionIdx = new HashMap<>();
+		
+		for(int i = 0; i<returnType.getAttributes().size(); i++) {
+			EventAttribute ea = returnType.getAttributes().get(i);
+			
+			if(!(ea instanceof VirtualEventAttribute)) {
+				org.emoflon.cep.grapel.AttributeExpression gae = gReturn.getReturnParams().get(i);
+				ArithmeticExpression ae = transform(gae);
+				returnState.getParameters().add(ae);
+				baseExpressionIdx.put(ea, i);
+			} else {
+				VirtualEventAttribute vea = (VirtualEventAttribute)ea;
+				ArithmeticExpressionLiteral baseExpression = (ArithmeticExpressionLiteral)returnState.getParameters().get(baseExpressionIdx.get(vea.getBaseAttribute()));
+				ArithmeticValueExpression baseValueExpression = (ArithmeticValueExpression)baseExpression.getValue();
+				EventPatternNodeExpression baseEpne = baseValueExpression.getNodeExpression();
+				
+				ArithmeticExpressionLiteral virtualExpression = factory.createArithmeticExpressionLiteral();
+				ArithmeticValueExpression virtualValueExpression = factory.createArithmeticValueExpression();
+				virtualExpression.setValue(virtualValueExpression);
+				
+				if(baseEpne instanceof EventNodeExpression) {
+					EventNodeExpression ene = (EventNodeExpression)baseEpne;
+					EventPatternNode baseNode = ene.getEventPatternNode();
+					EventAttribute baseAttribute = ene.getEventAttribute();
+					
+					EventNodeExpression virtualEne = factory.createEventNodeExpression();
+					virtualValueExpression.setNodeExpression(virtualEne);
+					virtualEne.setEventPatternNode(baseNode);
+					virtualEne.setEventAttribute(baseAttribute);
+				} else {
+					IBeXPatternNodeExpression ibexPne = (IBeXPatternNodeExpression)baseEpne;
+					EventPatternNode baseNode = ibexPne.getEventPatternNode();
+					IBeXNode baseAttribute = ibexPne.getPatternAttribute();
+					
+					IBeXPatternNodeExpression virtualPne = factory.createIBeXPatternNodeExpression();
+					virtualValueExpression.setNodeExpression(virtualPne);
+					virtualPne.setEventPatternNode(baseNode);
+					virtualPne.setPatternAttribute(baseAttribute);
+				}
+				
+				AttributeExpressionLiteral virtualAel = factory.createAttributeExpressionLiteral();
+				virtualValueExpression.setAttributeExpression(virtualAel);
+
+				virtualValueExpression.setType(vea.getAttribute().getEAttributeType());
+				virtualExpression.setType(vea.getAttribute().getEAttributeType());
+				virtualValueExpression.setType(vea.getAttribute().getEAttributeType());
+				virtualAel.setType(vea.getAttribute().getEAttributeType());
+				virtualAel.setAttribute(vea.getAttribute());
+				virtualAel.setClass(vea.getAttribute().getEContainingClass());
+				
+				String vFieldName = toCamelCase(virtualAel, baseEpne);
+				EventPatternNode epn = baseEpne.getEventPatternNode();
+				String eventName = "";
+				if(epn instanceof EventNode) {
+					eventName = ((EventNode)epn).getType().getName();
+				}else {
+					eventName = ((IBeXPatternNode)epn).getType().getName();
+				}
+				Map<String, VirtualEventAttribute> vFields = virtualFields.get(events.get(eventName));
+				if(vFields == null || !vFields.containsKey(vFieldName))
+					createVirtualField(virtualAel, baseEpne);
+				else {
+					virtualAel.setVirtualAttribute(vFields.get(vFieldName));
+				}
+				
+				returnState.getParameters().add(virtualExpression);
+			}
+		}
+		
 		for(int i = 0; i<returnState.getParameters().size(); i++) {
 			ArithmeticExpression ae = returnState.getParameters().get(i);
 			EventAttribute ea = returnState.getReturnType().getAttributes().get(i);
@@ -814,8 +918,15 @@ public class GrapelToGrapelModelTransformer {
 			}
 			
 			if(eaDataType != ae.getType()) {
-				ae.setRequiresCast(true);
-				ae.setCastTo(eaDataType);
+				if(eaDataType == EcorePackage.Literals.EINT && ae.getType() == EcorePackage.Literals.ELONG) {
+					ae.setRequiresCast(false);
+				} else if(eaDataType == EcorePackage.Literals.ELONG && ae.getType() == EcorePackage.Literals.EINT) {
+					ae.setRequiresCast(false);
+				} else {
+					ae.setRequiresCast(true);
+					ae.setCastTo(eaDataType);
+				}
+
 			}
 		}
 		return returnState;

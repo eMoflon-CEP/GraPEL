@@ -5,8 +5,6 @@ package org.emoflon.cep.validation;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EAttribute;
