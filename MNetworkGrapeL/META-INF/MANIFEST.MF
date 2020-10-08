@@ -14,3 +14,13 @@ Require-Bundle: grapel.engine;bundle-version="1.0.0",
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Export-Package: MNetworkGrapeL.api,
+ MNetworkGrapeL.api.matches,
+ MNetworkGrapeL.api.rules,
+ MNetworkGrapeL.grapel.Mnetwork,
+ MNetworkGrapeL.grapel.Mnetwork.eventhandler,
+ MNetworkGrapeL.grapel.Mnetwork.eventmonitors,
+ MNetworkGrapeL.grapel.Mnetwork.events,
+ MNetworkGrapeL.grapel.Mnetwork.patternmonitors,
+ MNetworkGrapeL.hipe.engine,
+ MNetworkGrapeL.hipe.engine.actor

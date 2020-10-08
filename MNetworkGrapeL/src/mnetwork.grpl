@@ -1,2 +1,54 @@
 import "platform:/resource/MNetwork/model/mNetwork.ecore"
 import "http://www.eclipse.org/emf/2002/Ecore"
+
+pattern serverInEU {
+	server: Server {
+		.tag == enum::EU
+	}
+}
+
+pattern serverInNonEU {
+	server: Server {
+		.tag == enum::NonEU
+	}
+}
+
+pattern serverHasEUEntity {
+	entityInEntry: Entity {
+		.tag == enum::EU
+	}
+	entryInDatabase: Entry {
+		-entity -> entityInEntry	
+	}
+	databaseInVserver: Database {
+		-entry -> entryInDatabase
+	}
+	vServerInServer: VServer {
+		-database -> databaseInVserver
+	}
+	server: Server {
+		-vserver -> vServerInServer
+	}
+}
+
+pattern serverInEUHasEUEntity refines serverHasEUEntity {
+	server: Server {
+		.tag == enum::EU
+	}
+}
+
+event serverMigrationWarning {
+	Server server;
+}
+
+event_pattern isEUServerWithEUEntitiesMigratingToNonEU spawns serverMigrationWarning {
+	euServerWithEUEntities: serverInEUHasEUEntity
+	nonEUServer: serverInNonEU
+	
+	euServerWithEUEntities.server == nonEUServer.server
+	
+	euServerWithEUEntities -> nonEUServer {	
+	}
+	
+	spawn serverMigrationWarning(euServerWithEUEntities.server)
+}
