@@ -9,6 +9,7 @@ import org.junit.Test;
 import Flights.Flight;
 import FlightsGrapeL.grapel.Flight.eventhandler.ConnectingFlightNotReachableEventHandler;
 import FlightsGrapeL.grapel.Flight.eventhandler.FlightDelayedEventHandler;
+import FlightsGrapeL.grapel.Flight.eventhandler.TravelHasConnectingFlightEventHandler;
 
 public class FlightConnectingTest extends FlightAbstractTest {
 	@Before
@@ -16,11 +17,13 @@ public class FlightConnectingTest extends FlightAbstractTest {
 		api = this.init("test1.xmi");
 	}
 	
-//	@Test
-//	public void modelIncludes2ConnectingFlights() {
-//		// Funktioniert in aktueller Implementierung nicht, da durch Pattern Matches generierte Events
-//		// sich nicht in dem EventHandler wiederfinden lassen
-//	}
+	@Test
+	public void modelIncludes2ConnectingFlights() {
+		TravelHasConnectingFlightEventHandler tcfHandler = api.getTravelHasConnectingFlightEventHandler();
+		
+		api.update();
+		assertEquals(2, tcfHandler.getAllEvents().size());
+	}
 	
 	@Test
 	public void hurryFirstFlightMultipleTimes() {
@@ -37,16 +40,33 @@ public class FlightConnectingTest extends FlightAbstractTest {
 	}
 	
 	@Test
+	public void delayFirstFlight() {
+		FlightDelayedEventHandler delayedHandler = api.getFlightDelayedEventHandler();
+		ConnectingFlightNotReachableEventHandler cfHandler = api.getConnectingFlightNotReachableEventHandler();
+		Flight flight = findFlight(getModel().getFlights(), "MUC->FRA_1");
+		
+		api.update();
+		assertEquals(0, delayedHandler.getAllEvents().size());
+		assertEquals(0, cfHandler.getAllEvents().size());
+		
+		changeFlightArrival(flight,299999);
+		api.update();
+		assertEquals(1, delayedHandler.getAllEvents().size());
+		cfHandler.getAllEvents().forEach(event -> System.out.println(event));
+		assertEquals(2, cfHandler.getAllEvents().size());
+	}
+	
+	@Test
 	public void delayFirstFlightMultipleTimes() {
 		FlightDelayedEventHandler delayedHandler = api.getFlightDelayedEventHandler();
 		ConnectingFlightNotReachableEventHandler cfHandler = api.getConnectingFlightNotReachableEventHandler();
 		Flight flight = findFlight(getModel().getFlights(), "MUC->FRA_1");
 		
 		for(int i = 0; i<4;i++) {
-			changeFlightArrival(flight,1000);
+			changeFlightArrival(flight,300000);
 			api.update();
-			assertEquals(1, delayedHandler.getAllEvents().size());
-			assertEquals(1, cfHandler.getAllEvents().size());
+			assertEquals(i+1, delayedHandler.getAllEvents().size());
+			assertEquals(2*(i+1), cfHandler.getAllEvents().size());
 		}
 	}
 	
@@ -57,15 +77,15 @@ public class FlightConnectingTest extends FlightAbstractTest {
 		Flight flight = findFlight(getModel().getFlights(), "MUC->FRA_1");
 		
 		for(int i = 0; i<4;i++) {
-			changeFlightArrival(flight,1000);
+			changeFlightArrival(flight,300000);
 			api.update();
-			assertEquals(1, delayedHandler.getAllEvents().size());
-			assertEquals(1, cfHandler.getAllEvents().size());
+			assertEquals(i+1, delayedHandler.getAllEvents().size());
+			assertEquals(2*(i+1), cfHandler.getAllEvents().size());
 			
-			changeFlightArrival(flight,-1000);
+			changeFlightArrival(flight,-300000);
 			api.update();
-			assertEquals(0, delayedHandler.getAllEvents().size());
-			assertEquals(0, cfHandler.getAllEvents().size());
+			assertEquals(i+1, delayedHandler.getAllEvents().size());
+			assertEquals(2*(i+1), cfHandler.getAllEvents().size());
 		}
 	}
 	
@@ -80,15 +100,15 @@ public class FlightConnectingTest extends FlightAbstractTest {
 		assertEquals(1, delayedHandler.getAllEvents().size());
 		assertEquals(0, cfHandler.getAllEvents().size());
 		
-		changeFlightArrival(flight,300000);
+		changeFlightArrival(flight,289999);
 		api.update();
-		assertEquals(1, delayedHandler.getAllEvents().size());
-		assertEquals(1, cfHandler.getAllEvents().size());
+		assertEquals(2, delayedHandler.getAllEvents().size());
+		assertEquals(2, cfHandler.getAllEvents().size());
 		
 		changeFlightArrival(flight,800000);
 		api.update();
-		assertEquals(1, delayedHandler.getAllEvents().size());
-		assertEquals(2, cfHandler.getAllEvents().size());
+		assertEquals(3, delayedHandler.getAllEvents().size());
+		assertEquals(4, cfHandler.getAllEvents().size());
 	}
 	
 	@Test
@@ -104,18 +124,18 @@ public class FlightConnectingTest extends FlightAbstractTest {
 		
 		changeFlightArrival(flight,300000);
 		api.update();
-		assertEquals(1, delayedHandler.getAllEvents().size());
-		assertEquals(1, cfHandler.getAllEvents().size());
+		assertEquals(2, delayedHandler.getAllEvents().size());
+		assertEquals(2, cfHandler.getAllEvents().size());
 		
 		changeFlightArrival(flight,-400000);
 		api.update();
-		assertEquals(0, delayedHandler.getAllEvents().size());
-		assertEquals(0, cfHandler.getAllEvents().size());
+		assertEquals(2, delayedHandler.getAllEvents().size());
+		assertEquals(2, cfHandler.getAllEvents().size());
 		
 		changeFlightArrival(flight,1500000);
 		api.update();
-		assertEquals(1, delayedHandler.getAllEvents().size());
-		assertEquals(2, cfHandler.getAllEvents().size());
+		assertEquals(3, delayedHandler.getAllEvents().size());
+		assertEquals(4, cfHandler.getAllEvents().size());
 	}
 	
 	
