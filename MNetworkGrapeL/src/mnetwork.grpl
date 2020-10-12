@@ -1,6 +1,10 @@
 import "platform:/resource/MNetwork/model/mNetwork.ecore"
 import "http://www.eclipse.org/emf/2002/Ecore"
 
+pattern container {
+	memik: MEMIK
+}
+
 pattern serverInEU {
 	server: Server {
 		.tag == enum::EU
@@ -31,7 +35,26 @@ pattern serverHasEUEntity {
 	}
 }
 
-pattern serverInEUHasEUEntity refines serverHasEUEntity {
+pattern serverInEUHasEUEntity {
+	entityInEntry: Entity {
+		.tag == enum::EU
+	}
+	entryInDatabase: Entry {
+		-entity -> entityInEntry	
+	}
+	databaseInVserver: Database {
+		-entry -> entryInDatabase
+	}
+	vServerInServer: VServer {
+		-database -> databaseInVserver
+	}
+	server: Server {
+		.tag == enum::EU
+		-vserver -> vServerInServer
+	}
+}
+
+pattern serverInEUHasEUEntity2 refines serverHasEUEntity {
 	server: Server {
 		.tag == enum::EU
 	}
@@ -47,7 +70,8 @@ event_pattern isEUServerWithEUEntitiesMigratingToNonEU spawns serverMigrationWar
 	
 	euServerWithEUEntities.server == nonEUServer.server
 	
-	euServerWithEUEntities -> nonEUServer {	
+	euServerWithEUEntities -> nonEUServer {
+		!vanished(euServerWithEUEntities)
 	}
 	
 	spawn serverMigrationWarning(euServerWithEUEntities.server)
