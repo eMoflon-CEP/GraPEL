@@ -81,12 +81,12 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    	return getScopeForMatchEventState((MatchEventState)context);
 	    }
 	    // AttributeConstraint
-	    if (isAttributeConstraint(context, reference)) {
-	    	return getScopeForAttributeConstraints((AttributeConstraint)context, reference);
+	    if (isGrapelAttributeConstraint(context, reference)) {
+	    	return getScopeForGrapelAttributeConstraints((AttributeConstraint)context, reference);
 		}
 	    // AttributeExpression
-	    if (isAttributeExpression(context, reference)) {
-	    	return getScopeForAttributeExpressions((AttributeExpression)context, reference);
+	    if (isGrapelAttributeExpression(context, reference)) {
+	    	return getScopeForGrapelAttributeExpressions((AttributeExpression)context, reference);
 		}
 	    return super.getScope(context, reference);
 	}
@@ -127,11 +127,11 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return (context instanceof EventPatternNodeExpression);
 	}
 
-	private IScope getScopeForAttributeExpressions(AttributeExpression context, EReference reference) {
+	private IScope getScopeForGrapelAttributeExpressions(AttributeExpression context, EReference reference) {
 		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
-	private boolean isAttributeExpression(EObject context, EReference reference) {
+	private boolean isGrapelAttributeExpression(EObject context, EReference reference) {
 		 return (context instanceof AttributeExpression);
 	}
 
@@ -144,11 +144,11 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(getGTFile(context).getEvents());
 	}
 
-	private IScope getScopeForAttributeConstraints(AttributeConstraint context, EReference reference) {
+	private IScope getScopeForGrapelAttributeConstraints(AttributeConstraint context, EReference reference) {
 		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
-	private boolean isAttributeConstraint(EObject context, EReference reference) {
+	private boolean isGrapelAttributeConstraint(EObject context, EReference reference) {
 		return (context instanceof AttributeConstraint);
 	}
 
@@ -246,17 +246,17 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(scope);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <T> T getContainer(EObject node, Class<T> clazz) {
-		EObject current = node;
-		while(!(current.getClass() == clazz)) {
-			if(node.eContainer() == null)
-				return null;
-			
-			current = current.eContainer();
-		}
-		return (T)current;
-	}
+//	@SuppressWarnings("unchecked")
+//	public static <T> T getContainer(EObject node, Class<T> clazz) {
+//		EObject current = node;
+//		while(!(current.getClass() == clazz)) {
+//			if(node.eContainer() == null)
+//				return null;
+//			
+//			current = current.eContainer();
+//		}
+//		return (T)current;
+//	}
 	
 	public static EditorGTFile getGTFile(EObject node) {
 		EObject current = node;
