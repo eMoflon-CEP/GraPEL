@@ -6,21 +6,19 @@ pattern container {
 }
 
 pattern serverInEU {
-	server: Server {
-		.tag == enum::EU
-	}
-}
-
+	server: Server
+	# server.tag == enum::EU
+} 
+ 
 pattern serverInNonEU {
-	server: Server {
-		.tag == enum::NonEU
-	}
+	server: Server
+	# server.tag == enum::NonEU
 }
 
 pattern serverHasEUEntity {
-	entityInEntry: Entity {
-		.tag == enum::EU
-	}
+	entityInEntry: Entity
+	# entityInEntry.tag == enum::EU
+	
 	entryInDatabase: Entry {
 		-entity -> entityInEntry	
 	}
@@ -36,9 +34,9 @@ pattern serverHasEUEntity {
 }
 
 pattern serverInEUHasEUEntity {
-	entityInEntry: Entity {
-		.tag == enum::EU
-	}
+	entityInEntry: Entity
+	# entityInEntry.tag == enum::EU
+	
 	entryInDatabase: Entry {
 		-entity -> entityInEntry	
 	}
@@ -48,16 +46,16 @@ pattern serverInEUHasEUEntity {
 	vServerInServer: VServer {
 		-database -> databaseInVserver
 	}
-	server: Server {
-		.tag == enum::EU
+	server: Server {	
 		-vserver -> vServerInServer
 	}
+	
+	# server.tag == enum::EU
 }
 
 pattern serverInEUHasEUEntity2 refines serverHasEUEntity {
-	server: Server {
-		.tag == enum::EU
-	}
+	server: Server
+	# server.tag == enum::EU
 }
 
 event serverMigrationWarning {

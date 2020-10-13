@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.scoping.IScope;
@@ -27,9 +28,12 @@ import org.emoflon.cep.grapel.EventPatternRelationalConstraint;
 import org.emoflon.cep.grapel.GrapelPackage;
 import org.emoflon.cep.grapel.MatchEventState;
 import org.emoflon.cep.grapel.impl.EventPatternImpl;
+import org.emoflon.ibex.gt.editor.gT.EditorAttributeExpression;
+import org.emoflon.ibex.gt.editor.gT.EditorEnumExpression;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.editor.utils.GTEditorModelUtils;
+import org.emoflon.ibex.gt.editor.utils.GTEnumExpressionHelper;
 
 /**
  * This class contains custom scoping description.
@@ -246,17 +250,19 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(scope);
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	public static <T> T getContainer(EObject node, Class<T> clazz) {
-//		EObject current = node;
-//		while(!(current.getClass() == clazz)) {
-//			if(node.eContainer() == null)
-//				return null;
-//			
-//			current = current.eContainer();
-//		}
-//		return (T)current;
-//	}
+	@Override
+	public IScope getScopeForEnumLiterals(EditorEnumExpression enumExpression) {
+		EEnum type = (EEnum)GTEnumExpressionHelper.getEnumDataType(enumExpression);
+		if (type != null && type instanceof EEnum) {
+			return Scopes.scopeFor(type.getELiterals());
+		} else {
+			EditorGTFile gtFile = getGTFile(enumExpression);
+			return Scopes.scopeFor(GTEditorModelUtils.getEnums(gtFile).stream()
+					.flatMap(e -> e.getELiterals().stream())
+					.collect(Collectors.toList()));
+		}
+
+	}
 	
 	public static EditorGTFile getGTFile(EObject node) {
 		EObject current = node;
