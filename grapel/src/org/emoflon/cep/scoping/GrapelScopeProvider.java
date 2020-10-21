@@ -33,6 +33,7 @@ import org.emoflon.ibex.gt.editor.gT.EditorEnumExpression;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.editor.utils.GTEditorModelUtils;
+import org.emoflon.ibex.gt.editor.utils.GTEditorPatternUtils;
 import org.emoflon.ibex.gt.editor.utils.GTEnumExpressionHelper;
 
 /**
@@ -97,7 +98,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	
 	private IScope getScopeForMatchEventState(MatchEventState context) {
 		Collection<EObject> scope = new HashSet<>();
-		scope.addAll(getContainer(context, EventPatternImpl.class).getNodes().stream()
+		scope.addAll(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes().stream()
 				.filter(node -> (node.getType() instanceof EditorPattern))
 				.collect(Collectors.toList()));
 		return Scopes.scopeFor(scope);
@@ -107,7 +108,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		Collection<EObject> scope = new HashSet<>();
 		
 		if(reference == GrapelPackage.Literals.EVENT_PATTERN_NODE_EXPRESSION__PATTERN_NODE) {
-			EventPattern ePattern = getContainer(context, EventPatternImpl.class);
+			EventPattern ePattern = GTEditorPatternUtils.getContainer(context, EventPatternImpl.class);
 			scope.addAll(ePattern.getNodes());
 		}
 		
@@ -132,7 +133,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	}
 
 	private IScope getScopeForGrapelAttributeExpressions(AttributeExpression context, EReference reference) {
-		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
+		return Scopes.scopeFor(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
 	private boolean isGrapelAttributeExpression(EObject context, EReference reference) {
@@ -149,7 +150,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	}
 
 	private IScope getScopeForGrapelAttributeConstraints(AttributeConstraint context, EReference reference) {
-		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
+		return Scopes.scopeFor(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
 	private boolean isGrapelAttributeConstraint(EObject context, EReference reference) {
