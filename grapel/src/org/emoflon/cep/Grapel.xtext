@@ -29,12 +29,8 @@ EventPattern:
 	'event_pattern' name=ID returnType=ReturnType '{'
 	(nodes += EventPatternNode)*
 	(contextConstraints += EventPatternContextConstraint)*
-	relationalConstraints += EventPatternRelationalConstraint 
-		(relConstraintRelations += RelationalConstraintRelation 
-			relationalConstraints += EventPatternRelationalConstraint)* '{'
-	(attributeConstraint = AttributeConstraint)?
-	'}'
-	
+	relationalConstraint = RelationalConstraint 
+	('{' (attributeConstraint = AttributeConstraint)'}')?
 	returnStatement = ReturnStatement
 	'}'
 ;
@@ -74,19 +70,31 @@ enum ContextRelation:
   UNEQUAL='!=' 
 ;
 
-enum RelationalConstraintRelation:
-	AND='AND' |
-  	OR='OR' 
-;
-
-EventPatternRelationalConstraint:
-	operands +=  [EventPatternNode|ID] (operators += RelationalOperator operands += [EventPatternNode|ID])*
-;
-
-enum RelationalOperator:
+enum BinaryRelationalOperator:
 	AND='&&' |
   	OR='||' |
   	FOLLOWS='->' 
+;
+
+enum UnaryRelationalOperator:
+	NONE='g9%db3ß2Qx4psQtt_1:23nfp++' |
+  	ALL='all' 
+;
+
+RelationalConstraint:
+	BinaryRelationalConstraint
+;
+
+BinaryRelationalConstraint returns RelationalConstraint:
+	UnaryRelationalConstraint({BinaryRelationalConstraint.left = current} operator=BinaryRelationalOperator right=UnaryRelationalConstraint)*
+;
+
+UnaryRelationalConstraint returns RelationalConstraint: {UnaryRelationalConstraint}
+	(negated?="!")? (operator=UnaryRelationalOperator operand=RelationalConstraint | '(' operand=RelationalConstraint) ')' | RelationalNodeExpression
+;
+
+RelationalNodeExpression returns RelationalConstraint:
+	node = [EventPatternNode|ID]
 ;
 
 
@@ -111,7 +119,7 @@ AttributeRelation:
 ;
 
 MatchEventState:
-		'vanished' '(' event=[EventPatternNode] ')'
+	'vanished' '(' event=[EventPatternNode] ')'
 ;
 
 enum AttributeRelationOperator:

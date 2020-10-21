@@ -24,10 +24,8 @@
         eType="#//EventPatternNode" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contextConstraints" upperBound="-1"
         eType="#//EventPatternContextConstraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraints"
-        upperBound="-1" eType="#//EventPatternRelationalConstraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relConstraintRelations"
-        unique="false" upperBound="-1" eType="#//RelationalConstraintRelation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationalConstraint" eType="#//RelationalConstraint"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConstraint" eType="#//AttributeConstraint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnStatement" eType="#//ReturnStatement"
@@ -66,20 +64,17 @@
     <eLiterals name="EQUAL" literal="=="/>
     <eLiterals name="UNEQUAL" value="1" literal="!="/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="RelationalConstraintRelation">
-    <eLiterals name="AND" literal="AND"/>
-    <eLiterals name="OR" value="1" literal="OR"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EventPatternRelationalConstraint">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" unique="false"
-        upperBound="-1" eType="#//EventPatternNode"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operators" unique="false"
-        upperBound="-1" eType="#//RelationalOperator"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="RelationalOperator">
+  <eClassifiers xsi:type="ecore:EEnum" name="BinaryRelationalOperator">
     <eLiterals name="AND" literal="&amp;&amp;"/>
     <eLiterals name="OR" value="1" literal="||"/>
     <eLiterals name="FOLLOWS" value="2" literal="->"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="UnaryRelationalOperator">
+    <eLiterals name="NONE" literal="g9%db3ß2Qx4psQtt_1:23nfp++"/>
+    <eLiterals name="ALL" value="1" literal="all"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="#//EventPatternNode"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint"/>
   <eClassifiers xsi:type="ecore:EEnum" name="AttributeConstraintRelation">
@@ -133,6 +128,19 @@
     <eLiterals name="SQRT" value="2" literal="sqrt"/>
     <eLiterals name="sin" value="3" literal="sin"/>
     <eLiterals name="cos" value="4" literal="cos"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryRelationalConstraint" eSuperTypes="#//RelationalConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//RelationalConstraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//BinaryRelationalOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//RelationalConstraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnaryRelationalConstraint" eSuperTypes="#//RelationalConstraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//UnaryRelationalOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operand" eType="#//RelationalConstraint"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BinaryAttributeConstraint" eSuperTypes="#//AttributeConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//AttributeConstraint"
