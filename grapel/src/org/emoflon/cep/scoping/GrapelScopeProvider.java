@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.scoping.IScope;
@@ -27,9 +28,13 @@ import org.emoflon.cep.grapel.EventPatternRelationalConstraint;
 import org.emoflon.cep.grapel.GrapelPackage;
 import org.emoflon.cep.grapel.MatchEventState;
 import org.emoflon.cep.grapel.impl.EventPatternImpl;
+import org.emoflon.ibex.gt.editor.gT.EditorAttributeExpression;
+import org.emoflon.ibex.gt.editor.gT.EditorEnumExpression;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.editor.utils.GTEditorModelUtils;
+import org.emoflon.ibex.gt.editor.utils.GTEditorPatternUtils;
+import org.emoflon.ibex.gt.editor.utils.GTEnumExpressionHelper;
 
 /**
  * This class contains custom scoping description.
@@ -81,19 +86,19 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    	return getScopeForMatchEventState((MatchEventState)context);
 	    }
 	    // AttributeConstraint
-	    if (isAttributeConstraint(context, reference)) {
-	    	return getScopeForAttributeConstraints((AttributeConstraint)context, reference);
+	    if (isGrapelAttributeConstraint(context, reference)) {
+	    	return getScopeForGrapelAttributeConstraints((AttributeConstraint)context, reference);
 		}
 	    // AttributeExpression
-	    if (isAttributeExpression(context, reference)) {
-	    	return getScopeForAttributeExpressions((AttributeExpression)context, reference);
+	    if (isGrapelAttributeExpression(context, reference)) {
+	    	return getScopeForGrapelAttributeExpressions((AttributeExpression)context, reference);
 		}
 	    return super.getScope(context, reference);
 	}
 	
 	private IScope getScopeForMatchEventState(MatchEventState context) {
 		Collection<EObject> scope = new HashSet<>();
-		scope.addAll(getContainer(context, EventPatternImpl.class).getNodes().stream()
+		scope.addAll(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes().stream()
 				.filter(node -> (node.getType() instanceof EditorPattern))
 				.collect(Collectors.toList()));
 		return Scopes.scopeFor(scope);
@@ -103,7 +108,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		Collection<EObject> scope = new HashSet<>();
 		
 		if(reference == GrapelPackage.Literals.EVENT_PATTERN_NODE_EXPRESSION__PATTERN_NODE) {
-			EventPattern ePattern = getContainer(context, EventPatternImpl.class);
+			EventPattern ePattern = GTEditorPatternUtils.getContainer(context, EventPatternImpl.class);
 			scope.addAll(ePattern.getNodes());
 		}
 		
@@ -127,11 +132,11 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return (context instanceof EventPatternNodeExpression);
 	}
 
-	private IScope getScopeForAttributeExpressions(AttributeExpression context, EReference reference) {
-		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
+	private IScope getScopeForGrapelAttributeExpressions(AttributeExpression context, EReference reference) {
+		return Scopes.scopeFor(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
-	private boolean isAttributeExpression(EObject context, EReference reference) {
+	private boolean isGrapelAttributeExpression(EObject context, EReference reference) {
 		 return (context instanceof AttributeExpression);
 	}
 
@@ -144,11 +149,11 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(getGTFile(context).getEvents());
 	}
 
-	private IScope getScopeForAttributeConstraints(AttributeConstraint context, EReference reference) {
-		return Scopes.scopeFor(getContainer(context, EventPatternImpl.class).getNodes());
+	private IScope getScopeForGrapelAttributeConstraints(AttributeConstraint context, EReference reference) {
+		return Scopes.scopeFor(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
-	private boolean isAttributeConstraint(EObject context, EReference reference) {
+	private boolean isGrapelAttributeConstraint(EObject context, EReference reference) {
 		return (context instanceof AttributeConstraint);
 	}
 
@@ -246,16 +251,18 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(scope);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <T> T getContainer(EObject node, Class<T> clazz) {
-		EObject current = node;
-		while(!(current.getClass() == clazz)) {
-			if(node.eContainer() == null)
-				return null;
-			
-			current = current.eContainer();
+	@Override
+	public IScope getScopeForEnumLiterals(EditorEnumExpression enumExpression) {
+		EEnum type = (EEnum)GTEnumExpressionHelper.getEnumDataType(enumExpression);
+		if (type != null && type instanceof EEnum) {
+			return Scopes.scopeFor(type.getELiterals());
+		} else {
+			EditorGTFile gtFile = getGTFile(enumExpression);
+			return Scopes.scopeFor(GTEditorModelUtils.getEnums(gtFile).stream()
+					.flatMap(e -> e.getELiterals().stream())
+					.collect(Collectors.toList()));
 		}
-		return (T)current;
+
 	}
 	
 	public static EditorGTFile getGTFile(EObject node) {

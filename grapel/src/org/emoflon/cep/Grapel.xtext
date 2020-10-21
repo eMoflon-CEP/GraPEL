@@ -10,7 +10,6 @@ EditorGTFile: {EditorGTFile}
 	(imports+=EditorImport)*
   	(patterns+=EditorPattern |
   	conditions+=EditorCondition |
-  	attributeConditionLibraries+=EditorAttributeConditionLibrary |
   	events += Event |
   	eventPatterns += EventPattern)*
   	
