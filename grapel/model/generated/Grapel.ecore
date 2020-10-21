@@ -70,12 +70,10 @@
     <eLiterals name="FOLLOWS" value="2" literal="->"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="UnaryRelationalOperator">
-    <eLiterals name="NONE" literal="g9%db3ß2Qx4psQtt_1:23nfp++"/>
+    <eLiterals name="NONE" literal="$NO_RELATION"/>
     <eLiterals name="ALL" value="1" literal="all"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraint">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="#//EventPatternNode"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint"/>
   <eClassifiers xsi:type="ecore:EEnum" name="AttributeConstraintRelation">
     <eLiterals name="AND" literal="&amp;&amp;"/>
@@ -123,7 +121,7 @@
     <eLiterals name="POW" value="4" literal="^"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
-    <eLiterals name="NONE" literal="g9%db3ß2Qx4psQtt_1:23nfp"/>
+    <eLiterals name="NONE" literal="$NO_OP"/>
     <eLiterals name="ABS" value="1" literal="abs"/>
     <eLiterals name="SQRT" value="2" literal="sqrt"/>
     <eLiterals name="sin" value="3" literal="sin"/>
@@ -141,6 +139,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//UnaryRelationalOperator"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="operand" eType="#//RelationalConstraint"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationalNodeExpression" eSuperTypes="#//RelationalConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="#//EventPatternNode"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BinaryAttributeConstraint" eSuperTypes="#//AttributeConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//AttributeConstraint"

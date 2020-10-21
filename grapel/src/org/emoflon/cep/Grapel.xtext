@@ -77,7 +77,7 @@ enum BinaryRelationalOperator:
 ;
 
 enum UnaryRelationalOperator:
-	NONE='g9%db3ß2Qx4psQtt_1:23nfp++' |
+	NONE='$NO_RELATION' |
   	ALL='all' 
 ;
 
@@ -93,7 +93,7 @@ UnaryRelationalConstraint returns RelationalConstraint: {UnaryRelationalConstrai
 	(negated?="!")? (operator=UnaryRelationalOperator operand=RelationalConstraint | '(' operand=RelationalConstraint) ')' | RelationalNodeExpression
 ;
 
-RelationalNodeExpression returns RelationalConstraint:
+RelationalNodeExpression returns RelationalConstraint: {RelationalNodeExpression}
 	node = [EventPatternNode|ID]
 ;
 
@@ -211,7 +211,7 @@ enum ArithmeticOperator:
 ;
 
 enum UnaryOperator:
-	NONE='g9%db3ß2Qx4psQtt_1:23nfp'     |
+	NONE='$NO_OP'     |
 	ABS='abs'	|
 	SQRT='sqrt' |
 	sin='sin'	|

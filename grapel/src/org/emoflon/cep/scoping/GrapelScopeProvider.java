@@ -24,11 +24,10 @@ import org.emoflon.cep.grapel.EventPatternContextConstraint;
 import org.emoflon.cep.grapel.EventPatternNode;
 import org.emoflon.cep.grapel.EventPatternNodeAttributeExpression;
 import org.emoflon.cep.grapel.EventPatternNodeExpression;
-import org.emoflon.cep.grapel.EventPatternRelationalConstraint;
 import org.emoflon.cep.grapel.GrapelPackage;
 import org.emoflon.cep.grapel.MatchEventState;
+import org.emoflon.cep.grapel.RelationalConstraint;
 import org.emoflon.cep.grapel.impl.EventPatternImpl;
-import org.emoflon.ibex.gt.editor.gT.EditorAttributeExpression;
 import org.emoflon.ibex.gt.editor.gT.EditorEnumExpression;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
@@ -78,8 +77,8 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    	return getScopeForEventPatternNodeAttributeExpressionAttributeFields((EventPatternNodeAttributeExpression)context, reference);
 		}
 	    // EventPatternRelationalConstraint
-	    if (isEventPatternRelationalConstraint(context, reference)) {
-	    	return getScopeForEventPatternRelationalConstraints((EventPatternRelationalConstraint)context, reference);
+	    if (isRelationalConstraint(context)) {
+	    	return getScopeRelationalConstraints((RelationalConstraint)context);
 		}
 	    // MatchEventState
 	    if(context instanceof MatchEventState) {
@@ -157,16 +156,15 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return (context instanceof AttributeConstraint);
 	}
 
-	private IScope getScopeForEventPatternRelationalConstraints(EventPatternRelationalConstraint context,
-			EReference reference) {
-		EventPattern ePattern = (EventPattern)context.eContainer();
+	private IScope getScopeRelationalConstraints(RelationalConstraint context) {
+		EventPattern ePattern = GTEditorPatternUtils.getContainer(context, EventPatternImpl.class);
 		Collection<EObject> scope = new HashSet<>();
 		scope.addAll(ePattern.getNodes());
 		return Scopes.scopeFor(scope);
 	}
 
-	private boolean isEventPatternRelationalConstraint(EObject context, EReference reference) {
-		return (context instanceof EventPatternRelationalConstraint);
+	private boolean isRelationalConstraint(EObject context) {
+		return (context instanceof RelationalConstraint);
 	}
 
 	private IScope getScopeForEventPatternNodeAttributeExpressionAttributeFields(
