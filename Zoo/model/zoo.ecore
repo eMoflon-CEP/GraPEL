@@ -41,7 +41,7 @@
         eType="#//Enviroment"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSize" unique="false"
         lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-        defaultValueLiteral=""/>
+        defaultValueLiteral="0.0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Enviroment">
     <eLiterals name="Jungle"/>

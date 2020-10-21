@@ -106,7 +106,7 @@ event toleranceSinCosWarning {
 event_pattern temperatureCheck spawns tempartureWarning {
 	newAnimal: animalInEnclosure
 	
-	newAnimal {
+	#newAnimal {
 		! vanished(newAnimal) &&
 		newAnimal.animal.tolerance >= abs(newAnimal.animal.preferedTemperature - newAnimal.enclosure.temperature)
 	}
@@ -116,7 +116,7 @@ event_pattern temperatureCheck spawns tempartureWarning {
 event_pattern humidityCheck spawns humidityWarning {
 	newAnimal: animalInEnclosure
 	
-	newAnimal {
+	#newAnimal {
 		// ignore humidity in mixed_enclosure: Literals/ Enummeration not supported jet
 		// newAnimal.enclosure.enviromentType &&
 		[! vanished(newAnimal) &&
@@ -131,7 +131,7 @@ event_pattern bearBeforeApeCheck spawns bearBeforeApe {
 	
 	newBear.enclosure == newApe.enclosure
 	
-	newBear -> newApe {
+	#newBear -> newApe {
 		[! vanished(newBear) && ! vanished(newApe)]
 	}
 	
@@ -151,7 +151,7 @@ event_pattern bearBeforeApeCheck spawns bearBeforeApe {
 event_pattern sizeCheck spawns capacityWarning {
 	encolsureCapacity: moreAnimalsThanCapacity
 	
-	encolsureCapacity{
+	#encolsureCapacity{
 		! vanished(encolsureCapacity)
 	}
 	
@@ -160,7 +160,7 @@ event_pattern sizeCheck spawns capacityWarning {
 event_pattern toleranceOfBearSinCosCheck spawns toleranceSinCosWarning {
 	newBear: bearInEnclosure
 	
-	newBear {
+	#newBear {
 		! vanished(newBear) &&
 		sin(newBear.bear.tolerance) == cos(newBear.bear.tolerance)
 	}
@@ -173,7 +173,7 @@ event_pattern nameCheck spawns animalsWithSameName {
 	
 //	animal1.animal.name == animal2.animal.name // cannot put attributes in constraint here
 	
-	animal1 && animal2 {
+	#animal1 && animal2 {
 		animal1.animal.name == animal2.animal.name &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
@@ -186,7 +186,7 @@ event_pattern ageCheck spawns animalsWithSameAge {
 	
 //	animal1.animal.age == animal2.animal.age // cannot put attributes in constraint here
 	
-	animal1 && animal2 {
+	#animal1 && animal2 {
 		animal1.animal.age == animal2.animal.age &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
@@ -197,7 +197,7 @@ event_pattern nameAndAgeCheck1 spawns animalsWithSameNameAndAge1 {
 	animal1: animalInEnclosure
 	animal2: animalInEnclosure
 	
-	animal1 && animal2 {
+	#animal1 && animal2 {
 		animal1.animal.name + animal1.animal.age == animal2.animal.name + animal2.animal.age &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
@@ -222,7 +222,7 @@ event_pattern nameAndAgeCheck3 spawns animalsWithSameNameAndAge3 {
 	
 //	animal1.animal.name == animal2.animal.name && animal1.animal.age == animal2.animal.age // cannot put attributes in constraint here
 	
-	animal1 && animal2 {
+	#animal1 && animal2 {
 		animal1.animal.name == animal2.animal.name && animal1.animal.age == animal2.animal.age &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
