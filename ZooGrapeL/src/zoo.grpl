@@ -36,8 +36,8 @@ pattern camelInEnclosure {
 }
 pattern moreAnimalsThanCapacity {
 	enclosure: Enclosure{
-		.capacity < calc(count(animalInEnclosure))
 	}
+	# enclosure.capacity < count(animalInEnclosure)
 }
 
 event tempartureWarning {
