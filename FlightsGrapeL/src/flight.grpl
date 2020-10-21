@@ -95,8 +95,7 @@ pattern travelHasConnectingFlight {
 event_pattern hasContainer spawns modelContainer {
 	event1: container
 	
-	event1 {
-	}
+	# all(event1)
 	
 	spawn modelContainer(event1.model)
 }
@@ -104,7 +103,7 @@ event_pattern hasContainer spawns modelContainer {
 event_pattern testEvent spawns flightDelayed {
 	event1 : flightWithArrival  
 	          
-	event1 {
+	# all(event1) {
 		event1.arrival.time > event1.routex.duration + event1.departure.time && !vanished(event1)   
 	}               
 	 
@@ -117,7 +116,7 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	
 	delayed.flight == connecting.flight 
 	            
-	connecting -> delayed { 
+	# all(connecting -> all(delayed)) { 
 		(delayed.arrival.time + abs(connecting.departingGate.position - connecting.arrivalGate.position)) * connecting.transitAirport.size > connecting.connectionDeparture.time
 	}          
 	     

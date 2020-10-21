@@ -68,7 +68,7 @@ event_pattern isEUServerWithEUEntitiesMigratingToNonEU spawns serverMigrationWar
 	
 	euServerWithEUEntities.server == nonEUServer.server
 	
-	euServerWithEUEntities -> nonEUServer {
+	# all(euServerWithEUEntities -> all(nonEUServer)) {
 		!vanished(euServerWithEUEntities)
 	}
 	
