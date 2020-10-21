@@ -7,6 +7,7 @@ Automatic-Module-Name: TestsuiteGrapel
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: Flights,
  MNetwork;bundle-version="0.1.0",
+ Zoo;bundle-version="0.1.0",
  grapel.engine;bundle-version="1.0.0",
  org.emoflon.ibex.common;bundle-version="1.0.0",
  org.emoflon.ibex.gt;bundle-version="1.0.0",
@@ -16,4 +17,5 @@ Require-Bundle: Flights,
  org.emoflon.ibex.gt.viatra;bundle-version="1.0.0",
  FlightsGrapeL;bundle-version="1.0.0",
  MNetworkGrapeL;bundle-version="1.0.0",
+ ZooGrapeL;bundle-version="1.0.0",
  org.junit
