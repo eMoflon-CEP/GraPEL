@@ -93,8 +93,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraint" abstract="true"
       interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraintLiteral" eSuperTypes="#//RelationalConstraint">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="relationalExpression" lowerBound="1"
-        eType="#//RelationalExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventPatternNode" lowerBound="1"
+        eType="#//EventPatternNode"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraintProduction" eSuperTypes="#//RelationalConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" lowerBound="1" eType="#//RelationalConstraint"
@@ -102,32 +102,22 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" lowerBound="1" eType="#//RelationalConstraint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" lowerBound="1" eType="#//RelationalConstraintOperator"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negated" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationalConstraintUnary" eSuperTypes="#//RelationalConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operand" lowerBound="1"
+        eType="#//RelationalConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
+        eType="#//RelationalConstraintUnaryOperator"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="RelationalConstraintOperator">
     <eLiterals name="AND"/>
     <eLiterals name="OR" value="1"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RelationalExpression" abstract="true"
-      interface="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="RelationalExpressionLiteral" eSuperTypes="#//RelationalExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eventPatternNode" lowerBound="1"
-        eType="#//EventPatternNode"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RelationalExpressionProduction" eSuperTypes="#//RelationalExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" lowerBound="1" eType="#//RelationalExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" lowerBound="1" eType="#//RelationalExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" lowerBound="1" eType="#//RelationalExpressionOperator"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negated" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="RelationalExpressionOperator">
-    <eLiterals name="AND"/>
-    <eLiterals name="OR" value="1"/>
     <eLiterals name="FOLLOWS" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RelationalConstraintUnaryOperator">
+    <eLiterals name="BRACKET"/>
+    <eLiterals name="ALL" value="1"/>
+    <eLiterals name="NOT" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint" abstract="true"
       interface="true">

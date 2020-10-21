@@ -17,11 +17,12 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//RelationalConstraintOperator">
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintOperator/AND"/>
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintOperator/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintOperator/FOLLOWS"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//RelationalExpressionOperator">
-      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalExpressionOperator/AND"/>
-      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalExpressionOperator/OR"/>
-      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalExpressionOperator/FOLLOWS"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//RelationalConstraintUnaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintUnaryOperator/BRACKET"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintUnaryOperator/ALL"/>
+      <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//RelationalConstraintUnaryOperator/NOT"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="GrapeLModel.ecore#//AttributeConstraintOperator">
       <genEnumLiterals ecoreEnumLiteral="GrapeLModel.ecore#//AttributeConstraintOperator/AND"/>
@@ -117,23 +118,16 @@
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//RelationalConstraint"/>
     <genClasses ecoreClass="GrapeLModel.ecore#//RelationalConstraintLiteral">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintLiteral/relationalExpression"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintLiteral/eventPatternNode"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//RelationalConstraintProduction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintProduction/lhs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintProduction/rhs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalConstraintProduction/op"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalConstraintProduction/negated"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="GrapeLModel.ecore#//RelationalExpression"/>
-    <genClasses ecoreClass="GrapeLModel.ecore#//RelationalExpressionLiteral">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalExpressionLiteral/eventPatternNode"/>
-    </genClasses>
-    <genClasses ecoreClass="GrapeLModel.ecore#//RelationalExpressionProduction">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalExpressionProduction/lhs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalExpressionProduction/rhs"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalExpressionProduction/op"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalExpressionProduction/negated"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//RelationalConstraintUnary">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RelationalConstraintUnary/operand"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//RelationalConstraintUnary/operator"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//AttributeConstraint">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//AttributeConstraint/params"/>

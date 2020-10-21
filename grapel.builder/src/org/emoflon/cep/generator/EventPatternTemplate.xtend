@@ -31,12 +31,8 @@ import GrapeLModel.ContextRelation
 import GrapeLModel.RelationalConstraint
 import GrapeLModel.ReturnStatement
 import GrapeLModel.RelationalConstraintLiteral
-import GrapeLModel.RelationalExpression
 import GrapeLModel.RelationalConstraintProduction
 import GrapeLModel.RelationalConstraintOperator
-import GrapeLModel.RelationalExpressionLiteral
-import GrapeLModel.RelationalExpressionProduction
-import GrapeLModel.RelationalExpressionOperator
 import GrapeLModel.EventNodeExpression
 import GrapeLModel.IBeXPatternNodeExpression
 import GrapeLModel.ArithmeticExpressionUnary
@@ -46,6 +42,7 @@ import GrapeLModel.AttributeConstraintUnary
 import GrapeLModel.AttributeConstraintUnaryOperator
 import org.eclipse.emf.ecore.EDataType
 import org.eclipse.emf.ecore.EcorePackage
+import GrapeLModel.RelationalConstraintUnary
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -70,7 +67,7 @@ class EventPatternTemplate extends AbstractTemplate{
 	action onload() {
 		monitor.subscribe(eventChannel);
 		
-		on all «getRelationalConstraint(pattern.relationalConstraint)» {
+		on «getRelationalConstraint(pattern.relationalConstraint)» {
 			«getRelationalConstraintBody(pattern.context, pattern.attributeConstraint)»
 		}
 		
@@ -88,28 +85,6 @@ class EventPatternTemplate extends AbstractTemplate{
 	def String getRelationalConstraint(RelationalConstraint constraint) {
 		if(constraint instanceof RelationalConstraintLiteral) {
 			val literal = constraint as RelationalConstraintLiteral;
-			return relationalExpr2Apama(literal.relationalExpression)
-		} else {
-			val production = constraint as RelationalConstraintProduction
-			return '''«getRelationalConstraint(constraint)» «relationalConstraintOp2Apama(production.op)» «getRelationalConstraint(constraint)»'''
-		}
-	}
-	
-	def String relationalConstraintOp2Apama(RelationalConstraintOperator op) {
-		switch(op) {
-			case AND: {
-				return "and"
-			}
-			case OR: {
-				return "or"
-			}
-			
-		}
-	}
-	
-	def String relationalExpr2Apama(RelationalExpression expr) {
-		if(expr instanceof RelationalExpressionLiteral) {
-			val literal = expr as RelationalExpressionLiteral;
 			if(literal.eventPatternNode instanceof EventNode) {
 				val node = literal.eventPatternNode as EventNode;
 				return '''«node.type.name»() as «node.name»'''
@@ -117,24 +92,23 @@ class EventPatternTemplate extends AbstractTemplate{
 				val node = literal.eventPatternNode as IBeXPatternNode;
 				return '''«node.type.name»() as «node.name»'''
 			}
+		} else if(constraint instanceof RelationalConstraintUnary) {
+			switch(constraint.operator) {
+				case ALL: return '''all «getRelationalConstraint(constraint.operand)»'''
+				case BRACKET: return '''(«getRelationalConstraint(constraint.operand)»)'''
+				case NOT: return ''' not «getRelationalConstraint(constraint.operand)»'''
+			}
 		} else {
-			val production = expr as RelationalExpressionProduction
-			return '''«relationalExpr2Apama(production.lhs)» «relationalExprOp2Apama(production.op)» «relationalExpr2Apama(production.rhs)»'''
+			val production = constraint as RelationalConstraintProduction
+			return '''«getRelationalConstraint(production.lhs)» «relationalConstraintOp2Apama(production.op)» «getRelationalConstraint(production.rhs)»'''
 		}
 	}
 	
-	def String relationalExprOp2Apama(RelationalExpressionOperator op) {
+	def String relationalConstraintOp2Apama(RelationalConstraintOperator op) {
 		switch(op) {
-			case AND: {
-				return "&&"
-			}
-			case FOLLOWS: {
-				return "->"
-			}
-			case OR: {
-				return "||"
-			}
-			
+			case AND: return 'and'
+			case OR: return 'or'
+			case FOLLOWS: return '->'
 		}
 	}
 	

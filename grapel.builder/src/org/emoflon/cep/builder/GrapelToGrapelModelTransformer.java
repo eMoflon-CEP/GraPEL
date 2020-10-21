@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.emoflon.cep.grapel.EditorGTFile;
-import org.emoflon.cep.grapel.UnaryOperator;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.transformations.EditorToIBeXPatternTransformation;
@@ -38,10 +37,8 @@ import GrapeLModel.RelationalConstraint;
 import GrapeLModel.RelationalConstraintLiteral;
 import GrapeLModel.RelationalConstraintOperator;
 import GrapeLModel.RelationalConstraintProduction;
-import GrapeLModel.RelationalExpression;
-import GrapeLModel.RelationalExpressionLiteral;
-import GrapeLModel.RelationalExpressionOperator;
-import GrapeLModel.RelationalExpressionProduction;
+import GrapeLModel.RelationalConstraintUnary;
+import GrapeLModel.RelationalConstraintUnaryOperator;
 import GrapeLModel.ReturnStatement;
 import GrapeLModel.SimpleAttribute;
 import GrapeLModel.StringLiteral;
@@ -212,16 +209,11 @@ public class GrapelToGrapelModelTransformer {
 		}
 		
 		
-		// transform relational constraints
-		List<org.emoflon.cep.grapel.EventPatternRelationalConstraint> gRelationalConstraints = new LinkedList<>();
-		gRelationalConstraints.addAll(gEventPattern.getRelationalConstraints());
-		
-		List<org.emoflon.cep.grapel.RelationalConstraintRelation> gRelations = new LinkedList<>();
-		gRelations.addAll(gEventPattern.getRelConstraintRelations());
-		
-		RelationalConstraint relConstraint = transform(gRelationalConstraints, gRelations);
+		// transform relational constraints		
+		RelationalConstraint relConstraint = transform(gEventPattern.getRelationalConstraint());
 		pattern.setRelationalConstraint(relConstraint);
 		
+		// transform attribute constraints	
 		if(gEventPattern.getAttributeConstraint()!=null) {
 			AttributeConstraint atrConstraint = transform(gEventPattern.getAttributeConstraint());
 			pattern.setAttributeConstraint(atrConstraint);
@@ -290,78 +282,49 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
-	private RelationalConstraint transform(List<org.emoflon.cep.grapel.EventPatternRelationalConstraint> gRelationalConstraints, List<org.emoflon.cep.grapel.RelationalConstraintRelation> gRelations) {
-		if(gRelationalConstraints.size()<2) {
-			org.emoflon.cep.grapel.EventPatternRelationalConstraint gConstraint = gRelationalConstraints.remove(0);
-			RelationalConstraintLiteral rcl = factory.createRelationalConstraintLiteral();
+	private RelationalConstraint transform(org.emoflon.cep.grapel.RelationalConstraint gConstraint) {
+		if(gConstraint instanceof org.emoflon.cep.grapel.RelationalNodeExpression) {
+			RelationalConstraintLiteral literal = factory.createRelationalConstraintLiteral();
+			literal.setEventPatternNode(gNode2Nodes.get(((org.emoflon.cep.grapel.RelationalNodeExpression)gConstraint).getNode()));
+			return literal;
+		} else if (gConstraint instanceof org.emoflon.cep.grapel.UnaryRelationalConstraint) {
+			RelationalConstraintUnary constraint = factory.createRelationalConstraintUnary();
+			org.emoflon.cep.grapel.UnaryRelationalConstraint gUnaryConstraint = (org.emoflon.cep.grapel.UnaryRelationalConstraint)gConstraint;
+			if(gUnaryConstraint.getOperator() == org.emoflon.cep.grapel.UnaryRelationalOperator.NONE) {
+				constraint.setOperator(RelationalConstraintUnaryOperator.BRACKET);
+				constraint.setOperand(transform(gUnaryConstraint.getOperand()));
+			} else {
+				constraint.setOperator(RelationalConstraintUnaryOperator.ALL);
+				constraint.setOperand(transform(gUnaryConstraint.getOperand()));
+			}
 			
-			List<org.emoflon.cep.grapel.EventPatternNode> gNodes = new LinkedList<>();
-			gNodes.addAll(gConstraint.getOperands());
-			List<org.emoflon.cep.grapel.RelationalOperator> gOperators = new LinkedList<>();
-			gOperators.addAll(gConstraint.getOperators());
-			
-			rcl.setRelationalExpression(transformRE(gNodes, gOperators));
-			return rcl;
-		}
-		
-		RelationalConstraintProduction rcp = factory.createRelationalConstraintProduction();
-		rcp.setOp(transform(gRelations.remove(0)));
-		
-		List<org.emoflon.cep.grapel.EventPatternRelationalConstraint> leftConstraint = new LinkedList<>();
-		leftConstraint.add(gRelationalConstraints.remove(0));
-		rcp.setLhs(transform(leftConstraint, new LinkedList<>()));
-		
-		rcp.setRhs(transform(gRelationalConstraints, gRelations));
-		
-		return rcp;
-	}
-	
-	private RelationalConstraintOperator transform(org.emoflon.cep.grapel.RelationalConstraintRelation gRelation) {
-		switch(gRelation) {
-		case AND:
-			return RelationalConstraintOperator.AND;
-		case OR:
-			return RelationalConstraintOperator.OR;
-		default:
-			return null;
-		
+			if(gUnaryConstraint.isNegated()) {
+				RelationalConstraintUnary negate = factory.createRelationalConstraintUnary();
+				negate.setOperator(RelationalConstraintUnaryOperator.NOT);
+				negate.setOperand(constraint);
+				return negate;
+			} else {
+				return constraint;
+			}
+		} else {
+			org.emoflon.cep.grapel.BinaryRelationalConstraint gBinaryConstraint = (org.emoflon.cep.grapel.BinaryRelationalConstraint)gConstraint;
+			RelationalConstraintProduction constraint = factory.createRelationalConstraintProduction();
+			constraint.setLhs(transform(gBinaryConstraint.getLeft()));
+			constraint.setRhs(transform(gBinaryConstraint.getRight()));
+			constraint.setOp(transform(gBinaryConstraint.getOperator()));
+			return constraint;
 		}
 	}
 	
-	private RelationalExpression transformRE(List<org.emoflon.cep.grapel.EventPatternNode> gNodes, List<org.emoflon.cep.grapel.RelationalOperator> gOperators) {
-		if(gNodes.size()<2) {
-			org.emoflon.cep.grapel.EventPatternNode gNode = gNodes.remove(0);
-			RelationalExpressionLiteral rel = factory.createRelationalExpressionLiteral();
-			rel.setEventPatternNode(gNode2Nodes.get(gNode));
-			return rel;
+	private RelationalConstraintOperator transform(org.emoflon.cep.grapel.BinaryRelationalOperator op) {
+		switch(op) {
+			case AND: return RelationalConstraintOperator.AND;
+			case FOLLOWS: return RelationalConstraintOperator.FOLLOWS;
+			case OR: return RelationalConstraintOperator.OR;
+			default: return null;
 		}
-		
-		RelationalExpressionProduction rep = factory.createRelationalExpressionProduction();
-		rep.setOp(transform(gOperators.remove(0)));
-		
-		List<org.emoflon.cep.grapel.EventPatternNode> leftConstraint = new LinkedList<>();
-		leftConstraint.add(gNodes.remove(0));
-		rep.setLhs(transformRE(leftConstraint, new LinkedList<>()));
-		
-		rep.setRhs(transformRE(gNodes, gOperators));
-		
-		return rep;
 	}
 	
-	private RelationalExpressionOperator transform(org.emoflon.cep.grapel.RelationalOperator gOperator) {
-		switch(gOperator) {
-		case AND:
-			return RelationalExpressionOperator.AND;
-		case FOLLOWS:
-			return RelationalExpressionOperator.FOLLOWS;
-		case OR:
-			return RelationalExpressionOperator.OR;
-		default:
-			return null;
-		
-		
-		}
-	}
 	
 	private AttributeConstraint transform(org.emoflon.cep.grapel.AttributeConstraint gConstraint) {
 		if(gConstraint instanceof org.emoflon.cep.grapel.BinaryAttributeConstraint) {
@@ -613,7 +576,7 @@ public class GrapelToGrapelModelTransformer {
 		
 		ArithmeticExpressionUnary aeu = factory.createArithmeticExpressionUnary();
 		aeu.setIsNegative(gExpression.isNegative());
-		if(gExpression.getOperator() != UnaryOperator.NONE) {
+		if(gExpression.getOperator() != org.emoflon.cep.grapel.UnaryOperator.NONE) {
 			aeu.setOperator(transform(gExpression.getOperator()));
 			aeu.setOperand(transform(gExpression.getOperand()));
 		} else {
