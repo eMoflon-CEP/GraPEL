@@ -23,11 +23,16 @@
   <eClassifiers xsi:type="ecore:EClass" name="MatchEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="relatedPattern" lowerBound="1"
         eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXPattern"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eventNode2patternNode"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventAttribute2patternNode"
         lowerBound="1" upperBound="-1" eType="#//EventAttribute2PatternNodeMap" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RuleEvent" eSuperTypes="#//MatchEvent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="relatedRule" eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXRule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventAttribute2patternParameter"
+        lowerBound="1" upperBound="-1" eType="#//EventAttribute2PatternParameterMap"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterAttributes" upperBound="-1"
+        eType="#//SimpleAttribute" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventAttribute" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -69,6 +74,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="ApplyStatement" eSuperTypes="#//ReturnStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
         eType="#//RuleEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternParameters" upperBound="-1"
+        eType="#//ArithmeticExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNode" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -275,5 +282,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="EventAttribute2PatternNodeMap" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="#//EventAttribute"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventAttribute2PatternParameterMap"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="#//SimpleAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXParameter"/>
   </eClassifiers>
 </ecore:EPackage>
