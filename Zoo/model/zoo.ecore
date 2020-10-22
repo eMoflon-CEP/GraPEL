@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="zoo" nsURI="platform:/resource/Zoo/model/zoo.ecore" nsPrefix="zoo">
+  <eClassifiers xsi:type="ecore:EClass" name="Zoo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enclosures" lowerBound="1"
+        eType="#//Enclosures" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Animal" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="age" unique="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sizeModifier" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preferedEnviroment" unique="false"
+        lowerBound="1" eType="#//Enviroment"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preferedHumidity" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preferedTemperature" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tolerance" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Bear" eSuperTypes="#//Animal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Camel" eSuperTypes="#//Animal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Enclosures">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enclosures" upperBound="-1"
+        eType="#//Enclosure" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enclosure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="animals" upperBound="-1"
+        eType="#//Animal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temperature" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" unique="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="humidity" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enviromentType" lowerBound="1"
+        eType="#//Enviroment"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSize" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Enviroment">
+    <eLiterals name="Jungle"/>
+    <eLiterals name="Forest" value="1"/>
+    <eLiterals name="Desert" value="2"/>
+    <eLiterals name="Mixed" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ape" eSuperTypes="#//Animal"/>
+</ecore:EPackage>
