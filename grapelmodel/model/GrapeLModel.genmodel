@@ -70,6 +70,9 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//MatchEvent/relatedPattern"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//MatchEvent/eventNode2patternNode"/>
     </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//RuleEvent">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//RuleEvent/relatedRule"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//EventAttribute">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventAttribute/name"/>
     </genClasses>
@@ -93,8 +96,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventPattern/returnStatement"/>
     </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//ReturnStatement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ReturnStatement/returnType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ReturnStatement/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//SpawnStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//SpawnStatement/returnType"/>
+    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ApplyStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ApplyStatement/returnType"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//EventPatternNode">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPatternNode/name"/>

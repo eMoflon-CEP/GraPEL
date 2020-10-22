@@ -26,6 +26,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventNode2patternNode"
         lowerBound="1" upperBound="-1" eType="#//EventAttribute2PatternNodeMap" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleEvent" eSuperTypes="#//MatchEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relatedRule" eType="ecore:EClass ../../org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore#//IBeXRule"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventAttribute" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -55,11 +58,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnStatement" lowerBound="1"
         eType="#//ReturnStatement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
-        eType="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="#//ArithmeticExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpawnStatement" eSuperTypes="#//ReturnStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
+        eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyStatement" eSuperTypes="#//ReturnStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
+        eType="#//RuleEvent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNode" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
