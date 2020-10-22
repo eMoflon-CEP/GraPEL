@@ -7,13 +7,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.parser.ParseException;
 import org.eclipse.xtext.validation.Check;
+import org.emoflon.cep.grapel.ApplyStatement;
 import org.emoflon.cep.grapel.ArithmeticOperator;
 import org.emoflon.cep.grapel.AttributeExpression;
 import org.emoflon.cep.grapel.AttributeExpressionLiteral;
@@ -30,11 +30,15 @@ import org.emoflon.cep.grapel.EventPatternNodeAttributeExpression;
 import org.emoflon.cep.grapel.EventPatternNodeExpression;
 import org.emoflon.cep.grapel.GrapelPackage;
 import org.emoflon.cep.grapel.IntegerLiteral;
+import org.emoflon.cep.grapel.ReturnApply;
+import org.emoflon.cep.grapel.ReturnSpawn;
 import org.emoflon.cep.grapel.ReturnStatement;
+import org.emoflon.cep.grapel.SpawnStatement;
 import org.emoflon.cep.grapel.StringLiteral;
 import org.emoflon.cep.grapel.UnaryAttributeExpression;
 import org.emoflon.cep.grapel.UnaryOperator;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
+import org.emoflon.ibex.gt.editor.gT.EditorParameter;
 
 /**
  * This class contains custom validation rules. 
@@ -145,13 +149,49 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	}
 	
 	@Check
-	public void checkReturnStatement(ReturnStatement statement) {
+	public void checkReturnStatement(SpawnStatement statement) {
 		try {
 			EventPattern pattern = (EventPattern)statement.eContainer();
-
-			if(!statement.getReturnArg().equals(pattern.getReturnType().getReturnType()))
+			
+			if(!(pattern.getReturnType() instanceof ReturnSpawn)) {
 				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
-						GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
+						GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
+						EVENT_PATTERN_INVALID_RETURN);
+				return;
+			}
+			if(statement.getReturnArg() == null)
+				return;
+			
+			ReturnSpawn returnType = (ReturnSpawn)pattern.getReturnType();
+			if(!statement.getReturnArg().equals(returnType.getReturnType()))
+				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+						GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
+						EVENT_PATTERN_INVALID_RETURN);
+			checkReturnStatementParameters(pattern,  statement);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Check
+	public void checkReturnStatement(ApplyStatement statement) {
+		try {
+			EventPattern pattern = (EventPattern)statement.eContainer();
+			
+			if(!(pattern.getReturnType() instanceof ReturnApply)) {
+				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+						GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
+						EVENT_PATTERN_INVALID_RETURN);
+				return;
+			}
+			if(statement.getReturnArg() == null)
+				return;
+			
+			ReturnApply returnType = (ReturnApply)pattern.getReturnType();
+			if(!statement.getReturnArg().equals(returnType.getReturnType()))
+				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+						GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
 						EVENT_PATTERN_INVALID_RETURN);
 			checkReturnStatementParameters(pattern,  statement);
 		}catch(Exception e) {
@@ -332,16 +372,138 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					NAME_EXPECT_UNIQUE);
 	}
 	
-	public void checkReturnStatementParameters(EventPattern pattern, ReturnStatement statement) {
+	public void checkReturnStatementParameters(EventPattern pattern, SpawnStatement statement) {
 		if(statement.getReturnParams().size() != statement.getReturnArg().getAttributes().size()) {
 			error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE , pattern.getName()),
-					GrapelPackage.Literals.RETURN_STATEMENT__RETURN_ARG,
+					GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
 					EVENT_PATTERN_INVALID_RETURN);
 			return;
 		}
 		
 		for(int i = 0; i < statement.getReturnParams().size(); i++) {
 			EventAttribute expected = statement.getReturnArg().getAttributes().get(i);
+			AttributeExpression given = statement.getReturnParams().get(i);
+			if(expected.getType() instanceof EClass) {
+				if(!(given instanceof EventPatternNodeAttributeExpression)) {
+					error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+							GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+							EVENT_PATTERN_INVALID_RETURN);
+					continue;
+				}
+				
+				EventPatternNodeAttributeExpression expr = (EventPatternNodeAttributeExpression) given;
+				if(expr.getField() != null) {
+					error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+							GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+							EVENT_PATTERN_INVALID_RETURN);
+					continue;
+				}
+				EventPatternNodeExpression nodeExpr = (EventPatternNodeExpression) expr.getNodeExpression();
+				if(nodeExpr.getAttribute() instanceof EventAttribute) {
+					if(expected != nodeExpr.getAttribute())
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+				} else {
+					EditorNode gtNode = (EditorNode)nodeExpr.getAttribute();
+					if(expected.getType() != gtNode.getType())
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+				}
+			}else {
+				if((given instanceof EventPatternNodeAttributeExpression)) {
+					EClassifier givenType = getTypeOfExpression(given);
+					if(!(givenType instanceof EDataType)) {
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+					
+					if(expected.getType() != givenType) {
+						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+					
+				} else {
+					EClassifier givenType = getTypeOfExpression(given);
+					if(givenType == null) {
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+					if(!(givenType instanceof EDataType)) {
+						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+						continue;
+					}
+					
+					if(givenType == EcorePackage.Literals.ESTRING && expected.getType() != EcorePackage.Literals.ESTRING) {
+						if(!(given instanceof AttributeExpressionLiteral)) {
+							error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+									GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+									EVENT_PATTERN_INVALID_RETURN);
+							continue;
+						} else {
+							StringLiteral val = (StringLiteral)given;
+							if(expected.getType() == EcorePackage.Literals.EDOUBLE) {
+								try {
+									Double.parseDouble(val.getValue());
+								}catch(Exception e) {
+									error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+											GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+											EVENT_PATTERN_INVALID_RETURN);
+									continue;
+								}
+								
+							} else if (expected.getType() == EcorePackage.Literals.EINT || expected.getType() == EcorePackage.Literals.ELONG) {
+								try {
+									Integer.parseInt(val.getValue());
+								}catch(Exception e) {
+									error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+											GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+											EVENT_PATTERN_INVALID_RETURN);
+									continue;
+								}
+							} else {
+								error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+										GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+										EVENT_PATTERN_INVALID_RETURN);
+								continue;
+							}
+						}
+						
+					}
+					
+					if(givenType != expected.getType()) {
+						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
+								EVENT_PATTERN_INVALID_RETURN);
+					}
+				}
+			}
+		}
+			
+		
+	}
+	
+	public void checkReturnStatementParameters(EventPattern pattern, ApplyStatement statement) {
+		if(statement.getReturnParams().size() != statement.getReturnArg().getParameters().size()) {
+			error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE , pattern.getName()),
+					GrapelPackage.Literals.APPLY_STATEMENT__RETURN_ARG,
+					EVENT_PATTERN_INVALID_RETURN);
+			return;
+		}
+		
+		for(int i = 0; i < statement.getReturnParams().size(); i++) {
+			EditorParameter expected = statement.getReturnArg().getParameters().get(i);
 			AttributeExpression given = statement.getReturnParams().get(i);
 			if(expected.getType() instanceof EClass) {
 				if(!(given instanceof EventPatternNodeAttributeExpression)) {

@@ -3,8 +3,10 @@
  */
 package org.emoflon.cep.scoping;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
@@ -14,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
+import org.emoflon.cep.grapel.ApplyStatement;
 import org.emoflon.cep.grapel.AttributeConstraint;
 import org.emoflon.cep.grapel.AttributeExpression;
 import org.emoflon.cep.grapel.EditorGTFile;
@@ -27,6 +30,9 @@ import org.emoflon.cep.grapel.EventPatternNodeExpression;
 import org.emoflon.cep.grapel.GrapelPackage;
 import org.emoflon.cep.grapel.MatchEventState;
 import org.emoflon.cep.grapel.RelationalConstraint;
+import org.emoflon.cep.grapel.ReturnApply;
+import org.emoflon.cep.grapel.ReturnSpawn;
+import org.emoflon.cep.grapel.SpawnStatement;
 import org.emoflon.cep.grapel.impl.EventPatternImpl;
 import org.emoflon.ibex.gt.editor.gT.EditorEnumExpression;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
@@ -42,8 +48,8 @@ import org.emoflon.ibex.gt.editor.utils.GTEnumExpressionHelper;
  * on how and when to use it.
  */
 public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
-	@Override
-	public IScope getScope(EObject context, EReference reference) {	
+	
+	public IScope getScopeInternal(EObject context, EReference reference) {
 		// Events
 	    if (isEvent(context, reference)) {
 	    	return getScopeForEvents((Event)context);
@@ -57,9 +63,21 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    	return getScopeForEventPatterns((EventPattern)context, reference);
 		}
 	    // EventPatternReturnTypes
-	    if (isEventPatternReturnType(context, reference)) {
-	    	return getScopeForEventPatternReturnTypes((EventPattern)context, reference);
+	    if (isReturnSpawn(context, reference)) {
+	    	return getScopeForReturnSpawn((ReturnSpawn)context);
 		}
+	    if (isReturnApply(context, reference)) {
+	    	return getScopeForReturnApply((ReturnApply)context);
+		}
+	    if (isSpawnStatement(context, reference)) {
+	    	return getScopeForSpawnStatement((SpawnStatement)context);
+	    }
+	    if (isApplyStatementArg(context, reference)) {
+	    	return getScopeForApplyStatementArg((ApplyStatement)context);
+	    }
+	    if (isApplyStatementMatch(context, reference)) {
+	    	return getScopeForApplyStatementMatch((ApplyStatement)context);
+	    }
 	    // EventPatternNodes
 	    if (isEventPatternNode(context, reference)) {
 	    	return getScopeForEventPatternNodes((EventPatternNode)context);
@@ -93,6 +111,16 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    	return getScopeForGrapelAttributeExpressions((AttributeExpression)context, reference);
 		}
 	    return super.getScope(context, reference);
+	}
+	
+	@Override
+	public IScope getScope(EObject context, EReference reference) {	
+		try {
+			return getScopeInternal(context, reference);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return super.getScope(context, reference);
+		}
 	}
 	
 	private IScope getScopeForMatchEventState(MatchEventState context) {
@@ -139,13 +167,66 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		 return (context instanceof AttributeExpression);
 	}
 
-	private boolean isEventPatternReturnType(EObject context, EReference reference) {
-		 return (context instanceof EventPattern && 
-				 (reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE || reference == GrapelPackage.Literals.EVENT_PATTERN__RETURN_STATEMENT));
+	private boolean isReturnSpawn(EObject context, EReference reference) {
+		 return (context instanceof ReturnSpawn && reference == GrapelPackage.Literals.RETURN_SPAWN__RETURN_TYPE);
 	}
 	
-	protected IScope getScopeForEventPatternReturnTypes(EventPattern context, EReference reference) {
+	private boolean isReturnApply(EObject context, EReference reference) {
+		 return (context instanceof ReturnApply && reference == GrapelPackage.Literals.RETURN_APPLY__RETURN_TYPE);
+	}
+	
+	private IScope getScopeForReturnSpawn(ReturnSpawn context) {
 		return Scopes.scopeFor(getGTFile(context).getEvents());
+	}
+	
+	private IScope getScopeForReturnApply(ReturnApply context) {
+		return Scopes.scopeFor(getGTFile(context).getPatterns().stream()
+				.filter(pattern -> GTEditorPatternUtils.containsCreatedOrDeletedElements(pattern))
+				.collect(Collectors.toList()));
+	}
+	
+	private boolean isSpawnStatement(EObject context, EReference reference) {
+		 return (context instanceof SpawnStatement && reference == GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG);
+	}
+	
+	private IScope getScopeForSpawnStatement(SpawnStatement context) {
+		EventPattern eventPattern = (EventPattern)context.eContainer();
+		if(eventPattern.getReturnType() != null && eventPattern.getReturnType() instanceof ReturnSpawn) {
+			ReturnSpawn spawn = (ReturnSpawn)eventPattern.getReturnType();
+			return Scopes.scopeFor(Arrays.asList(new EObject[]{spawn.getReturnType()}));
+		} else if(eventPattern.getReturnType() != null && eventPattern.getReturnType() instanceof ReturnApply) {
+			Scopes.scopeFor(new LinkedList<>());
+		}
+		return Scopes.scopeFor(getGTFile(context).getEvents());
+	}
+	
+	private boolean isApplyStatementArg(EObject context, EReference reference) {
+		 return (context instanceof ApplyStatement && reference == GrapelPackage.Literals.APPLY_STATEMENT__RETURN_ARG);
+	}
+	
+	private boolean isApplyStatementMatch(EObject context, EReference reference) {
+		 return (context instanceof ApplyStatement && reference == GrapelPackage.Literals.APPLY_STATEMENT__MATCH);
+	}
+	
+	private IScope getScopeForApplyStatementArg(ApplyStatement context) {
+		EventPattern eventPattern = (EventPattern)context.eContainer();
+		if(eventPattern.getReturnType() != null && eventPattern.getReturnType() instanceof ReturnApply) {
+			ReturnApply spawn = (ReturnApply)eventPattern.getReturnType();
+			return Scopes.scopeFor(Arrays.asList(new EObject[]{spawn.getReturnType()}));
+		} else if(eventPattern.getReturnType() != null && eventPattern.getReturnType() instanceof ReturnSpawn) {
+			Scopes.scopeFor(new LinkedList<>());
+		}
+		return Scopes.scopeFor(getGTFile(context).getPatterns().stream()
+				.filter(pattern -> GTEditorPatternUtils.containsCreatedOrDeletedElements(pattern))
+				.collect(Collectors.toList()));
+	}
+	
+	private IScope getScopeForApplyStatementMatch(ApplyStatement context) {
+		EventPattern eventPattern = (EventPattern)context.eContainer();
+		return Scopes.scopeFor(eventPattern.getNodes().stream()
+				.filter(node -> node.getType() instanceof EditorPattern)
+				.filter(node -> node.getType().equals(context.getReturnArg()))
+				.collect(Collectors.toList()));
 	}
 
 	private IScope getScopeForGrapelAttributeConstraints(AttributeConstraint context, EReference reference) {
