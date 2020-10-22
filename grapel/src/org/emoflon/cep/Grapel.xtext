@@ -36,15 +36,35 @@ EventPattern:
 ;
 
 ReturnType:
+	ReturnSpawn | ReturnApply
+;
+
+ReturnSpawn:
 	'spawns' returnType=[Event|ID]
 ;
 
+ReturnApply:
+	'applies' returnType=[GT::EditorPattern|ID]
+;
+
 ReturnStatement:
+	SpawnStatement | ApplyStatement
+;
+
+SpawnStatement:
 	'spawn' returnArg=[Event|ID]'('
 		(returnParams+=AttributeExpression 
 			(',' returnParams+=AttributeExpression)* 
 		)?
 	')'
+;
+
+ApplyStatement:
+	'apply' returnArg=[GT::EditorPattern|ID]'('
+		(returnParams+=AttributeExpression 
+			(',' returnParams+=AttributeExpression)* 
+		)?
+	')' 'to' match=[EventPatternNode|ID]
 ;
 
 EventPatternNode:

@@ -31,13 +31,23 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnStatement" eType="#//ReturnStatement"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ReturnType">
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnSpawn" eSuperTypes="#//ReturnType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//Event"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnApply" eSuperTypes="#//ReturnType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass platform:/resource/org.emoflon.ibex.gt.editor/model/generated/GT.ecore#//EditorPattern"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="returnArg" eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnParams" upperBound="-1"
         eType="#//AttributeExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpawnStatement" eSuperTypes="#//ReturnStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnArg" eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyStatement" eSuperTypes="#//ReturnStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnArg" eType="ecore:EClass platform:/resource/org.emoflon.ibex.gt.editor/model/generated/GT.ecore#//EditorPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="match" eType="#//EventPatternNode"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventPatternNode">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

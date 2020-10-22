@@ -66,12 +66,22 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/attributeConstraint"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//EventPattern/returnStatement"/>
     </genClasses>
-    <genClasses ecoreClass="Grapel.ecore#//ReturnType">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//ReturnType/returnType"/>
+    <genClasses ecoreClass="Grapel.ecore#//ReturnType"/>
+    <genClasses ecoreClass="Grapel.ecore#//ReturnSpawn">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//ReturnSpawn/returnType"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//ReturnApply">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//ReturnApply/returnType"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//ReturnStatement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//ReturnStatement/returnArg"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//ReturnStatement/returnParams"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//SpawnStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//SpawnStatement/returnArg"/>
+    </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//ApplyStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//ApplyStatement/returnArg"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//ApplyStatement/match"/>
     </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//EventPatternNode">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//EventPatternNode/name"/>
