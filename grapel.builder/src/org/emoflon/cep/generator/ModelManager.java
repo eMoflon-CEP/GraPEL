@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EDataType;
+import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXRule;
 
 import GrapeLModel.ComplexAttribute;
 import GrapeLModel.Event;
@@ -27,6 +28,7 @@ public class ModelManager {
 	private Map<String, Event> events = new HashMap<>();
 	private Map<String, Map<String, EventAttribute>> fields = new LinkedHashMap<>();
 	private Map<String, Map<String, SimpleAttribute>> parameterFields = new LinkedHashMap<>();
+	private Map<String, IBeXRule> patternName2Rule = new LinkedHashMap<>();
 	
 	private void mapFields() {
 		container.getEvents().forEach(event -> {
@@ -145,6 +147,20 @@ public class ModelManager {
 			return "string";
 		}else if(type.getName().equals("EBoolean")) {
 			return "boolean";
+		}else {
+			throw new RuntimeException("Unsupported type: "+type.getName());
+		}
+	}
+	
+	public static String eDataTypeDefaultValue(final EDataType type) {
+		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
+			return "0";
+		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
+			return "0.0";
+		}else if(type.getName().equals("EString") || type.getName().equals("EChar")) {
+			return "\"\"";
+		}else if(type.getName().equals("EBoolean")) {
+			return "true";
 		}else {
 			throw new RuntimeException("Unsupported type: "+type.getName());
 		}

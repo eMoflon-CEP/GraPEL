@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.MatchEvent;
+import GrapeLModel.RuleEvent;
 
 public class GrapelAPIGenerator {
 	
@@ -51,11 +52,16 @@ public class GrapelAPIGenerator {
 		});
 		
 		container.getEvents().forEach(event -> {
-			if(event instanceof MatchEvent) {
+			if(event instanceof RuleEvent) {
+				templates.add(new MatchEventTemplate(imports, names, paths, model, event.getName()));
+				templates.add(new RuleEventTemplate(imports, names, paths, model, event.getName()));
+				templates.add(new RuleEventHandlerTemplate(imports, names, paths, model, event.getName()));
+				templates.add(new MatchEventMonitorTemplate(event.getName(), imports, names, paths, model));
+			}else if(event instanceof MatchEvent && !(event instanceof RuleEvent)) {
 				templates.add(new MatchEventTemplate(imports, names, paths, model, event.getName()));
 				templates.add(new MatchEventHandlerTemplate(imports, names, paths, model, event.getName()));
 				templates.add(new MatchEventMonitorTemplate(event.getName(), imports, names, paths, model));
-			}else {
+			} else {
 				templates.add(new EventTemplate(imports, names, paths, model, event.getName()));
 				templates.add(new EventHandlerTemplate(imports, names, paths, model, event.getName()));
 				templates.add(new EventMonitorTemplate(event.getName(), imports, names, paths, model));

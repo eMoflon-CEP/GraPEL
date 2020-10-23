@@ -4,7 +4,7 @@ import org.emoflon.cep.generator.EventTemplate
 import GrapeLModel.EventAttribute
 import GrapeLModel.VirtualEventAttribute
 
-class MatchEventTemplate extends EventTemplate {
+class RuleEventTemplate extends EventTemplate {
 	
 	new(ImportManager imports, NSManager names, PathManager paths, ModelManager model, String patternName) {
 		super(imports, names, paths, model, patternName)
@@ -15,32 +15,31 @@ class MatchEventTemplate extends EventTemplate {
 		
 import org.emoflon.cep.engine.EMoflonEvent;
 import org.emoflon.cep.engine.TypeRegistry;
-import org.emoflon.ibex.common.operational.IMatch;
-import org.emoflon.ibex.common.operational.SimpleMatch;
+import org.emoflon.cep.engine.GrapeLMatch;
 		
 import com.apama.event.parser.EventType;
 import com.apama.event.parser.FieldTypes;
 
-import «imports.getPatternFQN(eventName, !model.isMatchEventRuleEvent(eventName))»;
+import «imports.getPatternFQN(eventName, false)»;
 import «imports.getMatchFQN(eventName)»;
 «FOR fieldName : model.getComplexFields(eventName).map[field | imports.getFieldFQN(eventName, field.name)].toSet»
 import «fieldName»;
 «ENDFOR»
 		
-public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names.getMatchName(eventName)», «names.getPatternName(eventName, !model.isMatchEventRuleEvent(eventName))»>{
+public class «names.getMatchEventName(eventName)»Application extends EMoflonEvent<«names.getMatchName(eventName)», «names.getPatternName(eventName, false)»>{
 			
-	final public static String EVENT_NAME = "«eventName»";
+	final public static String EVENT_NAME = "«eventName»Application";
 	final public static EventType EVENT_TYPE = createEventType();
 	
-	public «names.getEventName(eventName)»(final «names.getPatternName(eventName, !model.isMatchEventRuleEvent(eventName))» pattern, final «names.getMatchName(eventName)» match, boolean vanished) {
+	public «names.getEventName(eventName)»Application(final «names.getPatternName(eventName, false)» pattern, final «names.getMatchName(eventName)» match, boolean vanished) {
 		super(pattern, match, vanished);
 	}
 			
-	public «names.getEventName(eventName)»(final com.apama.event.Event apamaEvent, final TypeRegistry registry, final «names.getPatternName(eventName, !model.isMatchEventRuleEvent(eventName))» pattern) {
+	public «names.getEventName(eventName)»Application(final com.apama.event.Event apamaEvent, final TypeRegistry registry, final «names.getPatternName(eventName, false)» pattern) {
 		super(apamaEvent, registry, pattern);
 	}
 	
-	«FOR field : model.getNonVirtualFields(eventName)»
+	«FOR field : model.getApplicationEventFields(eventName)»
 	public «ModelManager.getJavaFieldType(field)» get«StringUtil.firstToUpper(field.name)»() {
 		return («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
 	}
@@ -48,10 +47,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 
 	@Override
 	public void assignFields() {
-		fields.put("vanished", vanished);
-		«FOR field : model.getFields(eventName)»
-		fields.put("«field.name»", «getAccessAttribute(field)»);
-		«ENDFOR»
+		throw new UnsupportedOperationException();
 	}
 		
 	@Override
@@ -61,8 +57,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 			
 	public static EventType createEventType() {
 		EventType type = new EventType(EVENT_NAME);
-		type.addField("vanished", FieldTypes.BOOLEAN);
-		«FOR field : model.getFields(eventName)»
+		«FOR field : model.getApplicationEventFields(eventName)»
 		type.addField("«field.name»", «ModelManager.getApamaFieldType(field)»);
 		«ENDFOR»
 		return type;
@@ -70,7 +65,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 		
 	@Override
 	public boolean isComplexType(String fieldName) {
-		«FOR field : model.getFields(eventName)»
+		«FOR field : model.getComplexFields(eventName)»
 		if("«field.name»".equals(fieldName)) {
 			return true;
 		}
@@ -80,7 +75,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 		
 	@Override
 	public Class<?> getClassOfField(String fieldName) {
-		«FOR field : model.getFields(eventName)»
+		«FOR field : model.getApplicationEventFields(eventName)»
 		if("«field.name»".equals(fieldName)) {
 			return «ModelManager.getJavaFieldType(field)».class;
 		}
@@ -90,13 +85,16 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 	
 	@Override
 	public void assignMatch() {
-		IMatch iMatch = new SimpleMatch(pattern.getPatternName());
+		GrapeLMatch iMatch = new GrapeLMatch(pattern.getPatternName());
 		«FOR field : model.getNonVirtualFields(eventName)»
 		iMatch.put("«field.name»", fields.get("«field.name»"));
 		«ENDFOR»
+		«FOR field : model.getParameterFields(eventName)»
+		iMatch.addRuleParameter("«field.name»", fields.get("«field.name»"));
+		«ENDFOR»
 		«names.getMatchName(eventName)» match = new «names.getMatchName(eventName)»(pattern, iMatch);
 		this.match = match;
-	}	
+	}
 }
 '''		
 	}
@@ -108,6 +106,10 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 			val vAtr = eAtr as VirtualEventAttribute
 			return '''match.get«StringUtil.firstToUpper(vAtr.baseAttribute.name)»().get«StringUtil.firstToUpper(vAtr.attribute.name)»()'''
 		}
+	}
+	
+	override getPath() {
+		return paths.getRuleEventLocation(eventName)
 	}
 	
 }

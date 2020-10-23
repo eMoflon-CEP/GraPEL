@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.moflon.core.utilities.WorkspaceHelper;
 
 import GrapeLModel.GrapeLModelContainer;
+import GrapeLModel.RuleEvent;
 
 public class PathManager {
 	
@@ -36,6 +37,7 @@ public class PathManager {
 	private Map<String, String> patternMonitors = new HashMap<>();
 	private Map<String, String> eventMonitors = new HashMap<>();
 	private Map<String, String> events = new HashMap<>();
+	private Map<String, String> ruleEvents = new HashMap<>();
 	private Map<String, String> eventHandler = new HashMap<>();
 	
 	private void mapMonitors() {
@@ -53,6 +55,9 @@ public class PathManager {
 		container.getEvents().forEach(event -> {
 			events.put(event.getName(), eventFolder+"/"+names.getEventName(event.getName())+".java");
 			eventHandler.put(event.getName(), handlerFolder+"/"+names.getEventHandlerName(event.getName())+".java");
+			if(event instanceof RuleEvent) {
+				ruleEvents.put(event.getName(), eventFolder+"/"+names.getEventName(event.getName())+"Application.java");
+			}
 		});
 		
 		events.put(NSManager.SYNCHRONIZATION_EVENT, eventMonitorFolder+"/RequestSynchronizationEvent.mon");
@@ -109,6 +114,10 @@ public class PathManager {
 	
 	public String getEventLocation(String eventName) {
 		return events.get(eventName);
+	}
+	
+	public String getRuleEventLocation(String eventName) {
+		return ruleEvents.get(eventName);
 	}
 	
 	public String getEventHandlerLocation(String eventHandlerName) {
