@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EDataType;
-import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXRule;
 
 import GrapeLModel.ComplexAttribute;
 import GrapeLModel.Event;
@@ -28,7 +27,6 @@ public class ModelManager {
 	private Map<String, Event> events = new HashMap<>();
 	private Map<String, Map<String, EventAttribute>> fields = new LinkedHashMap<>();
 	private Map<String, Map<String, SimpleAttribute>> parameterFields = new LinkedHashMap<>();
-	private Map<String, IBeXRule> patternName2Rule = new LinkedHashMap<>();
 	
 	private void mapFields() {
 		container.getEvents().forEach(event -> {

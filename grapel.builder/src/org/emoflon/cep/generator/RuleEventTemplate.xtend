@@ -15,7 +15,8 @@ class RuleEventTemplate extends EventTemplate {
 		
 import org.emoflon.cep.engine.EMoflonEvent;
 import org.emoflon.cep.engine.TypeRegistry;
-import org.emoflon.cep.engine.GrapeLMatch;
+import org.emoflon.ibex.common.operational.IMatch;
+import org.emoflon.ibex.common.operational.SimpleMatch;
 		
 import com.apama.event.parser.EventType;
 import com.apama.event.parser.FieldTypes;
@@ -85,7 +86,7 @@ public class «names.getMatchEventName(eventName)»Application extends EMoflonEv
 	
 	@Override
 	public void assignMatch() {
-		GrapeLMatch iMatch = new GrapeLMatch(pattern.getPatternName());
+		IMatch iMatch = new SimpleMatch(pattern.getPatternName());
 		«FOR field : model.getNonVirtualFields(eventName)»
 		iMatch.put("«field.name»", fields.get("«field.name»"));
 		«ENDFOR»

@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 import org.emoflon.ibex.gt.api.GraphTransformationMatch;
@@ -16,9 +18,11 @@ import com.apama.event.parser.EventType;
 public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E extends EMoflonEvent<M,P>, M extends GraphTransformationMatch<M, P>, P extends GraphTransformationRule<M, P>> extends EMoflonEventHandler<E, M, P> {
 
 	protected EventType apamaRuleEventType;
+	protected boolean applyAutomatically = false;
 	protected Collection<R> ruleEvents = Collections.synchronizedList(new LinkedList<>());
 	protected Collection<R> lastRuleEvents = Collections.synchronizedList(new LinkedList<>());
 	protected Set<Consumer<R>> ruleSubscriber = new LinkedHashSet<>();
+	protected Queue<R> eventQueue = new LinkedBlockingQueue<>();
 	
 	public EMoflonRuleEventHandler(GrapeEngine engine) {
 		super(engine);
@@ -30,7 +34,24 @@ public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E ex
 		apamaRuleEventType = getRuleEventType();
 	}
 	
+	public void setApplyAutomatically(boolean applyAutomatically) {
+		this.applyAutomatically = applyAutomatically;
+	}
+	
 	protected abstract R convertRuleEvent(final com.apama.event.Event apamaEvent);
+	
+	public void applyAutmatically() {
+		if(!applyAutomatically)
+			return;
+		
+		while(!eventQueue.isEmpty()) {
+			engine.getEMoflonAPI().updateMatches();
+			R event = eventQueue.poll();
+			if(pattern.findMatches().contains(event.getMatch())) {
+				apply(event.getMatch(), event);
+			}
+		}
+	}
 	
 	protected abstract M apply(M match, R event);
 	
@@ -43,12 +64,15 @@ public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E ex
 			ruleEvents.add(event);
 			lastRuleEvents.add(event);
 			ruleSubscriber.forEach(sub -> sub.accept(event));
-			//apply rule
-			engine.getEMoflonAPI().updateMatches();
-			if(pattern.findMatches().contains(event.getMatch())) {
-				apply(event.getMatch(), event);
-			}
+			// stash event
+			eventQueue.add(event);
 		}
+	}
+	
+	@Override
+	protected void clearRecentEvents() {
+		super.clearRecentEvents();
+		lastRuleEvents.clear();
 	}
 	
 	public boolean subscribeRuleEvents(Consumer<R> consumer) {

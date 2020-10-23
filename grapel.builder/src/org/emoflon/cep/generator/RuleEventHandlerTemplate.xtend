@@ -76,8 +76,10 @@ public class «names.getMatchEventHandlerName(eventName)» extends EMoflonRuleEv
 	
 	@Override
 	protected «names.getMatchName(eventName)» apply(«names.getMatchName(eventName)» match, «names.getMatchEventName(eventName)»Application event) {
-		//TODO..
-		return null;
+		«FOR param : model.getParameterFields(eventName)»
+		pattern.set«param.name.toFirstUpper»(event.get«param.name.toFirstUpper»);
+		«ENDFOR»
+		return pattern.apply(match);
 	}
 
 	@Override
