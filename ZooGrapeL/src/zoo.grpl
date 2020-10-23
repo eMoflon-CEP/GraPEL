@@ -57,7 +57,7 @@ event bearBeforeApe {
 }
 event sizeWarning {
 	Enclosure enclosure;
-	EDouble maxSize;
+	Animal animal;
 }
 event capacityWarning {
 	Enclosure enclosure;
@@ -98,15 +98,29 @@ event animalsWithSameNameAndAge4 {
 	EString name;
 	EInt age;
 }
+event enviromentMissmatchWarning {
+	Enclosure enclosurue;
+	Animal animal;
+}
 event toleranceSinCosWarning {
 	Bear bear;
 	EDouble tolerance;
 }
 
+event_pattern enviromentCheck spawns enviromentMissmatchWarning {
+	newAnimal: animalInEnclosure
+	
+	# all(newAnimal) {
+		! vanished(newAnimal) &&
+		newAnimal.enclosure.enviromentType != newAnimal.animal.preferedEnviroment
+	}
+	
+	spawn enviromentMissmatchWarning(newAnimal.enclosure,newAnimal.animal)
+}
 event_pattern temperatureCheck spawns tempartureWarning {
 	newAnimal: animalInEnclosure
 	
-	#newAnimal {
+	# all(newAnimal) {
 		! vanished(newAnimal) &&
 		newAnimal.animal.tolerance >= abs(newAnimal.animal.preferedTemperature - newAnimal.enclosure.temperature)
 	}
@@ -131,27 +145,27 @@ event_pattern bearBeforeApeCheck spawns bearBeforeApe {
 	
 	newBear.enclosure == newApe.enclosure
 	
-	#newBear -> newApe {
+	# all(newBear) -> all(newApe) {
 		[! vanished(newBear) && ! vanished(newApe)]
 	}
 	
 	spawn bearBeforeApe(newApe.enclosure, newBear.bear, newApe.ape)
 }
-// meta model doesn't update even though changed in graphics editor
-//event_pattern sizeCheck spawns sizeWarning {
-//	newAnimal: animalInEnclosure
-//	
-//	newAnimal{
-//		! vanished(newAnimal)
-//	}
-//	
-//	spawn sizeWarning(newAnimal.enclosure,enclsoureSize.enclosure.maxSize)
-//}
+event_pattern sizeCheck spawns sizeWarning {
+	newAnimal: animalInEnclosure
+	
+	# all(newAnimal) {
+		! vanished(newAnimal) &&
+		newAnimal.animal.sizeModifier > newAnimal.enclosure.maxSize
+	}
+	
+	spawn sizeWarning(newAnimal.enclosure,newAnimal.animal)
+}
 // not needed -> direct pattern, count included?
-event_pattern sizeCheck spawns capacityWarning {
+event_pattern capacityCheck spawns capacityWarning {
 	encolsureCapacity: moreAnimalsThanCapacity
 	
-	#encolsureCapacity{
+	# all(encolsureCapacity) {
 		! vanished(encolsureCapacity)
 	}
 	
@@ -160,7 +174,7 @@ event_pattern sizeCheck spawns capacityWarning {
 event_pattern toleranceOfBearSinCosCheck spawns toleranceSinCosWarning {
 	newBear: bearInEnclosure
 	
-	#newBear {
+	# all(newBear) {
 		! vanished(newBear) &&
 		sin(newBear.bear.tolerance) == cos(newBear.bear.tolerance)
 	}
@@ -173,7 +187,7 @@ event_pattern nameCheck spawns animalsWithSameName {
 	
 //	animal1.animal.name == animal2.animal.name // cannot put attributes in constraint here
 	
-	#animal1 && animal2 {
+	# all(animal1) && all(animal2) {
 		animal1.animal.name == animal2.animal.name &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
@@ -186,7 +200,7 @@ event_pattern ageCheck spawns animalsWithSameAge {
 	
 //	animal1.animal.age == animal2.animal.age // cannot put attributes in constraint here
 	
-	#animal1 && animal2 {
+	# all(animal1) && all(animal2) {
 		animal1.animal.age == animal2.animal.age &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
@@ -197,7 +211,7 @@ event_pattern nameAndAgeCheck1 spawns animalsWithSameNameAndAge1 {
 	animal1: animalInEnclosure
 	animal2: animalInEnclosure
 	
-	#animal1 && animal2 {
+	# all(animal1) && all(animal2) {
 		animal1.animal.name + animal1.animal.age == animal2.animal.name + animal2.animal.age &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
@@ -222,7 +236,7 @@ event_pattern nameAndAgeCheck3 spawns animalsWithSameNameAndAge3 {
 	
 //	animal1.animal.name == animal2.animal.name && animal1.animal.age == animal2.animal.age // cannot put attributes in constraint here
 	
-	#animal1 && animal2 {
+	# all(animal1) && all(animal2) {
 		animal1.animal.name == animal2.animal.name && animal1.animal.age == animal2.animal.age &&
 		! vanished(animal1) && ! vanished(animal2)
 	}
