@@ -29,7 +29,6 @@ import GrapeLModel.ContextConstraint
 import GrapeLModel.NodeContextConstraint
 import GrapeLModel.ContextRelation
 import GrapeLModel.RelationalConstraint
-import GrapeLModel.ReturnStatement
 import GrapeLModel.RelationalConstraintLiteral
 import GrapeLModel.RelationalConstraintProduction
 import GrapeLModel.RelationalConstraintOperator
@@ -43,6 +42,8 @@ import GrapeLModel.AttributeConstraintUnaryOperator
 import org.eclipse.emf.ecore.EDataType
 import org.eclipse.emf.ecore.EcorePackage
 import GrapeLModel.RelationalConstraintUnary
+import GrapeLModel.SpawnStatement
+import GrapeLModel.ApplyStatement
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -77,7 +78,8 @@ class EventPatternTemplate extends AbstractTemplate{
 					
 	«IF pattern.attributeConstraint !== null»«getAttributeConstraint(pattern.attributeConstraint)»«ENDIF»
 			
-	«getSendAction(pattern.returnStatement)»
+	«if(pattern.returnStatement instanceof SpawnStatement) getSendAction(pattern.returnStatement as SpawnStatement) 
+	else getSendAction(pattern.returnStatement as ApplyStatement)»
 }
 '''
 	}
@@ -114,10 +116,12 @@ class EventPatternTemplate extends AbstractTemplate{
 	
 	def String getRelationalConstraintBody(Context context, AttributeConstraint constraint) {
 		if(context === null && constraint === null) {
-			return '''«sendActionName»(«getSendActionParams(pattern.returnStatement)»);'''
+			return '''«sendActionName»(«if(pattern.returnStatement instanceof SpawnStatement) getSendActionParams(pattern.returnStatement as SpawnStatement) 
+			else getSendActionParams(pattern.returnStatement as ApplyStatement)»);'''
 		} else {
 			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» and «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
-	«sendActionName»(«getSendActionParams(pattern.returnStatement)»);
+	«sendActionName»(«if(pattern.returnStatement instanceof SpawnStatement) getSendActionParams(pattern.returnStatement as SpawnStatement) 
+	else getSendActionParams(pattern.returnStatement as ApplyStatement)»);
 }'''
 		}
 		
@@ -147,14 +151,27 @@ action «attributeConstraint»(«FOR param : constraint.params.map[param | event
 '''
 	}
 	
-	def String getSendActionParams(ReturnStatement returnStatement) {
+	def String getSendActionParams(SpawnStatement returnStatement) {
+		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
+	}
+//	TODO:!
+	def String getSendActionParams(ApplyStatement returnStatement) {
 		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
-	def String getSendAction(ReturnStatement returnStatement) {
+	def String getSendAction(SpawnStatement returnStatement) {
 		return '''
 action «sendActionName»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
 	send «returnStatement.returnType.name»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«param.name»«ENDFOR») to eventChannel;
+}
+'''		
+	}
+	
+//	TODO:!
+	def String getSendAction(ApplyStatement returnStatement) {
+		return '''
+action «sendActionName»(«FOR param : model.getApplicationEventFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
+	send «returnStatement.returnType.name»Application(«FOR param : model.getApplicationEventFields(returnStatement.returnType.name) SEPARATOR ', '»«param.name»«ENDFOR») to eventChannel;
 }
 '''		
 	}

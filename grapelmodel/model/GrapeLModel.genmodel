@@ -106,6 +106,7 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//ApplyStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ApplyStatement/returnType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ApplyStatement/patternParameters"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ApplyStatement/matchEvent"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//EventPatternNode">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventPatternNode/name"/>

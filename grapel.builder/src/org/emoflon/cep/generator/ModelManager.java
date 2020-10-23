@@ -3,19 +3,18 @@ package org.emoflon.cep.generator;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EDataType;
 
-import GrapeLModel.Event;
-import GrapeLModel.AttributeConstraint;
 import GrapeLModel.ComplexAttribute;
+import GrapeLModel.Event;
 import GrapeLModel.EventAttribute;
 import GrapeLModel.EventPattern;
 import GrapeLModel.GrapeLModelContainer;
+import GrapeLModel.RuleEvent;
 import GrapeLModel.SimpleAttribute;
 import GrapeLModel.VirtualEventAttribute;
 
@@ -25,15 +24,25 @@ public class ModelManager {
 	private GrapeLModelContainer container;
 	
 	private Map<String, EventPattern> eventPatterns = new HashMap<>();
+	private Map<String, Event> events = new HashMap<>();
 	private Map<String, Map<String, EventAttribute>> fields = new LinkedHashMap<>();
+	private Map<String, Map<String, SimpleAttribute>> parameterFields = new LinkedHashMap<>();
 	
 	private void mapFields() {
 		container.getEvents().forEach(event -> {
+			events.put(event.getName(), event);
 			Map<String, EventAttribute> localFields = new LinkedHashMap<>();
 			fields.put(event.getName(), localFields);
 			event.getAttributes().forEach(atr -> {
 				localFields.put(atr.getName(), atr);
 			});
+			if(event instanceof RuleEvent) {
+				Map<String, SimpleAttribute> localParameters = new LinkedHashMap<>();
+				parameterFields.put(event.getName(), localParameters);
+				((RuleEvent) event).getParameterAttributes().forEach(atr -> {
+					localParameters.put(atr.getName(), atr);
+				});
+			}
 		});
 	}
 	
@@ -54,6 +63,10 @@ public class ModelManager {
 		return fields.get(eventName).values();
 	}
 	
+	public Collection<SimpleAttribute> getParameterFields(String eventName) {
+		return parameterFields.get(eventName).values();
+	}
+	
 	public Collection<EventAttribute> getNonVirtualFields(String eventName) {
 		return fields.get(eventName).values().stream().filter(eatr -> !(eatr instanceof VirtualEventAttribute)).distinct().collect(Collectors.toList());
 	}
@@ -62,8 +75,16 @@ public class ModelManager {
 		return getFields(eventName).stream().filter(field -> (field instanceof ComplexAttribute)).distinct().collect(Collectors.toList());
 	}
 	
+	public Collection<EventAttribute> getApplicationEventFields(String eventName) {
+		return Stream.concat(getParameterFields(eventName).stream(), getComplexFields(eventName).stream()).collect(Collectors.toList());
+	}
+	
 	public EventPattern getEventPattern(String eventPattern) {
 		return eventPatterns.get(eventPattern);
+	}
+	
+	public boolean isMatchEventRuleEvent(String eventName) {
+		return events.get(eventName) instanceof RuleEvent;
 	}
 	
 	public static String getApamaFieldType(EventAttribute field) {
@@ -127,5 +148,9 @@ public class ModelManager {
 		}else {
 			throw new RuntimeException("Unsupported type: "+type.getName());
 		}
+	}
+
+	public String getProjectName() {
+		return projectName;
 	}
 }
