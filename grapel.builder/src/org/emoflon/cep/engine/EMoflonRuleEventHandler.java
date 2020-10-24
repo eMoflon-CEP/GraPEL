@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -53,7 +54,7 @@ public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E ex
 		}
 	}
 	
-	protected abstract M apply(M match, R event);
+	protected abstract Optional<M> apply(M match, R event);
 	
 	@Override
 	public void handleEvent(com.apama.event.Event arg0) {

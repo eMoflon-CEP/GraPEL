@@ -13,6 +13,7 @@ class RuleEventHandlerTemplate extends EventHandlerTemplate {
 
 import java.io.IOException;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 import org.emoflon.cep.engine.EMoflonRuleEventHandler;
 import org.emoflon.cep.engine.GrapeEngine;
@@ -75,9 +76,9 @@ public class «names.getMatchEventHandlerName(eventName)» extends EMoflonRuleEv
 	}
 	
 	@Override
-	protected «names.getMatchName(eventName)» apply(«names.getMatchName(eventName)» match, «names.getMatchEventName(eventName)»Application event) {
+	protected Optional<«names.getMatchName(eventName)»> apply(«names.getMatchName(eventName)» match, «names.getMatchEventName(eventName)»Application event) {
 		«FOR param : model.getParameterFields(eventName)»
-		pattern.set«param.name.toFirstUpper»(event.get«param.name.toFirstUpper»);
+		pattern.set«param.name.toFirstUpper»(event.get«param.name.toFirstUpper»());
 		«ENDFOR»
 		return pattern.apply(match);
 	}

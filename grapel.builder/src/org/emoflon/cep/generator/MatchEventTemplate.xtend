@@ -94,8 +94,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 		«FOR field : model.getNonVirtualFields(eventName)»
 		iMatch.put("«field.name»", fields.get("«field.name»"));
 		«ENDFOR»
-		«names.getMatchName(eventName)» match = new «names.getMatchName(eventName)»(pattern, iMatch);
-		this.match = match;
+		this.match = new «names.getMatchName(eventName)»(pattern, iMatch);
 	}	
 }
 '''		
