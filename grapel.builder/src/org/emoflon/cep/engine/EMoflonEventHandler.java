@@ -34,8 +34,21 @@ public abstract class EMoflonEventHandler <E extends EMoflonEvent<M,P>, M extend
 	
 	protected abstract E matchToEvent(M match, boolean vanished);
 	
-	// todo set paused
-	// todo set continue -> spin all queues & reinit
+	protected void pauseSubsciptions() {
+		paused = true;
+	}
+	
+	protected void continueSubscriptions() {
+		while(!disappearingQueue.isEmpty()) {
+			sendEvent(matchToEvent(disappearingQueue.poll(), true));
+		}
+		
+		while(!appearingQueue.isEmpty()) {
+			sendEvent(matchToEvent(appearingQueue.poll(), false));
+		}
+		
+		paused = false;
+	}
 	
 	protected void sendAppearingMatchToApama(M match) {
 		if(!paused)

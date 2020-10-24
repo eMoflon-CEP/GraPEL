@@ -128,9 +128,20 @@ public class GrapeEngine implements IEventListener{
 			recentEvents.replace(name, handler.getNewEvents());
 		});
 		
+		// Pause eMoflon -> Apama subscriptions
+		eventHandler.values().stream().filter(handler->(handler instanceof EMoflonEventHandler))
+		.map(handler -> (EMoflonEventHandler<?,?,?>)handler)
+		.forEach(handler -> handler.pauseSubsciptions());
+		
+		// Apply all rule events
 		eventHandler.values().stream().filter(handler->(handler instanceof EMoflonRuleEventHandler))
 		.map(handler -> (EMoflonRuleEventHandler<?,?,?,?>)handler)
 		.forEach(handler -> handler.applyAutmatically());
+		
+		// Unpause eMoflon -> Apama subscriptions
+		eventHandler.values().stream().filter(handler->(handler instanceof EMoflonEventHandler))
+		.map(handler -> (EMoflonEventHandler<?,?,?>)handler)
+		.forEach(handler -> handler.continueSubscriptions());
 	}
 	
 	public Map<String, Collection<? extends Event>> getAllEvents() {
