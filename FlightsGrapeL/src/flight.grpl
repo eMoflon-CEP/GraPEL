@@ -92,19 +92,19 @@ pattern travelHasConnectingFlight {
 //	spawn e1(dot.airport.ID,dot2.airport.size)                        
 //}
 
-rule dummy(str: EString) {
-	airport : Airport {
-		.ID := param::str
-	}
-} 
-
-event_pattern dummy2 applies dummy {
-	d : dummy
-	
-	#d
-	
-	apply dummy("Value") to d
-}
+//rule dummy(str: EString) {
+//	airport : Airport {
+//		.ID := param::str
+//	}
+//} 
+//
+//event_pattern dummy2 applies dummy {
+//	d : dummy
+//	
+//	#d
+//	
+//	apply dummy("Value") to d
+//}
 
 event_pattern hasContainer spawns modelContainer {
 	event1: container

@@ -14,6 +14,7 @@ import org.emoflon.ibex.gt.api.GraphTransformationMatch;
 import org.emoflon.ibex.gt.api.GraphTransformationRule;
 
 import com.apama.EngineException;
+import com.apama.engine.MonitorScript;
 import com.apama.event.parser.EventType;
 
 public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E extends EMoflonEvent<M,P>, M extends GraphTransformationMatch<M, P>, P extends GraphTransformationRule<M, P>> extends EMoflonEventHandler<E, M, P> {
@@ -31,8 +32,18 @@ public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E ex
 
 	@Override
 	public void init() throws EngineException {
-		super.init();
+		apamaEventType = getEventType();
 		apamaRuleEventType = getRuleEventType();
+		parser.registerEventType(apamaEventType);
+		parser.registerEventType(apamaRuleEventType);
+		
+		MonitorScript script = new MonitorScript(loadEPLDescription());
+		engineClient.injectMonitorScript(script);
+		eventConsumer = engineClient.addConsumer(getHandlerName(), getChannelNames());
+		eventConsumer.addEventListener(this);
+		
+		pattern = getPattern();
+		subscribeToPattern(this::sendAppearingMatchToApama, this::sendDisappearingMatchToApama);
 	}
 	
 	public void setApplyAutomatically(boolean applyAutomatically) {
@@ -58,8 +69,12 @@ public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E ex
 	
 	@Override
 	public void handleEvent(com.apama.event.Event arg0) {
+		arg0.setEventParser(parser);
 		if(arg0.getEventType().getName().equals(apamaEventType.getName())) {
-			super.handleEvent(arg0);
+			E event = convertEvent(arg0);
+			events.add(event);
+			lastEvents.add(event);
+			subscriber.forEach(sub -> sub.accept(event));
 		} else if(arg0.getEventType().getName().equals(apamaRuleEventType.getName())) {
 			R event = convertRuleEvent(arg0);
 			ruleEvents.add(event);

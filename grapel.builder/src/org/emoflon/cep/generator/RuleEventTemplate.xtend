@@ -87,7 +87,7 @@ public class «names.getMatchEventName(eventName)»Application extends EMoflonEv
 	@Override
 	public void assignMatch() {
 		IMatch iMatch = new SimpleMatch(pattern.getPatternName());
-		«FOR field : model.getNonVirtualFields(eventName)»
+		«FOR field : model.getComplexFields(eventName)»
 		iMatch.put("«field.name»", fields.get("«field.name»"));
 		«ENDFOR»
 		this.match = new «names.getMatchName(eventName)»(pattern, iMatch);

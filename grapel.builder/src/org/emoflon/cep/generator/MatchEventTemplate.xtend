@@ -70,7 +70,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 		
 	@Override
 	public boolean isComplexType(String fieldName) {
-		«FOR field : model.getFields(eventName)»
+		«FOR field : model.getComplexFields(eventName)»
 		if("«field.name»".equals(fieldName)) {
 			return true;
 		}
@@ -91,7 +91,7 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 	@Override
 	public void assignMatch() {
 		IMatch iMatch = new SimpleMatch(pattern.getPatternName());
-		«FOR field : model.getNonVirtualFields(eventName)»
+		«FOR field : model.getComplexFields(eventName)»
 		iMatch.put("«field.name»", fields.get("«field.name»"));
 		«ENDFOR»
 		this.match = new «names.getMatchName(eventName)»(pattern, iMatch);

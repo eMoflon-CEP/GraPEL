@@ -167,6 +167,9 @@ public class GrapeEngine implements IEventListener{
 	protected void addEventHandler(final EventHandler<? extends Event> handler) {
 		handler.setEventParser(parser);
 		eventTypes.put(handler.getHandlerName(), handler.getEventType());
+//		if(handler instanceof EMoflonRuleEventHandler) {
+//			((EMoflonRuleEventHandler)handler)
+//		}
 		eventHandler.put(handler.getHandlerName(), handler);
 	}
 	

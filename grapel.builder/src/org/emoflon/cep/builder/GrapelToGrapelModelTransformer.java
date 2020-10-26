@@ -99,12 +99,12 @@ public class GrapelToGrapelModelTransformer {
 		mapEditor2IBeXPatterns(grapelFile);
 		
 		//transform events
-		container.getEvents().addAll(grapelFile.getEvents().parallelStream()
+		container.getEvents().addAll(grapelFile.getEvents().stream()
 				.map(event -> transform(event))
 				.collect(Collectors.toList()));
 		
 		//transform event patterns
-		container.getEventPatterns().addAll(grapelFile.getEventPatterns().parallelStream()
+		container.getEventPatterns().addAll(grapelFile.getEventPatterns().stream()
 				.map(pattern -> transform(pattern))
 				.collect(Collectors.toList()));
 		
