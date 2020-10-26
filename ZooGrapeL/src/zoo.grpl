@@ -99,12 +99,28 @@ event animalsWithSameNameAndAge4 {
 	EInt age;
 }
 event enviromentMissmatchWarning {
-	Enclosure enclosurue;
+	Enclosure enclosure;
 	Animal animal;
 }
 event toleranceSinCosWarning {
 	Bear bear;
 	EDouble tolerance;
+}
+
+event apeKleeWarning {
+	Ape animal;
+	Enclosure enclosure;
+}
+
+event_pattern apeKleeCheck spawns apeKleeWarning {
+	newApe: apeInEnclosure
+	
+	# all(newApe) {
+		! vanished(newApe) &&
+		newApe.ape.name == "Klee"
+	} 
+	
+	spawn apeKleeWarning(newApe.ape,newApe.enclosure)
 }
 
 event_pattern enviromentCheck spawns enviromentMissmatchWarning {
