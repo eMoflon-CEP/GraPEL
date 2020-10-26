@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ZooGrapeL.grapel.Zoo.eventhandler.ContainerEventHandler;
+import ZooGrapeL.grapel.Zoo.eventhandler.HumidityWarningEventHandler;
+import ZooGrapeL.grapel.Zoo.eventhandler.TempartureWarningEventHandler;
 import zoo.Enclosure;
 import zoo.Zoo;
 
@@ -36,13 +38,32 @@ public class ZooGeneralTest extends ZooAbstractTest {
 			i = i + e.getAnimals().size();
 		assertEquals(12,i);
 	}
+//	@Test
+//	public void produces4EnviromentWarnings() {
+//		EnviromentMissmatchWarningEventHandler enviromentHandler = api.getEnviromentMissmatchWarningEventHandler();
+//		
+//		api.update();
+//		assertEquals(4, enviromentHandler.getAllEvents().size());
+//	}
 	@Test
-	public void includes4EnviromentWarnings() {
-		EnviromentMissmatchWarningEventHandler enviromentHandler = api.getEnviromentMissmatchWarningEventHandler();
+	public void produces4TemperatureWarnings() {
+		TempartureWarningEventHandler temperatureHandler = api.getTempartureWarningEventHandler();
 		
 		api.update();
-		assertEquals(4, enviromentHandler.getAllEvents().size());
+		assertEquals(4, temperatureHandler.getAllEvents().size()); // needs to change, if mixed is ignored
 	}
+	@Test
+	public void produces5HumidityWarnings() {
+		HumidityWarningEventHandler humidityHandler = api.getHumidityWarningEventHandler();
+		
+		api.update();
+		assertEquals(5, humidityHandler.getAllEvents().size()); // needs to change, if mixed is ignored
+	}
+//	@Test
+//	public void produces1SameAgeAndNameWarning() {
+//		AnimalsWithSameNameAndAge1EventHandler sameNameAndAge1 = api.getAnimalsWithSameNameAndAge1EventHandler();
+//		
+//	}
 	
 	@After
 	public void dispose() {
