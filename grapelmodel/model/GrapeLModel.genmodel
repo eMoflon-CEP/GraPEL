@@ -77,15 +77,11 @@
     </genClasses>
     <genClasses image="false" ecoreClass="GrapeLModel.ecore#//EventAttribute">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EventAttribute/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//EventAttribute/type"/>
     </genClasses>
-    <genClasses ecoreClass="GrapeLModel.ecore#//SimpleAttribute">
-      <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//SimpleAttribute/type"/>
-    </genClasses>
-    <genClasses ecoreClass="GrapeLModel.ecore#//ComplexAttribute">
-      <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ComplexAttribute/type"/>
-    </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//SimpleAttribute"/>
+    <genClasses ecoreClass="GrapeLModel.ecore#//ComplexAttribute"/>
     <genClasses ecoreClass="GrapeLModel.ecore#//VirtualEventAttribute">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/type"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/baseAttribute"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference GrapeLModel.ecore#//VirtualEventAttribute/attribute"/>
     </genClasses>

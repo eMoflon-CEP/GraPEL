@@ -135,7 +135,7 @@ class EventPatternTemplate extends AbstractTemplate{
 	def String getContextConstraint(Context context) {	
 		return '''
 action «contextConstraint»(«FOR param : context.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
-	return «FOR constraint : context.contextConstraints.map[constraint | contextConstraint2Apama(constraint)] SEPARATOR ' AND\n'»«constraint»«ENDFOR»;
+	return «FOR constraint : context.contextConstraints.map[constraint | contextConstraint2Apama(constraint)] SEPARATOR ' and\n'»«constraint»«ENDFOR»;
 }
 '''
 	}

@@ -447,7 +447,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				}
 				EventPatternNodeExpression nodeExpr = (EventPatternNodeExpression) expr.getNodeExpression();
 				if(nodeExpr.getAttribute() instanceof EventAttribute) {
-					if(expected != nodeExpr.getAttribute())
+					if(expected.getType() != ((EventAttribute)nodeExpr.getAttribute()).getType())
 						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
