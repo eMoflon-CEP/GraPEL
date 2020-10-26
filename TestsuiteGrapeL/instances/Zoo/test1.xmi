@@ -113,14 +113,14 @@
         maxSize="1.0">
       <animals
           xsi:type="zoo:Bear"
-          name="Botticelli"
-          age="14"
+          name="van Gogh"
+          age="20"
           sizeModifier="2.2"
           tolerance="3.391592653589793"/>
       <animals
           xsi:type="zoo:Camel"
-          name="Manet"
-          age="8"
+          name="Picasso"
+          age="10"
           sizeModifier="1.3"/>
       <animals
           xsi:type="zoo:Ape"
