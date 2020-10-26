@@ -189,17 +189,17 @@ event_pattern toleranceOfBearSinCosCheck spawns toleranceSinCosWarning {
 	
 	spawn toleranceSinCosWarning(newBear.bear,newBear.bear.tolerance)
 }
-//event_pattern nameCheck spawns animalsWithSameName {
-//	animal1: animalInEnclosure
-//	animal2: animalInEnclosure
-//
-//	# all(animal1) && all(animal2) {
-//		animal1.animal.name == animal2.animal.name &&
-//		! vanished(animal1) && ! vanished(animal2)
-//	}
-//	
-//	spawn animalsWithSameName(animal1.animal,animal2.animal,animal1.animal.name)
-//}
+event_pattern nameCheck spawns animalsWithSameName {
+	animal1: animalInEnclosure
+	animal2: animalInEnclosure
+
+	# all(animal1) && all(animal2) {
+		animal1.animal.name == animal2.animal.name &&
+		! vanished(animal1) && ! vanished(animal2)
+	}
+	
+	spawn animalsWithSameName(animal1.animal,animal2.animal,animal1.animal.name)
+}
 //event_pattern ageCheck spawns animalsWithSameAge {
 //	animal1: animalInEnclosure
 //	animal2: animalInEnclosure
@@ -279,5 +279,5 @@ event_pattern nameAndAgeCheck2 spawns animalsWithSameNameAndAge2 {
 	
 	# all(animalswSameAge) && all(animalswSameName)  
 	
-	spawn animalsWithSameNameAndAge2(animalswSameName.animal1,animalswSameName.animal2,animalswSameName.name,animalswSameAge.age)  
+	spawn animalsWithSameNameAndAge2(animalswSameName.animal1,animalswSameName.animal2,animalswSameName.animal1.name,animalswSameAge.animal1.age)  
 }

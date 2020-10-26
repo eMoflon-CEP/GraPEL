@@ -153,11 +153,11 @@ action «attributeConstraint»(«FOR param : constraint.params.map[param | event
 	}
 	
 	def String getSendActionParams(SpawnStatement returnStatement) {
-		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
+		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)] SEPARATOR ', '»«param»«ENDFOR»'''
 	}
-//	TODO:!
+
 	def String getSendActionParams(ApplyStatement returnStatement) {
-		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
+		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)] SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
 	def String getSendAction(SpawnStatement returnStatement) {
