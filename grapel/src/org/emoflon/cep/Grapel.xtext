@@ -169,7 +169,7 @@ AttributeExpressionOperand:
 ;
 
 AttributeExpressionLiteral:
-	NumberLiteral  | StringLiteral | BooleanLiteral
+	NumberLiteral  | StringLiteral | BooleanLiteral | EnumLiteral
 ;
 
 NumberLiteral:
@@ -190,6 +190,10 @@ StringLiteral:
 
 BooleanLiteral:
 	value = BOOLEAN
+;
+
+EnumLiteral:
+	'enum::' value = [ecore::EEnumLiteral]
 ;
 
 Double returns ecore::EDouble:

@@ -20,6 +20,7 @@ import org.emoflon.cep.grapel.ApplyStatement;
 import org.emoflon.cep.grapel.AttributeConstraint;
 import org.emoflon.cep.grapel.AttributeExpression;
 import org.emoflon.cep.grapel.EditorGTFile;
+import org.emoflon.cep.grapel.EnumLiteral;
 import org.emoflon.cep.grapel.Event;
 import org.emoflon.cep.grapel.EventAttribute;
 import org.emoflon.cep.grapel.EventPattern;
@@ -54,6 +55,11 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    if (isEvent(context, reference)) {
 	    	return getScopeForEvents((Event)context);
 	    }
+	    
+	    if (isEnumLiteralExpression(context)) {
+	    	return getScopeForEnumLiterals((EnumLiteral)context);
+	    }
+	    
 	    // EventAttributes
 	    if (isEventAttribute(context, reference)) {
 	    	return getScopeForEventAttributes((EventAttribute)context);
@@ -110,9 +116,19 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    if (isGrapelAttributeExpression(context, reference)) {
 	    	return getScopeForGrapelAttributeExpressions((AttributeExpression)context, reference);
 		}
+	    
 	    return super.getScope(context, reference);
 	}
 	
+	private IScope getScopeForEnumLiterals(EnumLiteral context) {
+		EditorGTFile gtFile = getGTFile(context);
+		return Scopes.scopeFor(GTEditorModelUtils.getEnums(gtFile).stream().flatMap(eenum -> eenum.getELiterals().stream()).collect(Collectors.toList()));
+	}
+
+	private boolean isEnumLiteralExpression(EObject context) {
+		return context instanceof EnumLiteral;
+	}
+
 	@Override
 	public IScope getScope(EObject context, EReference reference) {	
 		try {

@@ -200,6 +200,9 @@
     <genClasses ecoreClass="GrapeLModel.ecore#//BooleanLiteral">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//BooleanLiteral/value"/>
     </genClasses>
+    <genClasses ecoreClass="GrapeLModel.ecore#//EnumLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GrapeLModel.ecore#//EnumLiteral/fqInstanceName"/>
+    </genClasses>
     <genClasses ecoreClass="GrapeLModel.ecore#//ArithmeticValueExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueExpression/nodeExpression"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GrapeLModel.ecore#//ArithmeticValueExpression/attributeExpression"/>

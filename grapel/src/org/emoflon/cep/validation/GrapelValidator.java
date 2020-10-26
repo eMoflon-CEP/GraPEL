@@ -10,6 +10,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.parser.ParseException;
 import org.eclipse.xtext.validation.Check;
@@ -22,6 +23,7 @@ import org.emoflon.cep.grapel.AttributeRelationOperator;
 import org.emoflon.cep.grapel.BinaryAttributeExpression;
 import org.emoflon.cep.grapel.DoubleLiteral;
 import org.emoflon.cep.grapel.EditorGTFile;
+import org.emoflon.cep.grapel.EnumLiteral;
 import org.emoflon.cep.grapel.Event;
 import org.emoflon.cep.grapel.EventAttribute;
 import org.emoflon.cep.grapel.EventPattern;
@@ -37,6 +39,7 @@ import org.emoflon.cep.grapel.SpawnStatement;
 import org.emoflon.cep.grapel.StringLiteral;
 import org.emoflon.cep.grapel.UnaryAttributeExpression;
 import org.emoflon.cep.grapel.UnaryOperator;
+import org.emoflon.ibex.gt.editor.gT.ArithmeticExpression;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
 import org.emoflon.ibex.gt.editor.gT.EditorParameter;
 
@@ -93,6 +96,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public static final String ATTRIBUTE_RELATION_INVALID = CODE_PREFIX +  "event_pattern.attribute_relation.invalid";
 	public static final String ATTRIBUTE_RELATION_DISCURAGED = CODE_PREFIX +  "event_pattern.attribute_relation.discuraged";
 	public static final String ATTRIBUTE_RELATION_BOOLEAN_COMPARISON = "Cannot compare EBoolean to '%s'.";
+	public static final String ATTRIBUTE_RELATION_ENUM_COMPARISON = "Cannot compare EEnum to '%s'.";
 	public static final String ATTRIBUTE_RELATION_STRING_COMPARISON = "Cannot compare EString to '%s'.";
 	public static final String ATTRIBUTE_RELATION_OBJECT_COMPARISON = "Cannot compare EClass objects to '%s'.";
 	public static final String ATTRIBUTE_RELATION_FORBIDDEN_OPERATION = "Operation '%s' can not be used on data type '%s'.";
@@ -221,10 +225,53 @@ public class GrapelValidator extends AbstractGrapelValidator {
 			checkBooleanComparisons(relation);
 			checkStringComparisons(relation);
 			checkFloatComparisons(relation);
+			checkEnumComparisons(relation);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	private void checkEnumComparisons(AttributeRelation relation) {
+		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
+		if(relation.getRhs() == null) {
+			if(lhsType!=EcorePackage.Literals.EENUM) {
+				error(String.format("Non-Enum data types may not be used in enum comparisons."),
+						GrapelPackage.Literals.ATTRIBUTE_RELATION__LHS,
+						ATTRIBUTE_RELATION_INVALID);
+				return;
+			}
+		}
+		
+		EClassifier rhsType = getTypeOfExpression(relation.getRhs());
+		
+		if(lhsType==rhsType && lhsType==EcorePackage.Literals.EENUM && 
+				!(relation.getRelation()==AttributeRelationOperator.EQUAL || relation.getRelation()==AttributeRelationOperator.UNEQUAL)) {
+			error(String.format(ATTRIBUTE_RELATION_FORBIDDEN_OPERATION, relation.getRelation().getName(), EcorePackage.Literals.EENUM.getName()),
+					GrapelPackage.Literals.ATTRIBUTE_RELATION__RELATION,
+					ATTRIBUTE_RELATION_INVALID);
+		}
+		
+		if(lhsType!=rhsType && lhsType==EcorePackage.Literals.EENUM) {
+			error(String.format(ATTRIBUTE_RELATION_ENUM_COMPARISON, rhsType.getName()),
+					GrapelPackage.Literals.ATTRIBUTE_RELATION__RHS,
+					ATTRIBUTE_RELATION_INVALID);
+		}
+		
+		if(lhsType!=rhsType && rhsType==EcorePackage.Literals.EENUM) {
+			error(String.format(ATTRIBUTE_RELATION_ENUM_COMPARISON, lhsType.getName()),
+					GrapelPackage.Literals.ATTRIBUTE_RELATION__LHS,
+					ATTRIBUTE_RELATION_INVALID);
+		}
+	}
+
+	@Check
+	public void enumLiterals(EnumLiteral literal) {
+		if(literal.eContainer() instanceof ArithmeticExpression) {
+			error(String.format("Enum literals may not be used in arithmetic expressions."),
+					GrapelPackage.Literals.ENUM_LITERAL__VALUE,
+					ARITHMETIC_EXPRESSION_INVALID);
+		}
 	}
 	
 	private void checkBooleanComparisons(AttributeRelation relation) {
@@ -623,7 +670,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 		if(expr instanceof EventPatternNodeAttributeExpression) {
 			EClassifier classifier = getTypeOfExpression(expr);
-			if(!(classifier instanceof EDataType)) {
+			if(!(classifier instanceof EDataType || classifier == EcorePackage.Literals.EENUM)) {
 				error(String.format(ARITHMETIC_EXPRESSION_FORBIDDEN_ECLASS),
 						GrapelPackage.Literals.EVENT_PATTERN_NODE_ATTRIBUTE_EXPRESSION__NODE_EXPRESSION,
 						ARITHMETIC_EXPRESSION_INVALID);
@@ -734,6 +781,8 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				return EcorePackage.Literals.EINT;
 			} else if(literal instanceof StringLiteral) {
 				return EcorePackage.Literals.ESTRING;
+			} else if(literal instanceof EnumLiteral) {
+				return EcorePackage.Literals.EENUM;
 			} else {
 				return EcorePackage.Literals.EBOOLEAN;
 			}
@@ -742,7 +791,11 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		if(expr instanceof EventPatternNodeAttributeExpression) {
 			EventPatternNodeAttributeExpression epnExpr = (EventPatternNodeAttributeExpression) expr;
 			if(epnExpr.getField()!= null) {
-				return epnExpr.getField().getEType();
+				if(epnExpr.getField().getEType() instanceof EEnum) {
+					return EcorePackage.Literals.EENUM;
+				} else {
+					return epnExpr.getField().getEType();
+				}
 			}
 			else {
 				EventPatternNodeExpression epne = epnExpr.getNodeExpression();
@@ -751,9 +804,15 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				
 				if(epne.getAttribute() instanceof EventAttribute) {
 					EventAttribute ea = (EventAttribute)epne.getAttribute();
+					if(ea.getType() instanceof EEnum) {
+						return EcorePackage.Literals.EENUM;
+					}
 					return ea.getType();
 				}else {
 					EditorNode en = (EditorNode)epne.getAttribute();
+					if(en.getType() instanceof EEnum) {
+						return EcorePackage.Literals.EENUM;
+					}
 					return en.getType();
 				}
 			}	

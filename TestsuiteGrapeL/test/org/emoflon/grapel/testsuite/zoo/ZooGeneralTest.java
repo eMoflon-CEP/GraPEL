@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ZooGrapeL.grapel.Zoo.eventhandler.ContainerEventHandler;
+import ZooGrapeL.grapel.Zoo.eventhandler.EnviromentMissmatchWarningEventHandler;
 import zoo.Enclosure;
 import zoo.Zoo;
 

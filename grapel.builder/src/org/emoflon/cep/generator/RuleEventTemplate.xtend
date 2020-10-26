@@ -3,6 +3,7 @@ package org.emoflon.cep.generator
 import org.emoflon.cep.generator.EventTemplate
 import GrapeLModel.EventAttribute
 import GrapeLModel.VirtualEventAttribute
+import org.eclipse.emf.ecore.EEnum
 
 class RuleEventTemplate extends EventTemplate {
 	
@@ -101,7 +102,11 @@ public class «names.getMatchEventName(eventName)»Application extends EMoflonEv
 			return '''match.get«StringUtil.firstToUpper(eAtr.name)»()'''
 		}else {
 			val vAtr = eAtr as VirtualEventAttribute
-			return '''match.get«StringUtil.firstToUpper(vAtr.baseAttribute.name)»().get«StringUtil.firstToUpper(vAtr.attribute.name)»()'''
+			if(vAtr.type instanceof EEnum) {
+				return '''"«vAtr.type.name»." + match.get«StringUtil.firstToUpper(vAtr.baseAttribute.name)»().get«StringUtil.firstToUpper(vAtr.attribute.name)»().getLiteral()'''
+			} else { 
+				return '''match.get«StringUtil.firstToUpper(vAtr.baseAttribute.name)»().get«StringUtil.firstToUpper(vAtr.attribute.name)»()'''
+			}
 		}
 	}
 	

@@ -126,6 +126,9 @@
     <genClasses ecoreClass="Grapel.ecore#//BooleanLiteral">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//BooleanLiteral/value"/>
     </genClasses>
+    <genClasses ecoreClass="Grapel.ecore#//EnumLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Grapel.ecore#//EnumLiteral/value"/>
+    </genClasses>
     <genClasses ecoreClass="Grapel.ecore#//BinaryRelationalConstraint">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Grapel.ecore#//BinaryRelationalConstraint/left"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Grapel.ecore#//BinaryRelationalConstraint/operator"/>

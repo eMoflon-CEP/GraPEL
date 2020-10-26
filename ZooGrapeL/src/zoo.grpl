@@ -131,8 +131,7 @@ event_pattern humidityCheck spawns humidityWarning {
 	newAnimal: animalInEnclosure
 	
 	#newAnimal {
-		// ignore humidity in mixed_enclosure: Literals/ Enummeration not supported jet
-		// newAnimal.enclosure.enviromentType &&
+		newAnimal.enclosure.enviromentType == enum::Jungle &&
 		[! vanished(newAnimal) &&
 		abs(newAnimal.animal.preferedHumidity - newAnimal.enclosure.humidity) <= newAnimal.animal.tolerance]
 	}

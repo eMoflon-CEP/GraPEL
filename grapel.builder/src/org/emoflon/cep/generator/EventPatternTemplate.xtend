@@ -39,11 +39,12 @@ import GrapeLModel.ArithmeticExpressionUnaryOperator
 import GrapeLModel.MatchVanishedConstraint
 import GrapeLModel.AttributeConstraintUnary
 import GrapeLModel.AttributeConstraintUnaryOperator
-import org.eclipse.emf.ecore.EDataType
 import org.eclipse.emf.ecore.EcorePackage
 import GrapeLModel.RelationalConstraintUnary
 import GrapeLModel.SpawnStatement
 import GrapeLModel.ApplyStatement
+import org.eclipse.emf.ecore.EClassifier
+import GrapeLModel.EnumLiteral
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -276,11 +277,11 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		else return arithmeticExpr2ApamaInternal(expr, isAssignment)
 	}
 	
-	def String castTo(String expr, EDataType from, EDataType to, boolean isAssignment) {
+	def String castTo(String expr, EClassifier from, EClassifier to, boolean isAssignment) {
 		if(isAssignment && from == EcorePackage.Literals.ESTRING && to != EcorePackage.Literals.ESTRING) {
-			return '''«ModelManager.eDataTypeAsApamaType(to)».parse(«expr»)'''
+			return '''«ModelManager.dataTypeAsApamaType(to)».parse(«expr»)'''
 		}else {
-			return '''«expr».to«ModelManager.eDataTypeAsApamaType(to).toFirstUpper»()'''
+			return '''«expr».to«ModelManager.dataTypeAsApamaType(to).toFirstUpper»()'''
 		}
 	}
 	
@@ -347,14 +348,13 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		if(value instanceof ArithmeticValueLiteral) {
 			val literal = value as ArithmeticValueLiteral
 			if(literal instanceof IntegerLiteral) {
-				val integer = literal as IntegerLiteral
-				return integer.value+""
+				return literal.value+""
 			}else if(literal instanceof DoubleLiteral) {
-				val longfloat = literal as DoubleLiteral
-				return longfloat.value+""
+				return literal.value+""
 			}else if(literal instanceof StringLiteral) {
-				val str = literal as StringLiteral
-				return '''"«str.value»"'''
+				return '''"«literal.value»"'''
+			}else if(literal instanceof EnumLiteral) {
+				return '''"«literal.fqInstanceName»"'''
 			}else {
 				val bool = literal as BooleanLiteral
 				return (bool.value)?"true":"false"

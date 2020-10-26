@@ -9,7 +9,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
@@ -74,6 +76,7 @@ import GrapeLModel.Context;
 import GrapeLModel.ContextConstraint;
 import GrapeLModel.ContextRelation;
 import GrapeLModel.DoubleLiteral;
+import GrapeLModel.EnumLiteral;
 import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.GrapeLModelFactory;
 
@@ -236,6 +239,9 @@ public class GrapelToGrapelModelTransformer {
 		if(gAttribute.getType() instanceof EDataType) {
 			attribute = factory.createSimpleAttribute();
 			((SimpleAttribute)attribute).setType((EDataType) gAttribute.getType());
+		}else if(gAttribute.getType() instanceof EEnum) {
+			attribute = factory.createSimpleAttribute();
+			((SimpleAttribute)attribute).setType((EEnum) gAttribute.getType());
 		}else {
 			attribute = factory.createComplexAttribute();
 			((ComplexAttribute)attribute).setType((EClass) gAttribute.getType());
@@ -408,6 +414,18 @@ public class GrapelToGrapelModelTransformer {
 		}
 		
 		if(rhs.getType() == EcorePackage.Literals.ELONG && lhs.getType() == EcorePackage.Literals.EINT) {
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(lhs.getType() == EcorePackage.Literals.EDOUBLE && rhs.getType() == EcorePackage.Literals.EFLOAT) {
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.EDOUBLE && lhs.getType() == EcorePackage.Literals.EFLOAT) {
 			lhs.setRequiresCast(false);
 			rhs.setRequiresCast(false);
 			return;
@@ -665,6 +683,20 @@ public class GrapelToGrapelModelTransformer {
 			return;
 		}
 		
+		if(lhs.getType() == EcorePackage.Literals.EFLOAT && rhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			production.setType(rhs.getType());
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.EFLOAT && lhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			production.setType(lhs.getType());
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
 		if(lhs.getType() == EcorePackage.Literals.EDOUBLE && rhs.getType() != EcorePackage.Literals.ESTRING) {
 			production.setType(lhs.getType());
 			rhs.setRequiresCast(true);
@@ -720,6 +752,12 @@ public class GrapelToGrapelModelTransformer {
 			StringLiteral literal = factory.createStringLiteral();
 			literal.setValue(((org.emoflon.cep.grapel.StringLiteral) gLiteral).getValue());
 			literal.setType(EcorePackage.Literals.ESTRING);
+			return literal;
+		}else if(gLiteral instanceof org.emoflon.cep.grapel.EnumLiteral) {
+			EnumLiteral literal = factory.createEnumLiteral();
+			org.emoflon.cep.grapel.EnumLiteral gEnum = (org.emoflon.cep.grapel.EnumLiteral)gLiteral;
+			literal.setFqInstanceName(gEnum.getValue().getEEnum().getName()+"."+gEnum.getValue().getLiteral());
+			literal.setType(EcorePackage.Literals.EENUM);
 			return literal;
 		}else {
 			BooleanLiteral literal = factory.createBooleanLiteral();
@@ -944,7 +982,7 @@ public class GrapelToGrapelModelTransformer {
 			for(int i = 0; i<returnState.getParameters().size(); i++) {
 				ArithmeticExpression ae = returnState.getParameters().get(i);
 				EventAttribute ea = ((SpawnStatement)returnState).getReturnType().getAttributes().get(i);
-				EDataType eaDataType = null;
+				EClassifier eaDataType = null;
 				if(ea instanceof SimpleAttribute) {
 					eaDataType = ((SimpleAttribute)ea).getType();
 				} else if(ea instanceof VirtualEventAttribute) {
@@ -957,6 +995,10 @@ public class GrapelToGrapelModelTransformer {
 					if(eaDataType == EcorePackage.Literals.EINT && ae.getType() == EcorePackage.Literals.ELONG) {
 						ae.setRequiresCast(false);
 					} else if(eaDataType == EcorePackage.Literals.ELONG && ae.getType() == EcorePackage.Literals.EINT) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EFLOAT && ae.getType() == EcorePackage.Literals.EDOUBLE) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EDOUBLE && ae.getType() == EcorePackage.Literals.EFLOAT) {
 						ae.setRequiresCast(false);
 					} else {
 						ae.setRequiresCast(true);
@@ -979,7 +1021,7 @@ public class GrapelToGrapelModelTransformer {
 			for(int i = 0; i<returnState.getParameters().size(); i++) {
 				ArithmeticExpression ae = returnState.getParameters().get(i);
 				EventAttribute ea = applyState.getReturnType().getAttributes().get(i);
-				EDataType eaDataType = null;
+				EClassifier eaDataType = null;
 				if(ea instanceof SimpleAttribute) {
 					eaDataType = ((SimpleAttribute)ea).getType();
 				} else if(ea instanceof VirtualEventAttribute) {
@@ -992,6 +1034,10 @@ public class GrapelToGrapelModelTransformer {
 					if(eaDataType == EcorePackage.Literals.EINT && ae.getType() == EcorePackage.Literals.ELONG) {
 						ae.setRequiresCast(false);
 					} else if(eaDataType == EcorePackage.Literals.ELONG && ae.getType() == EcorePackage.Literals.EINT) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EFLOAT && ae.getType() == EcorePackage.Literals.EDOUBLE) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EDOUBLE && ae.getType() == EcorePackage.Literals.EFLOAT) {
 						ae.setRequiresCast(false);
 					} else {
 						ae.setRequiresCast(true);

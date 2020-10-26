@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EEnum;
 
 import GrapeLModel.ComplexAttribute;
 import GrapeLModel.Event;
@@ -90,7 +91,7 @@ public class ModelManager {
 	public static String getApamaFieldType(EventAttribute field) {
 		if(field instanceof ComplexAttribute)
 			return "FieldTypes.INTEGER";
-		EDataType type = (field instanceof SimpleAttribute)?((SimpleAttribute)field).getType():((VirtualEventAttribute)field).getType();
+		EClassifier type = (field instanceof SimpleAttribute)?((SimpleAttribute)field).getType():((VirtualEventAttribute)field).getType();
 		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
 			return "FieldTypes.INTEGER";
 		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
@@ -100,7 +101,11 @@ public class ModelManager {
 		}else if(type.getName().equals("EBoolean")) {
 			return "FieldTypes.BOOLEAN";
 		}else {
-			throw new RuntimeException("Unsupported type: "+type.getName());
+			if(type instanceof EEnum) {
+				return "FieldTypes.STRING";
+			} else {
+				throw new RuntimeException("Unsupported type: "+type.getName());
+			}
 		}
 	}
 	
@@ -110,9 +115,15 @@ public class ModelManager {
 			return cAtr.getType().getName();
 		}else if(field instanceof SimpleAttribute) {
 			SimpleAttribute sAtr = (SimpleAttribute)field;
+			if(sAtr.getType() instanceof EEnum)
+				return "java.lang.String";
+			
 			return sAtr.getType().getInstanceClassName();
 		} else {
 			VirtualEventAttribute vAtr = (VirtualEventAttribute)field;
+			if(vAtr.getType() instanceof EEnum)
+				return "java.lang.String";
+			
 			return vAtr.getType().getInstanceClassName();
 		}
 	}
@@ -121,7 +132,7 @@ public class ModelManager {
 	public static String asApamaType(final EventAttribute field) {
 		if(field instanceof ComplexAttribute)
 			return "integer";
-		EDataType type = (field instanceof SimpleAttribute)?((SimpleAttribute)field).getType():((VirtualEventAttribute)field).getType();
+		EClassifier type = (field instanceof SimpleAttribute)?((SimpleAttribute)field).getType():((VirtualEventAttribute)field).getType();
 		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
 			return "integer";
 		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
@@ -131,12 +142,16 @@ public class ModelManager {
 		}else if(type.getName().equals("EBoolean")) {
 			return "boolean";
 		}else {
-			throw new RuntimeException("Unsupported type: "+type.getName());
+			if(type instanceof EEnum) {
+				return "string";
+			} else {
+				throw new RuntimeException("Unsupported type: "+type.getName());
+			}
 		}
 
 	}
 	
-	public static String eDataTypeAsApamaType(final EDataType type) {
+	public static String dataTypeAsApamaType(final EClassifier type) {
 		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
 			return "integer";
 		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
@@ -146,11 +161,15 @@ public class ModelManager {
 		}else if(type.getName().equals("EBoolean")) {
 			return "boolean";
 		}else {
-			throw new RuntimeException("Unsupported type: "+type.getName());
+			if(type instanceof EEnum) {
+				return "string";
+			} else {
+				throw new RuntimeException("Unsupported type: "+type.getName());
+			}
 		}
 	}
 	
-	public static String eDataTypeDefaultValue(final EDataType type) {
+	public static String eDataTypeDefaultValue(final EClassifier type) {
 		if(type.getName().equals("EInt") || type.getName().equals("EByte") || type.getName().equals("EShort") || type.getName().equals("ELong")) {
 			return "0";
 		}else if(type.getName().equals("EDouble") || type.getName().equals("EFloat")) {
