@@ -29,7 +29,6 @@ import GrapeLModel.ContextConstraint
 import GrapeLModel.NodeContextConstraint
 import GrapeLModel.ContextRelation
 import GrapeLModel.RelationalConstraint
-import GrapeLModel.ReturnStatement
 import GrapeLModel.RelationalConstraintLiteral
 import GrapeLModel.RelationalConstraintProduction
 import GrapeLModel.RelationalConstraintOperator
@@ -40,9 +39,12 @@ import GrapeLModel.ArithmeticExpressionUnaryOperator
 import GrapeLModel.MatchVanishedConstraint
 import GrapeLModel.AttributeConstraintUnary
 import GrapeLModel.AttributeConstraintUnaryOperator
-import org.eclipse.emf.ecore.EDataType
 import org.eclipse.emf.ecore.EcorePackage
 import GrapeLModel.RelationalConstraintUnary
+import GrapeLModel.SpawnStatement
+import GrapeLModel.ApplyStatement
+import org.eclipse.emf.ecore.EClassifier
+import GrapeLModel.EnumLiteral
 
 class EventPatternTemplate extends AbstractTemplate{
 	
@@ -77,7 +79,8 @@ class EventPatternTemplate extends AbstractTemplate{
 					
 	«IF pattern.attributeConstraint !== null»«getAttributeConstraint(pattern.attributeConstraint)»«ENDIF»
 			
-	«getSendAction(pattern.returnStatement)»
+	«if(pattern.returnStatement instanceof SpawnStatement) getSendAction(pattern.returnStatement as SpawnStatement) 
+	else getSendAction(pattern.returnStatement as ApplyStatement)»
 }
 '''
 	}
@@ -114,10 +117,12 @@ class EventPatternTemplate extends AbstractTemplate{
 	
 	def String getRelationalConstraintBody(Context context, AttributeConstraint constraint) {
 		if(context === null && constraint === null) {
-			return '''«sendActionName»(«getSendActionParams(pattern.returnStatement)»);'''
+			return '''«sendActionName»(«if(pattern.returnStatement instanceof SpawnStatement) getSendActionParams(pattern.returnStatement as SpawnStatement) 
+			else getSendActionParams(pattern.returnStatement as ApplyStatement)»);'''
 		} else {
 			return '''if(«IF context !== null»«contextConstraint»(«getContextConstraintParams(context)»)«ENDIF»«IF context !== null && constraint !== null» and «ENDIF»«IF constraint !== null»«attributeConstraint»(«getAttributeConstraintParams(constraint)»)«ENDIF») {
-	«sendActionName»(«getSendActionParams(pattern.returnStatement)»);
+	«sendActionName»(«if(pattern.returnStatement instanceof SpawnStatement) getSendActionParams(pattern.returnStatement as SpawnStatement) 
+	else getSendActionParams(pattern.returnStatement as ApplyStatement)»);
 }'''
 		}
 		
@@ -130,7 +135,7 @@ class EventPatternTemplate extends AbstractTemplate{
 	def String getContextConstraint(Context context) {	
 		return '''
 action «contextConstraint»(«FOR param : context.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
-	return «FOR constraint : context.contextConstraints.map[constraint | contextConstraint2Apama(constraint)] SEPARATOR ' AND\n'»«constraint»«ENDFOR»;
+	return «FOR constraint : context.contextConstraints.map[constraint | contextConstraint2Apama(constraint)] SEPARATOR ' and\n'»«constraint»«ENDFOR»;
 }
 '''
 	}
@@ -147,14 +152,27 @@ action «attributeConstraint»(«FOR param : constraint.params.map[param | event
 '''
 	}
 	
-	def String getSendActionParams(ReturnStatement returnStatement) {
+	def String getSendActionParams(SpawnStatement returnStatement) {
+		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
+	}
+//	TODO:!
+	def String getSendActionParams(ApplyStatement returnStatement) {
 		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
-	def String getSendAction(ReturnStatement returnStatement) {
+	def String getSendAction(SpawnStatement returnStatement) {
 		return '''
 action «sendActionName»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
 	send «returnStatement.returnType.name»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«param.name»«ENDFOR») to eventChannel;
+}
+'''		
+	}
+	
+//	TODO:!
+	def String getSendAction(ApplyStatement returnStatement) {
+		return '''
+action «sendActionName»(«FOR param : model.getApplicationEventFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
+	send «returnStatement.returnType.name»Application(«FOR param : model.getApplicationEventFields(returnStatement.returnType.name) SEPARATOR ', '»«param.name»«ENDFOR») to eventChannel;
 }
 '''		
 	}
@@ -259,11 +277,11 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 		else return arithmeticExpr2ApamaInternal(expr, isAssignment)
 	}
 	
-	def String castTo(String expr, EDataType from, EDataType to, boolean isAssignment) {
+	def String castTo(String expr, EClassifier from, EClassifier to, boolean isAssignment) {
 		if(isAssignment && from == EcorePackage.Literals.ESTRING && to != EcorePackage.Literals.ESTRING) {
-			return '''«ModelManager.eDataTypeAsApamaType(to)».parse(«expr»)'''
+			return '''«ModelManager.dataTypeAsApamaType(to)».parse(«expr»)'''
 		}else {
-			return '''«expr».to«ModelManager.eDataTypeAsApamaType(to).toFirstUpper»()'''
+			return '''«expr».to«ModelManager.dataTypeAsApamaType(to).toFirstUpper»()'''
 		}
 	}
 	
@@ -330,14 +348,13 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 		if(value instanceof ArithmeticValueLiteral) {
 			val literal = value as ArithmeticValueLiteral
 			if(literal instanceof IntegerLiteral) {
-				val integer = literal as IntegerLiteral
-				return integer.value+""
+				return literal.value+""
 			}else if(literal instanceof DoubleLiteral) {
-				val longfloat = literal as DoubleLiteral
-				return longfloat.value+""
+				return literal.value+""
 			}else if(literal instanceof StringLiteral) {
-				val str = literal as StringLiteral
-				return '''"«str.value»"'''
+				return '''"«literal.value»"'''
+			}else if(literal instanceof EnumLiteral) {
+				return '''"«literal.fqInstanceName»"'''
 			}else {
 				val bool = literal as BooleanLiteral
 				return (bool.value)?"true":"false"

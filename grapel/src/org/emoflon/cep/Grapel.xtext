@@ -36,15 +36,35 @@ EventPattern:
 ;
 
 ReturnType:
+	ReturnSpawn | ReturnApply
+;
+
+ReturnSpawn:
 	'spawns' returnType=[Event|ID]
 ;
 
+ReturnApply:
+	'applies' returnType=[GT::EditorPattern|ID]
+;
+
 ReturnStatement:
+	SpawnStatement | ApplyStatement
+;
+
+SpawnStatement:
 	'spawn' returnArg=[Event|ID]'('
 		(returnParams+=AttributeExpression 
 			(',' returnParams+=AttributeExpression)* 
 		)?
 	')'
+;
+
+ApplyStatement:
+	'apply' returnArg=[GT::EditorPattern|ID]'('
+		(returnParams+=AttributeExpression 
+			(',' returnParams+=AttributeExpression)* 
+		)?
+	')' 'to' match=[EventPatternNode|ID]
 ;
 
 EventPatternNode:
@@ -149,7 +169,7 @@ AttributeExpressionOperand:
 ;
 
 AttributeExpressionLiteral:
-	NumberLiteral  | StringLiteral | BooleanLiteral
+	NumberLiteral  | StringLiteral | BooleanLiteral | EnumLiteral
 ;
 
 NumberLiteral:
@@ -170,6 +190,10 @@ StringLiteral:
 
 BooleanLiteral:
 	value = BOOLEAN
+;
+
+EnumLiteral:
+	'enum::' value = [ecore::EEnumLiteral]
 ;
 
 Double returns ecore::EDouble:

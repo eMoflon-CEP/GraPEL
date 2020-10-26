@@ -78,6 +78,13 @@ public class GrapeEngine implements IEventListener{
 //		engineClient.startInspectPollingThread();
 	}
 	
+	public void setApplyAutomatically(boolean applyAutomatically) {
+		eventHandler.values().stream()
+		.filter(handler->(handler instanceof EMoflonRuleEventHandler))
+		.map(handler -> (EMoflonRuleEventHandler<?,?,?,?>)handler)
+		.forEach(handler -> handler.setApplyAutomatically(applyAutomatically));
+	}
+	
 	protected void injectMonitorScript(String monitorFilePath) throws EngineException, IOException {
 		MonitorScript script = new MonitorScript(IOUtils.loadTextFile(monitorFilePath));
 		engineClient.injectMonitorScript(script);
@@ -120,6 +127,21 @@ public class GrapeEngine implements IEventListener{
 			events.replace(name, handler.getAllEvents());
 			recentEvents.replace(name, handler.getNewEvents());
 		});
+		
+		// Pause eMoflon -> Apama subscriptions
+		eventHandler.values().stream().filter(handler->(handler instanceof EMoflonEventHandler))
+		.map(handler -> (EMoflonEventHandler<?,?,?>)handler)
+		.forEach(handler -> handler.pauseSubsciptions());
+		
+		// Apply all rule events
+		eventHandler.values().stream().filter(handler->(handler instanceof EMoflonRuleEventHandler))
+		.map(handler -> (EMoflonRuleEventHandler<?,?,?,?>)handler)
+		.forEach(handler -> handler.applyAutmatically());
+		
+		// Unpause eMoflon -> Apama subscriptions
+		eventHandler.values().stream().filter(handler->(handler instanceof EMoflonEventHandler))
+		.map(handler -> (EMoflonEventHandler<?,?,?>)handler)
+		.forEach(handler -> handler.continueSubscriptions());
 	}
 	
 	public Map<String, Collection<? extends Event>> getAllEvents() {
@@ -145,6 +167,9 @@ public class GrapeEngine implements IEventListener{
 	protected void addEventHandler(final EventHandler<? extends Event> handler) {
 		handler.setEventParser(parser);
 		eventTypes.put(handler.getHandlerName(), handler.getEventType());
+//		if(handler instanceof EMoflonRuleEventHandler) {
+//			((EMoflonRuleEventHandler)handler)
+//		}
 		eventHandler.put(handler.getHandlerName(), handler);
 	}
 	

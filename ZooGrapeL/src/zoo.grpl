@@ -93,7 +93,7 @@ event animalsWithSameNameAndAge3 {
 	EInt age;
 }
 event enviromentMissmatchWarning {
-	Enclosure enclosurue;
+	Enclosure enclosure;
 	Animal animal;
 }
 event toleranceSinCosWarning {
@@ -101,16 +101,32 @@ event toleranceSinCosWarning {
 	EDouble tolerance;
 }
 
-//event_pattern enviromentCheck spawns enviromentMissmatchWarning {
-//	newAnimal: animalInEnclosure
-//	
-//	# all(newAnimal) {
-//		! vanished(newAnimal)  &&
-//		newAnimal.enclosure.enviromentType != newAnimal.animal.preferedEnviroment
-//	}
-//	
-//	spawn enviromentMissmatchWarning(newAnimal.enclosure,newAnimal.animal)
-//}
+event apeKleeWarning {
+	Ape animal;
+	Enclosure enclosure;
+}
+
+event_pattern apeKleeCheck spawns apeKleeWarning {
+	newApe: apeInEnclosure
+	
+	# all(newApe) {
+		! vanished(newApe) &&
+		newApe.ape.name == "Klee"
+	} 
+	
+	spawn apeKleeWarning(newApe.ape,newApe.enclosure)
+}
+
+event_pattern enviromentCheck spawns enviromentMissmatchWarning {
+	newAnimal: animalInEnclosure
+	
+	# all(newAnimal) {
+		! vanished(newAnimal) &&
+		newAnimal.enclosure.enviromentType != newAnimal.animal.preferedEnviroment
+	}
+	
+	spawn enviromentMissmatchWarning(newAnimal.enclosure,newAnimal.animal)
+}
 event_pattern temperatureCheck spawns tempartureWarning {
 	newAnimal: animalInEnclosure
 	
@@ -124,9 +140,8 @@ event_pattern temperatureCheck spawns tempartureWarning {
 event_pattern humidityCheck spawns humidityWarning {
 	newAnimal: animalInEnclosure
 	
-	# all(newAnimal) {
-		// ignore humidity in mixed_enclosure: Literals/ Enummeration not supported jet
-		// newAnimal.enclosure.enviromentType &&
+	#newAnimal {
+		newAnimal.enclosure.enviromentType == enum::Jungle &&
 		[! vanished(newAnimal) &&
 		abs(newAnimal.animal.preferedHumidity - newAnimal.enclosure.humidity) >= newAnimal.animal.tolerance]
 	}
@@ -242,3 +257,28 @@ event_pattern toleranceOfBearSinCosCheck spawns toleranceSinCosWarning {
 //	
 //	spawn animalsWithSameNameAndAge3(animalswSameAge.animal1,animalswSameAge.animal2,animalswSameAge.animal1.name,animalswSameAge.animal1.age)
 //}
+event_pattern nameAndAgeCheck3 spawns animalsWithSameNameAndAge3 {
+	animal1: animalInEnclosure
+	animal2: animalInEnclosure
+	
+//	animal1.animal.name == animal2.animal.name && animal1.animal.age == animal2.animal.age // cannot put attributes in constraint here
+	
+	# all(animal1) && all(animal2) {
+		animal1.animal.name == animal2.animal.name && animal1.animal.age == animal2.animal.age &&
+		! vanished(animal1) && ! vanished(animal2)
+	}
+	
+	spawn animalsWithSameNameAndAge3(animal1.animal,animal2.animal,animal1.animal.name,animal1.animal.age)
+}
+// pattern broken, multiple context constraints/ brackets
+event_pattern nameAndAgeCheck2 spawns animalsWithSameNameAndAge2 {
+	animalswSameName: animalsWithSameName
+	animalswSameAge: animalsWithSameAge
+	
+	animalswSameAge.animal1 == animalswSameName.animal1
+	animalswSameAge.animal2 == animalswSameName.animal2
+	
+	# all(animalswSameAge) && all(animalswSameName)  
+	
+	spawn animalsWithSameNameAndAge2(animalswSameName.animal1,animalswSameName.animal2,animalswSameName.name,animalswSameAge.age)  
+}

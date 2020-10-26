@@ -59,6 +59,10 @@ public abstract class GrapeEngineAPI {
 		grapeEngine.update();
 	}
 	
+	public void setRuleAutoApply(boolean autoApply) {
+		grapeEngine.setApplyAutomatically(autoApply);
+	}
+	
 	public Map<String, Collection<? extends Event>> getAllEvents() {
 		return grapeEngine.getAllEvents();
 	} 

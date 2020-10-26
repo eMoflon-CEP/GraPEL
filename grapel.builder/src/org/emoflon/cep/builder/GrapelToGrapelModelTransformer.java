@@ -4,21 +4,25 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.emoflon.cep.grapel.EditorGTFile;
 import org.emoflon.ibex.gt.editor.gT.EditorNode;
+import org.emoflon.ibex.gt.editor.gT.EditorParameter;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
+import org.emoflon.ibex.gt.editor.utils.GTEditorPatternUtils;
 import org.emoflon.ibex.gt.transformations.EditorToIBeXPatternTransformation;
 import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXContextPattern;
 import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXNode;
+import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXParameter;
+import org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXRule;
 
 import GrapeLModel.Event;
 import GrapeLModel.EventAttribute;
@@ -40,9 +44,12 @@ import GrapeLModel.RelationalConstraintProduction;
 import GrapeLModel.RelationalConstraintUnary;
 import GrapeLModel.RelationalConstraintUnaryOperator;
 import GrapeLModel.ReturnStatement;
+import GrapeLModel.RuleEvent;
 import GrapeLModel.SimpleAttribute;
+import GrapeLModel.SpawnStatement;
 import GrapeLModel.StringLiteral;
 import GrapeLModel.VirtualEventAttribute;
+import GrapeLModel.ApplyStatement;
 import GrapeLModel.ArithmeticExpression;
 import GrapeLModel.ArithmeticExpressionLiteral;
 import GrapeLModel.ArithmeticExpressionOperator;
@@ -69,6 +76,7 @@ import GrapeLModel.Context;
 import GrapeLModel.ContextConstraint;
 import GrapeLModel.ContextRelation;
 import GrapeLModel.DoubleLiteral;
+import GrapeLModel.EnumLiteral;
 import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.GrapeLModelFactory;
 
@@ -94,12 +102,12 @@ public class GrapelToGrapelModelTransformer {
 		mapEditor2IBeXPatterns(grapelFile);
 		
 		//transform events
-		container.getEvents().addAll(grapelFile.getEvents().parallelStream()
+		container.getEvents().addAll(grapelFile.getEvents().stream()
 				.map(event -> transform(event))
 				.collect(Collectors.toList()));
 		
 		//transform event patterns
-		container.getEventPatterns().addAll(grapelFile.getEventPatterns().parallelStream()
+		container.getEventPatterns().addAll(grapelFile.getEventPatterns().stream()
 				.map(pattern -> transform(pattern))
 				.collect(Collectors.toList()));
 		
@@ -123,7 +131,9 @@ public class GrapelToGrapelModelTransformer {
 	}
 	
 	private void mapEditor2IBeXPatterns(EditorGTFile grapelFile) {
-		for(EditorPattern ePattern : grapelFile.getPatterns()) {
+		for(EditorPattern ePattern : grapelFile.getPatterns().stream()
+				.filter(pattern -> !GTEditorPatternUtils.containsCreatedOrDeletedElements(pattern))
+				.collect(Collectors.toList())) {
 			for(IBeXContextPattern iPattern : container.getIbexModel().getPatternSet().getContextPatterns().stream()
 					.filter(cp -> (cp instanceof IBeXContextPattern))
 					.map(cp -> (IBeXContextPattern)cp)
@@ -135,6 +145,7 @@ public class GrapelToGrapelModelTransformer {
 					container.getEvents().add(matchEvent);
 					matchEvent.setName(iPattern.getName());
 					events.put(matchEvent.getName(), matchEvent);
+					matchEvent.setRelatedPattern(iPattern);
 					
 					Map<String, EventAttribute> localNonVFields = Collections.synchronizedMap(new LinkedHashMap<>());
 					nonVirtualFields.put(matchEvent, localNonVFields);
@@ -148,8 +159,55 @@ public class GrapelToGrapelModelTransformer {
 								cAtr.setName(iNode.getName());
 								cAtr.setType(iNode.getType());
 								matchEvent.getAttributes().add(cAtr);
-								matchEvent.getEventNode2patternNode().put(cAtr, iNode);
+								matchEvent.getEventAttribute2patternNode().put(cAtr, iNode);
 								localNonVFields.put(cAtr.getName(), cAtr);
+							}
+						}
+					} 
+				}
+			}
+		}
+		
+		for(EditorPattern ePattern : grapelFile.getPatterns().stream()
+				.filter(pattern -> GTEditorPatternUtils.containsCreatedOrDeletedElements(pattern))
+				.collect(Collectors.toList())) {
+			for(IBeXRule iRule : container.getIbexModel().getRuleSet().getRules()) {
+				if(iRule.getName().equals(ePattern.getName())) {
+					editor2IBeXPatterns.put(ePattern, (IBeXContextPattern)iRule.getLhs());
+					
+					RuleEvent ruleEvent = factory.createRuleEvent();
+					container.getEvents().add(ruleEvent);
+					ruleEvent.setName(iRule.getName());
+					events.put(ruleEvent.getName(), ruleEvent);
+					ruleEvent.setRelatedRule(iRule);
+					ruleEvent.setRelatedPattern((IBeXContextPattern)iRule.getLhs());
+					
+					Map<String, EventAttribute> localNonVFields = Collections.synchronizedMap(new LinkedHashMap<>());
+					nonVirtualFields.put(ruleEvent, localNonVFields);
+					
+					for(EditorNode eNode : ePattern.getNodes()) {
+						for(IBeXNode iNode : ((IBeXContextPattern)iRule.getLhs()).getSignatureNodes()) {
+							if(eNode.getName().equals(iNode.getName())) {
+								gEventAttr2Attr.put(eNode, iNode);
+								
+								ComplexAttribute cAtr = factory.createComplexAttribute();
+								cAtr.setName(iNode.getName());
+								cAtr.setType(iNode.getType());
+								ruleEvent.getAttributes().add(cAtr);
+								ruleEvent.getEventAttribute2patternNode().put(cAtr, iNode);
+								localNonVFields.put(cAtr.getName(), cAtr);
+							}
+						}
+					}
+					
+					for(EditorParameter eParam : ePattern.getParameters()) {
+						for(IBeXParameter iParam : iRule.getParameters()) {
+							if(eParam.getName().equals(iParam.getName())) {
+								SimpleAttribute sAtr = factory.createSimpleAttribute();
+								sAtr.setName(iParam.getName());
+								sAtr.setType(iParam.getType());
+								ruleEvent.getParameterAttributes().add(sAtr);
+								ruleEvent.getEventAttribute2patternParameter().put(sAtr, iParam);
 							}
 						}
 					}
@@ -181,6 +239,9 @@ public class GrapelToGrapelModelTransformer {
 		if(gAttribute.getType() instanceof EDataType) {
 			attribute = factory.createSimpleAttribute();
 			((SimpleAttribute)attribute).setType((EDataType) gAttribute.getType());
+		}else if(gAttribute.getType() instanceof EEnum) {
+			attribute = factory.createSimpleAttribute();
+			((SimpleAttribute)attribute).setType((EEnum) gAttribute.getType());
 		}else {
 			attribute = factory.createComplexAttribute();
 			((ComplexAttribute)attribute).setType((EClass) gAttribute.getType());
@@ -353,6 +414,18 @@ public class GrapelToGrapelModelTransformer {
 		}
 		
 		if(rhs.getType() == EcorePackage.Literals.ELONG && lhs.getType() == EcorePackage.Literals.EINT) {
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(lhs.getType() == EcorePackage.Literals.EDOUBLE && rhs.getType() == EcorePackage.Literals.EFLOAT) {
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.EDOUBLE && lhs.getType() == EcorePackage.Literals.EFLOAT) {
 			lhs.setRequiresCast(false);
 			rhs.setRequiresCast(false);
 			return;
@@ -610,6 +683,20 @@ public class GrapelToGrapelModelTransformer {
 			return;
 		}
 		
+		if(lhs.getType() == EcorePackage.Literals.EFLOAT && rhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			production.setType(rhs.getType());
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
+		if(rhs.getType() == EcorePackage.Literals.EFLOAT && lhs.getType() == EcorePackage.Literals.EDOUBLE) {
+			production.setType(lhs.getType());
+			lhs.setRequiresCast(false);
+			rhs.setRequiresCast(false);
+			return;
+		}
+		
 		if(lhs.getType() == EcorePackage.Literals.EDOUBLE && rhs.getType() != EcorePackage.Literals.ESTRING) {
 			production.setType(lhs.getType());
 			rhs.setRequiresCast(true);
@@ -665,6 +752,12 @@ public class GrapelToGrapelModelTransformer {
 			StringLiteral literal = factory.createStringLiteral();
 			literal.setValue(((org.emoflon.cep.grapel.StringLiteral) gLiteral).getValue());
 			literal.setType(EcorePackage.Literals.ESTRING);
+			return literal;
+		}else if(gLiteral instanceof org.emoflon.cep.grapel.EnumLiteral) {
+			EnumLiteral literal = factory.createEnumLiteral();
+			org.emoflon.cep.grapel.EnumLiteral gEnum = (org.emoflon.cep.grapel.EnumLiteral)gLiteral;
+			literal.setFqInstanceName(gEnum.getValue().getEEnum().getName()+"."+gEnum.getValue().getLiteral());
+			literal.setType(EcorePackage.Literals.EENUM);
 			return literal;
 		}else {
 			BooleanLiteral literal = factory.createBooleanLiteral();
@@ -804,103 +897,176 @@ public class GrapelToGrapelModelTransformer {
 	}
 	
 	private ReturnStatement transform(org.emoflon.cep.grapel.ReturnStatement gReturn) {
-		ReturnStatement returnState = factory.createReturnStatement();
-		Event returnType = gEvent2Events.get(gReturn.getReturnArg());
-		returnState.setReturnType(returnType);
+		ReturnStatement returnState = null;
+		if(gReturn instanceof org.emoflon.cep.grapel.SpawnStatement) {
+			org.emoflon.cep.grapel.SpawnStatement spawn = (org.emoflon.cep.grapel.SpawnStatement)gReturn;
+			returnState = factory.createSpawnStatement();
+			((SpawnStatement)returnState).setReturnType((gEvent2Events.get(spawn.getReturnArg())));
+		} else {
+			org.emoflon.cep.grapel.ApplyStatement apply = (org.emoflon.cep.grapel.ApplyStatement)gReturn;
+			returnState = factory.createApplyStatement();
+			((ApplyStatement)returnState).setReturnType((RuleEvent)(events.get(apply.getReturnArg().getName())));
+		}
 		
-		Map<EventAttribute, Integer> baseExpressionIdx = new HashMap<>();
-		
-		for(int i = 0; i<returnType.getAttributes().size(); i++) {
-			EventAttribute ea = returnType.getAttributes().get(i);
+		if(gReturn instanceof org.emoflon.cep.grapel.SpawnStatement) {
+			Event returnType = ((SpawnStatement)returnState).getReturnType();
+			Map<EventAttribute, Integer> baseExpressionIdx = new HashMap<>();
 			
-			if(!(ea instanceof VirtualEventAttribute)) {
+			for(int i = 0; i<returnType.getAttributes().size(); i++) {
+				EventAttribute ea = returnType.getAttributes().get(i);
+				
+				if(!(ea instanceof VirtualEventAttribute)) {
+					org.emoflon.cep.grapel.AttributeExpression gae = gReturn.getReturnParams().get(i);
+					ArithmeticExpression ae = transform(gae);
+					returnState.getParameters().add(ae);
+					baseExpressionIdx.put(ea, i);
+				} else {
+					VirtualEventAttribute vea = (VirtualEventAttribute)ea;
+					ArithmeticExpressionLiteral baseExpression = (ArithmeticExpressionLiteral)returnState.getParameters().get(baseExpressionIdx.get(vea.getBaseAttribute()));
+					ArithmeticValueExpression baseValueExpression = (ArithmeticValueExpression)baseExpression.getValue();
+					EventPatternNodeExpression baseEpne = baseValueExpression.getNodeExpression();
+					
+					ArithmeticExpressionLiteral virtualExpression = factory.createArithmeticExpressionLiteral();
+					ArithmeticValueExpression virtualValueExpression = factory.createArithmeticValueExpression();
+					virtualExpression.setValue(virtualValueExpression);
+					
+					if(baseEpne instanceof EventNodeExpression) {
+						EventNodeExpression ene = (EventNodeExpression)baseEpne;
+						EventPatternNode baseNode = ene.getEventPatternNode();
+						EventAttribute baseAttribute = ene.getEventAttribute();
+						
+						EventNodeExpression virtualEne = factory.createEventNodeExpression();
+						virtualValueExpression.setNodeExpression(virtualEne);
+						virtualEne.setEventPatternNode(baseNode);
+						virtualEne.setEventAttribute(baseAttribute);
+					} else {
+						IBeXPatternNodeExpression ibexPne = (IBeXPatternNodeExpression)baseEpne;
+						EventPatternNode baseNode = ibexPne.getEventPatternNode();
+						IBeXNode baseAttribute = ibexPne.getPatternAttribute();
+						
+						IBeXPatternNodeExpression virtualPne = factory.createIBeXPatternNodeExpression();
+						virtualValueExpression.setNodeExpression(virtualPne);
+						virtualPne.setEventPatternNode(baseNode);
+						virtualPne.setPatternAttribute(baseAttribute);
+					}
+					
+					AttributeExpressionLiteral virtualAel = factory.createAttributeExpressionLiteral();
+					virtualValueExpression.setAttributeExpression(virtualAel);
+
+					virtualValueExpression.setType(vea.getAttribute().getEAttributeType());
+					virtualExpression.setType(vea.getAttribute().getEAttributeType());
+					virtualValueExpression.setType(vea.getAttribute().getEAttributeType());
+					virtualAel.setType(vea.getAttribute().getEAttributeType());
+					virtualAel.setAttribute(vea.getAttribute());
+					virtualAel.setClass(vea.getAttribute().getEContainingClass());
+					
+					String vFieldName = toCamelCase(virtualAel, baseEpne);
+					EventPatternNode epn = baseEpne.getEventPatternNode();
+					String eventName = "";
+					if(epn instanceof EventNode) {
+						eventName = ((EventNode)epn).getType().getName();
+					}else {
+						eventName = ((IBeXPatternNode)epn).getType().getName();
+					}
+					Map<String, VirtualEventAttribute> vFields = virtualFields.get(events.get(eventName));
+					if(vFields == null || !vFields.containsKey(vFieldName))
+						createVirtualField(virtualAel, baseEpne);
+					else {
+						virtualAel.setVirtualAttribute(vFields.get(vFieldName));
+					}
+					
+					returnState.getParameters().add(virtualExpression);
+				}
+			}
+			
+			for(int i = 0; i<returnState.getParameters().size(); i++) {
+				ArithmeticExpression ae = returnState.getParameters().get(i);
+				EventAttribute ea = ((SpawnStatement)returnState).getReturnType().getAttributes().get(i);
+				EClassifier eaDataType = null;
+				if(ea instanceof SimpleAttribute) {
+					eaDataType = ((SimpleAttribute)ea).getType();
+				} else if(ea instanceof VirtualEventAttribute) {
+					eaDataType = ((VirtualEventAttribute)ea).getType();
+				} else {
+					continue;
+				}
+				
+				if(eaDataType != ae.getType()) {
+					if(eaDataType == EcorePackage.Literals.EINT && ae.getType() == EcorePackage.Literals.ELONG) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.ELONG && ae.getType() == EcorePackage.Literals.EINT) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EFLOAT && ae.getType() == EcorePackage.Literals.EDOUBLE) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EDOUBLE && ae.getType() == EcorePackage.Literals.EFLOAT) {
+						ae.setRequiresCast(false);
+					} else {
+						ae.setRequiresCast(true);
+						ae.setCastTo(eaDataType);
+					}
+
+				}
+			}
+		} else {
+			ApplyStatement applyState = (ApplyStatement)returnState;
+			RuleEvent returnType = applyState.getReturnType();
+			
+			// calculate return rule parameters
+			for(int i = 0; i<returnType.getAttributes().size(); i++) {
 				org.emoflon.cep.grapel.AttributeExpression gae = gReturn.getReturnParams().get(i);
 				ArithmeticExpression ae = transform(gae);
 				returnState.getParameters().add(ae);
-				baseExpressionIdx.put(ea, i);
-			} else {
-				VirtualEventAttribute vea = (VirtualEventAttribute)ea;
-				ArithmeticExpressionLiteral baseExpression = (ArithmeticExpressionLiteral)returnState.getParameters().get(baseExpressionIdx.get(vea.getBaseAttribute()));
-				ArithmeticValueExpression baseValueExpression = (ArithmeticValueExpression)baseExpression.getValue();
-				EventPatternNodeExpression baseEpne = baseValueExpression.getNodeExpression();
-				
-				ArithmeticExpressionLiteral virtualExpression = factory.createArithmeticExpressionLiteral();
-				ArithmeticValueExpression virtualValueExpression = factory.createArithmeticValueExpression();
-				virtualExpression.setValue(virtualValueExpression);
-				
-				if(baseEpne instanceof EventNodeExpression) {
-					EventNodeExpression ene = (EventNodeExpression)baseEpne;
-					EventPatternNode baseNode = ene.getEventPatternNode();
-					EventAttribute baseAttribute = ene.getEventAttribute();
-					
-					EventNodeExpression virtualEne = factory.createEventNodeExpression();
-					virtualValueExpression.setNodeExpression(virtualEne);
-					virtualEne.setEventPatternNode(baseNode);
-					virtualEne.setEventAttribute(baseAttribute);
-				} else {
-					IBeXPatternNodeExpression ibexPne = (IBeXPatternNodeExpression)baseEpne;
-					EventPatternNode baseNode = ibexPne.getEventPatternNode();
-					IBeXNode baseAttribute = ibexPne.getPatternAttribute();
-					
-					IBeXPatternNodeExpression virtualPne = factory.createIBeXPatternNodeExpression();
-					virtualValueExpression.setNodeExpression(virtualPne);
-					virtualPne.setEventPatternNode(baseNode);
-					virtualPne.setPatternAttribute(baseAttribute);
-				}
-				
-				AttributeExpressionLiteral virtualAel = factory.createAttributeExpressionLiteral();
-				virtualValueExpression.setAttributeExpression(virtualAel);
-
-				virtualValueExpression.setType(vea.getAttribute().getEAttributeType());
-				virtualExpression.setType(vea.getAttribute().getEAttributeType());
-				virtualValueExpression.setType(vea.getAttribute().getEAttributeType());
-				virtualAel.setType(vea.getAttribute().getEAttributeType());
-				virtualAel.setAttribute(vea.getAttribute());
-				virtualAel.setClass(vea.getAttribute().getEContainingClass());
-				
-				String vFieldName = toCamelCase(virtualAel, baseEpne);
-				EventPatternNode epn = baseEpne.getEventPatternNode();
-				String eventName = "";
-				if(epn instanceof EventNode) {
-					eventName = ((EventNode)epn).getType().getName();
-				}else {
-					eventName = ((IBeXPatternNode)epn).getType().getName();
-				}
-				Map<String, VirtualEventAttribute> vFields = virtualFields.get(events.get(eventName));
-				if(vFields == null || !vFields.containsKey(vFieldName))
-					createVirtualField(virtualAel, baseEpne);
-				else {
-					virtualAel.setVirtualAttribute(vFields.get(vFieldName));
-				}
-				
-				returnState.getParameters().add(virtualExpression);
-			}
-		}
-		
-		for(int i = 0; i<returnState.getParameters().size(); i++) {
-			ArithmeticExpression ae = returnState.getParameters().get(i);
-			EventAttribute ea = returnState.getReturnType().getAttributes().get(i);
-			EDataType eaDataType = null;
-			if(ea instanceof SimpleAttribute) {
-				eaDataType = ((SimpleAttribute)ea).getType();
-			} else if(ea instanceof VirtualEventAttribute) {
-				eaDataType = ((VirtualEventAttribute)ea).getType();
-			} else {
-				continue;
 			}
 			
-			if(eaDataType != ae.getType()) {
-				if(eaDataType == EcorePackage.Literals.EINT && ae.getType() == EcorePackage.Literals.ELONG) {
-					ae.setRequiresCast(false);
-				} else if(eaDataType == EcorePackage.Literals.ELONG && ae.getType() == EcorePackage.Literals.EINT) {
-					ae.setRequiresCast(false);
+			for(int i = 0; i<returnState.getParameters().size(); i++) {
+				ArithmeticExpression ae = returnState.getParameters().get(i);
+				EventAttribute ea = applyState.getReturnType().getAttributes().get(i);
+				EClassifier eaDataType = null;
+				if(ea instanceof SimpleAttribute) {
+					eaDataType = ((SimpleAttribute)ea).getType();
+				} else if(ea instanceof VirtualEventAttribute) {
+					eaDataType = ((VirtualEventAttribute)ea).getType();
 				} else {
-					ae.setRequiresCast(true);
-					ae.setCastTo(eaDataType);
+					continue;
 				}
+				
+				if(eaDataType != ae.getType()) {
+					if(eaDataType == EcorePackage.Literals.EINT && ae.getType() == EcorePackage.Literals.ELONG) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.ELONG && ae.getType() == EcorePackage.Literals.EINT) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EFLOAT && ae.getType() == EcorePackage.Literals.EDOUBLE) {
+						ae.setRequiresCast(false);
+					} else if(eaDataType == EcorePackage.Literals.EDOUBLE && ae.getType() == EcorePackage.Literals.EFLOAT) {
+						ae.setRequiresCast(false);
+					} else {
+						ae.setRequiresCast(true);
+						ae.setCastTo(eaDataType);
+					}
 
+				}
 			}
+			
+			org.emoflon.cep.grapel.ApplyStatement gApplyStatement = (org.emoflon.cep.grapel.ApplyStatement)gReturn;
+			IBeXPatternNode matchNode = (IBeXPatternNode)gNode2Nodes.get(gApplyStatement.getMatch());
+			applyState.setMatchEvent((IBeXPatternNode)matchNode);
+			//TODO match event attributes
+			for(IBeXNode eventAttribute : matchNode.getType().getSignatureNodes()) {
+				
+				ArithmeticExpressionLiteral literal = factory.createArithmeticExpressionLiteral();
+				ArithmeticValueExpression valExpr = factory.createArithmeticValueExpression();
+				literal.setValue(valExpr);
+				
+				IBeXPatternNodeExpression expr = factory.createIBeXPatternNodeExpression();
+				valExpr.setNodeExpression(expr);
+				expr.setEventPatternNode(matchNode);
+				expr.setPatternAttribute(eventAttribute);
+				returnState.getParameters().add(literal);
+			}
+			
 		}
+		
+		
 		return returnState;
 	}
 	
