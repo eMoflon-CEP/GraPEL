@@ -140,8 +140,7 @@ event_pattern temperatureCheck spawns tempartureWarning {
 event_pattern humidityCheck spawns humidityWarning {
 	newAnimal: animalInEnclosure
 	
-	#newAnimal {
-		newAnimal.enclosure.enviromentType == enum::Jungle &&
+	#all(newAnimal) {
 		[! vanished(newAnimal) &&
 		abs(newAnimal.animal.preferedHumidity - newAnimal.enclosure.humidity) >= newAnimal.animal.tolerance]
 	}
