@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/ABC/src-gen" creationIcons="false" editDirectory="/ABC.edit/src-gen"
+    editorDirectory="/ABC.editor/src-gen" modelPluginID="ABC" modelName="ABC" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    codeFormatting="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
+    copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>ABC.ecore</foreignModel>
+  <testsDirectory xsi:nil="true"/>
+  <genPackages prefix="ABC" disposableProviderFactory="true" ecorePackage="ABC.ecore#/">
+    <genClasses ecoreClass="ABC.ecore#//ABCContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ABC.ecore#//ABCContainer/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="ABC.ecore#//Elements">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ABC.ecore#//Elements/element"/>
+    </genClasses>
+    <genClasses ecoreClass="ABC.ecore#//Element">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ABC.ecore#//Element/s"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ABC.ecore#//Element/i"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ABC.ecore#//Element/f"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ABC.ecore#//Element/d"/>
+    </genClasses>
+    <genClasses ecoreClass="ABC.ecore#//A"/>
+    <genClasses ecoreClass="ABC.ecore#//B"/>
+    <genClasses ecoreClass="ABC.ecore#//C"/>
+    <genClasses ecoreClass="ABC.ecore#//D"/>
+    <genClasses ecoreClass="ABC.ecore#//E"/>
+    <genClasses ecoreClass="ABC.ecore#//F"/>
+  </genPackages>
+</genmodel:GenModel>

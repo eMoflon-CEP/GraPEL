@@ -1,0 +1,124 @@
+import "platform:/resource/ABC/model/ABC.ecore"
+import "http://www.eclipse.org/emf/2002/Ecore"
+
+pattern container {
+	abc: ABCContainer
+}
+
+pattern aInElements {
+	a: A
+}
+pattern bInElements {
+	b: B
+}
+pattern cInElements {
+	c: C
+}
+pattern dInElements {
+	d: D
+}
+pattern fInElements {
+	f: F
+}
+
+event integerATypecast {
+	EInt s;
+	EInt i;
+	EInt d;
+}
+event stringBTypecast {
+	EString s;
+	EString i;
+	EString d;
+}
+event doubleCTypecast {
+	EDouble s;
+	EDouble i;
+	EDouble d;
+}
+
+event apamaExternalA {}
+event apamaExternalB {}
+event apamaExternalC {}
+
+event apamaInternalF {
+	EInt i;
+}
+event apamaExternalF {}
+event_pattern typecastOnA spawns integerATypecast {
+	newA: aInElements
+	
+	# all(newA)
+	
+	spawn integerATypecast(newA.a.s,newA.a.i,newA.a.d)
+}
+event_pattern checkOnA spawns apamaExternalA {
+	castedA: integerATypecast
+	
+	# all(castedA) {
+		castedA.i == castedA.d &&
+		castedA.i == castedA.s
+	}
+	
+	spawn apamaExternalA()
+}
+event_pattern typecastOnB spawns stringBTypecast {
+	newB: bInElements
+	
+	# all(newB)
+	
+	spawn stringBTypecast(newB.b.s,newB.b.i,newB.b.d)
+}
+event_pattern checkOnB spawns apamaExternalB {
+	castedB: stringBTypecast
+	
+	# all(castedB) {
+		castedB.s == castedB.i &&
+		castedB.s == castedB.d
+	}
+	
+	spawn apamaExternalB()
+}
+event_pattern typecastOnC spawns doubleCTypecast {
+	newC: cInElements
+	
+	# all(newC)
+	
+	spawn doubleCTypecast(newC.c.s,newC.c.i,newC.c.d)
+}
+event_pattern checkOnC spawns apamaExternalC {
+	castedC: stringBTypecast
+	
+	# all(castedC) {
+		castedC.s == castedC.i &&
+		castedC.s == castedC.d
+	}
+	
+	spawn apamaExternalC()
+}
+
+event_pattern checkOnF spawns apamaInternalF {
+	newF: fInElements
+	
+	# all(newF)
+	
+	spawn apamaInternalF(999)
+}
+event_pattern checkOnInternalF spawns apamaInternalF {
+	newInternalF: apamaInternalF
+	
+	# all(newInternalF) {
+		newInternalF.i > 0
+	}
+	
+	spawn apamaInternalF(newInternalF.i-1)
+}
+event_pattern checkOnInternalF2 spawns apamaExternalF {
+	newInternalF: apamaInternalF
+	
+	# all(newInternalF) {
+		newInternalF.i == 0
+	}
+	
+	spawn apamaExternalF()
+}
