@@ -6,6 +6,8 @@ import org.emoflon.grapel.testsuite.GrapeLAppTestCase;
 
 import ABC.ABCContainer;
 import ABC.ABCFactory;
+import ABC.D;
+import ABC.E;
 import ABC.F;
 import ABCGrapeL.grapel.Abc.AbcGrapeLAPI;
 import ABCGrapeL.grapel.Abc.AbcGrapeLHiPEEngine;
@@ -40,7 +42,6 @@ public abstract class ABCAbstractTest extends GrapeLAppTestCase<AbcGrapeLAPI> {
 	protected F createFElement() {		
 		return createFElement(0,0,0,"");
 	}
-	
 	protected F createFElement(double d, float fl, int i, String str) {
 		F f = factory.createF();
 		
@@ -50,5 +51,34 @@ public abstract class ABCAbstractTest extends GrapeLAppTestCase<AbcGrapeLAPI> {
 		f.setS(str);
 		
 		return f;
+	}
+	
+	protected D createDElement() {		
+		return createDElement(0,0,10,"");
+	}
+	protected D createDElement(double doub, float f, int i, String str) {
+		D d = factory.createD();
+		
+		d.setD(doub);
+		d.setF(f);
+		d.setI(i);
+		d.setS(str);
+		
+		return d;
+	}
+	
+	protected E createEElement() {		
+		return createEElement(0,0,0,"");
+	}
+	
+	protected E createEElement(double d, float f, int i, String str) {
+		E e = factory.createE();
+		
+		e.setD(d);
+		e.setF(f);
+		e.setI(i);
+		e.setS(str);
+		
+		return e;
 	}
 }

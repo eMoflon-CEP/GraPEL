@@ -17,8 +17,17 @@ pattern cInElements {
 pattern dInElements {
 	d: D
 }
+pattern eInElements {
+	e: E
+}
 pattern fInElements {
 	f: F
+}
+
+rule changeIntInD(newInt:EInt) {
+	d: D {
+		.i := param::newInt
+	}
 }
 
 event integerATypecast {
@@ -40,6 +49,9 @@ event doubleCTypecast {
 event apamaExternalA {}
 event apamaExternalB {}
 event apamaExternalC {}
+event apamaExternalE {
+	E e;
+}
 
 event apamaInternalF {
 	EInt i;
@@ -95,6 +107,21 @@ event_pattern checkOnC spawns apamaExternalC {
 	}
 	
 	spawn apamaExternalC()
+}
+event_pattern applyOnD applies changeIntInD {
+	newD: changeIntInD
+	
+	# newD
+	
+	apply changeIntInD(20) to newD
+}
+
+event_pattern checkOnE spawns apamaExternalE {
+	newE: eInElements
+	
+	# all(newE)
+	
+	spawn apamaExternalE(newE.e)
 }
 
 event_pattern checkOnF spawns apamaInternalF {
