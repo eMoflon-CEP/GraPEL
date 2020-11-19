@@ -20,36 +20,6 @@ public class ABCRuleApplicationTest extends ABCAbstractTest {
 	}
 	
 	@Test
-	public void testSimpleRuleApplicationForDElement1() {
-		ABCContainer abc = getModel();
-		D d = createDElement();
-		ArrayList<D> dElements = new ArrayList<D>();
-		
-		// double functions to check obfuscation -> 2nd handler, array and foreach
-		// get removed when rule application is working
-		DInElementsEventHandler dHandler = api.getDInElementsEventHandler();
-		ChangeIntInDEventHandler changeDHanler = api.getChangeIntInDEventHandler();
-		
-		
-		api.update();
-		assertEquals(0, dHandler.getAllEvents().size());
-		assertEquals(10, d.getI());
-		
-		abc.getElements().getElement().add(d);
-		
-		api.update();
-		assertEquals(1, dHandler.getAllEvents().size());
-		assertEquals(1, changeDHanler.getAllEvents().size());
-		
-		
-		changeDHanler.getAllEvents().forEach(event -> dElements.add(event.getD()));
-		
-		assertEquals(true, dElements.contains(d));
-		assertEquals(20, dElements.get(0).getI());
-		assertEquals(20, d.getI());
-	}
-	
-	@Test
 	public void testSimpleRuleApplicationForDElement() {
 		ABCContainer abc = getModel();
 		D d = createDElement();
