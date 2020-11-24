@@ -14,6 +14,7 @@ import ZooGrapeL.grapel.Zoo.eventhandler.AnimalsWithSameNameEventHandler;
 import ZooGrapeL.grapel.Zoo.eventhandler.ContainerEventHandler;
 import ZooGrapeL.grapel.Zoo.eventhandler.EnviromentMissmatchWarningEventHandler;
 import ZooGrapeL.grapel.Zoo.eventhandler.HumidityWarningEventHandler;
+import ZooGrapeL.grapel.Zoo.eventhandler.MoreAnimalsThanCapacityEventHandler;
 import ZooGrapeL.grapel.Zoo.eventhandler.TempartureWarningEventHandler;
 import zoo.Enclosure;
 import zoo.Zoo;
@@ -64,6 +65,13 @@ public class ZooGeneralTest extends ZooAbstractTest {
 		
 		api.update();
 		assertEquals(5, humidityHandler.getAllEvents().size()); // needs to change, if mixed is ignored
+	}
+	@Test
+	public void produces4overfilledWarning() {
+		MoreAnimalsThanCapacityEventHandler capacityHandler = api.getMoreAnimalsThanCapacityEventHandler();
+		
+		api.update();
+		assertEquals(4, capacityHandler.getAllEvents().size());
 	}
 	@Test
 	public void producesSameAgeAndNameWarning() {
