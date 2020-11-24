@@ -281,7 +281,11 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		if(isAssignment && from == EcorePackage.Literals.ESTRING && to != EcorePackage.Literals.ESTRING) {
 			return '''«ModelManager.dataTypeAsApamaType(to)».parse(«expr»)'''
 		}else {
-			return '''«expr».to«ModelManager.dataTypeAsApamaType(to).toFirstUpper»()'''
+			if((from == EcorePackage.Literals.EDOUBLE || from == EcorePackage.Literals.EFLOAT) && (to == EcorePackage.Literals.EINT || to == EcorePackage.Literals.ELONG)) {
+				return '''«expr».floor()'''
+			} else {
+				return '''«expr».to«ModelManager.dataTypeAsApamaType(to).toFirstUpper»()'''
+			}
 		}
 	}
 	
@@ -371,7 +375,6 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		} else {
 			return  '''«expr.nodeExpression.eventPatternNode.name».«attributeExpression2Apama(expr.attributeExpression)»'''
 		}
-//		return '''«nodeExpression2Apama(expr.nodeExpression)»«IF expr.attributeExpression !== null».«attributeExpression2Apama(expr.attributeExpression)»«ENDIF»'''
 	}
 	
 	def String nodeExpression2Apama(EventPatternNodeExpression expr) {
@@ -395,11 +398,8 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 	def String attributeExpression2Apama(AttributeExpression expr) {
 		if(expr instanceof AttributeExpressionLiteral) {
 			val literal = expr as  AttributeExpressionLiteral
-//			return literal.attribute.name
 			return literal.virtualAttribute.name
 		}else {
-//			val production = expr as AttributeExpressionProduction
-//			return production.attribute.name + "." + attributeExpression2Apama(production.child)
 			throw new RuntimeException("Nested attribute expressions not yet supported!");
 		}
 	}

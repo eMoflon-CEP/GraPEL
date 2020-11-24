@@ -74,3 +74,21 @@ event_pattern isEUServerWithEUEntitiesMigratingToNonEU spawns serverMigrationWar
 	
 	spawn serverMigrationWarning(euServerWithEUEntities.server)
 }
+
+rule reseatNonEUServerToEU() {
+	server: Server {
+		.tag := enum::EU
+	}
+	# server.tag == enum::NonEU
+}
+
+event_pattern applyOnServerMigrationWarning applies reseatNonEUServerToEU {
+	migrationWarning: serverMigrationWarning
+	ruleToEU: reseatNonEUServerToEU
+	
+	migrationWarning.server == ruleToEU.server
+	
+	# all(ruleToEU) && all(migrationWarning)
+	
+	apply reseatNonEUServerToEU() to ruleToEU
+}
