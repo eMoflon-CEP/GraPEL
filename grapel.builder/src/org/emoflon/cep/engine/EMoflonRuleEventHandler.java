@@ -59,7 +59,8 @@ public abstract class EMoflonRuleEventHandler <R extends EMoflonEvent<M,P>, E ex
 		while(!eventQueue.isEmpty()) {
 			engine.getEMoflonAPI().updateMatches();
 			R event = eventQueue.poll();
-			if(pattern.findMatches().contains(event.getMatch())) {
+			Collection<M> matches = pattern.findMatches(false);
+			if(matches.contains(event.getMatch())) {
 				apply(event.getMatch(), event);
 			}
 		}
