@@ -24,19 +24,19 @@ public class ABCRuleApplicationTest extends ABCAbstractTest {
 		ABCContainer abc = getModel();
 		D d = createDElement();
 
-		ChangeIntInDEventHandler changeDHanler = api.getChangeIntInDEventHandler();
+		ChangeIntInDEventHandler changeDHandler = api.getChangeIntInDEventHandler();
 		
 		api.setRuleAutoApply(true);
 		api.getChangeIntInDEventHandler().applyAutmatically();
 		
 		api.update();
-		assertEquals(0, changeDHanler.getAllEvents().size());
+		assertEquals(0, changeDHandler.getAllEvents().size());
 		assertEquals(10, d.getI());
 		
 		abc.getElements().getElement().add(d);
 		
 		api.update();
-		assertEquals(1, changeDHanler.getAllEvents().size());
+		assertEquals(1, changeDHandler.getAllEvents().size());
 		assertEquals(20, d.getI());
 	}
 	
