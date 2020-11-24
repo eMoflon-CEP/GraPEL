@@ -264,3 +264,23 @@ event_pattern nameAndAgeCheck4 spawns animalsWithSameNameAndAge3 {
 	spawn animalsWithSameNameAndAge3(animal1.animal,animal2.animal,animal1.animal.name,animal1.animal.age)
 }
 
+rule moveAnimalToEnclousureWithFreeSpace(test:EBoolean) {
+	animal: Animal {
+	}
+	oldEnclousure: Enclosure {
+//		-animals -> animal
+		-- -animals -> animal
+	}
+//	# oldEnclousure.capacity < count(animalInEnclosure)
+	newEnclosure: Enclosure{
+		++ -animals -> animal
+	}
+//	# newEnclosure.capacity > count(animalInEnclosure)
+}
+event_pattern applyOnOverfilledEnclosure applies moveAnimalToEnclousureWithFreeSpace {
+	moveRule: moveAnimalToEnclousureWithFreeSpace
+	
+	# all(moveRule)
+	
+	apply moveAnimalToEnclousureWithFreeSpace(true) to moveRule
+}

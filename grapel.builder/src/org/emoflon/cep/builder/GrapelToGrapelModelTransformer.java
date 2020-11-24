@@ -1009,10 +1009,9 @@ public class GrapelToGrapelModelTransformer {
 			}
 		} else {
 			ApplyStatement applyState = (ApplyStatement)returnState;
-			RuleEvent returnType = applyState.getReturnType();
 			
 			// calculate return rule parameters
-			for(int i = 0; i<returnType.getAttributes().size(); i++) {
+			for(int i = 0; i<gReturn.getReturnParams().size(); i++) {
 				org.emoflon.cep.grapel.AttributeExpression gae = gReturn.getReturnParams().get(i);
 				ArithmeticExpression ae = transform(gae);
 				returnState.getParameters().add(ae);
