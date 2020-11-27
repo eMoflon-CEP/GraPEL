@@ -67,11 +67,11 @@ public class ZooGeneralTest extends ZooAbstractTest {
 		assertEquals(5, humidityHandler.getAllEvents().size()); // needs to change, if mixed is ignored
 	}
 	@Test
-	public void produces4overfilledWarning() {
+	public void produces1overfilledWarning() {
 		MoreAnimalsThanCapacityEventHandler capacityHandler = api.getMoreAnimalsThanCapacityEventHandler();
 		
 		api.update();
-		assertEquals(4, capacityHandler.getAllEvents().size());
+		assertEquals(1, capacityHandler.getAllEvents().size());
 	}
 	@Test
 	public void producesSameAgeAndNameWarning() {
