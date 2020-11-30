@@ -1,6 +1,6 @@
 package org.emoflon.grapel.testsuite.mnetwork;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.emoflon.grapel.testsuite.GrapeLAppTestCase;
 
@@ -25,7 +25,7 @@ public abstract class MNetworkAbstractTest extends GrapeLAppTestCase<MnetworkGra
 	}
 	protected MEMIK getModel() {
 		ContainerEventHandler containerHandler = api.getContainerEventHandler();
-		ArrayList<MEMIK> models = new ArrayList<MEMIK>();
+		LinkedList<MEMIK> models = new LinkedList<MEMIK>();
 
 		api.update();
 		containerHandler.getAllEvents().forEach(event -> models.add(event.getMemik()));

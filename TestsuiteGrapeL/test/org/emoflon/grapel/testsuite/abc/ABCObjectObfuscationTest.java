@@ -2,7 +2,7 @@ package org.emoflon.grapel.testsuite.abc;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,8 +26,8 @@ public class ABCObjectObfuscationTest extends ABCAbstractTest {
 		E e2 = createEElement();
 		E e3 = createEElement();
 		
-		ArrayList<E> eHandlerEList = new ArrayList<E>();
-		ArrayList<E> externalEHandlerEList = new ArrayList<E>();
+		LinkedList<E> eHandlerEList = new LinkedList<E>();
+		LinkedList<E> externalEHandlerEList = new LinkedList<E>();
 		
 		EInElementsEventHandler eHandler = api.getEInElementsEventHandler();
 		ApamaExternalEEventHandler externalEHandler = api.getApamaExternalEEventHandler();

@@ -1,6 +1,6 @@
 package org.emoflon.grapel.testsuite.flights;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.emoflon.flight.model.util.LongDateHelper;
 import org.emoflon.grapel.testsuite.GrapeLAppTestCase;
@@ -26,7 +26,7 @@ public abstract class FlightAbstractTest extends GrapeLAppTestCase<FlightGrapeLA
 	}
 	protected FlightModel getModel() {
 		ModelContainerEventHandler containerHandler = api.getModelContainerEventHandler();
-		ArrayList<FlightModel> models = new ArrayList<FlightModel>();
+		LinkedList<FlightModel> models = new LinkedList<FlightModel>();
 
 		api.update();
 		containerHandler.getAllEvents().forEach(event -> models.add(event.getModel()));

@@ -1,6 +1,6 @@
 package org.emoflon.grapel.testsuite.abc;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.emoflon.grapel.testsuite.GrapeLAppTestCase;
 
@@ -30,7 +30,7 @@ public abstract class ABCAbstractTest extends GrapeLAppTestCase<AbcGrapeLAPI> {
 
 	protected ABCContainer getModel() {
 		ContainerEventHandler containerHandler = api.getContainerEventHandler();
-		ArrayList<ABCContainer> models = new ArrayList<ABCContainer>();
+		LinkedList<ABCContainer> models = new LinkedList<ABCContainer>();
 		
 		api.update();
 		containerHandler.getAllEvents().forEach(event -> models.add(event.getAbc()));

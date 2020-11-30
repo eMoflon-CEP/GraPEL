@@ -1,6 +1,6 @@
 package org.emoflon.grapel.testsuite.zoo;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.emoflon.grapel.testsuite.GrapeLAppTestCase;
 
@@ -23,7 +23,7 @@ public abstract class ZooAbstractTest extends GrapeLAppTestCase<ZooGrapeLAPI> {
 	}
 	protected Zoo getModel() {
 		ContainerEventHandler containerHandler = api.getContainerEventHandler();
-		ArrayList<Zoo> models = new ArrayList<Zoo>();
+		LinkedList<Zoo> models = new LinkedList<Zoo>();
 
 		api.update();
 		containerHandler.getAllEvents().forEach(event -> models.add(event.getZoo()));
