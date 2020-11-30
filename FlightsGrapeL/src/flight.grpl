@@ -91,6 +91,14 @@ pattern travelHasConnectingFlight {
 //	     
 //	spawn e1(dot.airport.ID,dot2.airport.size)                        
 //}
+rule changeFlight() {
+	travel : Travel {
+		-- -flights -> oldFlight
+		++ -flights -> newFlight
+	}
+	oldFlight : Flight{}
+	newFlight : Flight{}
+}
 
 rule dummy(str: EString) {
 	airport : Airport {
@@ -135,5 +143,19 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	}          
 	     
 	spawn connectingFlightNotReachable(connecting.connectingFlight, connecting.travel)
+}
+
+event_pattern rebookConnectingFlight applies changeFlight {
+	rebook: changeFlight
+	notReachable: connectingFlightNotReachable
+	
+	notReachable.connectingFlight == rebook.oldFlight
+	
+	# all(notReachable) && all(rebook) {
+		rebook.newFlight.ID == "FRA->BER_2"
+	}
+	
+	
+	apply changeFlight() to rebook
 }
       
