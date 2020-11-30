@@ -279,23 +279,24 @@ event_pattern renameApeKlee applies renameApe {
 	
 	apply renameApe("Richter") to kleeRename
 }
-rule moveAnimalToEnclousureWithFreeSpace(test:EBoolean) {
+rule moveAnimalToEnclousureWithFreeSpace() {
 	animal: Animal {
 	}
 	oldEnclousure: Enclosure {
-//		-animals -> animal
 		-- -animals -> animal
 	}
-//	# oldEnclousure.capacity < count(animalInEnclosure)
 	newEnclosure: Enclosure{
 		++ -animals -> animal
 	}
-//	# newEnclosure.capacity > count(animalInEnclosure)
+	# newEnclosure.capacity == count(animalInEnclosure)
 }
 event_pattern applyOnOverfilledEnclosure applies moveAnimalToEnclousureWithFreeSpace {
 	moveRule: moveAnimalToEnclousureWithFreeSpace
+	overfilled: capacityWarning
 	
-	# all(moveRule)
+	moveRule.oldEnclousure == overfilled.enclosure
 	
-	apply moveAnimalToEnclousureWithFreeSpace(true) to moveRule
+	# all(moveRule) && all(overfilled)
+	
+	apply moveAnimalToEnclousureWithFreeSpace() to moveRule
 }
