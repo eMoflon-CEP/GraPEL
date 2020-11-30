@@ -2,8 +2,6 @@ package org.emoflon.grapel.testsuite.abc;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +9,6 @@ import org.junit.Test;
 import ABC.ABCContainer;
 import ABC.D;
 import ABCGrapeL.grapel.Abc.eventhandler.ChangeIntInDEventHandler;
-import ABCGrapeL.grapel.Abc.eventhandler.DInElementsEventHandler;
 
 public class ABCRuleApplicationTest extends ABCAbstractTest {
 	@Before
@@ -36,6 +33,7 @@ public class ABCRuleApplicationTest extends ABCAbstractTest {
 		abc.getElements().getElement().add(d);
 		
 		api.update();
+		api.getChangeIntInDEventHandler().applyAutmatically();
 		assertEquals(1, changeDHandler.getAllEvents().size());
 		assertEquals(20, d.getI());
 	}
