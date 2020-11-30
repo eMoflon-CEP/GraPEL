@@ -43,7 +43,8 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 	
 	«FOR field : model.getNonVirtualFields(eventName)»
 	public «ModelManager.getJavaFieldType(field)» get«StringUtil.firstToUpper(field.name)»() {
-		return («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
+		return«IF !ModelManager.getJavaFieldType(field).equals("int")» («ModelManager.getJavaFieldType(field)») fields.get("«field.name»");
+		«ELSE» ((Long)fields.get("«field.name»")).intValue();«ENDIF»
 	}
 	«ENDFOR»
 

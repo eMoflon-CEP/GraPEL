@@ -9,7 +9,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ABC -->
       <package
-            uri="http://www.example.org/ABC"
+            uri="platform:/resource/ABC/model/ABC.ecore"
             class="ABC.ABCPackage"
             genModel="model/ABC.genmodel"/>
    </extension>
