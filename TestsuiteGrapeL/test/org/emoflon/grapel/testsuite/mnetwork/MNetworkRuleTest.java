@@ -21,10 +21,7 @@ public class MNetworkRuleTest extends MNetworkAbstractTest {
 		ServerMigrationWarningEventHandler migrationHandler = api.getServerMigrationWarningEventHandler();
 		ReseatNonEUServerToEUEventHandler reseatHandler = api.getReseatNonEUServerToEUEventHandler();
 		Server euServer = findServer(getModel().getNetwork(), 0);
-		
-//		api.setRuleAutoApply(true);
-		
-		
+
 		api.update();
 		assertEquals(0,migrationHandler.getAllEvents().size());
 		assertEquals(1,reseatHandler.getAllEvents().size());	
@@ -34,7 +31,9 @@ public class MNetworkRuleTest extends MNetworkAbstractTest {
 		assertEquals(3,migrationHandler.getAllEvents().size());		
 		assertEquals(2,reseatHandler.getAllEvents().size());
 		
-		reseatHandler.applyAutmatically();
+		api.setRuleAutoApply(true);
+		api.update();
+		
 		assertEquals(GeoTag.EU, euServer.getTag());
 		
 		

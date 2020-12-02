@@ -26,10 +26,11 @@ public class ZooRuleTest extends ZooAbstractTest {
 		RenameApeEventHandler renameApeEventHandler = api.getRenameApeEventHandler();
 		
 		api.setRuleAutoApply(true);
-		renameApeEventHandler.applyAutmatically();
+		api.update();		
 		assertEquals(0, kleeWarningEventHandler.getAllEvents().size());
 		assertEquals(0, renameApeEventHandler.getAllEvents().size());
 		
+		api.setRuleAutoApply(false);
 		api.update();
 		assertEquals(1, kleeWarningEventHandler.getAllEvents().size());
 		assertEquals(1, renameApeEventHandler.getAllEvents().size());
@@ -45,11 +46,11 @@ public class ZooRuleTest extends ZooAbstractTest {
 		MoveAnimalToEnclousureWithFreeSpaceEventHandler moveHandler = api.getMoveAnimalToEnclousureWithFreeSpaceEventHandler();
 		MoreAnimalsThanCapacityEventHandler capacityHandler = api.getMoreAnimalsThanCapacityEventHandler();
 		
-		api.setRuleAutoApply(true);
-		moveHandler.applyAutmatically();
 		assertEquals(0, moveHandler.getAllEvents().size());
 		
+		api.setRuleAutoApply(true);
 		api.update();
+		
 		assertEquals(1, capacityHandler.getAllEvents().size());
 		assertEquals(1, moveHandler.getAllEvents().size());
 		LinkedList<Animal> animals = new LinkedList<Animal>();

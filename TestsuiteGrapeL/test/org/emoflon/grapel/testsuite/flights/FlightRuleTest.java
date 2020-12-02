@@ -21,7 +21,7 @@ public class FlightRuleTest extends FlightAbstractTest {
 	@Test
 	public void tryRebookCFOnDelayedFlight() {
 		ConnectingFlightNotReachableEventHandler cfHandler = api.getConnectingFlightNotReachableEventHandler();
-		api.setRuleAutoApply(true);
+		
 		Flight flight = findFlight(getModel().getFlights(), "MUC->FRA_1");
 		Flight cf = findFlight(getModel().getFlights(), "FRA->BER_1");
 		Flight altCF = findFlight(getModel().getFlights(), "FRA->BER_2");
@@ -34,6 +34,10 @@ public class FlightRuleTest extends FlightAbstractTest {
 		LinkedList<Travel> delayedTravels = new LinkedList<Travel>();
 		assertEquals(2, cfHandler.getAllEvents().size());
 		cfHandler.getAllEvents().forEach(event -> delayedTravels.add(event.getTravel()));
+		
+		api.setRuleAutoApply(true);
+		api.update();
+		
 		assertEquals(true, delayedTravels.get(0).getFlights().contains(altCF));
 		assertEquals(true, delayedTravels.get(1).getFlights().contains(altCF));
 		
