@@ -282,11 +282,12 @@ event_pattern renameApeKlee applies renameApe {
 rule moveAnimalToEnclousureWithFreeSpace() {
 	animal: Animal {
 	}
-	oldEnclousure: Enclosure {
+	oldEnclosure: Enclosure {
 		-- -animals -> animal
 	}
-	# oldEnclousure.capacity < count(countAnimalInEnclosureOld)
-	newEnclosure: Enclosure{
+	# oldEnclosure.capacity < count(countAnimalInEnclosureOld)
+	
+	newEnclosure: Enclosure{ 
 		++ -animals -> animal
 	}
 	# newEnclosure.capacity > count(countAnimalInEnclosureNew)
@@ -294,14 +295,15 @@ rule moveAnimalToEnclousureWithFreeSpace() {
 pattern countAnimalInEnclosureOld {
 	animal2: Animal {
 	}
-	oldEnclousure: Enclosure {
+	oldEnclosure: Enclosure {
 		-animals -> animal2
 	}
 }
+
 pattern countAnimalInEnclosureNew {
 	animal2: Animal {
 	}
-	newEnclousure: Enclosure {
+	newEnclosure: Enclosure {
 		-animals -> animal2
 	}
 }
