@@ -285,18 +285,30 @@ rule moveAnimalToEnclousureWithFreeSpace() {
 	oldEnclousure: Enclosure {
 		-- -animals -> animal
 	}
+	# oldEnclousure.capacity < count(countAnimalInEnclosureOld)
 	newEnclosure: Enclosure{
 		++ -animals -> animal
 	}
-	# newEnclosure.capacity == count(animalInEnclosure)
+	# newEnclosure.capacity > count(countAnimalInEnclosureNew)
+}
+pattern countAnimalInEnclosureOld {
+	animal2: Animal {
+	}
+	oldEnclousure: Enclosure {
+		-animals -> animal2
+	}
+}
+pattern countAnimalInEnclosureNew {
+	animal2: Animal {
+	}
+	newEnclousure: Enclosure {
+		-animals -> animal2
+	}
 }
 event_pattern applyOnOverfilledEnclosure applies moveAnimalToEnclousureWithFreeSpace {
 	moveRule: moveAnimalToEnclousureWithFreeSpace
-	overfilled: capacityWarning
 	
-	moveRule.oldEnclousure == overfilled.enclosure
-	
-	# all(moveRule) && all(overfilled)
+	# all(moveRule)
 	
 	apply moveAnimalToEnclousureWithFreeSpace() to moveRule
 }

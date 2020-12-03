@@ -25,21 +25,21 @@ public class ZooRuleTest extends ZooAbstractTest {
 		ApeKleeWarningEventHandler kleeWarningEventHandler = api.getApeKleeWarningEventHandler();
 		RenameApeEventHandler renameApeEventHandler = api.getRenameApeEventHandler();
 		
-		api.setRuleAutoApply(true);
-		api.update();		
+		api.setRuleAutoApply(true);	
 		assertEquals(0, kleeWarningEventHandler.getAllEvents().size());
 		assertEquals(0, renameApeEventHandler.getAllEvents().size());
 		
-		api.setRuleAutoApply(false);
 		api.update();
 		assertEquals(1, kleeWarningEventHandler.getAllEvents().size());
-		assertEquals(1, renameApeEventHandler.getAllEvents().size());
+		assertEquals(3, renameApeEventHandler.getAllEvents().size());
 		
 		LinkedList<Ape> apes = new LinkedList<Ape>();
 		kleeWarningEventHandler.getAllEvents().forEach(event -> apes.add(event.getAnimal()));
-		Ape klee = apes.get(0);
-		
-		assertEquals(true, klee.getName().equals("Richter"));
+
+		long richterCount = apes.stream().filter(ape -> ape.getName().equals("Richter")).count();
+		long kleeCount = apes.stream().filter(ape -> ape.getName().equals("Klee")).count();
+		assertEquals(1, richterCount);
+		assertEquals(0, kleeCount);
 	}
 	@Test
 	public void ruleAppliesOnOverfilledEnclosure() {
@@ -48,11 +48,15 @@ public class ZooRuleTest extends ZooAbstractTest {
 		
 		assertEquals(0, moveHandler.getAllEvents().size());
 		
-		api.setRuleAutoApply(true);
 		api.update();
 		
-		assertEquals(1, capacityHandler.getAllEvents().size());
-		assertEquals(1, moveHandler.getAllEvents().size());
+		assertEquals(1, capacityHandler.getNewEvents().size());
+		assertEquals(8, moveHandler.getNewEvents().size());
+		
+//		api.setRuleAutoApply(true);
+//		api.update();
+//		assertEquals(0, capacityHandler.getNewEvents().size());
+//		assertEquals(0, moveHandler.getNewEvents().size());
 		LinkedList<Animal> animals = new LinkedList<Animal>();
 		moveHandler.getAllEvents().forEach(event -> animals.add(event.getAnimal()));
 		animals.forEach(a -> System.out.println(a.getName()));
