@@ -96,8 +96,41 @@ rule changeFlight() {
 		-- -flights -> oldFlight
 		++ -flights -> newFlight
 	}
-	oldFlight : Flight{}
-	newFlight : Flight{}
+	oldFlight : Flight{
+	}
+	newFlight : Flight{
+	}
+	trgAirport : Airport
+	srcAirport: Airport
+} when identicalRoute
+
+condition oldRoute = enforce supportOldRoute
+condition newRoute = enforce supportNewRoute
+
+condition identicalRoute = oldRoute && newRoute
+
+pattern supportOldRoute {
+	oldRoute : Route {
+		-trg -> trgAirport
+		-src -> srcAirport
+	}
+	oldFlight : Flight{
+		-route -> oldRoute
+	}
+	trgAirport : Airport
+	srcAirport: Airport
+}
+
+pattern supportNewRoute {
+	newRoute : Route {
+		-trg -> trgAirport
+		-src -> srcAirport
+	}
+	newFlight : Flight{
+		-route -> newRoute
+	}
+	trgAirport : Airport
+	srcAirport: Airport
 }
 
 rule dummy(str: EString) {
@@ -145,7 +178,7 @@ event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReacha
 	spawn connectingFlightNotReachable(connecting.connectingFlight, connecting.travel)
 }
 
-event_pattern rebookConnectingFlight applies changeFlight {
+event_pattern rebookConnectingFlightTest applies changeFlight {
 	rebook: changeFlight
 	notReachable: connectingFlightNotReachable
 	
