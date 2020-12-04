@@ -56,11 +56,8 @@ public class ZooRuleTest extends ZooAbstractTest {
 		api.setRuleAutoApply(true);
 		api.update();
 		
-		assertEquals(0, capacityHandler.getNewEvents().size());
-		assertEquals(0, moveHandler.getNewEvents().size());
-		LinkedList<Animal> animals = new LinkedList<Animal>();
-		moveHandler.getAllEvents().forEach(event -> animals.add(event.getAnimal()));
-		animals.forEach(a -> System.out.println(a.getName()));
+		assertEquals(0, capacityHandler.getNewEvents().stream().filter(event -> !(Boolean)event.getField("vanished")).count());
+		assertEquals(0, moveHandler.getNewEvents().stream().filter(event -> !(Boolean)event.getField("vanished")).count());
 	}
 	
 	

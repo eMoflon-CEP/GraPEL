@@ -310,7 +310,9 @@ pattern countAnimalInEnclosureNew {
 event_pattern applyOnOverfilledEnclosure applies moveAnimalToEnclousureWithFreeSpace {
 	moveRule: moveAnimalToEnclousureWithFreeSpace
 	
-	# all(moveRule)
+	# all(moveRule) {
+		!vanished(moveRule)
+	}
 	
 	apply moveAnimalToEnclousureWithFreeSpace() to moveRule
 }

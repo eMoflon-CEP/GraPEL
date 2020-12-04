@@ -31,9 +31,12 @@ public class FlightRuleTest extends FlightAbstractTest {
 		
 		changeFlightArrival(flight,300000);
 		api.update();
+		
 		LinkedList<Travel> delayedTravels = new LinkedList<Travel>();
 		assertEquals(2, cfHandler.getAllEvents().size());
-		cfHandler.getAllEvents().forEach(event -> delayedTravels.add(event.getTravel()));
+		cfHandler.getAllEvents().forEach(event -> {
+			delayedTravels.add(event.getTravel());
+		});
 		
 		api.setRuleAutoApply(true);
 		api.update();

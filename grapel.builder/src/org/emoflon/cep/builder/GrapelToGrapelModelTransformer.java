@@ -150,8 +150,8 @@ public class GrapelToGrapelModelTransformer {
 					Map<String, EventAttribute> localNonVFields = Collections.synchronizedMap(new LinkedHashMap<>());
 					nonVirtualFields.put(matchEvent, localNonVFields);
 					
-					for(EditorNode eNode : ePattern.getNodes()) {
-						for(IBeXNode iNode : iPattern.getSignatureNodes()) {
+					for(IBeXNode iNode : iPattern.getSignatureNodes()) {
+						for(EditorNode eNode : ePattern.getNodes()) {
 							if(eNode.getName().equals(iNode.getName())) {
 								gEventAttr2Attr.put(eNode, iNode);
 								
@@ -185,8 +185,8 @@ public class GrapelToGrapelModelTransformer {
 					Map<String, EventAttribute> localNonVFields = Collections.synchronizedMap(new LinkedHashMap<>());
 					nonVirtualFields.put(ruleEvent, localNonVFields);
 					
-					for(EditorNode eNode : ePattern.getNodes()) {
-						for(IBeXNode iNode : ((IBeXContextPattern)iRule.getLhs()).getSignatureNodes()) {
+					for(IBeXNode iNode : ((IBeXContextPattern)iRule.getLhs()).getSignatureNodes()) {
+						for(EditorNode eNode : ePattern.getNodes()) {
 							if(eNode.getName().equals(iNode.getName())) {
 								gEventAttr2Attr.put(eNode, iNode);
 								
@@ -1062,7 +1062,7 @@ public class GrapelToGrapelModelTransformer {
 				expr.setPatternAttribute(eventAttribute);
 				returnState.getParameters().add(literal);
 			}
-			
+		
 		}
 		
 		
