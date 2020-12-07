@@ -312,6 +312,9 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		if(relation.getRhs() == null) {
 			return;
 		}
+		if(relation.getLhs() == null) {
+			return;
+		}
 		
 		EClassifier rhsType = getTypeOfExpression(relation.getRhs());
 		if(lhsType==rhsType && lhsType==EcorePackage.Literals.ESTRING && 
