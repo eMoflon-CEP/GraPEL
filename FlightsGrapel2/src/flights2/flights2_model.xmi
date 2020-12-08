@@ -1,0 +1,1569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grapelmodel:GrapeLModelContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:IBeXPatternModel="platform:/resource/org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:grapelmodel="platform:/resource/grapelmodel/model/GrapeLModel.ecore" xsi:schemaLocation="platform:/resource/org.emoflon.ibex.patternmodel/model/IBeXPatternModel.ecore java://org.emoflon.ibex.patternmodel.IBeXPatternModel.IBeXPatternModelPackage http://www.eclipse.org/emf/2002/Ecore java://org.eclipse.emf.ecore.EcorePackage platform:/resource/grapelmodel/model/GrapeLModel.ecore java://GrapeLModel.GrapeLModelPackage" name="flights2" correlatorLocation="C:\\SoftwareAG\\Apama\\bin\\correlator.exe">
+  <events xmi:type="grapelmodel:MatchEvent" name="flightSrcGate" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.2">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="airport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="flight">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="gate">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="flightSrcGategateposition" baseAttribute="//@events.0/@attributes.2">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.0"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.28"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.0/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.31"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="flightTrgGate" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.4">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="airport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="flight">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="gate">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="flightTrgGategateposition" baseAttribute="//@events.1/@attributes.2">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.4"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.29"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.1/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.32"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="flightTimes" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.3">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="arrival">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="departure">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="flight">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="plane">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Plane"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="route">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="flightTimesarrivaltime" baseAttribute="//@events.2/@attributes.0">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="flightTimesdeparturetime" baseAttribute="//@events.2/@attributes.1">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="flightTimesrouteduration" baseAttribute="//@events.2/@attributes.4">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Route/duration"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.2/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.5"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.2/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.7"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.2/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.27"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.2/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.36"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.2/@attributes.4" value="//@ibexModel/@nodeSet/@nodes.44"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="travelOnFlight" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.14">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="flight">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="travel">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.3/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.26"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.3/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.54"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="flightsConnectedByTravel" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.5">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="airport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f1">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f2">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f2Departure">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="r1">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="r2">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="flightsConnectedByTravelairportsize" baseAttribute="//@events.4/@attributes.0">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Airport/size"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="flightsConnectedByTravelf2Departuretime" baseAttribute="//@events.4/@attributes.3">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.4/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.3"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.4/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.11"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.4/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.14"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.4/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.16"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.4/@attributes.4" value="//@ibexModel/@nodeSet/@nodes.38"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.4/@attributes.5" value="//@ibexModel/@nodeSet/@nodes.40"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="invalidConnectedFlights" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.7">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="airport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="arrival">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="departure">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f1">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f2">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="srcGate">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="trgGate">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.5/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.1"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.5/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.6"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.5/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.8"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.5/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.9"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.5/@attributes.4" value="//@ibexModel/@nodeSet/@nodes.12"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.5/@attributes.5" value="//@ibexModel/@nodeSet/@nodes.52"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.5/@attributes.6" value="//@ibexModel/@nodeSet/@nodes.63"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="supportOldRoute" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.11">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="fOld">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="route">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="srcAirport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="trgAirport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.6/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.22"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.6/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.41"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.6/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.47"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.6/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.58"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="supportNewRoute" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.9">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="fNew">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="route">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="srcAirport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="trgAirport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.7/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.18"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.7/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.46"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.7/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.50"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.7/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.61"/>
+  </events>
+  <events xmi:type="grapelmodel:MatchEvent" name="travelInNewFlight" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.13">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="fNew">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="travel">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.8/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.19"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.8/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.57"/>
+  </events>
+  <events xmi:type="grapelmodel:RuleEvent" name="rebookFlight" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.8" relatedRule="//@ibexModel/@ruleSet/@rules.2">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="fNew">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="fNewDeparture">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="fOld">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="fOldDeparture">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="pNew">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Plane"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="srcAirport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="t">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="trgAirport">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="rebookFlightfNewDeparturetime" baseAttribute="//@events.9/@attributes.1">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="rebookFlightfOldDeparturetime" baseAttribute="//@events.9/@attributes.3">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.20"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.21"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.2" value="//@ibexModel/@nodeSet/@nodes.24"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.3" value="//@ibexModel/@nodeSet/@nodes.25"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.4" value="//@ibexModel/@nodeSet/@nodes.35"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.5" value="//@ibexModel/@nodeSet/@nodes.51"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.6" value="//@ibexModel/@nodeSet/@nodes.53"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.9/@attributes.7" value="//@ibexModel/@nodeSet/@nodes.62"/>
+  </events>
+  <events xmi:type="grapelmodel:RuleEvent" name="changeRouteDuration" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.1" relatedRule="//@ibexModel/@ruleSet/@rules.1">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="route">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="changeRouteDurationrouteduration" baseAttribute="//@events.10/@attributes.0">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Route/duration"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.10/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.45"/>
+    <eventAttribute2patternParameter xmi:type="grapelmodel:EventAttribute2PatternParameterMap" key="//@events.10/@parameterAttributes.0" value="//@ibexModel/@patternSet/@contextPatterns.1/@parameters.0"/>
+    <parameterAttributes xmi:type="grapelmodel:SimpleAttribute" name="newDuration">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </parameterAttributes>
+  </events>
+  <events xmi:type="grapelmodel:RuleEvent" name="changeFlightArrival" relatedPattern="//@ibexModel/@patternSet/@contextPatterns.0" relatedRule="//@ibexModel/@ruleSet/@rules.0">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="flight">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="oldArrival">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="changeFlightArrivalflightID" baseAttribute="//@events.11/@attributes.0">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//FlightObject/ID"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="changeFlightArrivaloldArrivaltime" baseAttribute="//@events.11/@attributes.1">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.11/@attributes.0" value="//@ibexModel/@nodeSet/@nodes.30"/>
+    <eventAttribute2patternNode xmi:type="grapelmodel:EventAttribute2PatternNodeMap" key="//@events.11/@attributes.1" value="//@ibexModel/@nodeSet/@nodes.34"/>
+    <eventAttribute2patternParameter xmi:type="grapelmodel:EventAttribute2PatternParameterMap" key="//@events.11/@parameterAttributes.0" value="//@ibexModel/@patternSet/@contextPatterns.0/@parameters.0"/>
+    <parameterAttributes xmi:type="grapelmodel:SimpleAttribute" name="newArrivalTime">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    </parameterAttributes>
+  </events>
+  <events xmi:type="grapelmodel:Event" name="FlightDelayed">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="flight">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="route">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="plane">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Plane"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="arrival">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:SimpleAttribute" name="delay">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="FlightDelayedarrivaltime" baseAttribute="//@events.12/@attributes.3">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+  </events>
+  <events xmi:type="grapelmodel:Event" name="ConnectedFlights">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f1">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f2">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f2Departure">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:SimpleAttribute" name="gateDistance">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="ConnectedFlightsf2Departuretime" baseAttribute="//@events.13/@attributes.2">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+  </events>
+  <events xmi:type="grapelmodel:Event" name="BrokenConnectingFlights">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f1">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f2">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f1Arrival">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="f2Departure">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:SimpleAttribute" name="gateDistance">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:VirtualEventAttribute" name="BrokenConnectingFlightsf1Arrivaltime" baseAttribute="//@events.14/@attributes.2">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+    </attributes>
+  </events>
+  <events xmi:type="grapelmodel:Event" name="RepeatedDelaysWithSamePlane">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="plane">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Plane"/>
+    </attributes>
+  </events>
+  <events xmi:type="grapelmodel:Event" name="RepeatedDelaysOnSameRoute">
+    <attributes xmi:type="grapelmodel:ComplexAttribute" name="route">
+      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:SimpleAttribute" name="averageDelay">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </attributes>
+  </events>
+  <events xmi:type="grapelmodel:Event" name="HeadwindOnFlight">
+    <attributes xmi:type="grapelmodel:SimpleAttribute" name="flightNumber">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </attributes>
+    <attributes xmi:type="grapelmodel:SimpleAttribute" name="delay">
+      <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </attributes>
+  </events>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="findDelayedFlights">
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="flight" type="//@ibexModel/@patternSet/@contextPatterns.3"/>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.0/@nodes.0"/>
+    <attributeConstraint xmi:type="grapelmodel:AttributeConstraintProduction" params="//@eventPatterns.0/@nodes.0">
+      <lhs xmi:type="grapelmodel:AttributeConstraintUnary" operator="NOT">
+        <operand xmi:type="grapelmodel:MatchVanishedConstraint" eventPatternNode="//@eventPatterns.0/@nodes.0"/>
+      </lhs>
+      <rhs xmi:type="grapelmodel:AttributeConstraintLiteral">
+        <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">
+          <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.5"/>
+              <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.5">
+                <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+              </attributeExpression>
+            </value>
+          </lhs>
+          <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.7"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.6">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+                </attributeExpression>
+              </value>
+            </lhs>
+            <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.44"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.7">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Route/duration"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+                </attributeExpression>
+              </value>
+            </rhs>
+          </rhs>
+        </constraintExpression>
+      </rhs>
+    </attributeConstraint>
+    <returnStatement xmi:type="grapelmodel:SpawnStatement" returnType="//@events.12">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.27"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.44"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.36"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.5"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionProduction" op="SUBTRACT">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <lhs xmi:type="grapelmodel:ArithmeticExpressionUnary">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+          <operand xmi:type="grapelmodel:ArithmeticExpressionProduction" op="SUBTRACT">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.5"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.5">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+                </attributeExpression>
+              </value>
+            </lhs>
+            <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.7"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.6">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+                </attributeExpression>
+              </value>
+            </rhs>
+          </operand>
+        </lhs>
+        <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.44"/>
+            <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.7">
+              <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Route/duration"/>
+              <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+            </attributeExpression>
+          </value>
+        </rhs>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.0/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.5"/>
+          <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.2/@attributes.5">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+            <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+          </attributeExpression>
+        </value>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="findConnectedFlights">
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="flights" type="//@ibexModel/@patternSet/@contextPatterns.5"/>
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="gate1" type="//@ibexModel/@patternSet/@contextPatterns.4"/>
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="gate2" type="//@ibexModel/@patternSet/@contextPatterns.2"/>
+    <context xmi:type="grapelmodel:Context" params="//@eventPatterns.1/@nodes.0 //@eventPatterns.1/@nodes.1 //@eventPatterns.1/@nodes.2">
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.3"/>
+        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.4"/>
+      </contextConstraints>
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.3"/>
+        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.2" patternAttribute="//@ibexModel/@nodeSet/@nodes.0"/>
+      </contextConstraints>
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.11"/>
+        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.29"/>
+      </contextConstraints>
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.14"/>
+        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.2" patternAttribute="//@ibexModel/@nodeSet/@nodes.28"/>
+      </contextConstraints>
+    </context>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintProduction">
+      <lhs xmi:type="grapelmodel:RelationalConstraintProduction">
+        <lhs xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.1/@nodes.0"/>
+        <rhs xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.1/@nodes.1"/>
+      </lhs>
+      <rhs xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.1/@nodes.2"/>
+    </relationalConstraint>
+    <attributeConstraint xmi:type="grapelmodel:AttributeConstraintProduction" params="//@eventPatterns.1/@nodes.0 //@eventPatterns.1/@nodes.1 //@eventPatterns.1/@nodes.2">
+      <lhs xmi:type="grapelmodel:AttributeConstraintProduction">
+        <lhs xmi:type="grapelmodel:AttributeConstraintUnary" operator="NOT">
+          <operand xmi:type="grapelmodel:MatchVanishedConstraint" eventPatternNode="//@eventPatterns.1/@nodes.0"/>
+        </lhs>
+        <rhs xmi:type="grapelmodel:AttributeConstraintUnary" operator="NOT">
+          <operand xmi:type="grapelmodel:MatchVanishedConstraint" eventPatternNode="//@eventPatterns.1/@nodes.1"/>
+        </rhs>
+      </lhs>
+      <rhs xmi:type="grapelmodel:AttributeConstraintUnary" operator="NOT">
+        <operand xmi:type="grapelmodel:MatchVanishedConstraint" eventPatternNode="//@eventPatterns.1/@nodes.2"/>
+      </rhs>
+    </attributeConstraint>
+    <returnStatement xmi:type="grapelmodel:SpawnStatement" returnType="//@events.13">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.11"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.14"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.16"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionProduction" requiresCast="true" op="MULTIPLY">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <castTo xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+          <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.3"/>
+            <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.4/@attributes.6">
+              <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Airport/size"/>
+              <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+            </attributeExpression>
+          </value>
+        </lhs>
+        <rhs xmi:type="grapelmodel:ArithmeticExpressionUnary" requiresCast="true" operator="ABS">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <castTo xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+          <operand xmi:type="grapelmodel:ArithmeticExpressionProduction" op="SUBTRACT">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.32"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.1/@attributes.3">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+                </attributeExpression>
+              </value>
+            </lhs>
+            <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.2" patternAttribute="//@ibexModel/@nodeSet/@nodes.31"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.0/@attributes.3">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+                </attributeExpression>
+              </value>
+            </rhs>
+          </operand>
+        </rhs>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.1/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.16"/>
+          <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.4/@attributes.7">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+            <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+          </attributeExpression>
+        </value>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="findBrokenConnectingFlights">
+    <nodes xmi:type="grapelmodel:EventNode" name="flights" type="//@events.13"/>
+    <nodes xmi:type="grapelmodel:EventNode" name="delayed" type="//@events.12"/>
+    <context xmi:type="grapelmodel:Context" params="//@eventPatterns.2/@nodes.0 //@eventPatterns.2/@nodes.1">
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.0" eventAttribute="//@events.13/@attributes.0"/>
+        <rhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.1" eventAttribute="//@events.12/@attributes.0"/>
+      </contextConstraints>
+    </context>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+      <lhs xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.2/@nodes.0"/>
+      <rhs xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.2/@nodes.1"/>
+    </relationalConstraint>
+    <attributeConstraint xmi:type="grapelmodel:AttributeConstraintLiteral" params="//@eventPatterns.2/@nodes.1 //@eventPatterns.2/@nodes.0">
+      <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">
+        <lhs xmi:type="grapelmodel:ArithmeticExpressionProduction">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.1" eventAttribute="//@events.12/@attributes.3"/>
+              <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.12/@attributes.5">
+                <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+              </attributeExpression>
+            </value>
+          </lhs>
+          <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.0" eventAttribute="//@events.13/@attributes.3"/>
+            </value>
+          </rhs>
+        </lhs>
+        <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+          <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.0" eventAttribute="//@events.13/@attributes.2"/>
+            <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.13/@attributes.4">
+              <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+              <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+            </attributeExpression>
+          </value>
+        </rhs>
+      </constraintExpression>
+    </attributeConstraint>
+    <returnStatement xmi:type="grapelmodel:SpawnStatement" returnType="//@events.14">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.0" eventAttribute="//@events.13/@attributes.0"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.0" eventAttribute="//@events.13/@attributes.1"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.1" eventAttribute="//@events.12/@attributes.3"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.0" eventAttribute="//@events.13/@attributes.2"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.0" eventAttribute="//@events.13/@attributes.3"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.2/@nodes.1" eventAttribute="//@events.12/@attributes.3"/>
+          <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.12/@attributes.5">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+            <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+          </attributeExpression>
+        </value>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="fixBrokenConnectingFlights">
+    <nodes xmi:type="grapelmodel:EventNode" name="brokenConnectingFlights" type="//@events.14"/>
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="rebook" type="//@ibexModel/@patternSet/@contextPatterns.8"/>
+    <context xmi:type="grapelmodel:Context" params="//@eventPatterns.3/@nodes.0 //@eventPatterns.3/@nodes.1">
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.0" eventAttribute="//@events.14/@attributes.1"/>
+        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.24"/>
+      </contextConstraints>
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint" relation="UNEQUAL">
+        <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.0" eventAttribute="//@events.14/@attributes.1"/>
+        <rhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.20"/>
+      </contextConstraints>
+    </context>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+      <lhs xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.3/@nodes.1"/>
+      <rhs xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.3/@nodes.0"/>
+    </relationalConstraint>
+    <attributeConstraint xmi:type="grapelmodel:AttributeConstraintProduction" params="//@eventPatterns.3/@nodes.1 //@eventPatterns.3/@nodes.0">
+      <lhs xmi:type="grapelmodel:AttributeConstraintProduction">
+        <lhs xmi:type="grapelmodel:AttributeConstraintUnary" operator="NOT">
+          <operand xmi:type="grapelmodel:MatchVanishedConstraint" eventPatternNode="//@eventPatterns.3/@nodes.1"/>
+        </lhs>
+        <rhs xmi:type="grapelmodel:AttributeConstraintLiteral">
+          <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression">
+            <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.21"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.9/@attributes.8">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+                </attributeExpression>
+              </value>
+            </lhs>
+            <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+                <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.25"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.9/@attributes.9">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+                </attributeExpression>
+              </value>
+            </rhs>
+          </constraintExpression>
+        </rhs>
+      </lhs>
+      <rhs xmi:type="grapelmodel:AttributeConstraintLiteral">
+        <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression" op="GREATER_OR_EQUAL">
+          <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.21"/>
+              <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.9/@attributes.8">
+                <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+              </attributeExpression>
+            </value>
+          </lhs>
+          <rhs xmi:type="grapelmodel:ArithmeticExpressionProduction">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.0" eventAttribute="//@events.14/@attributes.4"/>
+              </value>
+            </lhs>
+            <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+                <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.0" eventAttribute="//@events.14/@attributes.2"/>
+                <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.14/@attributes.5">
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+                  <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+                </attributeExpression>
+              </value>
+            </rhs>
+          </rhs>
+        </constraintExpression>
+      </rhs>
+    </attributeConstraint>
+    <returnStatement xmi:type="grapelmodel:ApplyStatement" returnType="//@events.9" matchEvent="//@eventPatterns.3/@nodes.1">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.20"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.21"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.24"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.25"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.35"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.51"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.53"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.3/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.62"/>
+        </value>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="findRepeadedDelaysWithSamePlane">
+    <nodes xmi:type="grapelmodel:EventNode" name="delay1" type="//@events.12"/>
+    <nodes xmi:type="grapelmodel:EventNode" name="delay2" type="//@events.12"/>
+    <nodes xmi:type="grapelmodel:EventNode" name="delay3" type="//@events.12"/>
+    <context xmi:type="grapelmodel:Context" params="//@eventPatterns.4/@nodes.0 //@eventPatterns.4/@nodes.1 //@eventPatterns.4/@nodes.2">
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.4/@nodes.0" eventAttribute="//@events.12/@attributes.2"/>
+        <rhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.4/@nodes.1" eventAttribute="//@events.12/@attributes.2"/>
+      </contextConstraints>
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.4/@nodes.1" eventAttribute="//@events.12/@attributes.2"/>
+        <rhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.4/@nodes.2" eventAttribute="//@events.12/@attributes.2"/>
+      </contextConstraints>
+    </context>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+      <lhs xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+        <lhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+          <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.4/@nodes.0"/>
+        </lhs>
+        <rhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+          <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.4/@nodes.1"/>
+        </rhs>
+      </lhs>
+      <rhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+        <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.4/@nodes.2"/>
+      </rhs>
+    </relationalConstraint>
+    <returnStatement xmi:type="grapelmodel:SpawnStatement" returnType="//@events.15">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.4/@nodes.0" eventAttribute="//@events.12/@attributes.2"/>
+        </value>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="findRepeadedDelaysOnSameRoute">
+    <nodes xmi:type="grapelmodel:EventNode" name="delay1" type="//@events.12"/>
+    <nodes xmi:type="grapelmodel:EventNode" name="delay2" type="//@events.12"/>
+    <nodes xmi:type="grapelmodel:EventNode" name="delay3" type="//@events.12"/>
+    <context xmi:type="grapelmodel:Context" params="//@eventPatterns.5/@nodes.0 //@eventPatterns.5/@nodes.1 //@eventPatterns.5/@nodes.2">
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.0" eventAttribute="//@events.12/@attributes.1"/>
+        <rhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.1" eventAttribute="//@events.12/@attributes.1"/>
+      </contextConstraints>
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.1" eventAttribute="//@events.12/@attributes.1"/>
+        <rhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.2" eventAttribute="//@events.12/@attributes.1"/>
+      </contextConstraints>
+    </context>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+      <lhs xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+        <lhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+          <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.5/@nodes.0"/>
+        </lhs>
+        <rhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+          <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.5/@nodes.1"/>
+        </rhs>
+      </lhs>
+      <rhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+        <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.5/@nodes.2"/>
+      </rhs>
+    </relationalConstraint>
+    <returnStatement xmi:type="grapelmodel:SpawnStatement" returnType="//@events.16">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.0" eventAttribute="//@events.12/@attributes.1"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionProduction" op="DIVIDE">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <lhs xmi:type="grapelmodel:ArithmeticExpressionUnary">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <operand xmi:type="grapelmodel:ArithmeticExpressionProduction">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <lhs xmi:type="grapelmodel:ArithmeticExpressionProduction">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                  <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                  <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.0" eventAttribute="//@events.12/@attributes.4"/>
+                </value>
+              </lhs>
+              <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                  <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                  <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.1" eventAttribute="//@events.12/@attributes.4"/>
+                </value>
+              </rhs>
+            </lhs>
+            <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <value xmi:type="grapelmodel:ArithmeticValueExpression">
+                <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.5/@nodes.2" eventAttribute="//@events.12/@attributes.4"/>
+              </value>
+            </rhs>
+          </operand>
+        </lhs>
+        <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <value xmi:type="grapelmodel:IntegerLiteral" value="3">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          </value>
+        </rhs>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="replanRoute">
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="routeObject" type="//@ibexModel/@patternSet/@contextPatterns.1"/>
+    <nodes xmi:type="grapelmodel:EventNode" name="delayStatistic" type="//@events.16"/>
+    <context xmi:type="grapelmodel:Context" params="//@eventPatterns.6/@nodes.0 //@eventPatterns.6/@nodes.1">
+      <contextConstraints xmi:type="grapelmodel:NodeContextConstraint">
+        <lhs xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.6/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.45"/>
+        <rhs xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.6/@nodes.1" eventAttribute="//@events.16/@attributes.0"/>
+      </contextConstraints>
+    </context>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+      <lhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+        <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.6/@nodes.0"/>
+      </lhs>
+      <rhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+        <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.6/@nodes.1"/>
+      </rhs>
+    </relationalConstraint>
+    <attributeConstraint xmi:type="grapelmodel:AttributeConstraintUnary" params="//@eventPatterns.6/@nodes.0" operator="NOT">
+      <operand xmi:type="grapelmodel:MatchVanishedConstraint" eventPatternNode="//@eventPatterns.6/@nodes.0"/>
+    </attributeConstraint>
+    <returnStatement xmi:type="grapelmodel:ApplyStatement" returnType="//@events.10" matchEvent="//@eventPatterns.6/@nodes.0">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionProduction">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.6/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.45"/>
+            <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.10/@attributes.1">
+              <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Route/duration"/>
+              <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+            </attributeExpression>
+          </value>
+        </lhs>
+        <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.6/@nodes.1" eventAttribute="//@events.16/@attributes.1"/>
+          </value>
+        </rhs>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.6/@nodes.0" patternAttribute="//@ibexModel/@nodeSet/@nodes.45"/>
+        </value>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <eventPatterns xmi:type="grapelmodel:EventPattern" name="headwindDelaysFlight">
+    <nodes xmi:type="grapelmodel:EventNode" name="delay" type="//@events.17"/>
+    <nodes xmi:type="grapelmodel:IBeXPatternNode" name="flight" type="//@ibexModel/@patternSet/@contextPatterns.0"/>
+    <relationalConstraint xmi:type="grapelmodel:RelationalConstraintProduction" op="FOLLOWS">
+      <lhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+        <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.7/@nodes.1"/>
+      </lhs>
+      <rhs xmi:type="grapelmodel:RelationalConstraintUnary" operator="ALL">
+        <operand xmi:type="grapelmodel:RelationalConstraintLiteral" eventPatternNode="//@eventPatterns.7/@nodes.0"/>
+      </rhs>
+    </relationalConstraint>
+    <attributeConstraint xmi:type="grapelmodel:AttributeConstraintProduction" params="//@eventPatterns.7/@nodes.1 //@eventPatterns.7/@nodes.0">
+      <lhs xmi:type="grapelmodel:AttributeConstraintUnary" operator="NOT">
+        <operand xmi:type="grapelmodel:MatchVanishedConstraint" eventPatternNode="//@eventPatterns.7/@nodes.1"/>
+      </lhs>
+      <rhs xmi:type="grapelmodel:AttributeConstraintLiteral">
+        <constraintExpression xmi:type="grapelmodel:AttributeConstraintExpression" op="EQUAL">
+          <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+              <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.7/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.30"/>
+              <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.11/@attributes.2">
+                <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//FlightObject/ID"/>
+                <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//FlightObject"/>
+              </attributeExpression>
+            </value>
+          </lhs>
+          <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            <value xmi:type="grapelmodel:ArithmeticValueExpression">
+              <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+              <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.7/@nodes.0" eventAttribute="//@events.17/@attributes.0"/>
+            </value>
+          </rhs>
+        </constraintExpression>
+      </rhs>
+    </attributeConstraint>
+    <returnStatement xmi:type="grapelmodel:ApplyStatement" returnType="//@events.11" matchEvent="//@eventPatterns.7/@nodes.1">
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionProduction">
+        <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <lhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            <nodeExpression xmi:type="grapelmodel:EventNodeExpression" eventPatternNode="//@eventPatterns.7/@nodes.0" eventAttribute="//@events.17/@attributes.1"/>
+          </value>
+        </lhs>
+        <rhs xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+          <value xmi:type="grapelmodel:ArithmeticValueExpression">
+            <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+            <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.7/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.34"/>
+            <attributeExpression xmi:type="grapelmodel:AttributeExpressionLiteral" virtualAttribute="//@events.11/@attributes.3">
+              <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+              <class xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+            </attributeExpression>
+          </value>
+        </rhs>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.7/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.30"/>
+        </value>
+      </parameters>
+      <parameters xmi:type="grapelmodel:ArithmeticExpressionLiteral">
+        <value xmi:type="grapelmodel:ArithmeticValueExpression">
+          <nodeExpression xmi:type="grapelmodel:IBeXPatternNodeExpression" eventPatternNode="//@eventPatterns.7/@nodes.1" patternAttribute="//@ibexModel/@nodeSet/@nodes.34"/>
+        </value>
+      </parameters>
+    </returnStatement>
+  </eventPatterns>
+  <ibexModel xmi:type="IBeXPatternModel:IBeXModel">
+    <patternSet xmi:type="IBeXPatternModel:IBeXPatternSet">
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="changeFlightArrival" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.31" signatureNodes="//@ibexModel/@nodeSet/@nodes.30 //@ibexModel/@nodeSet/@nodes.34">
+        <parameters xmi:type="IBeXPatternModel:IBeXParameter" name="newArrivalTime">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+        </parameters>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="changeRouteDuration" documentation="" signatureNodes="//@ibexModel/@nodeSet/@nodes.45">
+        <parameters xmi:type="IBeXPatternModel:IBeXParameter" name="newDuration">
+          <type xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        </parameters>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="flightSrcGate" documentation="Graph-Patterns" localEdges="//@ibexModel/@edgeSet/@edges.0 //@ibexModel/@edgeSet/@edges.28" signatureNodes="//@ibexModel/@nodeSet/@nodes.0 //@ibexModel/@nodeSet/@nodes.28 //@ibexModel/@nodeSet/@nodes.31"/>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="flightTimes" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.26 //@ibexModel/@edgeSet/@edges.27 //@ibexModel/@edgeSet/@edges.32 //@ibexModel/@edgeSet/@edges.33" signatureNodes="//@ibexModel/@nodeSet/@nodes.5 //@ibexModel/@nodeSet/@nodes.7 //@ibexModel/@nodeSet/@nodes.27 //@ibexModel/@nodeSet/@nodes.36 //@ibexModel/@nodeSet/@nodes.44">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.5 //@ibexModel/@nodeSet/@nodes.7"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="flightTrgGate" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.1 //@ibexModel/@edgeSet/@edges.29" signatureNodes="//@ibexModel/@nodeSet/@nodes.4 //@ibexModel/@nodeSet/@nodes.29 //@ibexModel/@nodeSet/@nodes.32"/>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="flightsConnectedByTravel" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.12 //@ibexModel/@edgeSet/@edges.6 //@ibexModel/@edgeSet/@edges.14 //@ibexModel/@edgeSet/@edges.37 //@ibexModel/@edgeSet/@edges.8 //@ibexModel/@edgeSet/@edges.17 //@ibexModel/@edgeSet/@edges.35" localNodes="//@ibexModel/@nodeSet/@nodes.56" signatureNodes="//@ibexModel/@nodeSet/@nodes.3 //@ibexModel/@nodeSet/@nodes.11 //@ibexModel/@nodeSet/@nodes.14 //@ibexModel/@nodeSet/@nodes.16 //@ibexModel/@nodeSet/@nodes.38 //@ibexModel/@nodeSet/@nodes.40">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.11 //@ibexModel/@nodeSet/@nodes.14"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.38 //@ibexModel/@nodeSet/@nodes.40"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="flightsConnectedByTravel-CONDITION-f1_f2_airport" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.11 //@ibexModel/@edgeSet/@edges.5 //@ibexModel/@edgeSet/@edges.13 //@ibexModel/@edgeSet/@edges.36 //@ibexModel/@edgeSet/@edges.7 //@ibexModel/@edgeSet/@edges.16 //@ibexModel/@edgeSet/@edges.34" localNodes="//@ibexModel/@nodeSet/@nodes.15 //@ibexModel/@nodeSet/@nodes.37 //@ibexModel/@nodeSet/@nodes.39 //@ibexModel/@nodeSet/@nodes.55" signatureNodes="//@ibexModel/@nodeSet/@nodes.2 //@ibexModel/@nodeSet/@nodes.10 //@ibexModel/@nodeSet/@nodes.13">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.10 //@ibexModel/@nodeSet/@nodes.13"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.37 //@ibexModel/@nodeSet/@nodes.39"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="invalidConnectedFlights" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.4 //@ibexModel/@edgeSet/@edges.10 //@ibexModel/@edgeSet/@edges.3 //@ibexModel/@edgeSet/@edges.2 //@ibexModel/@edgeSet/@edges.15 //@ibexModel/@edgeSet/@edges.9" signatureNodes="//@ibexModel/@nodeSet/@nodes.1 //@ibexModel/@nodeSet/@nodes.6 //@ibexModel/@nodeSet/@nodes.8 //@ibexModel/@nodeSet/@nodes.9 //@ibexModel/@nodeSet/@nodes.12 //@ibexModel/@nodeSet/@nodes.52 //@ibexModel/@nodeSet/@nodes.63">
+        <attributeConstraint xmi:type="IBeXPatternModel:IBeXAttributeConstraint" relation="GREATER">
+          <lhs xmi:type="IBeXPatternModel:IBeXArithmeticValue">
+            <expression xmi:type="IBeXPatternModel:IBeXBinaryExpression">
+              <left xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="arrival">
+                <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+                <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+              </left>
+              <right xmi:type="IBeXPatternModel:IBeXUnaryExpression" operator="BRACKET">
+                <operand xmi:type="IBeXPatternModel:IBeXBinaryExpression" operator="MULTIPLICATION">
+                  <left xmi:type="IBeXPatternModel:IBeXUnaryExpression" operator="ABSOLUTE">
+                    <operand xmi:type="IBeXPatternModel:IBeXBinaryExpression" operator="SUBTRACTION">
+                      <left xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="trgGate">
+                        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+                        <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+                      </left>
+                      <right xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="srcGate">
+                        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+                        <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+                      </right>
+                    </operand>
+                  </left>
+                  <right xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="airport">
+                    <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+                    <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Airport/size"/>
+                  </right>
+                </operand>
+              </right>
+            </expression>
+          </lhs>
+          <rhs xmi:type="IBeXPatternModel:IBeXAttributeExpression" node="//@ibexModel/@nodeSet/@nodes.8">
+            <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+          </rhs>
+        </attributeConstraint>
+        <arithmeticConstraints xmi:type="IBeXPatternModel:IBeXArithmeticConstraint" relation="GREATER">
+          <lhs xmi:type="IBeXPatternModel:IBeXBinaryExpression">
+            <left xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="arrival">
+              <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+              <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+            </left>
+            <right xmi:type="IBeXPatternModel:IBeXUnaryExpression" operator="BRACKET">
+              <operand xmi:type="IBeXPatternModel:IBeXBinaryExpression" operator="MULTIPLICATION">
+                <left xmi:type="IBeXPatternModel:IBeXUnaryExpression" operator="ABSOLUTE">
+                  <operand xmi:type="IBeXPatternModel:IBeXBinaryExpression" operator="SUBTRACTION">
+                    <left xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="trgGate">
+                      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+                      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+                    </left>
+                    <right xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="srcGate">
+                      <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+                      <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Gate/position"/>
+                    </right>
+                  </operand>
+                </left>
+                <right xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="airport">
+                  <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+                  <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Airport/size"/>
+                </right>
+              </operand>
+            </right>
+          </lhs>
+          <rhs xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="departure">
+            <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+            <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+          </rhs>
+        </arithmeticConstraints>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.6 //@ibexModel/@nodeSet/@nodes.8"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.9 //@ibexModel/@nodeSet/@nodes.12"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.52 //@ibexModel/@nodeSet/@nodes.63"/>
+        <invocations xmi:type="IBeXPatternModel:IBeXPatternInvocation" positive="true" invokedPattern="//@ibexModel/@patternSet/@contextPatterns.6">
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.1" value="//@ibexModel/@nodeSet/@nodes.2"/>
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.9" value="//@ibexModel/@nodeSet/@nodes.10"/>
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.12" value="//@ibexModel/@nodeSet/@nodes.13"/>
+        </invocations>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="rebookFlight" apiPatternDependencies="//@ibexModel/@patternSet/@contextPatterns.13" documentation="Graph Transformation Rules" localEdges="//@ibexModel/@edgeSet/@edges.23 //@ibexModel/@edgeSet/@edges.18 //@ibexModel/@edgeSet/@edges.47 //@ibexModel/@edgeSet/@edges.19" signatureNodes="//@ibexModel/@nodeSet/@nodes.20 //@ibexModel/@nodeSet/@nodes.21 //@ibexModel/@nodeSet/@nodes.24 //@ibexModel/@nodeSet/@nodes.25 //@ibexModel/@nodeSet/@nodes.35 //@ibexModel/@nodeSet/@nodes.51 //@ibexModel/@nodeSet/@nodes.53 //@ibexModel/@nodeSet/@nodes.62">
+        <attributeConstraint xmi:type="IBeXPatternModel:IBeXAttributeConstraint" relation="GREATER">
+          <lhs xmi:type="IBeXPatternModel:IBeXAttributeExpression" node="//@ibexModel/@nodeSet/@nodes.35">
+            <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Plane/capacity"/>
+          </lhs>
+          <rhs xmi:type="IBeXPatternModel:IBeXArithmeticValue">
+            <expression xmi:type="IBeXPatternModel:IBeXMatchCount" operator="COUNT">
+              <operand xmi:type="IBeXPatternModel:IBeXArithmeticValueLiteral"/>
+              <invocation xmi:type="IBeXPatternModel:IBeXPatternInvocation" positive="true" invokedPattern="//@ibexModel/@patternSet/@contextPatterns.13">
+                <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.20" value="//@ibexModel/@nodeSet/@nodes.19"/>
+              </invocation>
+            </expression>
+          </rhs>
+        </attributeConstraint>
+        <arithmeticConstraints xmi:type="IBeXPatternModel:IBeXArithmeticConstraint" relation="GREATER">
+          <lhs xmi:type="IBeXPatternModel:IBeXArithmeticAttribute" name="pNew">
+            <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Plane"/>
+            <attribute xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Plane/capacity"/>
+          </lhs>
+          <rhs xmi:type="IBeXPatternModel:IBeXMatchCount" operator="COUNT">
+            <operand xmi:type="IBeXPatternModel:IBeXArithmeticValueLiteral"/>
+            <invocation xmi:type="IBeXPatternModel:IBeXPatternInvocation" positive="true" invokedPattern="//@ibexModel/@patternSet/@contextPatterns.13">
+              <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.20" value="//@ibexModel/@nodeSet/@nodes.19"/>
+            </invocation>
+          </rhs>
+        </arithmeticConstraints>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.20 //@ibexModel/@nodeSet/@nodes.24"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.21 //@ibexModel/@nodeSet/@nodes.25"/>
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.51 //@ibexModel/@nodeSet/@nodes.62"/>
+        <invocations xmi:type="IBeXPatternModel:IBeXPatternInvocation" positive="true" invokedPattern="//@ibexModel/@patternSet/@contextPatterns.10">
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.20" value="//@ibexModel/@nodeSet/@nodes.17"/>
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.51" value="//@ibexModel/@nodeSet/@nodes.48"/>
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.62" value="//@ibexModel/@nodeSet/@nodes.59"/>
+        </invocations>
+        <invocations xmi:type="IBeXPatternModel:IBeXPatternInvocation" positive="true" invokedPattern="//@ibexModel/@patternSet/@contextPatterns.12">
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.24" value="//@ibexModel/@nodeSet/@nodes.23"/>
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.51" value="//@ibexModel/@nodeSet/@nodes.49"/>
+          <mapping xmi:type="IBeXPatternModel:IBeXNodeToNodeMapping" key="//@ibexModel/@nodeSet/@nodes.62" value="//@ibexModel/@nodeSet/@nodes.60"/>
+        </invocations>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="supportNewRoute" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.21 //@ibexModel/@edgeSet/@edges.41 //@ibexModel/@edgeSet/@edges.45" signatureNodes="//@ibexModel/@nodeSet/@nodes.18 //@ibexModel/@nodeSet/@nodes.46 //@ibexModel/@nodeSet/@nodes.50 //@ibexModel/@nodeSet/@nodes.61">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.50 //@ibexModel/@nodeSet/@nodes.61"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="supportNewRoute-CONDITION-trgAirport_fNew_srcAirport" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.20 //@ibexModel/@edgeSet/@edges.39 //@ibexModel/@edgeSet/@edges.43" localNodes="//@ibexModel/@nodeSet/@nodes.42" signatureNodes="//@ibexModel/@nodeSet/@nodes.17 //@ibexModel/@nodeSet/@nodes.48 //@ibexModel/@nodeSet/@nodes.59">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.48 //@ibexModel/@nodeSet/@nodes.59"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="supportOldRoute" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.24 //@ibexModel/@edgeSet/@edges.38 //@ibexModel/@edgeSet/@edges.42" signatureNodes="//@ibexModel/@nodeSet/@nodes.22 //@ibexModel/@nodeSet/@nodes.41 //@ibexModel/@nodeSet/@nodes.47 //@ibexModel/@nodeSet/@nodes.58">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.47 //@ibexModel/@nodeSet/@nodes.58"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="supportOldRoute-CONDITION-trgAirport_fOld_srcAirport" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.25 //@ibexModel/@edgeSet/@edges.40 //@ibexModel/@edgeSet/@edges.44" localNodes="//@ibexModel/@nodeSet/@nodes.43" signatureNodes="//@ibexModel/@nodeSet/@nodes.23 //@ibexModel/@nodeSet/@nodes.49 //@ibexModel/@nodeSet/@nodes.60">
+        <injectivityConstraints xmi:type="IBeXPatternModel:IBeXInjectivityConstraint" values="//@ibexModel/@nodeSet/@nodes.49 //@ibexModel/@nodeSet/@nodes.60"/>
+      </contextPatterns>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="travelInNewFlight" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.22" signatureNodes="//@ibexModel/@nodeSet/@nodes.19 //@ibexModel/@nodeSet/@nodes.57"/>
+      <contextPatterns xmi:type="IBeXPatternModel:IBeXContextPattern" name="travelOnFlight" documentation="" localEdges="//@ibexModel/@edgeSet/@edges.48" signatureNodes="//@ibexModel/@nodeSet/@nodes.26 //@ibexModel/@nodeSet/@nodes.54"/>
+    </patternSet>
+    <ruleSet xmi:type="IBeXPatternModel:IBeXRuleSet">
+      <rules xmi:type="IBeXPatternModel:IBeXRule" name="changeFlightArrival" documentation="" lhs="//@ibexModel/@patternSet/@contextPatterns.0" parameters="//@ibexModel/@patternSet/@contextPatterns.0/@parameters.0">
+        <rhs xmi:type="IBeXPatternModel:IBeXContextPattern" name="changeFlightArrival_rhs" localEdges="//@ibexModel/@edgeSet/@edges.30" signatureNodes="//@ibexModel/@nodeSet/@nodes.30 //@ibexModel/@nodeSet/@nodes.33"/>
+        <create xmi:type="IBeXPatternModel:IBeXCreatePattern" name="changeFlightArrival" createdEdges="//@ibexModel/@edgeSet/@edges.30" createdNodes="//@ibexModel/@nodeSet/@nodes.33">
+          <attributeAssignments xmi:type="IBeXPatternModel:IBeXAttributeAssignment" node="//@ibexModel/@nodeSet/@nodes.33">
+            <value xmi:type="IBeXPatternModel:IBeXAttributeParameter" name="newArrivalTime"/>
+            <type xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//TimeStamp/time"/>
+          </attributeAssignments>
+        </create>
+        <delete xmi:type="IBeXPatternModel:IBeXDeletePattern" name="changeFlightArrival" deletedEdges="//@ibexModel/@edgeSet/@edges.31" deletedNodes="//@ibexModel/@nodeSet/@nodes.34"/>
+      </rules>
+      <rules xmi:type="IBeXPatternModel:IBeXRule" name="changeRouteDuration" documentation="" lhs="//@ibexModel/@patternSet/@contextPatterns.1" parameters="//@ibexModel/@patternSet/@contextPatterns.1/@parameters.0">
+        <rhs xmi:type="IBeXPatternModel:IBeXContextPattern" name="changeRouteDuration_rhs" signatureNodes="//@ibexModel/@nodeSet/@nodes.45"/>
+        <create xmi:type="IBeXPatternModel:IBeXCreatePattern" name="changeRouteDuration">
+          <attributeAssignments xmi:type="IBeXPatternModel:IBeXAttributeAssignment" node="//@ibexModel/@nodeSet/@nodes.45">
+            <value xmi:type="IBeXPatternModel:IBeXAttributeParameter" name="newDuration"/>
+            <type xmi:type="ecore:EAttribute" href="../../../Flights/model/Flights.ecore#//Route/duration"/>
+          </attributeAssignments>
+        </create>
+        <delete xmi:type="IBeXPatternModel:IBeXDeletePattern" name="changeRouteDuration"/>
+      </rules>
+      <rules xmi:type="IBeXPatternModel:IBeXRule" name="rebookFlight" documentation="Graph Transformation Rules" lhs="//@ibexModel/@patternSet/@contextPatterns.8" arithmeticConstraints="//@ibexModel/@patternSet/@contextPatterns.8/@arithmeticConstraints.0">
+        <rhs xmi:type="IBeXPatternModel:IBeXContextPattern" name="rebookFlight_rhs" localEdges="//@ibexModel/@edgeSet/@edges.23 //@ibexModel/@edgeSet/@edges.18 //@ibexModel/@edgeSet/@edges.19 //@ibexModel/@edgeSet/@edges.46" signatureNodes="//@ibexModel/@nodeSet/@nodes.20 //@ibexModel/@nodeSet/@nodes.21 //@ibexModel/@nodeSet/@nodes.24 //@ibexModel/@nodeSet/@nodes.25 //@ibexModel/@nodeSet/@nodes.35 //@ibexModel/@nodeSet/@nodes.51 //@ibexModel/@nodeSet/@nodes.53 //@ibexModel/@nodeSet/@nodes.62"/>
+        <create xmi:type="IBeXPatternModel:IBeXCreatePattern" name="rebookFlight" createdEdges="//@ibexModel/@edgeSet/@edges.46"/>
+        <delete xmi:type="IBeXPatternModel:IBeXDeletePattern" name="rebookFlight" deletedEdges="//@ibexModel/@edgeSet/@edges.47"/>
+      </rules>
+    </ruleSet>
+    <nodeSet xmi:type="IBeXPatternModel:IBeXNodeSet">
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="airport" outgoingEdges="//@ibexModel/@edgeSet/@edges.0">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="airport" outgoingEdges="//@ibexModel/@edgeSet/@edges.3 //@ibexModel/@edgeSet/@edges.2">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="airport" incomingEdges="//@ibexModel/@edgeSet/@edges.36 //@ibexModel/@edgeSet/@edges.34">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="airport" incomingEdges="//@ibexModel/@edgeSet/@edges.37 //@ibexModel/@edgeSet/@edges.35">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="airport" outgoingEdges="//@ibexModel/@edgeSet/@edges.1">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="arrival" incomingEdges="//@ibexModel/@edgeSet/@edges.26">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="arrival" incomingEdges="//@ibexModel/@edgeSet/@edges.4">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="departure" incomingEdges="//@ibexModel/@edgeSet/@edges.27">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="departure" incomingEdges="//@ibexModel/@edgeSet/@edges.10">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f1" outgoingEdges="//@ibexModel/@edgeSet/@edges.4 //@ibexModel/@edgeSet/@edges.9">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f1" outgoingEdges="//@ibexModel/@edgeSet/@edges.5 //@ibexModel/@edgeSet/@edges.7">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f1" outgoingEdges="//@ibexModel/@edgeSet/@edges.6 //@ibexModel/@edgeSet/@edges.8">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f2" outgoingEdges="//@ibexModel/@edgeSet/@edges.10 //@ibexModel/@edgeSet/@edges.15">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f2" outgoingEdges="//@ibexModel/@edgeSet/@edges.11 //@ibexModel/@edgeSet/@edges.13 //@ibexModel/@edgeSet/@edges.16">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f2" outgoingEdges="//@ibexModel/@edgeSet/@edges.12 //@ibexModel/@edgeSet/@edges.14 //@ibexModel/@edgeSet/@edges.17">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f2Departure" incomingEdges="//@ibexModel/@edgeSet/@edges.11">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="f2Departure" incomingEdges="//@ibexModel/@edgeSet/@edges.12">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fNew" outgoingEdges="//@ibexModel/@edgeSet/@edges.20">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fNew" outgoingEdges="//@ibexModel/@edgeSet/@edges.21">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fNew" outgoingEdges="//@ibexModel/@edgeSet/@edges.22">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fNew" incomingEdges="//@ibexModel/@edgeSet/@edges.46" outgoingEdges="//@ibexModel/@edgeSet/@edges.18 //@ibexModel/@edgeSet/@edges.19">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fNewDeparture" incomingEdges="//@ibexModel/@edgeSet/@edges.18">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fOld" outgoingEdges="//@ibexModel/@edgeSet/@edges.24">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fOld" outgoingEdges="//@ibexModel/@edgeSet/@edges.25">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fOld" incomingEdges="//@ibexModel/@edgeSet/@edges.47" outgoingEdges="//@ibexModel/@edgeSet/@edges.23">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="fOldDeparture" incomingEdges="//@ibexModel/@edgeSet/@edges.23">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" incomingEdges="//@ibexModel/@edgeSet/@edges.48">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" outgoingEdges="//@ibexModel/@edgeSet/@edges.26 //@ibexModel/@edgeSet/@edges.27 //@ibexModel/@edgeSet/@edges.32 //@ibexModel/@edgeSet/@edges.33">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" outgoingEdges="//@ibexModel/@edgeSet/@edges.28">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" outgoingEdges="//@ibexModel/@edgeSet/@edges.29">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="flight" outgoingEdges="//@ibexModel/@edgeSet/@edges.31 //@ibexModel/@edgeSet/@edges.30">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Flight"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="gate" incomingEdges="//@ibexModel/@edgeSet/@edges.0 //@ibexModel/@edgeSet/@edges.28">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="gate" incomingEdges="//@ibexModel/@edgeSet/@edges.1 //@ibexModel/@edgeSet/@edges.29">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="newArrival" incomingEdges="//@ibexModel/@edgeSet/@edges.30">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="oldArrival" incomingEdges="//@ibexModel/@edgeSet/@edges.31">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//TimeStamp"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="pNew" incomingEdges="//@ibexModel/@edgeSet/@edges.19">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Plane"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="plane" incomingEdges="//@ibexModel/@edgeSet/@edges.32">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Plane"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="r1" incomingEdges="//@ibexModel/@edgeSet/@edges.5" outgoingEdges="//@ibexModel/@edgeSet/@edges.34">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="r1" incomingEdges="//@ibexModel/@edgeSet/@edges.6" outgoingEdges="//@ibexModel/@edgeSet/@edges.35">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="r2" incomingEdges="//@ibexModel/@edgeSet/@edges.13" outgoingEdges="//@ibexModel/@edgeSet/@edges.36">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="r2" incomingEdges="//@ibexModel/@edgeSet/@edges.14" outgoingEdges="//@ibexModel/@edgeSet/@edges.37">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="route" incomingEdges="//@ibexModel/@edgeSet/@edges.24" outgoingEdges="//@ibexModel/@edgeSet/@edges.38 //@ibexModel/@edgeSet/@edges.42">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="route" incomingEdges="//@ibexModel/@edgeSet/@edges.20" outgoingEdges="//@ibexModel/@edgeSet/@edges.39 //@ibexModel/@edgeSet/@edges.43">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="route" incomingEdges="//@ibexModel/@edgeSet/@edges.25" outgoingEdges="//@ibexModel/@edgeSet/@edges.40 //@ibexModel/@edgeSet/@edges.44">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="route" incomingEdges="//@ibexModel/@edgeSet/@edges.33">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="route">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="route" incomingEdges="//@ibexModel/@edgeSet/@edges.21" outgoingEdges="//@ibexModel/@edgeSet/@edges.41 //@ibexModel/@edgeSet/@edges.45">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Route"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="srcAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.38">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="srcAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.39">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="srcAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.40">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="srcAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.41">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="srcAirport">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="srcGate" incomingEdges="//@ibexModel/@edgeSet/@edges.2 //@ibexModel/@edgeSet/@edges.15">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="t" outgoingEdges="//@ibexModel/@edgeSet/@edges.47 //@ibexModel/@edgeSet/@edges.46">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="travel" outgoingEdges="//@ibexModel/@edgeSet/@edges.48">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="travel" incomingEdges="//@ibexModel/@edgeSet/@edges.7 //@ibexModel/@edgeSet/@edges.16">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="travel" incomingEdges="//@ibexModel/@edgeSet/@edges.8 //@ibexModel/@edgeSet/@edges.17">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="travel" incomingEdges="//@ibexModel/@edgeSet/@edges.22">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Travel"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="trgAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.42">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="trgAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.43">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="trgAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.44">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="trgAirport" incomingEdges="//@ibexModel/@edgeSet/@edges.45">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="trgAirport">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Airport"/>
+      </nodes>
+      <nodes xmi:type="IBeXPatternModel:IBeXNode" name="trgGate" incomingEdges="//@ibexModel/@edgeSet/@edges.3 //@ibexModel/@edgeSet/@edges.9">
+        <type xmi:type="ecore:EClass" href="../../../Flights/model/Flights.ecore#//Gate"/>
+      </nodes>
+    </nodeSet>
+    <edgeSet xmi:type="IBeXPatternModel:IBeXEdgeSet">
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="airport->gate" sourceNode="//@ibexModel/@nodeSet/@nodes.0" targetNode="//@ibexModel/@nodeSet/@nodes.31">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="airport->gate" sourceNode="//@ibexModel/@nodeSet/@nodes.4" targetNode="//@ibexModel/@nodeSet/@nodes.32">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="airport->srcGate" sourceNode="//@ibexModel/@nodeSet/@nodes.1" targetNode="//@ibexModel/@nodeSet/@nodes.52">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="airport->trgGate" sourceNode="//@ibexModel/@nodeSet/@nodes.1" targetNode="//@ibexModel/@nodeSet/@nodes.63">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Airport/gates"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f1->arrival" sourceNode="//@ibexModel/@nodeSet/@nodes.9" targetNode="//@ibexModel/@nodeSet/@nodes.6">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/arrival"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f1->r1" sourceNode="//@ibexModel/@nodeSet/@nodes.10" targetNode="//@ibexModel/@nodeSet/@nodes.37">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f1->r1" sourceNode="//@ibexModel/@nodeSet/@nodes.11" targetNode="//@ibexModel/@nodeSet/@nodes.38">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f1->travel" sourceNode="//@ibexModel/@nodeSet/@nodes.10" targetNode="//@ibexModel/@nodeSet/@nodes.55">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/travels"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f1->travel" sourceNode="//@ibexModel/@nodeSet/@nodes.11" targetNode="//@ibexModel/@nodeSet/@nodes.56">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/travels"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f1->trgGate" sourceNode="//@ibexModel/@nodeSet/@nodes.9" targetNode="//@ibexModel/@nodeSet/@nodes.63">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->departure" sourceNode="//@ibexModel/@nodeSet/@nodes.12" targetNode="//@ibexModel/@nodeSet/@nodes.8">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->f2Departure" sourceNode="//@ibexModel/@nodeSet/@nodes.13" targetNode="//@ibexModel/@nodeSet/@nodes.15">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->f2Departure" sourceNode="//@ibexModel/@nodeSet/@nodes.14" targetNode="//@ibexModel/@nodeSet/@nodes.16">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->r2" sourceNode="//@ibexModel/@nodeSet/@nodes.13" targetNode="//@ibexModel/@nodeSet/@nodes.39">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->r2" sourceNode="//@ibexModel/@nodeSet/@nodes.14" targetNode="//@ibexModel/@nodeSet/@nodes.40">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->srcGate" sourceNode="//@ibexModel/@nodeSet/@nodes.12" targetNode="//@ibexModel/@nodeSet/@nodes.52">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->travel" sourceNode="//@ibexModel/@nodeSet/@nodes.13" targetNode="//@ibexModel/@nodeSet/@nodes.55">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/travels"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="f2->travel" sourceNode="//@ibexModel/@nodeSet/@nodes.14" targetNode="//@ibexModel/@nodeSet/@nodes.56">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/travels"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fNew->fNewDeparture" sourceNode="//@ibexModel/@nodeSet/@nodes.20" targetNode="//@ibexModel/@nodeSet/@nodes.21">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fNew->pNew" sourceNode="//@ibexModel/@nodeSet/@nodes.20" targetNode="//@ibexModel/@nodeSet/@nodes.35">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/plane"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fNew->route" sourceNode="//@ibexModel/@nodeSet/@nodes.17" targetNode="//@ibexModel/@nodeSet/@nodes.42">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fNew->route" sourceNode="//@ibexModel/@nodeSet/@nodes.18" targetNode="//@ibexModel/@nodeSet/@nodes.46">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fNew->travel" sourceNode="//@ibexModel/@nodeSet/@nodes.19" targetNode="//@ibexModel/@nodeSet/@nodes.57">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/travels"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fOld->fOldDeparture" sourceNode="//@ibexModel/@nodeSet/@nodes.24" targetNode="//@ibexModel/@nodeSet/@nodes.25">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fOld->route" sourceNode="//@ibexModel/@nodeSet/@nodes.22" targetNode="//@ibexModel/@nodeSet/@nodes.41">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="fOld->route" sourceNode="//@ibexModel/@nodeSet/@nodes.23" targetNode="//@ibexModel/@nodeSet/@nodes.43">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->arrival" sourceNode="//@ibexModel/@nodeSet/@nodes.27" targetNode="//@ibexModel/@nodeSet/@nodes.5">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/arrival"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->departure" sourceNode="//@ibexModel/@nodeSet/@nodes.27" targetNode="//@ibexModel/@nodeSet/@nodes.7">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/departure"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->gate" sourceNode="//@ibexModel/@nodeSet/@nodes.28" targetNode="//@ibexModel/@nodeSet/@nodes.31">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->gate" sourceNode="//@ibexModel/@nodeSet/@nodes.29" targetNode="//@ibexModel/@nodeSet/@nodes.32">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->newArrival" sourceNode="//@ibexModel/@nodeSet/@nodes.30" targetNode="//@ibexModel/@nodeSet/@nodes.33">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/arrival"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->oldArrival" sourceNode="//@ibexModel/@nodeSet/@nodes.30" targetNode="//@ibexModel/@nodeSet/@nodes.34">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/arrival"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->plane" sourceNode="//@ibexModel/@nodeSet/@nodes.27" targetNode="//@ibexModel/@nodeSet/@nodes.36">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/plane"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="flight->route" sourceNode="//@ibexModel/@nodeSet/@nodes.27" targetNode="//@ibexModel/@nodeSet/@nodes.44">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Flight/route"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="r1->airport" sourceNode="//@ibexModel/@nodeSet/@nodes.37" targetNode="//@ibexModel/@nodeSet/@nodes.2">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="r1->airport" sourceNode="//@ibexModel/@nodeSet/@nodes.38" targetNode="//@ibexModel/@nodeSet/@nodes.3">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="r2->airport" sourceNode="//@ibexModel/@nodeSet/@nodes.39" targetNode="//@ibexModel/@nodeSet/@nodes.2">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="r2->airport" sourceNode="//@ibexModel/@nodeSet/@nodes.40" targetNode="//@ibexModel/@nodeSet/@nodes.3">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->srcAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.41" targetNode="//@ibexModel/@nodeSet/@nodes.47">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->srcAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.42" targetNode="//@ibexModel/@nodeSet/@nodes.48">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->srcAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.43" targetNode="//@ibexModel/@nodeSet/@nodes.49">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->srcAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.46" targetNode="//@ibexModel/@nodeSet/@nodes.50">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/src"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->trgAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.41" targetNode="//@ibexModel/@nodeSet/@nodes.58">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->trgAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.42" targetNode="//@ibexModel/@nodeSet/@nodes.59">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->trgAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.43" targetNode="//@ibexModel/@nodeSet/@nodes.60">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="route->trgAirport" sourceNode="//@ibexModel/@nodeSet/@nodes.46" targetNode="//@ibexModel/@nodeSet/@nodes.61">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Route/trg"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="t->fNew" sourceNode="//@ibexModel/@nodeSet/@nodes.53" targetNode="//@ibexModel/@nodeSet/@nodes.20">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Travel/flights"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="t->fOld" sourceNode="//@ibexModel/@nodeSet/@nodes.53" targetNode="//@ibexModel/@nodeSet/@nodes.24">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Travel/flights"/>
+      </edges>
+      <edges xmi:type="IBeXPatternModel:IBeXEdge" name="travel->flight" sourceNode="//@ibexModel/@nodeSet/@nodes.54" targetNode="//@ibexModel/@nodeSet/@nodes.26">
+        <type xmi:type="ecore:EReference" href="../../../Flights/model/Flights.ecore#//Travel/flights"/>
+      </edges>
+    </edgeSet>
+  </ibexModel>
+</grapelmodel:GrapeLModelContainer>

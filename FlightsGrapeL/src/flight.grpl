@@ -69,28 +69,7 @@ pattern travelHasConnectingFlight {
 		-flights -> connectingFlight
 	}
 }
-   
-//event_pattern testEvent spawns e1{        
-//	dot : e1 
-//	dot2 : p1        
-//	 
-//	dot.airport == dot2.airport
-//	dot.str != dot.airport 
-//	dot.airport == dot2.airport    
-//	dot.str != dot2.airport
-//	
-//	dot -> dot2 AND dot && dot2 AND dot2 || dot {
-//		dot.airport.ID < dot2.airport.ID 
-//		&& dot2.airport.ID > dot.str &&
-//		dot2.airport.ID == dot.airport.size 
-//		&& 8 > dot.airport.ID
-//		|| dot.airport.ID < dot2.airport.size &&
-//		dot.airport.ID + dot.airport.ID >= dot2.airport.ID * dot2.airport.ID + dot.airport.ID ||
-//		dot2.airport.ID / dot.airport.size == dot.airport.ID  
-//	}     
-//	     
-//	spawn e1(dot.airport.ID,dot2.airport.size)                        
-//}
+
 rule changeFlight() {
 	travel : Travel {
 		-- -flights -> oldFlight
