@@ -1,21 +1,26 @@
 import "platform:/resource/Flights/model/Flights.ecore"
 import "http://www.eclipse.org/emf/2002/Ecore"
 
-event e1 {
-	Airport airport; 
-	EString str;    
+/*
+ * pattern to get container
+ */
+pattern container {
+	model: FlightModel
+}
+event modelContainer {
+	FlightModel model;
+}
+event_pattern hasContainer spawns modelContainer {
+	event1: container
+	
+	# all(event1)
+	
+	spawn modelContainer(event1.model)
 }
 
-event flightDelayed {
-	Flight flight;
-	TimeStamp arrival;
-}
-
-event connectingFlightNotReachable {
-	Flight connectingFlight;
-	Travel travel;
-}
- 
+/*
+ * find flights with a changing arrival time
+ */
 pattern flightWithArrival() {       
   	routex: Route
   	flight: Flight {
@@ -29,12 +34,24 @@ pattern flightWithArrival() {
   	plane: Plane
 }
 
-pattern container {
-	model: FlightModel
+/*
+ * found delayed flights
+ */
+event flightDelayed {
+	Flight flight;
+	TimeStamp arrival;
 }
-
-event modelContainer {
-	FlightModel model;
+/*
+ * check if a changed flight is delayed
+ */
+event_pattern flightDelayCheck spawns flightDelayed {
+	event1 : flightWithArrival  
+	          
+	# all(event1) {
+		event1.arrival.time > event1.routex.duration + event1.departure.time && !vanished(event1)   
+	}               
+	 
+	spawn flightDelayed(event1.flight, event1.arrival)                     
 }
 
 /*
@@ -69,28 +86,32 @@ pattern travelHasConnectingFlight {
 		-flights -> connectingFlight
 	}
 }
-   
-//event_pattern testEvent spawns e1{        
-//	dot : e1 
-//	dot2 : p1        
-//	 
-//	dot.airport == dot2.airport
-//	dot.str != dot.airport 
-//	dot.airport == dot2.airport    
-//	dot.str != dot2.airport
-//	
-//	dot -> dot2 AND dot && dot2 AND dot2 || dot {
-//		dot.airport.ID < dot2.airport.ID 
-//		&& dot2.airport.ID > dot.str &&
-//		dot2.airport.ID == dot.airport.size 
-//		&& 8 > dot.airport.ID
-//		|| dot.airport.ID < dot2.airport.size &&
-//		dot.airport.ID + dot.airport.ID >= dot2.airport.ID * dot2.airport.ID + dot.airport.ID ||
-//		dot2.airport.ID / dot.airport.size == dot.airport.ID  
-//	}     
-//	     
-//	spawn e1(dot.airport.ID,dot2.airport.size)                        
-//}
+/*
+ * not reachable connecting flight found
+ */
+event connectingFlightNotReachable {
+	Flight connectingFlight;
+	Travel travel;
+}
+/*
+ * check if a connecting flight is not reachable due to a delay
+ */
+event_pattern connectingFlightNotReachableCheck spawns connectingFlightNotReachable {
+	delayed: flightDelayed
+	connecting: travelHasConnectingFlight
+	
+	delayed.flight == connecting.flight 
+	            
+	# all(connecting -> all(delayed)) { 
+		(delayed.arrival.time + abs(connecting.departingGate.position - connecting.arrivalGate.position)) * connecting.transitAirport.size > connecting.connectionDeparture.time
+	}          
+	     
+	spawn connectingFlightNotReachable(connecting.connectingFlight, connecting.travel)
+}
+
+/*
+ * change a flight to a flight with the same route
+ */
 rule changeFlight() {
 	travel : Travel {
 		-- -flights -> oldFlight
@@ -103,7 +124,9 @@ rule changeFlight() {
 	trgAirport : Airport
 	srcAirport: Airport
 } when identicalRoute
-
+/*
+ * support pattern to allow the same route as well as different routes
+ */
 condition oldRoute = enforce supportOldRoute
 condition newRoute = enforce supportNewRoute
 
@@ -132,52 +155,9 @@ pattern supportNewRoute {
 	trgAirport : Airport
 	srcAirport: Airport
 }
-
-rule dummy(str: EString) {
-	airport : Airport {
-		.ID := param::str
-	}
-} 
-
-event_pattern dummy2 applies dummy {
-	d : dummy
-	
-	#d
-	
-	apply dummy("Value") to d
-}
-
-event_pattern hasContainer spawns modelContainer {
-	event1: container
-	
-	# all(event1)
-	
-	spawn modelContainer(event1.model)
-}
-
-event_pattern testEvent spawns flightDelayed {
-	event1 : flightWithArrival  
-	          
-	# all(event1) {
-		event1.arrival.time > event1.routex.duration + event1.departure.time && !vanished(event1)   
-	}               
-	 
-	spawn flightDelayed(event1.flight, event1.arrival)                     
-}
-
-event_pattern connectingFlightNotReachableEvent spawns connectingFlightNotReachable {
-	delayed: flightDelayed
-	connecting: travelHasConnectingFlight
-	
-	delayed.flight == connecting.flight 
-	            
-	# all(connecting -> all(delayed)) { 
-		(delayed.arrival.time + abs(connecting.departingGate.position - connecting.arrivalGate.position)) * connecting.transitAirport.size > connecting.connectionDeparture.time
-	}          
-	     
-	spawn connectingFlightNotReachable(connecting.connectingFlight, connecting.travel)
-}
-
+/*
+ * simple rebook for test purposes
+ */
 event_pattern rebookConnectingFlightTest applies changeFlight {
 	rebook: changeFlight
 	notReachable: connectingFlightNotReachable
