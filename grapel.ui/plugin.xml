@@ -431,4 +431,11 @@
 			type="text">
 		</fileTypes>
 	</extension>
+ <extension
+       point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
+    <diagramTextProvider
+          priority="19"
+          providerClass="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
+    </diagramTextProvider>
+ </extension>
 </plugin>
