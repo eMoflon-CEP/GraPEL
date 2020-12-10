@@ -10,25 +10,21 @@ import java.util.HashMap
 import org.emoflon.cep.grapel.EventPatternNode
 import org.eclipse.emf.ecore.EObject
 import org.emoflon.ibex.gt.editor.gT.EditorNode
-import org.emoflon.cep.grapel.EventPatternContextConstraint
 import org.emoflon.cep.grapel.RelationalConstraint
-import java.util.Map
 import org.emoflon.cep.grapel.BinaryRelationalConstraint
 import org.emoflon.cep.grapel.UnaryRelationalConstraint
 import org.emoflon.cep.grapel.RelationalNodeExpression
 import org.emoflon.cep.grapel.UnaryRelationalOperator
 import org.emoflon.cep.grapel.BinaryRelationalOperator
-import java.util.List
-import java.util.LinkedList
 import java.util.Map.Entry
 import java.util.AbstractMap.SimpleEntry
 import org.emoflon.ibex.gt.editor.ui.visualization.GTPlantUMLGenerator
-import org.emoflon.ibex.gt.editor.utils.GTFlattener
-import org.emoflon.ibex.gt.editor.ui.visualization.GTVisualizationUtils
 import org.emoflon.cep.grapel.ReturnSpawn
 import org.emoflon.cep.grapel.ReturnApply
 import org.emoflon.cep.grapel.SpawnStatement
 import org.emoflon.cep.grapel.ApplyStatement
+import org.emoflon.cep.grapel.EditorGTFile
+import org.emoflon.ibex.gt.editor.gT.EditorApplicationCondition
 
 class GrapeLPlantUMLGenerator {
 	static val ContextColor = 'Black'
@@ -36,7 +32,6 @@ class GrapeLPlantUMLGenerator {
 	static val DeleteColor = 'Crimson'
 	static val LocalNodeColor = 'Gray'
 	static val AtrConstrColor = 'White'
-	static int MAX_STR_LENGTH = 100
 	
 	static val ComplexFieldColor = 'Blue'
 	static val SimpleFieldColor = 'Gray'
@@ -54,7 +49,6 @@ class GrapeLPlantUMLGenerator {
 				HeaderBackgroundColor<<SimpleField>> «SimpleFieldColor»
 				BorderColor<<ComplexField>> «ComplexFieldColor»
 				BorderColor<<SimpleField>> «SimpleFieldColor»
-«««				FontColor<<ATR_CONSTR>> «ContextColor»
 				FontColor White
 			}
 			
@@ -65,12 +59,6 @@ class GrapeLPlantUMLGenerator {
 	
 	static def String visualizeEventPattern(EventPattern eventPattern) {
 		val node2NodeName = new HashMap
-//		for(node : eventPattern.nodes.filter[node | node.type instanceof Event]) {
-//			node2NodeName.put(node.name, node.name+" : "+(node.type as Event).name)
-//		}
-//		for(node : eventPattern.nodes.filter[node | node.type instanceof EditorPattern]) {
-//			node2NodeName.put(node.name, node.name+" : "+(node.type as EditorPattern).name)
-//		}
 
 		for(node : eventPattern.nodes.filter[node | node.type instanceof Event]) {
 			node2NodeName.put(node.name, '''Events.«(node.type as Event).name»''')
@@ -155,6 +143,69 @@ class GrapeLPlantUMLGenerator {
 			«ELSE»
 			«formatApplyType(eventPattern, eventPattern.returnType as ReturnApply, eventPattern.returnStatement as ApplyStatement)»
 			«ENDIF»
+			
+«««			TODO: Visualize attribute constraints
+		'''
+	}
+	
+	static def String visualizeDependencies(EditorGTFile file) {
+		return '''
+			«commonLayoutSettings»
+			skinparam class {
+				HeaderBackgroundColor<<EventPattern>> White
+				BorderColor<<EventPattern>> Black
+				HeaderBackgroundColor<<Event>> #634917
+				BorderColor<<Event>> #634917
+				HeaderBackgroundColor<<Pattern>> #595959
+				BorderColor<<Pattern>> #595959
+				FontColor<<EventPattern>> Black
+				FontColor White
+			}
+			
+			namespace Event_Patterns {
+			«IF file.eventPatterns !== null && !file.eventPatterns.empty»
+			«FOR eventPattern : file.eventPatterns»
+				class «eventPattern.name» <<EventPattern>> {
+					EVENT_PATTERN
+				}
+				«FOR node : eventPattern.nodes»
+				«IF node.type instanceof Event»
+				"«eventPattern.name»" -[#000000]-> "Events.«nodeTypeName(node)»" : depends_on_«nodeTypeName(node)»
+				«ELSE»
+				"«eventPattern.name»" -[#000000]-> "Patterns.«nodeTypeName(node)»" : depends_on_«nodeTypeName(node)»
+				«ENDIF»
+
+				«ENDFOR»
+				«IF eventPattern.returnType instanceof ReturnSpawn»
+				"«eventPattern.name»" #-[#629157]-# "Events.«(eventPattern.returnType as ReturnSpawn).returnType.name»" : spawns_«(eventPattern.returnType as ReturnSpawn).returnType.name»
+				«ENDIF»
+			«ENDFOR»
+			«ENDIF»
+			}
+			
+			namespace Events {
+			«IF file.events !== null && !file.events.empty»
+			«FOR event : file.events»
+				class «event.name» <<Event>> {
+					EVENT
+				}
+			«ENDFOR»
+			«ENDIF»
+			}
+
+			namespace Patterns {
+			«IF file.patterns !== null && !file.patterns.empty»
+			«FOR pattern : file.patterns»
+				class «pattern.name» <<Pattern>> {
+					PATTERN
+				}
+				«FOR subpattern : pattern.conditions.flatMap[cond | cond.conditions].filter[cond | cond instanceof EditorApplicationCondition].map[cond | cond as EditorApplicationCondition].map[cond | cond.pattern]»
+				"Patterns.«pattern.name»" -[#000000]-> "Patterns.«subpattern.name»" : depends_on_«subpattern.name»
+				«ENDFOR»
+«««				TODO: Nested Conditions!
+			«ENDFOR»
+			«ENDIF»
+			}
 		'''
 	}
 	
@@ -164,15 +215,6 @@ class GrapeLPlantUMLGenerator {
 		} else {
 			return "ComplexField" 
 		}
-	}
-	
-	private static def String contextConstraintLabel(EventPatternContextConstraint constraint) {
-		val lhsName = constraint.lhs.patternNode.name
-		val rhsName = constraint.rhs.patternNode.name
-		val lhsAtr = nodeAttributeName(constraint.lhs.patternNode, constraint.lhs.attribute)
-		val rhsAtr = nodeAttributeName(constraint.rhs.patternNode, constraint.rhs.attribute)
-		return '''«lhsName».«lhsAtr»\n«constraint.relation.toString»\n«rhsName».«rhsAtr»
-		'''
 	}
 	
 	private static def Entry<String, String> formatRelationalConstraint(EventPattern eventPattern, RelationalConstraint constraint) {		
@@ -293,6 +335,9 @@ class GrapeLPlantUMLGenerator {
 		return '''namespace Spawned_Event #629157 {
 			«formatEvent(spawnType.returnType)»
 			"«eventPattern.name»" -[#000000]-> "Spawned_Event.«spawnType.returnType.name»" : Spawns 
+			«FOR param : statement.returnParams»
+«««			TODO: visualize parameter dependencies
+			«ENDFOR»
 		}'''
 	}
 	
@@ -300,6 +345,10 @@ class GrapeLPlantUMLGenerator {
 		return '''namespace Applied_Rule #ffea08 {
 			«formatPattern(applyType.returnType)»
 			"«eventPattern.name»" -[#000000]-> "Applied_Rule.«applyType.returnType.name»" : Applies 
+			"«eventPattern.name».«statement.match.name» : «nodeTypeName(statement.match)»" #-[#335bb0]-# "Applied_Rule.«applyType.returnType.name»"
+			«FOR param : statement.returnParams»
+«««			TODO: visualize parameter dependencies
+			«ENDFOR»
 		}'''
 	}
 	

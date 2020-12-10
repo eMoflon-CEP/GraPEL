@@ -81,6 +81,8 @@ public class GrapeLVisualizer extends EMoflonVisualiser{
 			} else if(object.get() instanceof EditorPattern) {
 				return GTPlantUMLGenerator.visualizePattern((EditorPattern)object.get());
 			}
+		} else {
+			return GrapeLPlantUMLGenerator.visualizeDependencies(file);
 		}
 		
 		return EMoflonPlantUMLGenerator.emptyDiagram();
