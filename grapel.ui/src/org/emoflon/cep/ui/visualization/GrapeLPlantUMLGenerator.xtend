@@ -74,11 +74,19 @@ class GrapeLPlantUMLGenerator {
 	
 	static def String visualizeEventPattern(EventPattern eventPattern) {
 		val node2NodeName = new HashMap
+//		for(node : eventPattern.nodes.filter[node | node.type instanceof Event]) {
+//			node2NodeName.put(node.name, node.name+" : "+(node.type as Event).name)
+//		}
+//		for(node : eventPattern.nodes.filter[node | node.type instanceof EditorPattern]) {
+//			node2NodeName.put(node.name, node.name+" : "+(node.type as EditorPattern).name)
+//		}
+
 		for(node : eventPattern.nodes.filter[node | node.type instanceof Event]) {
-			node2NodeName.put(node.name, node.name+" : "+(node.type as Event).name)
+			node2NodeName.put(node.name, '''Events.«(node.type as Event).name»''')
 		}
+
 		for(node : eventPattern.nodes.filter[node | node.type instanceof EditorPattern]) {
-			node2NodeName.put(node.name, node.name+" : "+(node.type as EditorPattern).name)
+			node2NodeName.put(node.name, '''Graph_Patterns.«(node.type as EditorPattern).name»''')
 		}
 		'''
 			«commonLayoutSettings»
@@ -111,7 +119,7 @@ class GrapeLPlantUMLGenerator {
 				FontColor<<ATR_CONSTR>> «ContextColor»
 			}
 			
-			package «eventPattern.name» {
+			namespace «eventPattern.name» {
 				«FOR node : eventPattern.nodes.filter[node | node.type instanceof Event]»
 				class "«node.name» : «(node.type as Event).name»" <<EventNode>>
 				«ENDFOR»
@@ -119,9 +127,9 @@ class GrapeLPlantUMLGenerator {
 				class "«node.name» : «(node.type as EditorPattern).name»" <<PatternNode>>
 				«ENDFOR»
 				
-				«FOR contextConstraint : eventPattern.contextConstraints»
-				"«node2NodeName.get(contextConstraint.lhs.patternNode.name)»" -[#000000]- "«node2NodeName.get(contextConstraint.rhs.patternNode.name)»": «contextConstraintLabel(contextConstraint)»
-				«ENDFOR»
+«««				«FOR contextConstraint : eventPattern.contextConstraints»
+«««				"«node2NodeName.get(contextConstraint.lhs.patternNode.name)»" -[#000000]- "«node2NodeName.get(contextConstraint.rhs.patternNode.name)»": «contextConstraintLabel(contextConstraint)»
+«««				«ENDFOR»
 				
 				package Relational_Constraint #fff3d0{
 					«getFormattedRelationalConstraint(eventPattern.relationalConstraint)»
@@ -131,7 +139,7 @@ class GrapeLPlantUMLGenerator {
 			}
 			
 			«IF !eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern].empty»
-			package Graph_Patterns #c9c9c9{
+			namespace Graph_Patterns #c9c9c9{
 			«FOR pattern : eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern]»
 				«formatPattern(pattern)»
 			«ENDFOR»
@@ -139,7 +147,7 @@ class GrapeLPlantUMLGenerator {
 			«ENDIF»
 			
 			«IF !eventPattern.nodes.filter[node | node.type instanceof Event].map[node | node.type as Event].empty»
-			package Events #ccb19a{
+			namespace Events #ccb19a{
 			«FOR event : eventPattern.nodes.filter[node | node.type instanceof Event].map[node | node.type as Event]»
 				«formatEvent(event)»
 			«ENDFOR»
@@ -147,10 +155,14 @@ class GrapeLPlantUMLGenerator {
 			«ENDIF»
 			
 			«FOR node : eventPattern.nodes.filter[node | node.type instanceof Event]»
-			"«eventPattern.name».«node.name» : «(node.type as Event).name»" #--# "Events.«(node.type as Event).name»"
+			"«eventPattern.name».«node.name» : «(node.type as Event).name»" #-[#335bb0]-# "Events.«(node.type as Event).name»"
 			«ENDFOR»
 			«FOR node : eventPattern.nodes.filter[node | node.type instanceof EditorPattern]»
-			"«eventPattern.name».«node.name» : «(node.type as EditorPattern).name»" #--# "Graph_Patterns.«(node.type as EditorPattern).name»"
+			"«eventPattern.name».«node.name» : «(node.type as EditorPattern).name»" #-[#335bb0]-# "Graph_Patterns.«(node.type as EditorPattern).name»"
+			«ENDFOR»
+			
+			«FOR contextConstraint : eventPattern.contextConstraints»
+			"«node2NodeName.get(contextConstraint.lhs.patternNode.name)».«nodeAttributeName(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)»: «nodeAttributeType(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)»" *-[#a61e1e]-* "«node2NodeName.get(contextConstraint.rhs.patternNode.name)».«nodeAttributeName(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)»: «nodeAttributeType(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)»" : «contextConstraint.relation»
 			«ENDFOR»
 		'''
 	}
@@ -234,7 +246,7 @@ class GrapeLPlantUMLGenerator {
 	private static def String formatPattern(EditorPattern pattern) {
 		val nodeNamesInFlattenedPattern = pattern.nodes.map[it.name]
 		return '''
-		package «pattern.name» #FFFFFF{		
+		namespace «pattern.name» #FFFFFF{		
 			«GTPlantUMLGenerator.visualizeGraph(pattern)»
 			«GTPlantUMLGenerator.visualizeAttributeConstraints(pattern)»
 			«GTPlantUMLGenerator.visualizeRate(pattern)»
@@ -267,17 +279,17 @@ class GrapeLPlantUMLGenerator {
 	
 	private static def String formatEvent(Event event) {
 		return '''
-			package «event.name» #FFFFFF{
+			namespace «event.name» #FFFFFF{
 				«FOR field : event.attributes.filter[field | !(field.type instanceof EDataType)]»
-				class "«field.name» : «field.type.name»" <<«fieldSkin(field)»>> {
+				class "«field.name»: «field.type.name»" <<«fieldSkin(field)»>> {
 					«FOR atr : (field.type as EClass).EAllAttributes»
-					+ «atr.name» : «atr.EType.name»
+					+ «atr.name»: «atr.EType.name»
 					«ENDFOR»
 				}
 				«ENDFOR»
 				class Primitive-Fields <<SimpleField>>{
 				«FOR field : event.attributes.filter[field | (field.type instanceof EDataType)]»
-				+ «field.name» : «field.type.name»
+				+ «field.name»: «field.type.name»
 				«ENDFOR»
 				}
 			}
@@ -291,6 +303,16 @@ class GrapeLPlantUMLGenerator {
 		}else {
 			val patternNode = atr as EditorNode
 			return patternNode.name
+		}
+	}
+	
+	private static def String nodeAttributeType(EventPatternNode node, EObject atr) {
+		if(node.type instanceof Event) {
+			val eventAtr = atr as EventAttribute
+			return eventAtr.type.name
+		}else {
+			val patternNode = atr as EditorNode
+			return patternNode.type.name
 		}
 	}
 	
