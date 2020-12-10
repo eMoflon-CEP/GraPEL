@@ -25,6 +25,10 @@ import java.util.AbstractMap.SimpleEntry
 import org.emoflon.ibex.gt.editor.ui.visualization.GTPlantUMLGenerator
 import org.emoflon.ibex.gt.editor.utils.GTFlattener
 import org.emoflon.ibex.gt.editor.ui.visualization.GTVisualizationUtils
+import org.emoflon.cep.grapel.ReturnSpawn
+import org.emoflon.cep.grapel.ReturnApply
+import org.emoflon.cep.grapel.SpawnStatement
+import org.emoflon.cep.grapel.ApplyStatement
 
 class GrapeLPlantUMLGenerator {
 	static val ContextColor = 'Black'
@@ -164,6 +168,12 @@ class GrapeLPlantUMLGenerator {
 			«FOR contextConstraint : eventPattern.contextConstraints»
 			"«node2NodeName.get(contextConstraint.lhs.patternNode.name)».«nodeAttributeName(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)»: «nodeAttributeType(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)»" *-[#a61e1e]-* "«node2NodeName.get(contextConstraint.rhs.patternNode.name)».«nodeAttributeName(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)»: «nodeAttributeType(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)»" : «contextConstraint.relation»
 			«ENDFOR»
+			
+			«IF eventPattern.returnType instanceof ReturnSpawn»
+			«formatSpawnType(eventPattern, eventPattern.returnType as ReturnSpawn, eventPattern.returnStatement as SpawnStatement)»
+			«ELSE»
+			«formatApplyType(eventPattern, eventPattern.returnType as ReturnApply, eventPattern.returnStatement as ApplyStatement)»
+			«ENDIF»
 		'''
 	}
 	
@@ -292,6 +302,20 @@ class GrapeLPlantUMLGenerator {
 				}
 			}
 		'''
+	}
+	
+	private static def String formatSpawnType(EventPattern eventPattern, ReturnSpawn spawnType, SpawnStatement statement) {
+		return '''namespace Spawned_Event #629157 {
+			«formatEvent(spawnType.returnType)»
+			"«eventPattern.name»" -[#000000]-> "Spawned_Event.«spawnType.returnType.name»" : Spawns 
+		}'''
+	}
+	
+	private static def String formatApplyType(EventPattern eventPattern, ReturnApply applyType, ApplyStatement statement) {
+		return '''namespace Applied_Rule #ffea08 {
+			«formatPattern(applyType.returnType)»
+			"«eventPattern.name»" -[#000000]-> "Applied_Rule.«applyType.returnType.name»" : Applies 
+		}'''
 	}
 	
 	private static def String nodeTypeName(EventPatternNode node) {
