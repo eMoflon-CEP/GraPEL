@@ -132,7 +132,7 @@ class GrapeLPlantUMLGenerator {
 «««				«ENDFOR»
 				
 				package Relational_Constraint #fff3d0{
-					«getFormattedRelationalConstraint(eventPattern.relationalConstraint)»
+					«formatRelationalConstraint(eventPattern, eventPattern.relationalConstraint).value»
 				}
 				
 				
@@ -140,7 +140,7 @@ class GrapeLPlantUMLGenerator {
 			
 			«IF !eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern].empty»
 			namespace Graph_Patterns #c9c9c9{
-			«FOR pattern : eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern]»
+			«FOR pattern : eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern].toSet»
 				«formatPattern(pattern)»
 			«ENDFOR»
 			}
@@ -148,7 +148,7 @@ class GrapeLPlantUMLGenerator {
 			
 			«IF !eventPattern.nodes.filter[node | node.type instanceof Event].map[node | node.type as Event].empty»
 			namespace Events #ccb19a{
-			«FOR event : eventPattern.nodes.filter[node | node.type instanceof Event].map[node | node.type as Event]»
+			«FOR event : eventPattern.nodes.filter[node | node.type instanceof Event].map[node | node.type as Event].toSet»
 				«formatEvent(event)»
 			«ENDFOR»
 			}
@@ -184,14 +184,10 @@ class GrapeLPlantUMLGenerator {
 		'''
 	}
 	
-	private static def String getFormattedRelationalConstraint(RelationalConstraint constraint) {
-		return formatRelationalConstraint(constraint).value
-	}
-	
-	private static def Entry<String, String> formatRelationalConstraint(RelationalConstraint constraint) {		
+	private static def Entry<String, String> formatRelationalConstraint(EventPattern eventPattern, RelationalConstraint constraint) {		
 		if(constraint instanceof BinaryRelationalConstraint) {
-			val left = formatRelationalConstraint(constraint.left);
-			val right = formatRelationalConstraint(constraint.right);
+			val left = formatRelationalConstraint(eventPattern, constraint.left);
+			val right = formatRelationalConstraint(eventPattern, constraint.right);
 			if(constraint.operator == BinaryRelationalOperator.FOLLOWS) {
 				val expr = '''«left.value»
 				«right.value»
@@ -218,7 +214,7 @@ class GrapeLPlantUMLGenerator {
 			}
 		} else if (constraint instanceof UnaryRelationalConstraint) {
 			if(constraint.operator == UnaryRelationalOperator.ALL) {
-				val operand = formatRelationalConstraint(constraint.operand)
+				val operand = formatRelationalConstraint(eventPattern, constraint.operand)
 				val name = '''«IF constraint.negated»NOT_«ENDIF»ALL(«operand.key»)'''
 				val expr = '''package «name» #FFFFFF{
 					«operand.value»
@@ -226,7 +222,7 @@ class GrapeLPlantUMLGenerator {
 				val result = new SimpleEntry(name, expr)
 				return result
 			} else {
-				val operand = formatRelationalConstraint(constraint.operand)
+				val operand = formatRelationalConstraint(eventPattern,constraint.operand)
 				val name = '''«IF constraint.negated»NOT_«ENDIF»(«operand.key»)'''
 				val expr = '''package «name» #FFFFFF{
 					«operand.value»
@@ -237,7 +233,9 @@ class GrapeLPlantUMLGenerator {
 		} else {
 			val terminal = constraint as RelationalNodeExpression
 			val name = terminal.node.name
-			val expr = '''class «name» <<RelationNode>>'''
+			val expr = '''class «name» <<RelationNode>>
+			"«name»" #-[#000000]-# "«eventPattern.name».«name» : «nodeTypeName(terminal.node)»"
+			'''
 			val result = new SimpleEntry(name, expr)
 			return result
 		}
@@ -294,6 +292,16 @@ class GrapeLPlantUMLGenerator {
 				}
 			}
 		'''
+	}
+	
+	private static def String nodeTypeName(EventPatternNode node) {
+		if(node.type instanceof Event) {
+			val type = node.type as Event
+			return type.name
+		}else {
+			val type = node.type as EditorPattern
+			return type.name
+		}
 	}
 	
 	private static def String nodeAttributeName(EventPatternNode node, EObject atr) {
