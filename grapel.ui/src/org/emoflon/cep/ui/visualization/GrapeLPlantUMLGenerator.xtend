@@ -58,20 +58,7 @@ class GrapeLPlantUMLGenerator {
 				FontColor White
 			}
 			
-			namespace «event.name» {
-				«FOR field : event.attributes.filter[field | !(field.type instanceof EDataType)]»
-				class "«field.name» : «field.type.name»" <<«fieldSkin(field)»>> {
-					«FOR atr : (field.type as EClass).EAllAttributes»
-					+ «atr.name» : «atr.EType.name»
-					«ENDFOR»
-				}
-				«ENDFOR»
-				class Primitive-Fields <<SimpleField>>{
-				«FOR field : event.attributes.filter[field | (field.type instanceof EDataType)]»
-				+ «field.name» : «field.type.name»
-				«ENDFOR»
-				}
-			}
+			«formatEvent(event)»
 			
 		'''
 	}
@@ -131,15 +118,9 @@ class GrapeLPlantUMLGenerator {
 				class "«node.name» : «(node.type as EditorPattern).name»" <<PatternNode>>
 				«ENDFOR»
 				
-«««				«FOR contextConstraint : eventPattern.contextConstraints»
-«««				"«node2NodeName.get(contextConstraint.lhs.patternNode.name)»" -[#000000]- "«node2NodeName.get(contextConstraint.rhs.patternNode.name)»": «contextConstraintLabel(contextConstraint)»
-«««				«ENDFOR»
-				
 				package Relational_Constraint #fff3d0{
 					«formatRelationalConstraint(eventPattern, eventPattern.relationalConstraint).value»
 				}
-				
-				
 			}
 			
 			«IF !eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern].empty»
@@ -233,7 +214,7 @@ class GrapeLPlantUMLGenerator {
 				return result
 			} else {
 				val operand = formatRelationalConstraint(eventPattern,constraint.operand)
-				val name = '''«IF constraint.negated»NOT_«ENDIF»(«operand.key»)'''
+				val name = '''«IF constraint.negated»NOT_«ENDIF»Bracket(«operand.key»)'''
 				val expr = '''package «name» #FFFFFF{
 					«operand.value»
 				}'''
@@ -260,18 +241,18 @@ class GrapeLPlantUMLGenerator {
 			«GTPlantUMLGenerator.visualizeRate(pattern)»
 		
 								
-«««		«FOR p : GTPlantUMLGenerator.getConditionPatterns(pattern)»
-«««			«val flattenedConditionPattern = p»
-«««			namespace «p.name» #EEEEEE {
-«««				«GTPlantUMLGenerator.visualizeGraph(flattenedConditionPattern)»
-«««			}
-«««									
-«««			«FOR node : flattenedConditionPattern.nodes»
-«««				«IF nodeNamesInFlattenedPattern.contains(node.name)»
-«««					"«pattern.name».«GTPlantUMLGenerator.nodeName(pattern, node.name)»" #--# "«p.name».«GTPlantUMLGenerator.nodeName(node)»"
-«««				«ENDIF»
-«««			«ENDFOR»
-«««		«ENDFOR»
+		«FOR p : GTPlantUMLGenerator.getConditionPatterns(pattern)»
+			«val flattenedConditionPattern = p»
+			namespace «p.name» #EEEEEE {
+				«GTPlantUMLGenerator.visualizeGraph(flattenedConditionPattern)»
+			}
+									
+			«FOR node : flattenedConditionPattern.nodes»
+				«IF nodeNamesInFlattenedPattern.contains(node.name)»
+					"«pattern.name».«GTPlantUMLGenerator.nodeName(pattern, node.name)»" #--# "«p.name».«GTPlantUMLGenerator.nodeName(node)»"
+				«ENDIF»
+			«ENDFOR»
+		«ENDFOR»
 								
 «««		«IF !pattern.conditions.isEmpty»
 «««			class Conditions {
@@ -288,6 +269,7 @@ class GrapeLPlantUMLGenerator {
 	private static def String formatEvent(Event event) {
 		return '''
 			namespace «event.name» #FFFFFF{
+				«IF !event.attributes.filter[field | !(field.type instanceof EDataType)].empty»
 				«FOR field : event.attributes.filter[field | !(field.type instanceof EDataType)]»
 				class "«field.name»: «field.type.name»" <<«fieldSkin(field)»>> {
 					«FOR atr : (field.type as EClass).EAllAttributes»
@@ -295,11 +277,14 @@ class GrapeLPlantUMLGenerator {
 					«ENDFOR»
 				}
 				«ENDFOR»
+				«ENDIF»
+				«IF !event.attributes.filter[field | (field.type instanceof EDataType)].empty»
 				class Primitive-Fields <<SimpleField>>{
 				«FOR field : event.attributes.filter[field | (field.type instanceof EDataType)]»
 				+ «field.name»: «field.type.name»
 				«ENDFOR»
 				}
+				«ENDIF»
 			}
 		'''
 	}
