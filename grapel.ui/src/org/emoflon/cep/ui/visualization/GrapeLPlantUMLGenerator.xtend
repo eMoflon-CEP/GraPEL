@@ -335,8 +335,16 @@ class GrapeLPlantUMLGenerator {
 		«ENDFOR»
 								
 		«IF !pattern.conditions.isEmpty»
-			class Conditions <<Conditions>>{
+			class Conditions <<Conditions>> {
 				# «GTVisualizationUtils.getConditionString(pattern)»
+			}
+		«ENDIF»
+		
+		«IF !pattern.parameters.isEmpty»
+			class Parameter <<Conditions>> {
+				«FOR param : pattern.parameters»
+				# «param.name» : «param.type.name»
+				«ENDFOR»
 			}
 		«ENDIF»
 		}
@@ -374,7 +382,7 @@ class GrapeLPlantUMLGenerator {
 		return '''namespace Spawned_Event #629157 {
 			«formatEvent(spawnType.returnType)»
 «««			TODO: Reevaluate the necessity of an edge that signals spawn..
-«««			"«eventPattern.name»" -[#000000]-> "Spawned_Event.«spawnType.returnType.name»" : Spawns 
+			"«eventPattern.name»" -[#000000]-> "Spawned_Event.«spawnType.returnType.name»" : Spawns 
 			«FOR param : statement.returnParams»
 «««			TODO: visualize parameter dependencies
 			«ENDFOR»
@@ -385,7 +393,7 @@ class GrapeLPlantUMLGenerator {
 		return '''namespace Applied_Rule #ffea08 {
 			«formatPattern(applyType.returnType, "Applied_Rule")»
 «««			TODO: Reevaluate the necessity of an edge that signals apply..
-«««			"«eventPattern.name»" -[#000000]-> "Applied_Rule.«applyType.returnType.name»" : Applies 
+			"«eventPattern.name»" -[#000000]-> "Applied_Rule.«applyType.returnType.name»" : Applies 
 			"«eventPattern.name».«statement.match.name»" #-[#335bb0]-# "Applied_Rule.«applyType.returnType.name»"
 			«FOR param : statement.returnParams»
 «««			TODO: visualize parameter dependencies
