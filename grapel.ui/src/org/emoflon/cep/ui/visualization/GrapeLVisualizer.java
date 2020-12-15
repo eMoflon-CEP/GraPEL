@@ -69,20 +69,36 @@ public class GrapeLVisualizer extends EMoflonVisualiser{
 			return GTPlantUMLGenerator.visualizeNothing();
 		}
 		
-		//TODO: Visualize everything + dependencies in an abstract and compact fashion
 		
 		// Visualize selected event or event pattern
 		Optional<EObject> object = determineSelection(selection, file);
 		if (object.isPresent()) {
 			if(object.get() instanceof Event) {
-				return GrapeLPlantUMLGenerator.visualizeEvent((Event)object.get());
+				try {
+					return GrapeLPlantUMLGenerator.visualizeEvent((Event)object.get());
+				} catch(Exception e) {
+					return GTPlantUMLGenerator.visualizeNothing();
+				}
 			} else if(object.get() instanceof EventPattern) {
-				return GrapeLPlantUMLGenerator.visualizeEventPattern((EventPattern)object.get());
+				try {
+					return GrapeLPlantUMLGenerator.visualizeEventPattern((EventPattern)object.get());
+				} catch(Exception e) {
+					return GTPlantUMLGenerator.visualizeNothing();
+				}
 			} else if(object.get() instanceof EditorPattern) {
-				return GTPlantUMLGenerator.visualizePattern((EditorPattern)object.get());
+				try {
+					return GTPlantUMLGenerator.visualizePattern((EditorPattern)object.get());
+				} catch(Exception e) {
+					return GTPlantUMLGenerator.visualizeNothing();
+				}
 			}
 		} else {
-			return GrapeLPlantUMLGenerator.visualizeDependencies(file);
+			//Visualize everything + dependencies in an abstract and compact fashion
+			try {
+				return GrapeLPlantUMLGenerator.visualizeDependencies(file);
+			} catch(Exception e) {
+				return GTPlantUMLGenerator.visualizeNothing();
+			}
 		}
 		
 		return EMoflonPlantUMLGenerator.emptyDiagram();

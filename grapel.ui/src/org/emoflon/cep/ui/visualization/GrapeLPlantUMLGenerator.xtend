@@ -162,17 +162,17 @@ class GrapeLPlantUMLGenerator {
 			«ENDIF»
 			
 			«FOR node : eventPattern.nodes.filter[node | node.type instanceof Event]»
-			"«eventPattern.name».«node.name»" #-[#335bb0]-# "Events.«(node.type as Event).name»"
+			"«eventPattern.name».«node.name»" #.[#335bb0].# "Events.«(node.type as Event).name»"
 			«ENDFOR»
 			«FOR node : eventPattern.nodes.filter[node | node.type instanceof EditorPattern]»
-			"«eventPattern.name».«node.name»" #-[#335bb0]-# "Graph_Patterns.«(node.type as EditorPattern).name»"
+			"«eventPattern.name».«node.name»" #.[#335bb0].# "Graph_Patterns.«(node.type as EditorPattern).name»"
 			«ENDFOR»
 			
 			«FOR contextConstraint : eventPattern.contextConstraints»
 			"«eventPattern.name».«contextConstraint.lhs.patternNode.name».«nodeAttributeName(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)» : «nodeAttributeType(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)
 			»" *-[#a61e1e]-* "«
 			eventPattern.name».«contextConstraint.rhs.patternNode.name».«nodeAttributeName(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)» : «nodeAttributeType(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)
-			»" : «contextConstraint.relation»
+			»" : =«contextConstraint.relation»
 			«ENDFOR»
 			
 			«IF eventPattern.returnType instanceof ReturnSpawn»
@@ -182,6 +182,25 @@ class GrapeLPlantUMLGenerator {
 			«ENDIF»
 			
 «««			TODO: Visualize attribute constraints
+
+			namespace Legend {
+				namespace Node-Mapping {
+					"node1" #.[#335bb0].# "node2"
+					"node3" #.[#000000].# "node4"
+				}
+				namespace Node-Reference {
+					"node1" -[#000000]-> "node2" : Context
+					"node3" -[#DarkGreen]-> "node4" : Create
+					"node5" -[#Crimson]-> "node6" : Delete
+				}
+				namespace Context-Constraint {
+					"node1" *-[#a61e1e]-* "node2" : "=" (Equal)
+					"node3" *-[#a61e1e]-* "node4" : "!=" (Unequal)
+				}
+				namespace Temporal-Relation {
+					"node1" -[#852424]-> "node2" : A -before-> B
+				}
+			}
 		'''
 	}
 	
@@ -304,7 +323,7 @@ class GrapeLPlantUMLGenerator {
 			val terminal = constraint as RelationalNodeExpression
 			val name = terminal.node.name
 			val expr = '''class «name» <<RelationNode>>
-			"«name»" #-[#000000]-# "«eventPattern.name».«name»"
+			"«name»" #.[#000000].# "«eventPattern.name».«name»"
 			'''
 			val result = new SimpleEntry(name, expr)
 			return result
@@ -352,7 +371,7 @@ class GrapeLPlantUMLGenerator {
 	}
 	
 	private static def String createEdge(EditorPattern pattern, EditorPattern conditionPattern, EditorNode node, String namespace) {
-		return '''"«namespace».«pattern.name».«GTPlantUMLGenerator.nodeName(pattern, node.name)»" #--# "«namespace».«pattern.name».«conditionPattern.name».«GTPlantUMLGenerator.nodeName(node)»"'''
+		return '''"«namespace».«pattern.name».«GTPlantUMLGenerator.nodeName(pattern, node.name)»" #.[#335bb0].# "«namespace».«pattern.name».«conditionPattern.name».«GTPlantUMLGenerator.nodeName(node)»"'''
 	}
 	
 	private static def String formatEvent(Event event) {
@@ -394,7 +413,7 @@ class GrapeLPlantUMLGenerator {
 			«formatPattern(applyType.returnType, "Applied_Rule")»
 «««			TODO: Reevaluate the necessity of an edge that signals apply..
 			"«eventPattern.name»" -[#000000]-> "Applied_Rule.«applyType.returnType.name»" : Applies 
-			"«eventPattern.name».«statement.match.name»" #-[#335bb0]-# "Applied_Rule.«applyType.returnType.name»"
+			"«eventPattern.name».«statement.match.name»" #.[#335bb0].# "Applied_Rule.«applyType.returnType.name»"
 			«FOR param : statement.returnParams»
 «««			TODO: visualize parameter dependencies
 			«ENDFOR»
