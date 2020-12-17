@@ -1,9 +1,6 @@
 package org.emoflon.cep.ui.visualization;
 
-import java.util.Collection;
 import java.util.Optional;
-
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -87,7 +84,7 @@ public class GrapeLVisualizer extends EMoflonVisualiser{
 				}
 			} else if(object.get() instanceof EditorPattern) {
 				try {
-					return GTPlantUMLGenerator.visualizePattern((EditorPattern)object.get());
+					return GTPlantUMLGenerator.visualizeSelectedPattern((EditorPattern)object.get());
 				} catch(Exception e) {
 					return GTPlantUMLGenerator.visualizeNothing();
 				}

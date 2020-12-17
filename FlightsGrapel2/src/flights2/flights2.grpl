@@ -1,330 +1,330 @@
 import "platform:/resource/Flights/model/Flights.ecore"
 import "http://www.eclipse.org/emf/2002/Ecore"
 
-//// Graph-Patterns
-//pattern flightSrcGate {
-//	airport : Airport {
-//		-gates->gate
-//	}
-//	gate : Gate
-//	flight : Flight {
-//		-src->gate
-//	}
-//}
-//
-//pattern flightTrgGate {
-//	airport : Airport {
-//		-gates->gate
-//	}
-//	gate : Gate
-//	flight : Flight {
-//		-trg->gate
-//	}
-//}
-//
-//pattern flightTimes {
-//	flight : Flight {
-//		- plane -> plane
-//		- route -> route
-//		- departure -> departure
-//		- arrival -> arrival
-//	}
-//	route : Route
-//	plane : Plane
-//	departure : TimeStamp
-//	arrival : TimeStamp
-//}
-//
-//pattern travelOnFlight {
-//	travel : Travel {
-//		- flights -> flight
-//	}
-//	flight : Flight
-//}
-//
-//pattern flightsConnectedByTravel {
-//	f1 : Flight {
-//		-travels->travel
-//		-route->r1
-//	}
-//	f2 : Flight {
-//		-travels->travel
-//		-route->r2
-//		-departure->f2Departure
-//	}
-//	r1 : Route {
-//		-trg->airport
-//	}
-//	r2 : Route {
-//		-src->airport
-//	}
-//	
-//	f2Departure : TimeStamp
-//	
-//	airport : Airport
-//	
-//	local travel : Travel
-//}
-//
-//condition findFlightsConnectedByTravel = enforce flightsConnectedByTravel
-//
-//pattern invalidConnectedFlights {
-//	f1 : Flight {
-//		- arrival -> arrival
-//		- trg -> trgGate
-//	}
-//	f2 : Flight  {
-//		- departure -> departure
-//		- src -> srcGate
-//	}
-//	
-//	trgGate : Gate
-//	srcGate : Gate
-//	
-//	airport : Airport {
-//		- gates -> trgGate
-//		- gates -> srcGate
-//	}
-//	
-//	arrival : TimeStamp
-//	departure : TimeStamp
-//	
-//	# arrival.time + (abs(trgGate.position-srcGate.position)*airport.size) > departure.time
-//	
-//} when findFlightsConnectedByTravel
-//
-//pattern supportOldRoute {
-//	route : Route {
-//		-src -> srcAirport
-//		-trg -> trgAirport
-//	}
-//	fOld : Flight{
-//		-route -> route
-//	}
-//	srcAirport: Airport
-//	trgAirport : Airport
-//}
-//
-//pattern supportNewRoute {
-//	route : Route {
-//		-src -> srcAirport
-//		-trg -> trgAirport
-//	}
-//	fNew : Flight{
-//		-route -> route
-//	}
-//	srcAirport: Airport
-//	trgAirport : Airport
-//}
-//
-//condition oldRoute = enforce supportOldRoute
-//condition newRoute = enforce supportNewRoute
-//
-//condition identicalRoute = oldRoute && newRoute
-//
-//pattern travelInNewFlight {
-//	travel : Travel
-//	fNew : Flight {
-//		- travels -> travel
-//	}
-//}
-//
-//// Graph Transformation Rules
-//rule rebookFlight {
-//	t : Travel	{
-//		-- -flights->fOld
-//		++ -flights->fNew
-//	}
-//	fOld : Flight {
-//		-departure->fOldDeparture
-//	}
-//	fNew : Flight {
-//		-departure->fNewDeparture
-//		-plane->pNew
-//	}
-//	pNew : Plane
-//	
-//	# pNew.capacity > count(travelInNewFlight)
-//	
-//	fOldDeparture : TimeStamp
-//	fNewDeparture : TimeStamp
-//	
-//	srcAirport : Airport
-//	trgAirport : Airport
-//	
-//} when identicalRoute
-//
-//rule changeRouteDuration(newDuration : EInt) {
-//	route : Route {
-//		.duration := param::newDuration
-//	}
-//}
-//
-//rule changeFlightArrival(newArrivalTime : ELong) {
-//	flight : Flight {
-//		-- -arrival->oldArrival
-//		++ -arrival->newArrival
-//	}
-//	-- oldArrival : TimeStamp
-//	++ newArrival : TimeStamp {
-//		.time := param::newArrivalTime
-//	}
-//}
-//
-//// Events & Event Patterns
-//event FlightDelayed {
-//	Flight flight;
-//	Route route;
-//	Plane plane;
-//	TimeStamp arrival;
-//	EInt delay;
-//}
-//
-//event_pattern findDelayedFlights spawns FlightDelayed{
-//	flight : flightTimes
-//	
-//	# flight {
-//		!vanished(flight) && 
-//		flight.arrival.time > flight.departure.time + flight.route.duration
-//	}
-//	
-//	spawn FlightDelayed(flight.flight, flight.route, flight.plane, flight.arrival, 
-//		(flight.arrival.time-flight.departure.time)-flight.route.duration
-//	)
-//}
-//
-//event ConnectedFlights {
-//	Flight f1;
-//	Flight f2;
-//	TimeStamp f2Departure;
-//	EInt gateDistance;
-//}
-//
-//event_pattern findConnectedFlights spawns ConnectedFlights {
-//	flights : flightsConnectedByTravel
-//	gate1 : flightTrgGate
-//	gate2 : flightSrcGate
-//	
-//	flights.airport == gate1.airport
-//	flights.airport == gate2.airport
-//	flights.f1 == gate1.flight
-//	flights.f2 == gate2.flight
-//	
-//	# flights && gate1 && gate2 {
-//		!vanished(flights) &&
-//		!vanished(gate1) && 
-//		!vanished(gate2)
-//	}
-//	
-//	spawn ConnectedFlights(flights.f1, flights.f2, flights.f2Departure, 
-//		flights.airport.size*abs(gate1.gate.position-gate2.gate.position)
-//	)
-//}
-//
-//event BrokenConnectingFlights {
-//	Flight f1;
-//	Flight f2;
-//	TimeStamp f1Arrival;
-//	TimeStamp f2Departure;
-//	EInt gateDistance;
-//}
-//
-//event_pattern findBrokenConnectingFlights spawns BrokenConnectingFlights {
-//	flights : ConnectedFlights
-//	delayed : FlightDelayed
-//	
-//	flights.f1 == delayed.flight
-//	
-//	# flights -> delayed {
-//		delayed.arrival.time + flights.gateDistance > flights.f2Departure.time
-//	}
-//	
-//	spawn BrokenConnectingFlights(flights.f1, flights.f2, delayed.arrival, flights.f2Departure, flights.gateDistance)
-//}
-//
-//
-//event_pattern fixBrokenConnectingFlights applies rebookFlight {
-//	brokenConnectingFlights : BrokenConnectingFlights
-//	rebook : rebookFlight
-//	
-//	brokenConnectingFlights.f2 == rebook.fOld
-//	brokenConnectingFlights.f2 != rebook.fNew
-//	
-//	# rebook -> brokenConnectingFlights {
-//		!vanished(rebook) &&
-//		rebook.fNewDeparture.time > rebook.fOldDeparture.time &&
-//		
-//		rebook.fNewDeparture.time >= 
-//		brokenConnectingFlights.gateDistance + brokenConnectingFlights.f1Arrival.time
-//	}
-//	
-//	apply rebookFlight() to rebook
-//}
-//
-//event RepeatedDelaysWithSamePlane {
-//	Plane plane;
-//}
-//
-//event_pattern findRepeadedDelaysWithSamePlane spawns RepeatedDelaysWithSamePlane {
-//	delay1 : FlightDelayed
-//	delay2 : FlightDelayed
-//	delay3 : FlightDelayed
-//	
-//	delay1.plane == delay2.plane
-//	delay2.plane == delay3.plane
-//	
-//	# all(delay1) -> all(delay2) ->  all(delay3)
-//	
-//	spawn RepeatedDelaysWithSamePlane(delay1.plane)
-//}
-//
-//event RepeatedDelaysOnSameRoute {
-//	Route route;
-//	EInt averageDelay;
-//}
-//
-//event_pattern findRepeadedDelaysOnSameRoute spawns RepeatedDelaysOnSameRoute {
-//	delay1 : FlightDelayed
-//	delay2 : FlightDelayed
-//	delay3 : FlightDelayed
-//	
-//	delay1.route == delay2.route
-//	delay2.route == delay3.route
-//	
-//	# all(delay1) -> all(delay2) ->  all(delay3)
-//	
-//	spawn RepeatedDelaysOnSameRoute(delay1.route, (delay1.delay+delay2.delay+delay3.delay)/3)
-//}
-//
-//event_pattern replanRoute applies changeRouteDuration{
-//	routeObject : changeRouteDuration
-//	delayStatistic : RepeatedDelaysOnSameRoute
-//	
-//	routeObject.route == delayStatistic.route
-//	
-//	# all(routeObject) -> all(delayStatistic) {
-//		!vanished(routeObject)
-//	}
-//	
-//	apply changeRouteDuration(routeObject.route.duration + delayStatistic.averageDelay) to routeObject
-//}
-//
-//event HeadwindOnFlight {
-//	EString flightNumber;
-//	EInt delay;
-//}
-//
-//event_pattern headwindDelaysFlight applies changeFlightArrival {
-//	delay : HeadwindOnFlight
-//	flight : changeFlightArrival
-//	
-//	# all(flight) -> all(delay) {
-//		!vanished(flight) &&
-//		flight.flight.ID == delay.flightNumber
-//	}
-//	
-//	apply changeFlightArrival(delay.delay + flight.oldArrival.time) to flight
-//}
+// Graph-Patterns
+pattern flightSrcGate {
+	airport : Airport {
+		-gates->gate
+	}
+	gate : Gate
+	flight : Flight {
+		-src->gate
+	}
+}
+
+pattern flightTrgGate {
+	airport : Airport {
+		-gates->gate
+	}
+	gate : Gate
+	flight : Flight {
+		-trg->gate
+	}
+}
+
+pattern flightTimes {
+	flight : Flight {
+		- plane -> plane
+		- route -> route
+		- departure -> departure
+		- arrival -> arrival
+	}
+	route : Route
+	plane : Plane
+	departure : TimeStamp
+	arrival : TimeStamp
+}
+
+pattern travelOnFlight {
+	travel : Travel {
+		- flights -> flight
+	}
+	flight : Flight
+}
+
+pattern flightsConnectedByTravel {
+	f1 : Flight {
+		-travels->travel
+		-route->r1
+	}
+	f2 : Flight {
+		-travels->travel
+		-route->r2
+		-departure->f2Departure
+	}
+	r1 : Route {
+		-trg->airport
+	}
+	r2 : Route {
+		-src->airport
+	}
+	
+	f2Departure : TimeStamp
+	
+	airport : Airport
+	
+	local travel : Travel
+}
+
+condition findFlightsConnectedByTravel = enforce flightsConnectedByTravel
+
+pattern invalidConnectedFlights {
+	f1 : Flight {
+		- arrival -> arrival
+		- trg -> trgGate
+	}
+	f2 : Flight  {
+		- departure -> departure
+		- src -> srcGate
+	}
+	
+	trgGate : Gate
+	srcGate : Gate
+	
+	airport : Airport {
+		- gates -> trgGate
+		- gates -> srcGate
+	}
+	
+	arrival : TimeStamp
+	departure : TimeStamp
+	
+	# arrival.time + (abs(trgGate.position-srcGate.position)*airport.size) > departure.time
+	
+} when findFlightsConnectedByTravel
+
+pattern supportOldRoute {
+	route : Route {
+		-src -> srcAirport
+		-trg -> trgAirport
+	}
+	fOld : Flight{
+		-route -> route
+	}
+	srcAirport: Airport
+	trgAirport : Airport
+}
+
+pattern supportNewRoute {
+	route : Route {
+		-src -> srcAirport
+		-trg -> trgAirport
+	}
+	fNew : Flight{
+		-route -> route
+	}
+	srcAirport: Airport
+	trgAirport : Airport
+}
+
+condition oldRoute = enforce supportOldRoute
+condition newRoute = enforce supportNewRoute
+
+condition identicalRoute = oldRoute && newRoute
+
+pattern travelInNewFlight {
+	travel : Travel
+	fNew : Flight {
+		- travels -> travel
+	}
+}
+
+// Graph Transformation Rules
+rule rebookFlight {
+	t : Travel	{
+		-- -flights->fOld
+		++ -flights->fNew
+	}
+	fOld : Flight {
+		-departure->fOldDeparture
+	}
+	fNew : Flight {
+		-departure->fNewDeparture
+		-plane->pNew
+	}
+	pNew : Plane
+	
+	# pNew.capacity > count(travelInNewFlight)
+	
+	fOldDeparture : TimeStamp
+	fNewDeparture : TimeStamp
+	
+	srcAirport : Airport
+	trgAirport : Airport
+	
+} when identicalRoute
+
+rule changeRouteDuration(newDuration : EInt) {
+	route : Route {
+		.duration := param::newDuration
+	}
+}
+
+rule changeFlightArrival(newArrivalTime : ELong) {
+	flight : Flight {
+		-- -arrival->oldArrival
+		++ -arrival->newArrival
+	}
+	-- oldArrival : TimeStamp
+	++ newArrival : TimeStamp {
+		.time := param::newArrivalTime
+	}
+}
+
+// Events & Event Patterns
+event FlightDelayed {
+	Flight flight;
+	Route route;
+	Plane plane;
+	TimeStamp arrival;
+	EInt delay;
+}
+
+event_pattern findDelayedFlights spawns FlightDelayed{
+	flight : flightTimes
+	
+	# flight {
+		!vanished(flight) && 
+		flight.arrival.time > flight.departure.time + flight.route.duration
+	}
+	
+	spawn FlightDelayed(flight.flight, flight.route, flight.plane, flight.arrival, 
+		(flight.arrival.time-flight.departure.time)-flight.route.duration
+	)
+}
+
+event ConnectedFlights {
+	Flight f1;
+	Flight f2;
+	TimeStamp f2Departure;
+	EInt gateDistance;
+}
+
+event_pattern findConnectedFlights spawns ConnectedFlights {
+	flights : flightsConnectedByTravel
+	gate1 : flightTrgGate
+	gate2 : flightSrcGate
+	
+	flights.airport == gate1.airport
+	flights.airport == gate2.airport
+	flights.f1 == gate1.flight
+	flights.f2 == gate2.flight
+	
+	# flights && gate1 && gate2 {
+		!vanished(flights) &&
+		!vanished(gate1) && 
+		!vanished(gate2)
+	}
+	
+	spawn ConnectedFlights(flights.f1, flights.f2, flights.f2Departure, 
+		flights.airport.size*abs(gate1.gate.position-gate2.gate.position)
+	)
+}
+
+event BrokenConnectingFlights {
+	Flight f1;
+	Flight f2;
+	TimeStamp f1Arrival;
+	TimeStamp f2Departure;
+	EInt gateDistance;
+}
+
+event_pattern findBrokenConnectingFlights spawns BrokenConnectingFlights {
+	flights : ConnectedFlights
+	delayed : FlightDelayed
+	
+	flights.f1 == delayed.flight
+	
+	# flights -> delayed {
+		delayed.arrival.time + flights.gateDistance > flights.f2Departure.time
+	}
+	
+	spawn BrokenConnectingFlights(flights.f1, flights.f2, delayed.arrival, flights.f2Departure, flights.gateDistance)
+}
+
+
+event_pattern fixBrokenConnectingFlights applies rebookFlight {
+	brokenConnectingFlights : BrokenConnectingFlights
+	rebook : rebookFlight
+	
+	brokenConnectingFlights.f2 == rebook.fOld
+	brokenConnectingFlights.f2 != rebook.fNew
+	
+	# rebook -> brokenConnectingFlights {
+		!vanished(rebook) &&
+		rebook.fNewDeparture.time > rebook.fOldDeparture.time &&
+		
+		rebook.fNewDeparture.time >= 
+		brokenConnectingFlights.gateDistance + brokenConnectingFlights.f1Arrival.time
+	}
+	
+	apply rebookFlight() to rebook
+}
+
+event RepeatedDelaysWithSamePlane {
+	Plane plane;
+}
+
+event_pattern findRepeadedDelaysWithSamePlane spawns RepeatedDelaysWithSamePlane {
+	delay1 : FlightDelayed
+	delay2 : FlightDelayed
+	delay3 : FlightDelayed
+	
+	delay1.plane == delay2.plane
+	delay2.plane == delay3.plane
+	
+	# all(delay1) -> all(delay2) ->  all(delay3)
+	
+	spawn RepeatedDelaysWithSamePlane(delay1.plane)
+}
+
+event RepeatedDelaysOnSameRoute {
+	Route route;
+	EInt averageDelay;
+}
+
+event_pattern findRepeadedDelaysOnSameRoute spawns RepeatedDelaysOnSameRoute {
+	delay1 : FlightDelayed
+	delay2 : FlightDelayed
+	delay3 : FlightDelayed
+	
+	delay1.route == delay2.route
+	delay2.route == delay3.route
+	
+	# all(delay1) -> all(delay2) ->  all(delay3)
+	
+	spawn RepeatedDelaysOnSameRoute(delay1.route, (delay1.delay+delay2.delay+delay3.delay)/3)
+}
+
+event_pattern replanRoute applies changeRouteDuration{
+	routeObject : changeRouteDuration
+	delayStatistic : RepeatedDelaysOnSameRoute
+	
+	routeObject.route == delayStatistic.route
+	
+	# all(routeObject) -> all(delayStatistic) {
+		!vanished(routeObject)
+	}
+	
+	apply changeRouteDuration(routeObject.route.duration + delayStatistic.averageDelay) to routeObject
+}
+
+event HeadwindOnFlight {
+	EString flightNumber;
+	EInt delay;
+}
+
+event_pattern headwindDelaysFlight applies changeFlightArrival {
+	delay : HeadwindOnFlight
+	flight : changeFlightArrival
+	
+	# all(flight) -> all(delay) {
+		!vanished(flight) &&
+		flight.flight.ID == delay.flightNumber
+	}
+	
+	apply changeFlightArrival(delay.delay + flight.oldArrival.time) to flight
+}
 
 
 // #########################################################################
@@ -511,52 +511,88 @@ import "http://www.eclipse.org/emf/2002/Ecore"
 
 
 ////###################################################################
-//// Example Pattern and Rule for preliminaries
+//// Option (1) Example Pattern and Rule for preliminaries
 //
-//pattern indirectlyUnconnectedAirports {
-//	airport1 : Airport
-//	airport2 : Airport
-//	airport3 : Airport
-//	
-//	route12 : Route {
-//		-src->airport1
-//		-trg->airport2
-//	}
-//	route23 : Route {
-//		-src->airport2
-//		-trg->airport3
-//	}
-//	
-//} when unconnectedAirports
-//
-//condition unconnectedAirports = forbid connectedAirports
-//
-//pattern connectedAirports {
-//	airport1 : Airport
-//	airport3 : Airport
-//	
+//pattern	directRoute {
+//	srcAirport : Airport
+//	trgAirport : Airport
 //	route : Route {
-//		-src-> airport1
-//		-trg-> airport3
+//		-src->srcAirport
+//		-trg->trgAirport
 //	}
 //}
 //
-//rule establishDirectRoute {
-//	airport1 : Airport
-//	airport2 : Airport
-//	airport3 : Airport
+//condition noDirectRoute = forbid directRoute
+//
+//pattern coincidingFlights {
+//	flight1 : Flight {
+//		-route->route1
+//		-arrival->arrival
+//	}
+//	flight2 : Flight {
+//		-route->route2
+//		-departure->departure
+//	}
+//	route1 : Route {
+//		-trg->intermediate
+//	}
+//	route2 : Route {
+//		-src->intermediate
+//	}
+//	intermediate : Airport
 //	
-//	route12 : Route {
-//		-src->airport1
-//		-trg->airport2
+//	arrival : TimeStamp
+//	departure : TimeStamp
+//	
+//	#arrival.time < departure.time
+//}
+//
+//condition flightsCoincide = enforce coincidingFlights
+//
+//condition and = noDirectRoute && flightsCoincide
+//
+//pattern noDirectAlternative {
+//	flight1 : Flight {
+//		-route->route1
 //	}
-//	route23 : Route {
-//		-src->airport2
-//		-trg->airport3
+//	flight2 : Flight {
+//		-route->route2
 //	}
-//	++ route13 : Route {
-//		++ -src->airport1
-//		++ -trg->airport3
+//	route1 : Route {
+//		-src->srcAirport
 //	}
-//} when unconnectedAirports
-
+//	route2 : Route {
+//		-trg->trgAirport
+//	}
+//	
+//	srcAirport : Airport
+//	trgAirport : Airport
+//} when and
+//
+//condition directAlternative = enforce noDirectAlternative
+//
+//rule createDirectAlternative {
+//	routes : Routes {
+//		++ -routes->directRoute
+//		-routes->route1
+//		-routes->route2
+//	}
+//	
+//	route1 : Route {
+//		-src->srcAirport
+//	}
+//	route2 : Route {
+//		-trg->trgAirport
+//	}
+//	
+//	srcAirport : Airport
+//	trgAirport : Airport
+//	
+//	
+//	++ directRoute : Route {
+//		.duration := route1.duration + route2.duration 
+//		++ -src->srcAirport
+//		++ -trg->trgAirport
+//	}
+//
+//} when directAlternative

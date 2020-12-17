@@ -90,34 +90,20 @@ class GrapeLPlantUMLGenerator {
 			«commonLayoutSettings»
 			
 			skinparam class {
+				«GTPlantUMLGenerator.patternLayoutContent»
 				HeaderBackgroundColor<<EventNode>> «EventNodeColor»
 				HeaderBackgroundColor<<PatternNode>> «PatternNodeColor»
 				HeaderBackgroundColor<<RelationPackage>> «RelationPackageColor»
 				HeaderBackgroundColor<<RelationNode>> «RelationNodeColor»
 				HeaderBackgroundColor<<ComplexField>> «ComplexFieldColor»
 				HeaderBackgroundColor<<SimpleField>> «SimpleFieldColor»
-				HeaderBackgroundColor<<Conditions>> «AtrConstrColor»
-				HeaderBackgroundColor<<CONTEXT>> «ContextColor»
-				HeaderBackgroundColor<<CREATE>> «CreateColor»
-				HeaderBackgroundColor<<DELETE>> «DeleteColor»
-				HeaderBackgroundColor<<ATR_CONSTR>> «AtrConstrColor»
-				HeaderBackgroundColor<<LOCAL_NODE>> «LocalNodeColor»
 				BorderColor<<ComplexField>> «ComplexFieldColor»
 				BorderColor<<SimpleField>> «SimpleFieldColor»
 				BorderColor<<EventNode>> «EventNodeColor»
 				BorderColor<<PatternNode>> «PatternNodeColor»
 				BorderColor<<RelationPackage>> «RelationPackageColor»
 				BorderColor<<RelationNode>> «RelationNodeColor»
-				BorderColor<<CONTEXT>> «ContextColor»
-				BorderColor<<CREATE>> «CreateColor»
-				BorderColor<<DELETE>> «DeleteColor»
-				BorderColor<<Conditions>> «ContextColor»
-				BorderColor<<ATR_CONSTR>> «ContextColor»
-				BorderColor<<LOCAL_NODE>> «ContextColor»
 				FontColor<<RelationNode>> Black
-				FontColor White
-				FontColor<<ATR_CONSTR>> «ContextColor»
-				FontColor<<Conditions>> «ContextColor»
 			}
 			
 			namespace «eventPattern.name» {
@@ -148,7 +134,8 @@ class GrapeLPlantUMLGenerator {
 			«IF !eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern].empty»
 			namespace Graph_Patterns #c9c9c9{
 			«FOR pattern : eventPattern.nodes.filter[node | node.type instanceof EditorPattern].map[node | node.type as EditorPattern].toSet»
-				«formatPattern(pattern, "Graph_Patterns")»
+«««				«formatPattern(pattern, "Graph_Patterns")»
+				«GTPlantUMLGenerator.visualizePattern(pattern, "Graph_Patterns", true)»
 			«ENDFOR»
 			}
 			«ENDIF»
@@ -170,7 +157,7 @@ class GrapeLPlantUMLGenerator {
 			
 			«FOR contextConstraint : eventPattern.contextConstraints»
 			"«eventPattern.name».«contextConstraint.lhs.patternNode.name».«nodeAttributeName(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)» : «nodeAttributeType(contextConstraint.lhs.patternNode, contextConstraint.lhs.attribute)
-			»" *-[#a61e1e]-* "«
+			»" #-[#335bb0]-# "«
 			eventPattern.name».«contextConstraint.rhs.patternNode.name».«nodeAttributeName(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)» : «nodeAttributeType(contextConstraint.rhs.patternNode, contextConstraint.rhs.attribute)
 			»" : =«contextConstraint.relation»
 			«ENDFOR»
@@ -182,25 +169,6 @@ class GrapeLPlantUMLGenerator {
 			«ENDIF»
 			
 «««			TODO: Visualize attribute constraints
-
-			namespace Legend {
-				namespace Node-Mapping {
-					"node1" #.[#335bb0].# "node2"
-					"node3" #.[#000000].# "node4"
-				}
-				namespace Node-Reference {
-					"node1" -[#000000]-> "node2" : Context
-					"node3" -[#DarkGreen]-> "node4" : Create
-					"node5" -[#Crimson]-> "node6" : Delete
-				}
-				namespace Context-Constraint {
-					"node1" *-[#a61e1e]-* "node2" : "=" (Equal)
-					"node3" *-[#a61e1e]-* "node4" : "!=" (Unequal)
-				}
-				namespace Temporal-Relation {
-					"node1" -[#852424]-> "node2" : A -before-> B
-				}
-			}
 		'''
 	}
 	
@@ -330,46 +298,6 @@ class GrapeLPlantUMLGenerator {
 		}
 	}
 	
-	private static def String formatPattern(EditorPattern pattern, String namespace) {
-		val nodeNamesInFlattenedPattern = pattern.nodes.map[it.name]
-		val supportCorrespondences = new HashSet
-		return '''
-		namespace «pattern.name» #FFFFFF{		
-			«GTPlantUMLGenerator.visualizeGraph(pattern)»
-			«GTPlantUMLGenerator.visualizeAttributeConstraints(pattern)»
-			«GTPlantUMLGenerator.visualizeRate(pattern)»
-		
-								
-		«FOR p : GTPlantUMLGenerator.getConditionPatterns(pattern)»
-			«val flattenedConditionPattern = p»
-			namespace «p.name» #EEEEEE {
-				«GTPlantUMLGenerator.visualizeGraph(flattenedConditionPattern)»
-			}
-									
-			«FOR node : flattenedConditionPattern.nodes»
-				«IF nodeNamesInFlattenedPattern.contains(node.name) && !supportCorrespondences.contains(createEdge(pattern, p, node, namespace))»
-					«createEdge(pattern, p, node, namespace)»
-				«ENDIF»
-			«ENDFOR»
-		«ENDFOR»
-								
-		«IF !pattern.conditions.isEmpty»
-			class Conditions <<Conditions>> {
-				# «GTVisualizationUtils.getConditionString(pattern)»
-			}
-		«ENDIF»
-		
-		«IF !pattern.parameters.isEmpty»
-			class Parameter <<Conditions>> {
-				«FOR param : pattern.parameters»
-				# «param.name» : «param.type.name»
-				«ENDFOR»
-			}
-		«ENDIF»
-		}
-		'''		
-	}
-	
 	private static def String createEdge(EditorPattern pattern, EditorPattern conditionPattern, EditorNode node, String namespace) {
 		return '''"«namespace».«pattern.name».«GTPlantUMLGenerator.nodeName(pattern, node.name)»" #.[#335bb0].# "«namespace».«pattern.name».«conditionPattern.name».«GTPlantUMLGenerator.nodeName(node)»"'''
 	}
@@ -410,7 +338,8 @@ class GrapeLPlantUMLGenerator {
 	
 	private static def String formatApplyType(EventPattern eventPattern, ReturnApply applyType, ApplyStatement statement) {
 		return '''namespace Applied_Rule #ffea08 {
-			«formatPattern(applyType.returnType, "Applied_Rule")»
+«««			«formatPattern(applyType.returnType, "Applied_Rule")»
+			«GTPlantUMLGenerator.visualizePattern(applyType.returnType, "Applied_Rule", true)»
 «««			TODO: Reevaluate the necessity of an edge that signals apply..
 			"«eventPattern.name»" -[#000000]-> "Applied_Rule.«applyType.returnType.name»" : Applies 
 			"«eventPattern.name».«statement.match.name»" #.[#335bb0].# "Applied_Rule.«applyType.returnType.name»"
