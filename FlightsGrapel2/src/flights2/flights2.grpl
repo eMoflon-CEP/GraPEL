@@ -278,35 +278,55 @@ event_pattern findRepeadedDelaysWithSamePlane spawns RepeatedDelaysWithSamePlane
 	spawn RepeatedDelaysWithSamePlane(delay1.plane)
 }
 
+pattern flightExceedsDuration {
+	flight : Flight {
+		-route->route
+		-departure->departure
+		-arrival->arrival
+	}
+	route : Route
+	
+	departure : TimeStamp
+	arrival : TimeStamp
+	
+	# route.duration < arrival.time - departure.time
+}
+
 event RepeatedDelaysOnSameRoute {
 	Route route;
 	EInt averageDelay;
 }
 
-event_pattern findRepeadedDelaysOnSameRoute spawns RepeatedDelaysOnSameRoute {
-	delay1 : FlightDelayed
-	delay2 : FlightDelayed
-	delay3 : FlightDelayed
+event_pattern findRepeatedDelaysOnSameRoute spawns RepeatedDelaysOnSameRoute {
+	flight1 : flightExceedsDuration
+	flight2 : flightExceedsDuration
+	flight3 : flightExceedsDuration
 	
-	delay1.route == delay2.route
-	delay2.route == delay3.route
+	flight1.route == flight2.route
+	flight2.route == flight3.route
 	
-	# all(delay1) -> all(delay2) ->  all(delay3)
+	# all(flight1) -> all(flight2) ->  all(flight3) {
+		!vanished(flight1) && !vanished(flight2) && !vanished(flight3)
+	}
 	
-	spawn RepeatedDelaysOnSameRoute(delay1.route, (delay1.delay+delay2.delay+delay3.delay)/3)
+	spawn RepeatedDelaysOnSameRoute(flight1.route, 
+		(((flight1.arrival.time-flight1.departure.time) + 
+		 (flight2.arrival.time-flight2.departure.time) + 
+		 (flight3.arrival.time-flight3.departure.time))/3)
+		- flight1.route.duration)
 }
 
 event_pattern replanRoute applies changeRouteDuration{
-	routeObject : changeRouteDuration
-	delayStatistic : RepeatedDelaysOnSameRoute
+	routeMatch : changeRouteDuration
+	repeadedDelay : RepeatedDelaysOnSameRoute
 	
-	routeObject.route == delayStatistic.route
+	routeMatch.route == repeadedDelay.route
 	
-	# all(routeObject) -> all(delayStatistic) {
-		!vanished(routeObject)
+	# all(routeMatch) -> all(repeadedDelay) {
+		!vanished(routeMatch)
 	}
 	
-	apply changeRouteDuration(routeObject.route.duration + delayStatistic.averageDelay) to routeObject
+	apply changeRouteDuration(routeMatch.route.duration + repeadedDelay.averageDelay) to routeMatch
 }
 
 event HeadwindOnFlight {
