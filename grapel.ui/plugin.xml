@@ -438,4 +438,18 @@
           providerClass="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
     </diagramTextProvider>
  </extension>
+ <extension
+       point="org.eclipse.ui.newWizards">
+    <category
+          id="grapel.ui.category"
+          name="Grapel">
+    </category>
+    <wizard
+          category="grapel.ui.category"
+          class="org.emoflon.cep.ui.GrapelExecutableExtensionFactory:org.emoflon.cep.ui.wizard.GrapelNewProjectWizard"
+          id="grapel.ui.projectWizard"
+          name="GrapeL Project"
+          project="true">
+    </wizard>
+ </extension>
 </plugin>
