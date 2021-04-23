@@ -1,0 +1,92 @@
+package org.emoflon.cep.ui.wizard;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
+import org.eclipse.xtext.generator.IFileSystemAccess;
+import org.eclipse.xtext.generator.IFileSystemAccess2;
+import org.eclipse.xtext.generator.OutputConfiguration;
+import org.eclipse.xtext.ui.util.PluginProjectFactory;
+import org.eclipse.xtext.ui.wizard.AbstractPluginProjectCreator;
+import org.eclipse.xtext.ui.wizard.DefaultProjectInfo;
+import org.emoflon.cep.builder.GrapelNature;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
+public class GrapelProjectCreator extends AbstractPluginProjectCreator {
+	@Inject
+	private GrapelNewFileInitalContents initialContents;
+	
+	@Inject
+	private Provider<EclipseResourceFileSystemAccess2> fileSystemAccessProvider;
+	
+	@Override
+	protected PluginProjectFactory createProjectFactory() {
+		final PluginProjectFactory projectFactory = super.createProjectFactory();
+		projectFactory.setWithPluginXml(false);
+		return projectFactory;
+	}
+	
+	@Override
+	protected DefaultProjectInfo getProjectInfo() {
+		return (DefaultProjectInfo) super.getProjectInfo();
+	}
+	
+	@Override
+	protected String getModelFolderName() {
+		return "src";
+	}
+
+	@Override
+	protected List<String> getAllFolders() {
+		return ImmutableList.of(getModelFolderName(), "src-gen");
+	}
+	
+	@Override
+	protected String[] getProjectNatures() {
+		final ArrayList<String> natures = Lists.newArrayList(GrapelNature.NATURE_ID);
+		natures.addAll(Lists.newArrayList(super.getProjectNatures()));
+		return natures.toArray(new String[natures.size()]);
+	}
+
+	@Override
+	protected String[] getBuilders() {
+		final ArrayList<String> builders = Lists.newArrayList(GrapelNature.getRequiredBuilders());
+		builders.addAll(Lists.newArrayList(super.getBuilders()));
+		return builders.toArray(new String[builders.size()]);
+	}
+	
+	@Override
+	protected void enhanceProject(final IProject project, final IProgressMonitor monitor) throws CoreException {
+		final IFileSystemAccess2 access = getFileSystemAccess(project, monitor);
+		initialContents.generateInitialContents(access, project);
+		project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+	}
+
+	protected IFileSystemAccess2 getFileSystemAccess(final IProject project, final IProgressMonitor monitor) {
+		final EclipseResourceFileSystemAccess2 access = fileSystemAccessProvider.get();
+		access.setContext(project);
+		access.setMonitor(monitor);
+		final OutputConfiguration defaultOutput = new OutputConfiguration(IFileSystemAccess.DEFAULT_OUTPUT);
+		defaultOutput.setDescription("Output Folder");
+		defaultOutput.setOutputDirectory("./");
+		defaultOutput.setOverrideExistingResources(true);
+		defaultOutput.setCreateOutputDirectory(true);
+		defaultOutput.setCleanUpDerivedResources(false);
+		defaultOutput.setSetDerivedProperty(false);
+		defaultOutput.setKeepLocalHistory(false);
+		final HashMap<String, OutputConfiguration> outputConfigurations = new HashMap<>();
+		outputConfigurations.put(IFileSystemAccess.DEFAULT_OUTPUT, defaultOutput);
+		access.setOutputConfigurations(outputConfigurations);
+		return access;
+	}
+}
