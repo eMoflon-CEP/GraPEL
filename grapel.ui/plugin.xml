@@ -432,13 +432,6 @@
 		</fileTypes>
 	</extension>
  <extension
-       point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
-    <diagramTextProvider
-          priority="19"
-          providerClass="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
-    </diagramTextProvider>
- </extension>
- <extension
        point="org.eclipse.ui.newWizards">
     <category
           id="grapel.ui.category"
@@ -451,5 +444,11 @@
           name="GrapeL Project"
           project="true">
     </wizard>
+ </extension>
+ <extension
+       point="org.moflon.core.ui.DiagramTextProvider">
+    <diagramTextProvider
+          providerClass="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
+    </diagramTextProvider>
  </extension>
 </plugin>

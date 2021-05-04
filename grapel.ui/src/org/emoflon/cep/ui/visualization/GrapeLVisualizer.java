@@ -1,6 +1,7 @@
 package org.emoflon.cep.ui.visualization;
 
 import java.util.Optional;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -14,9 +15,9 @@ import org.emoflon.cep.grapel.EventPattern;
 import org.emoflon.ibex.gt.editor.gT.EditorPattern;
 import org.emoflon.ibex.gt.editor.ui.visualization.GTPlantUMLGenerator;
 import org.moflon.core.ui.visualisation.EMoflonPlantUMLGenerator;
-import org.moflon.core.ui.visualisation.common.EMoflonVisualiser;
+import org.moflon.core.ui.visualisation.common.EMoflonDiagramTextProvider;
 
-public class GrapeLVisualizer extends EMoflonVisualiser{
+public class GrapeLVisualizer implements EMoflonDiagramTextProvider {
 	
 	@Override
 	public boolean supportsEditor(IEditorPart editor) {
@@ -38,7 +39,7 @@ public class GrapeLVisualizer extends EMoflonVisualiser{
 	}
 
 	@Override
-	protected String getDiagramBody(IEditorPart editor, ISelection selection) {
+	public String getDiagramBody(IEditorPart editor, ISelection selection) {
 		Optional<EditorGTFile> file = this.loadFileFromEditor(editor);
 		if (!file.isPresent()) {
 			return EMoflonPlantUMLGenerator.emptyDiagram();
