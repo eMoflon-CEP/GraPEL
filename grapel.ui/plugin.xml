@@ -447,8 +447,8 @@
  </extension>
  <extension
        point="org.moflon.core.ui.DiagramTextProvider">
-    <diagramTextProvider
-          providerClass="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
-    </diagramTextProvider>
+    <diagram_text_provider
+          class="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
+    </diagram_text_provider>
  </extension>
 </plugin>

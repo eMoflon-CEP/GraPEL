@@ -34,5 +34,6 @@ Export-Package: grapel.ui.internal;uses:="org.osgi.framework,com.google.inject,o
  org.emoflon.cep.ui.outline,
  org.emoflon.cep.ui.quickfix;uses:="org.eclipse.xtext.ui.editor.quickfix",
  org.emoflon.cep.ui.visualization,
+ org.emoflon.cep.ui.wizard,
  org.emoflon.cep.validation
 Bundle-Activator: grapel.ui.internal.GrapelActivator
