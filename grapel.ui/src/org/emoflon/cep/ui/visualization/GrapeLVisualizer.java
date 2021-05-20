@@ -158,6 +158,7 @@ public class GrapeLVisualizer implements EMoflonDiagramTextProvider {
 			return Optional.of(editor) //
 					.flatMap(maybeCast(XtextEditor.class))
 					.map(e -> e.getDocument().readOnly(res -> res.getContents().get(0)))
+					.filter(e -> e instanceof EditorGTFile)
 					.flatMap(maybeCast(EditorGTFile.class));
 		} catch (Exception e) {
 			return Optional.empty();
