@@ -20,9 +20,20 @@ Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.24",
  org.emoflon.ibex.gt.editor.ui;bundle-version="1.1.0",
  org.moflon.core.ui,
  org.emoflon.ibex.gt.editor;bundle-version="1.1.0"
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.emoflon.cep.builder
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.emoflon.cep.ui.contentassist,
- grapel.ui.internal,
- org.emoflon.cep.ui.quickfix
+Export-Package: grapel.ui.internal;uses:="org.osgi.framework,com.google.inject,org.eclipse.ui.plugin",
+ org.emoflon.cep.ui,
+ org.emoflon.cep.ui.contentassist;
+  uses:="org.eclipse.emf.ecore,
+   org.emoflon.ibex.gt.editor.ui.contentassist,
+   org.eclipse.xtext.ui.editor.contentassist,
+   org.eclipse.xtext",
+ org.emoflon.cep.ui.labeling,
+ org.emoflon.cep.ui.outline,
+ org.emoflon.cep.ui.quickfix;uses:="org.eclipse.xtext.ui.editor.quickfix",
+ org.emoflon.cep.ui.visualization,
+ org.emoflon.cep.ui.wizard,
+ org.emoflon.cep.validation
 Bundle-Activator: grapel.ui.internal.GrapelActivator

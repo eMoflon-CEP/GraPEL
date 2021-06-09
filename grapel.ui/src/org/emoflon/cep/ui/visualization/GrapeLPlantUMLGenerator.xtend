@@ -210,7 +210,7 @@ class GrapeLPlantUMLGenerator {
 				}
 				«ENDFOR»
 				
-				package Relational_Constraint #fff3d0{
+				namespace Relational_Constraint #fff3d0 {
 					«formatRelationalConstraint(eventPattern, eventPattern.relationalConstraint).value»
 				}
 			}
@@ -390,8 +390,8 @@ class GrapeLPlantUMLGenerator {
 				val result = new SimpleEntry(right.key, expr)
 				return result
 			} else if(constraint.operator == BinaryRelationalOperator.AND) {
-				val name = '''AND(«left.key»,«right.key»)'''
-				val expr = '''package «name» #FFFFFF{
+				val name = '''AND«left.key»«right.key»'''
+				val expr = '''namespace «name» #FFFFFF{
 					«left.value»
 					«right.value»
 				}'''
@@ -399,7 +399,7 @@ class GrapeLPlantUMLGenerator {
 				return result
 			} else {
 				val name = '''OR(«left.key»,«right.key»)'''
-				val expr = '''package «name» #FFFFFF{
+				val expr = '''namespace «name» #FFFFFF{
 					«left.value»
 					«right.value»
 				}'''
@@ -409,16 +409,16 @@ class GrapeLPlantUMLGenerator {
 		} else if (constraint instanceof UnaryRelationalConstraint) {
 			if(constraint.operator == UnaryRelationalOperator.ALL) {
 				val operand = formatRelationalConstraint(eventPattern, constraint.operand)
-				val name = '''«IF constraint.negated»NOT_«ENDIF»ALL(«operand.key»)'''
-				val expr = '''package «name» #FFFFFF{
+				val name = '''«IF constraint.negated»NOT_«ENDIF»ALL«operand.key»'''
+				val expr = '''namespace «name» #FFFFFF{
 					«operand.value»
 				}'''
 				val result = new SimpleEntry(name, expr)
 				return result
 			} else {
 				val operand = formatRelationalConstraint(eventPattern,constraint.operand)
-				val name = '''«IF constraint.negated»NOT_«ENDIF»Bracket(«operand.key»)'''
-				val expr = '''package «name» #FFFFFF{
+				val name = '''«IF constraint.negated»NOT_«ENDIF»Bracket«operand.key»'''
+				val expr = '''namespace «name» #FFFFFF{
 					«operand.value»
 				}'''
 				val result = new SimpleEntry(name, expr)

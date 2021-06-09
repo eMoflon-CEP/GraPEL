@@ -45,6 +45,10 @@ import org.moflon.core.utilities.WorkspaceHelper;
 import GrapeLModel.GrapeLModelContainer;
 
 public class GrapelBuilder implements GrapelBuilderExtension {
+	/**
+	 * The ID of the GrapelBuilder.
+	 */
+	public static final String BUILDER_ID = "org.emoflon.cep.builder";
 
 	@Override
 	public void run(IProject project, Resource resource) {
@@ -139,7 +143,7 @@ public class GrapelBuilder implements GrapelBuilderExtension {
 	
 	private boolean processManifestForPackage(IProject project, Manifest manifest) {
 		List<String> dependencies = new ArrayList<String>();
-		dependencies.addAll(Arrays.asList("org.emoflon.ibex.common", "org.emoflon.ibex.gt", "grapelmodel"));
+		dependencies.addAll(Arrays.asList("org.emoflon.ibex.common", "org.emoflon.ibex.gt", "grapelmodel", "grapel.engine"));
 		collectEngineExtensions().forEach(engine -> dependencies.addAll(engine.getDependencies()));
 		boolean changedBasics = ManifestFileUpdater.setBasicProperties(manifest, project.getName());
 		boolean updatedDependencies = ManifestFileUpdater.updateDependencies(manifest, dependencies);

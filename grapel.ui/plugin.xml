@@ -432,10 +432,23 @@
 		</fileTypes>
 	</extension>
  <extension
-       point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
-    <diagramTextProvider
-          priority="19"
-          providerClass="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
-    </diagramTextProvider>
+       point="org.eclipse.ui.newWizards">
+    <category
+          id="grapel.ui.category"
+          name="Grapel">
+    </category>
+    <wizard
+          category="grapel.ui.category"
+          class="org.emoflon.cep.ui.GrapelExecutableExtensionFactory:org.emoflon.cep.ui.wizard.GrapelNewProjectWizard"
+          id="grapel.ui.projectWizard"
+          name="GrapeL Project"
+          project="true">
+    </wizard>
+ </extension>
+ <extension
+       point="org.moflon.core.ui.DiagramTextProvider">
+    <diagram_text_provider
+          class="org.emoflon.cep.ui.visualization.GrapeLVisualizer">
+    </diagram_text_provider>
  </extension>
 </plugin>

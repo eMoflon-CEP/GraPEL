@@ -13,5 +13,6 @@ Require-Bundle: grapel,
  org.emoflon.ibex.gt.editor;bundle-version="1.1.0",
  org.emoflon.ibex.gt.editor.ide;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.emoflon.cep.ide.contentassist.antlr,
+Export-Package: org.emoflon.cep.ide,
+ org.emoflon.cep.ide.contentassist.antlr,
  org.emoflon.cep.ide.contentassist.antlr.internal
