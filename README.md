@@ -21,7 +21,7 @@ This part will provide a guide on how to install GraPEL in Eclipse.
 2. Download and install Eclipse (Modelling) (tested with eclipse 2021-03)
 3. Follow the [install instructions for eMoflon](https://github.com/eMoflon/emoflon-ibex-updatesite#how-to-install)
 4. Install MWE category (MWE SDK and MWE2 Language SDK) and the XText category from the [XText updatesite](http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/)
-5. Import the the projects of the GraPEL, grapel-deployment and ApamaDependencies repositories into eclipse (TBD)
+5. Import the the projects of the GraPEL, [grapel-deployment](https://github.com/eMoflon-CEP/grapel-deployment) and [ApamaDependencies](https://github.com/eMoflon-CEP/ApamaDependencies) repositories into eclipse (TBD)
 6. Locate the Apama API jars contained in the Apama installation.
 For the Community Edition the needed .jars can be found in the installation zip:
 apama_10.5.3.2_amd64_linux.zip\apama_10.5.3.2_amd64_linux\data\SAGImage.zip\e2ei,11,PAM_10.5.3.2.377593,BM_PAM_SagCommonLibJava-ALL-Any.zip\Apama\lib
