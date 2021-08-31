@@ -20,31 +20,78 @@ import com.apama.event.parser.EventParser;
 import com.apama.event.parser.EventType;
 import com.apama.event.parser.FieldTypes;
 
+/**
+ * Core Grape Engine controlling and handling GrapeL interaction between eMoflon and Apama
+ */
 public class GrapeEngine implements IEventListener{
 	
+	/**
+	 * Waiting time after a synchronization event
+	 */
 	final static int SYNC_TIMEOUT = 5000;
 	
+	/**
+	 * API for the graph transformation tool
+	 */
 	final protected GraphTransformationAPI eMoflonAPI;
 	
+	/**
+	 * Apama correlator
+	 */
 	final protected ApamaCorrelator correlator;
+	/**
+	 * Interface for the event consumer
+	 */
 	protected ConsumerOperationsInterface eventConsumer;
+	/**
+	 * Engine thread 
+	 */
 	private Thread currentThread = Thread.currentThread();
+	/**
+	 * Lock indicating, if a sync has been received
+	 */
 	private boolean waitingForSync = false;
 	
+	/**
+	 * Mapping between ID/object per type
+	 */
 	protected TypeRegistry registry = new TypeRegistry();
+	/**
+	 * Interface to the engine client
+	 */
 	protected EngineClientInterface engineClient;
+	/**
+	 * Map from event handler names to event handlers in the engine
+	 */
 	protected Map<String, EventHandler<? extends Event>> eventHandler = new HashMap<>();
+	/**
+	 * Event parser
+	 */
 	protected EventParser parser = new EventParser();
+	/**
+	 * Map from event type names to event types
+	 */
 	protected Map<String, EventType> eventTypes = new HashMap<>();
 	
+	/**
+	 * Map from event name to all events
+	 */
 	protected Map<String, Collection<? extends Event>> events = new HashMap<>();
+	/**
+	 * Map from event name to recent events
+	 */
 	protected Map<String, Collection<? extends Event>> recentEvents = new HashMap<>();
-	
+
 	public GrapeEngine(final GraphTransformationAPI eMoflonAPI, final ApamaCorrelator correlator) {
 		this.eMoflonAPI = eMoflonAPI;
 		this.correlator = correlator;
 	}
 
+	/**
+	 * Initializes the engine by starting the correlator, synchronizing the engine client and sending an update event 
+	 * @param engineClientFactory to create the engine client
+	 * @throws Exception if no engine client is provided, sending the events fails or the event consumer cannot be added
+	 */
 	protected void init(Supplier<EngineClientInterface> engineClientFactory) throws Exception {
 		correlator.runCorrelator();
 		engineClient = engineClientFactory.get();
@@ -78,6 +125,9 @@ public class GrapeEngine implements IEventListener{
 //		engineClient.startInspectPollingThread();
 	}
 	
+	/**
+	 * @param applyAutomatically to enable/disable automatic rule application
+	 */
 	public void setApplyAutomatically(boolean applyAutomatically) {
 		eventHandler.values().stream()
 		.filter(handler->(handler instanceof EMoflonRuleEventHandler))
@@ -85,11 +135,20 @@ public class GrapeEngine implements IEventListener{
 		.forEach(handler -> handler.setApplyAutomatically(applyAutomatically));
 	}
 	
+	/**
+	 * Injects a monitor script into the engine
+	 * @param monitorFilePath to the monitor file
+	 * @throws EngineException if injecting the monitor script fails
+	 * @throws IOException if loading the monitor file fails
+	 */
 	protected void injectMonitorScript(String monitorFilePath) throws EngineException, IOException {
 		MonitorScript script = new MonitorScript(IOUtils.loadTextFile(monitorFilePath));
 		engineClient.injectMonitorScript(script);
 	}
 	
+	/**
+	 * Resets the recent events and trigger, updates the matches via eMoflon API call, handles mapping and communication with Apama and triggers possible rule applications
+	 */
 	@SuppressWarnings("static-access")
 	public void update() {
 		eventHandler.values().forEach(handler -> handler.clearRecentEvents());
@@ -144,26 +203,45 @@ public class GrapeEngine implements IEventListener{
 		.forEach(handler -> handler.continueSubscriptions());
 	}
 	
+	/**
+	 * @return a map containing all events
+	 */
 	public Map<String, Collection<? extends Event>> getAllEvents() {
 		return events;
 	}
 	
+	/**
+	 * @return a map containing all recent events
+	 */
 	public Map<String, Collection<? extends Event>> getNewEvents() {
 		return recentEvents;
 	}
 	
+	/**
+	 * @return the eMoflon API
+	 */
 	public GraphTransformationAPI getEMoflonAPI() {
 		return eMoflonAPI;
 	}
 	
+	/**
+	 * @return the engine client
+	 */
 	protected EngineClientInterface getEngineClient() {
 		return engineClient;
 	}
 	
+	/**
+	 * @return the mapping object/ID per type
+	 */
 	protected TypeRegistry getTypeRegistry() {
 		return registry;
 	}
 	
+	/**
+	 * Adds an event handler to the event handlers to the Grape engine
+	 * @param handler to be added
+	 */
 	protected void addEventHandler(final EventHandler<? extends Event> handler) {
 		handler.setEventParser(parser);
 		eventTypes.put(handler.getHandlerName(), handler.getEventType());
@@ -173,10 +251,20 @@ public class GrapeEngine implements IEventListener{
 		eventHandler.put(handler.getHandlerName(), handler);
 	}
 	
+	/**
+	 * Gets the event handler from the event handlers list of the engine by name
+	 * @param handler name of event handler
+	 * @return the event handler with the handler name
+	 */
 	protected EventHandler<? extends Event> getEventHandler(final String handler) {
 		return eventHandler.get(handler);
 	}
 	
+	/**
+	 * Terminates the eMoflon API, removes the consumers and disconnects from the apama engine, and disposes the correlator
+	 * @throws EngineException if removing the consumers or disconnecting the engine fails
+	 * @throws InterruptedException if disposing the correlator is interrupted
+	 */
 	public void dispose() throws EngineException, InterruptedException {
 //		engineClient.stopStatusPollingThread();
 //		engineClient.stopInspectPollingThread();
