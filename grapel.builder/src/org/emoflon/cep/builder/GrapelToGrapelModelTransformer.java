@@ -80,11 +80,16 @@ import GrapeLModel.EnumLiteral;
 import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.GrapeLModelFactory;
 
+/**
+ * Transformer for GrapeL file to GrapeL model conversion
+ */
 public class GrapelToGrapelModelTransformer {
 	
+	// GrapeL model stuff
 	private GrapeLModelFactory factory = GrapeLModelFactory.eINSTANCE;
 	private GrapeLModelContainer container;
 	
+	// mappings
 	private Map<EditorPattern, IBeXContextPattern> editor2IBeXPatterns = new HashMap<>();
 	private Map<org.emoflon.cep.grapel.Event, Event> gEvent2Events = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, Event> events = Collections.synchronizedMap(new HashMap<>());
@@ -94,6 +99,11 @@ public class GrapelToGrapelModelTransformer {
 	private Map<Event, Map<String, VirtualEventAttribute>> virtualFields = Collections.synchronizedMap(new HashMap<>());
 	private Map<EventPattern, org.emoflon.cep.grapel.EventPattern> eventPattern2gEventPattern= Collections.synchronizedMap(new HashMap<>());
 	
+	/**
+	 * Transforms an editor GT file to a GrapeL model container
+	 * @param grapelFile the input GrapeL editor file
+	 * @return the GrapeL model for the GrapeL file
+	 */
 	public GrapeLModelContainer transform(EditorGTFile grapelFile) {
 		container = factory.createGrapeLModelContainer();
 		//transform GT to IBeXPatterns
@@ -130,7 +140,12 @@ public class GrapelToGrapelModelTransformer {
 		return container;
 	}
 	
+	/**
+	 * Maps the contents of the editor file to their model IBeX pattern equivalent
+	 * @param grapelFile the input GrapeL editor file
+	 */
 	private void mapEditor2IBeXPatterns(EditorGTFile grapelFile) {
+		// pattern mapping
 		for(EditorPattern ePattern : grapelFile.getPatterns().stream()
 				.filter(pattern -> !GTEditorPatternUtils.containsCreatedOrDeletedElements(pattern))
 				.collect(Collectors.toList())) {
@@ -168,6 +183,7 @@ public class GrapelToGrapelModelTransformer {
 			}
 		}
 		
+		// rule mapping
 		for(EditorPattern ePattern : grapelFile.getPatterns().stream()
 				.filter(pattern -> GTEditorPatternUtils.containsCreatedOrDeletedElements(pattern))
 				.collect(Collectors.toList())) {
@@ -216,6 +232,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gEvent the GrapeL editor event
+	 * @return the GrapeL model equivalent event
+	 */
 	private Event transform(org.emoflon.cep.grapel.Event gEvent) {
 		Event event = factory.createEvent();
 		event.setName(gEvent.getName());
@@ -234,6 +254,10 @@ public class GrapelToGrapelModelTransformer {
 		return event;
 	}
 	
+	/**
+	 * @param gAttribute the GrapeL editor event attribute
+	 * @return the GrapeL model equivalent event attribute
+	 */
 	private EventAttribute transform(org.emoflon.cep.grapel.EventAttribute gAttribute) {
 		EventAttribute attribute = null;
 		if(gAttribute.getType() instanceof EDataType) {
@@ -251,6 +275,10 @@ public class GrapelToGrapelModelTransformer {
 		return attribute;
 	}
 	
+	/**
+	 * @param gEventPattern the GrapeL editor event pattern
+	 * @return the GrapeL model equivalent event pattern
+	 */
 	private EventPattern transform(org.emoflon.cep.grapel.EventPattern gEventPattern) {
 		EventPattern pattern = factory.createEventPattern();
 		pattern.setName(gEventPattern.getName());
@@ -286,6 +314,10 @@ public class GrapelToGrapelModelTransformer {
 		return pattern;
 	}
 	
+	/**
+	 * @param gEventPatternNode the GrapeL editor event pattern node
+	 * @return the GrapeL model equivalent event pattern
+	 */
 	private EventPatternNode transform(org.emoflon.cep.grapel.EventPatternNode gEventPatternNode) {
 		EventPatternNode patternNode = null;
 		if(gEventPatternNode.getType() instanceof org.emoflon.cep.grapel.Event) {
@@ -300,6 +332,10 @@ public class GrapelToGrapelModelTransformer {
 		return patternNode;
 	}
 	
+	/**
+	 * @param gContextConstraint the GrapeL editor event pattern context constraint
+	 * @return the GrapeL model equivalent event pattern context constraint
+	 */
 	private ContextConstraint transform(org.emoflon.cep.grapel.EventPatternContextConstraint gContextConstraint) {
 		NodeContextConstraint constraint = factory.createNodeContextConstraint();
 		constraint.setRelation(transform(gContextConstraint.getRelation()));
@@ -308,6 +344,10 @@ public class GrapelToGrapelModelTransformer {
 		return constraint;
 	}
 	
+	/**
+	 * @param context the context whose associated constraint parameters should be returned
+	 * @return the constraint parameters for the specified context
+	 */
 	private Set<EventPatternNode> getContextConstraintParams(Context context) {
 		Set<EventPatternNode> params = new LinkedHashSet<>();
 		context.getContextConstraints().stream().filter(cc -> (cc instanceof NodeContextConstraint)).map(cc -> (NodeContextConstraint)cc).forEach(cc -> {
@@ -318,6 +358,10 @@ public class GrapelToGrapelModelTransformer {
 		return params;
 	}
 	
+	/**
+	 * @param gContextRelation the GrapeL editor context relation
+	 * @return the GrapeL model equivalent context relation
+	 */
 	private ContextRelation transform(org.emoflon.cep.grapel.ContextRelation gContextRelation) {
 		switch(gContextRelation) {
 		case EQUAL:
@@ -329,6 +373,10 @@ public class GrapelToGrapelModelTransformer {
 		return null;
 	}
 	
+	/**
+	 * @param gNodeExpression the GrapeL editor event pattern node expression
+	 * @return the GrapeL model equivalent event pattern node expression
+	 */
 	private EventPatternNodeExpression transform(org.emoflon.cep.grapel.EventPatternNodeExpression gNodeExpression) {
 		if(gNodeExpression.getPatternNode().getType() instanceof org.emoflon.cep.grapel.Event) {
 			EventNodeExpression nodeExpression = factory.createEventNodeExpression();
@@ -343,6 +391,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gConstraint the GrapeL editor relational constraint
+	 * @return the GrapeL model equivalent relational constraint
+	 */
 	private RelationalConstraint transform(org.emoflon.cep.grapel.RelationalConstraint gConstraint) {
 		if(gConstraint instanceof org.emoflon.cep.grapel.RelationalNodeExpression) {
 			RelationalConstraintLiteral literal = factory.createRelationalConstraintLiteral();
@@ -377,6 +429,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param op the GrapeL editor binary relational operator
+	 * @return the GrapeL model equivalent binary relational operator
+	 */
 	private RelationalConstraintOperator transform(org.emoflon.cep.grapel.BinaryRelationalOperator op) {
 		switch(op) {
 			case AND: return RelationalConstraintOperator.AND;
@@ -386,7 +442,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
-	
+	/**
+	 * @param gConstraint the GrapeL editor attribute constraint
+	 * @return the GrapeL model equivalent attribute constraint
+	 */
 	private AttributeConstraint transform(org.emoflon.cep.grapel.AttributeConstraint gConstraint) {
 		if(gConstraint instanceof org.emoflon.cep.grapel.BinaryAttributeConstraint) {
 			return transform((org.emoflon.cep.grapel.BinaryAttributeConstraint)gConstraint);
@@ -395,6 +454,11 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * Updates the arithmetic expression tag, if a type cast is required
+	 * @param lhs the left hand side expression of the top level expression to be checked for the need of type casting
+	 * @param rhs the right hand side expression of the top level expression to be checked for the need of type casting
+	 */
 	private void checkACCast(ArithmeticExpression lhs, ArithmeticExpression rhs) {
 		if(rhs == null) {
 			lhs.setRequiresCast(false);
@@ -443,6 +507,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param root the root attribute constraint whose associated constraint parameters should be returned
+	 * @return the constraint parameters for the specified attribute constraint
+	 */
 	private Set<EventPatternNode> getAttributeConstraintParams(AttributeConstraint root) {
 		if(root instanceof AttributeConstraintLiteral) {
 			AttributeConstraintLiteral literal = (AttributeConstraintLiteral)root;
@@ -471,6 +539,10 @@ public class GrapelToGrapelModelTransformer {
 		return params;
 	}
 	
+	/**
+	 * @param gConstraint the GrapeL editor binary attribute constraint
+	 * @return the GrapeL model equivalent binary attribute constraint
+	 */
 	private AttributeConstraint transform(org.emoflon.cep.grapel.BinaryAttributeConstraint gConstraint) {
 		AttributeConstraintProduction acp = factory.createAttributeConstraintProduction();
 		acp.setLhs(transform(gConstraint.getLeft()));
@@ -479,6 +551,10 @@ public class GrapelToGrapelModelTransformer {
 		return acp;
 	}
 	
+	/**
+	 * @param gConstraint the GrapeL editor unary attribute constraint
+	 * @return the GrapeL model equivalent unary attribute constraint
+	 */
 	private AttributeConstraint transform(org.emoflon.cep.grapel.UnaryAttributeConstraint gConstraint) {
 		AttributeConstraintUnary acu = factory.createAttributeConstraintUnary();
 		
@@ -541,6 +617,10 @@ public class GrapelToGrapelModelTransformer {
 		return acu;
 	}
 	
+	/**
+	 * @param gRelation the GrapeL editor attribute constraint relational operator
+	 * @return the GrapeL model equivalent attribute constraint relational operator
+	 */
 	private AttributeConstraintOperator transform(org.emoflon.cep.grapel.AttributeConstraintRelation gRelation) {
 		switch(gRelation) {
 		case AND:
@@ -552,6 +632,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gRelation the GrapeL editor attribute relation operator
+	 * @return the GrapeL model equivalent attribute relation operator
+	 */
 	private AttributeConstraintRelation transform(org.emoflon.cep.grapel.AttributeRelationOperator gRelation) {
 		switch(gRelation) {
 		case EQUAL:
@@ -571,6 +655,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gExpression the GrapeL editor attribute expression
+	 * @return the GrapeL model equivalent attribute expression
+	 */
 	private ArithmeticExpression transform(org.emoflon.cep.grapel.AttributeExpression gExpression) {
 		if(gExpression instanceof org.emoflon.cep.grapel.BinaryAttributeExpression)
 			return transform((org.emoflon.cep.grapel.BinaryAttributeExpression)gExpression);
@@ -584,6 +672,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param root the root arithmetic expression whose associated expression parameters should be returned
+	 * @return the expression parameters for the specified arithmetic expression
+	 */
 	private Set<EventPatternNode> getArithmeticExpressionParams(ArithmeticExpression root) {
 		if(root instanceof ArithmeticExpressionLiteral) {
 			ArithmeticExpressionLiteral literal = (ArithmeticExpressionLiteral)root;
@@ -609,6 +701,10 @@ public class GrapelToGrapelModelTransformer {
 		return params;
 	}
 	
+	/**
+	 * @param gExpression the GrapeL editor binary attribute expression
+	 * @return the GrapeL model equivalent binary attribute expression
+	 */
 	private ArithmeticExpression transform(org.emoflon.cep.grapel.BinaryAttributeExpression gExpression) {
 		ArithmeticExpressionProduction aep = factory.createArithmeticExpressionProduction();
 		aep.setOp(transform(gExpression.getOperator()));
@@ -639,6 +735,10 @@ public class GrapelToGrapelModelTransformer {
 		return aep;
 	}
 	
+	/**
+	 * @param gExpression the GrapeL editor unary attribute expression
+	 * @return the GrapeL model equivalent unary attribute expression
+	 */
 	private ArithmeticExpression transform(org.emoflon.cep.grapel.UnaryAttributeExpression gExpression) {
 		if(gExpression instanceof org.emoflon.cep.grapel.AttributeExpressionOperand) {
 			ArithmeticExpressionLiteral ael = factory.createArithmeticExpressionLiteral();
@@ -661,6 +761,12 @@ public class GrapelToGrapelModelTransformer {
 		return aeu;
 	}
 	
+	/**
+	 * Updates the arithmetic expression tag, if a type cast is required, and sets the corresponding output type
+	 * @param production the arithmetic production expression
+	 * @param lhs the left hand side expression of the production expression to be checked for the need of type casting
+	 * @param rhs the right hand side expression of the production expression to be checked for the need of type casting
+	 */
 	private void setBinaryTypeAndCast(ArithmeticExpressionProduction production, ArithmeticExpression lhs, ArithmeticExpression rhs) {
 		if(lhs.getType() == rhs.getType()) {
 			production.setType(lhs.getType());
@@ -720,12 +826,20 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * Updates the arithmetic expression tag, that no type cast is required, and sets the corresponding output type
+	 * @param production the arithmetic production expression
+	 * @param operand expression of the production expression, which determines the output type
+	 */
 	private void setUnaryTypeAndCast(ArithmeticExpressionUnary production, ArithmeticExpression operand) {
 		production.setType(operand.getType());
 		operand.setRequiresCast(false);
 	}
 	
-	
+	/**
+	 * @param gOperand the GrapeL editor expression operand
+	 * @return the GrapeL model equivalent arithmetic value
+	 */
 	private ArithmeticValue transform(org.emoflon.cep.grapel.AttributeExpressionOperand gOperand) {
 		if(gOperand instanceof org.emoflon.cep.grapel.AttributeExpressionLiteral) {
 			return transform((org.emoflon.cep.grapel.AttributeExpressionLiteral)gOperand);
@@ -734,6 +848,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gLiteral the GrapeL editor expression literal
+	 * @return the GrapeL model equivalent arithmetic value
+	 */
 	private ArithmeticValue transform(org.emoflon.cep.grapel.AttributeExpressionLiteral gLiteral) {
 		if(gLiteral instanceof org.emoflon.cep.grapel.NumberLiteral) {
 			if(gLiteral instanceof org.emoflon.cep.grapel.DoubleLiteral) {
@@ -767,6 +885,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gExpression the GrapeL editor attribute expression
+	 * @return the GrapeL model equivalent arithmetic value
+	 */
 	private ArithmeticValue transform(org.emoflon.cep.grapel.EventPatternNodeAttributeExpression gExpression) {
 		ArithmeticValueExpression expression = factory.createArithmeticValueExpression();
 		expression.setNodeExpression(transform(gExpression.getNodeExpression()));
@@ -792,6 +914,11 @@ public class GrapelToGrapelModelTransformer {
 		return expression;
 	}
 	
+	/**
+	 * Creates the virtual fields for an attribute expression of an event pattern node
+	 * @param expr the attribute expression to be converted to a virtual field
+	 * @param root the root event pattern node expression, where the virtual field should be added
+	 */
 	private void createVirtualField(AttributeExpression expr, EventPatternNodeExpression root) {
 		if(expr instanceof AttributeExpressionProduction)
 			throw new RuntimeException("Nested attribute expressions not yet supported!");
@@ -836,6 +963,12 @@ public class GrapelToGrapelModelTransformer {
 		ael.setVirtualAttribute(vea);
 	}
 	
+	/**
+	 * Produces a camel case name for an attribute expression together with its root event pattern name
+	 * @param expr the attribute expression providing the attribute expression name
+	 * @param root the root event pattern node expression providing the event name
+	 * @return the camel case name for the event pattern name and attribute expression combination
+	 */
 	private String toCamelCase(AttributeExpression expr, EventPatternNodeExpression root) {
 		if(expr instanceof AttributeExpressionProduction)
 			throw new RuntimeException("Nested attribute expressions not yet supported!");
@@ -864,6 +997,10 @@ public class GrapelToGrapelModelTransformer {
 		return sb.toString();
 	}
 	
+	/**
+	 * @param gOperator the GrapeL editor binary arithmetic expression operator
+	 * @return the GrapeL model equivalent binary arithmetic expression operator
+	 */
 	private ArithmeticExpressionOperator transform(org.emoflon.cep.grapel.ArithmeticOperator gOperator) {
 		switch(gOperator) {
 		case DIVIDE:
@@ -881,6 +1018,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gOperator the GrapeL editor unary arithmetic expression operator
+	 * @return the GrapeL model equivalent unary arithmetic expression operator
+	 */
 	private ArithmeticExpressionUnaryOperator transform(org.emoflon.cep.grapel.UnaryOperator gOperator) {
 		switch(gOperator) {
 		case ABS:
@@ -896,6 +1037,10 @@ public class GrapelToGrapelModelTransformer {
 		}
 	}
 	
+	/**
+	 * @param gReturn the GrapeL editor event pattern return statement
+	 * @return the GrapeL model equivalent return statement
+	 */
 	private ReturnStatement transform(org.emoflon.cep.grapel.ReturnStatement gReturn) {
 		ReturnStatement returnState = null;
 		if(gReturn instanceof org.emoflon.cep.grapel.SpawnStatement) {
