@@ -2,11 +2,27 @@ package org.emoflon.cep.generator
 
 import org.emoflon.cep.generator.AbstractTemplate
 
+/**
+ * Template for GrapeL event handler generation
+ */
 class EventHandlerTemplate extends AbstractTemplate {
-	
+	/**
+	 * Name of the event the event handler works with
+	 */
 	protected String eventName;
+	/**
+	 * Model manager utility for GrapeL model
+	 */
 	protected ModelManager model;
 	
+	/**
+	 * Constructor for an event handler template
+	 * @param imports the manager that organizes the imports
+	 * @param names the manager that includes the name space mapping for the project
+	 * @param paths the manager that includes the utility for path generation
+	 * @param model the manager that includes the utility for model access
+	 * @param eventName the name of the event the handler works with
+	 */
 	new(ImportManager imports, NSManager names, PathManager paths, ModelManager model, String eventName) {
 		super(imports, names, paths)
 		this.eventName = eventName;

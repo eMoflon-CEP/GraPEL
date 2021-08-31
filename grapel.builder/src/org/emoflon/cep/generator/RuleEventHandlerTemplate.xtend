@@ -2,8 +2,19 @@ package org.emoflon.cep.generator
 
 import org.emoflon.cep.generator.EventHandlerTemplate
 
+/**
+ * Template for GrapeL rule event handler generation
+ */
 class RuleEventHandlerTemplate extends EventHandlerTemplate {
 	
+	/**
+	 * Constructor for a rule event handler template
+	 * @param imports the manager that organizes the imports
+	 * @param names the manager that includes the name space mapping for the project
+	 * @param paths the manager that includes the utility for path generation
+	 * @param model the manager that includes the utility for model access
+	 * @param patternName the pattern name specifying the pattern the rule event handler works with
+	 */
 	new(ImportManager imports, NSManager names, PathManager paths, ModelManager model, String patternName) {
 		super(imports, names, paths, model, patternName)
 	}

@@ -46,15 +46,37 @@ import GrapeLModel.ApplyStatement
 import org.eclipse.emf.ecore.EClassifier
 import GrapeLModel.EnumLiteral
 
+/**
+ * Template for GrapeL Apama event pattern generation
+ */
 class EventPatternTemplate extends AbstractTemplate{
 	
+	/**
+	 * Name of the event pattern
+	 */
 	String eventPatternName;
+	/**
+	 * GrapeL event pattern representation
+	 */
 	EventPattern pattern;
+	/**
+	 * Model manager utility for GrapeL model
+	 */
 	ModelManager model;
+
+	// Constant string elements
 	String contextConstraint = "contextCheck";
 	String attributeConstraint = "attributeCheck";
 	String sendActionName = "sendAction";
 	
+	/**
+	 * Constructor for an event pattern template
+	 * @param eventPatternName the name of the event pattern
+	 * @param imports the manager that organizes the imports
+	 * @param names the manager that includes the name space mapping for the project
+	 * @param paths the manager that includes the utility for path generation
+	 * @param model the manager that includes the utility for model access
+	 */
 	new(String eventPatternName, ImportManager imports, NSManager names, PathManager paths, ModelManager model) {
 		super(imports, names, paths)
 		this.eventPatternName = eventPatternName
@@ -85,6 +107,10 @@ class EventPatternTemplate extends AbstractTemplate{
 '''
 	}
 	
+	/**
+	 * @param constraint to be transformed to EPL code
+	 * @return Apama EPL code for the the relation constraint
+	 */
 	def String getRelationalConstraint(RelationalConstraint constraint) {
 		if(constraint instanceof RelationalConstraintLiteral) {
 			val literal = constraint as RelationalConstraintLiteral;
@@ -107,6 +133,10 @@ class EventPatternTemplate extends AbstractTemplate{
 		}
 	}
 	
+	/**
+	 * @param op specifying the relational constraint operation
+	 * @return the Apama EPL equivalent for the relational constraint operator
+	 */
 	def String relationalConstraintOp2Apama(RelationalConstraintOperator op) {
 		switch(op) {
 			case AND: return 'and'
@@ -115,6 +145,11 @@ class EventPatternTemplate extends AbstractTemplate{
 		}
 	}
 	
+	/**
+	 * @param context for the event pattern
+	 * @param constraint the attribute constraint which should be nested in the body
+	 * @return the Apama EPL code for the relational constraint body
+	 */
 	def String getRelationalConstraintBody(Context context, AttributeConstraint constraint) {
 		if(context === null && constraint === null) {
 			return '''«sendActionName»(«if(pattern.returnStatement instanceof SpawnStatement) getSendActionParams(pattern.returnStatement as SpawnStatement) 
@@ -128,10 +163,18 @@ class EventPatternTemplate extends AbstractTemplate{
 		
 	}
 	
+	/**
+	 * @param context of the event pattern
+	 * @return the context constraint parameters divided by a comma as a separator
+	 */
 	def String getContextConstraintParams(Context context) {
 		return '''«FOR param : context.params.map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
-
+	
+	/**
+	 * @param context of the event pattern
+	 * @return the Apama EPL code for the contextCheck action
+	 */
 	def String getContextConstraint(Context context) {	
 		return '''
 action «contextConstraint»(«FOR param : context.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
@@ -140,10 +183,18 @@ action «contextConstraint»(«FOR param : context.params.map[param | eventPatte
 '''
 	}
 	
+	/**
+	 * @param constraint the attribute constraint to generate the parameter list for
+	 * @return the attribute constraint parameters divided by a comma as a separator
+	 */
 	def String getAttributeConstraintParams(AttributeConstraint constraint) {
 		return '''«FOR param : constraint.params.map[param | param.name].toSet SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
+	/**
+	 * @param constraint the attribute constraint
+	 * @return the Apama EPL code for the attributeCheck action
+	 */
 	def String getAttributeConstraint(AttributeConstraint constraint) {
 		return '''
 action «attributeConstraint»(«FOR param : constraint.params.map[param | eventPatternNode2param(param)] SEPARATOR ', '»«param»«ENDFOR») returns boolean {
@@ -152,14 +203,26 @@ action «attributeConstraint»(«FOR param : constraint.params.map[param | event
 '''
 	}
 	
+	/**
+	 * @param returnStatement the return statement of the event pattern
+	 * @return the send action parameters for the return type pattern divided by a comma as a separator
+	 */
 	def String getSendActionParams(SpawnStatement returnStatement) {
 		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)] SEPARATOR ', '»«param»«ENDFOR»'''
 	}
-
+	
+	/**
+	 * @param returnStatement the apply statement of the event pattern
+	 * @return the send action parameters for the apply type pattern divided by a comma as a separator
+	 */
 	def String getSendActionParams(ApplyStatement returnStatement) {
 		return '''«FOR param : returnStatement.parameters.map[param | arithmeticExpr2Apama(param, true)] SEPARATOR ', '»«param»«ENDFOR»'''
 	}
 	
+	/**
+	 * @param returnStatement the return statement of the event pattern
+	 * @return the Apama EPL code for the sendAction of the return type pattern
+	 */
 	def String getSendAction(SpawnStatement returnStatement) {
 		return '''
 action «sendActionName»(«FOR param : model.getFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
@@ -169,6 +232,10 @@ action «sendActionName»(«FOR param : model.getFields(returnStatement.returnTy
 	}
 	
 //	TODO:!
+	/**
+	 * @param returnStatement the apply statement of the event pattern
+	 * @return the Apama EPL code for the sendAction of the apply type pattern
+	 */
 	def String getSendAction(ApplyStatement returnStatement) {
 		return '''
 action «sendActionName»(«FOR param : model.getApplicationEventFields(returnStatement.returnType.name) SEPARATOR ', '»«ModelManager.asApamaType(param)» «param.name»«ENDFOR») {
@@ -177,6 +244,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 '''		
 	}
 	
+	/**
+	 * @param constraint the context constraint of the event pattern
+	 * @return the Apama EPL code for the context constraint
+	 */
 	def String contextConstraint2Apama(ContextConstraint constraint) {
 		if(!(constraint instanceof NodeContextConstraint)) {
 			return "";
@@ -187,6 +258,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 			
 	}
 	
+	/**
+	 * @param op specifying the context relation
+	 * @return the Apama EPL equivalent for the context relation
+	 */
 	def String contextRelation2Apama(ContextRelation op) {
 		switch(op) {
 			case EQUAL: {
@@ -199,6 +274,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param constraint the attribute constraint
+	 * @return the Apama EPL code for the attribute constraint
+	 */
 	def String attributeConstraint2Apama(AttributeConstraint constraint) {
 		if(constraint instanceof AttributeConstraintLiteral) {
 			val literal = constraint as AttributeConstraintLiteral;
@@ -216,6 +295,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param op specifying the attribute constraint operator
+	 * @return the Apama EPL equivalent for the attribute constraint operator
+	 */
 	def String attributeConstrOp2Apama(AttributeConstraintOperator op) {
 		switch(op) {
 			case AND: {
@@ -228,10 +311,18 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param expr the attribute expression
+	 * @return the Apama EPL code for the attribute expression
+	 */
 	def String attributeConstrExpr2Apama(AttributeConstraintExpression expr) {
 		return '''«arithmeticExpr2Apama(expr.lhs, false)»«IF expr.rhs !== null» «attributeConstraintRelation2Apama(expr.op)» «arithmeticExpr2Apama(expr.rhs, false)»«ENDIF»'''
 	}
 	
+	/**
+	 * @param op specifying the attribute relation
+	 * @return the Apama EPL equivalent for the attribute relation
+	 */
 	def String attributeConstraintRelation2Apama(AttributeConstraintRelation op) {
 		switch(op) {
 			case EQUAL: {
@@ -256,6 +347,12 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * This method is only an internal method for arithmetic expression to Apama after check if cast is required after conversion
+	 * @param expr the arithmetic expression
+	 * @param isAssigment indicating if the expression is an assignment
+	 * @return the Apama EPL code for the arithmetic expression
+	 */
 	def String arithmeticExpr2ApamaInternal(ArithmeticExpression expr, boolean isAssignment) {
 		if(expr instanceof ArithmeticExpressionLiteral) {
 			val literal = expr as ArithmeticExpressionLiteral
@@ -269,6 +366,11 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param expr the arithmetic expression
+	 * @param isAssigment indicating if the expression is an assignment
+	 * @return the Apama EPL code for the arithmetic expression
+	 */
 	def String arithmeticExpr2Apama(ArithmeticExpression expr, boolean isAssignment) {
 		if(expr.requiresCast && expr instanceof ArithmeticExpressionProduction)
 			return '''«castTo('''(«arithmeticExpr2ApamaInternal(expr, isAssignment)»)''', expr.type, expr.castTo, isAssignment)»'''
@@ -277,6 +379,13 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		else return arithmeticExpr2ApamaInternal(expr, isAssignment)
 	}
 	
+	/**
+	 * @param expr to be type casted
+	 * @param from the type the expression has before cats
+	 * @param to the type the expression should have after casting
+	 * @param isAssignment indicating if the expression is an assignment
+	 * @return the Apama EPL code for type casting the expression
+	 */
 	def String castTo(String expr, EClassifier from, EClassifier to, boolean isAssignment) {
 		if(isAssignment && from == EcorePackage.Literals.ESTRING && to != EcorePackage.Literals.ESTRING) {
 			return '''«ModelManager.dataTypeAsApamaType(to)».parse(«expr»)'''
@@ -289,6 +398,11 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param expr the unary expression
+	 * @param isAssigment indicating if the expression is an assignment
+	 * @return the Apama EPL code for the unary expression
+	 */
 	def String unaryExpression2Apama(ArithmeticExpressionUnary expr, boolean isAssignment) {
 		if(expr.operator == ArithmeticExpressionUnaryOperator.BRACKETS)
 			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand, isAssignment)»)'''
@@ -296,6 +410,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 			return '''«IF expr.isNegative»-«ENDIF»(«arithmeticExpr2Apama(expr.operand, isAssignment)»).«arithmeticUnaryOp2Apama(expr.operator)»'''
 	}
 	
+	/**
+	 * @param eventPatternNode node to be mapped with its type
+	 * @return the Apama EPL code to represent a event pattern node with its type
+	 */
 	def String eventPatternNode2param(EventPatternNode eventPatternNode) {
 		if(eventPatternNode instanceof EventNode) {
 			val node = eventPatternNode as EventNode
@@ -306,7 +424,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 
-	
+	/**
+	 * @param op the arithmetic expression operator
+	 * @return the Apama EPL equivalent for the arithmetic expression operator
+	 */
 	def String arithmeticOp2Apama(ArithmeticExpressionOperator op) {
 		switch(op) {
 			case DIVIDE: {
@@ -328,6 +449,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param op the unary arithmetic expression operator
+	 * @return the Apama EPL equivalent for the arithmetic unary expression operator
+	 */
 	def String arithmeticUnaryOp2Apama(ArithmeticExpressionUnaryOperator op) {
 		switch(op) {
 			case ABS: {
@@ -348,6 +473,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param value the arithmetic value to be converted to a literal
+	 * @return the arithmetic value as a literal string 
+	 */
 	def String arithmeticVal2Apama(ArithmeticValue value) {
 		if(value instanceof ArithmeticValueLiteral) {
 			val literal = value as ArithmeticValueLiteral
@@ -369,6 +498,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param expr the arithmetic value expression
+	 * @return the Apama EPL code to represent the arithmetic value expression
+	 */
 	def String arithmeticValExpr2Apama(ArithmeticValueExpression expr) {
 		if(expr.attributeExpression === null) {
 			return nodeExpression2Apama(expr.nodeExpression)
@@ -377,6 +510,10 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param expr the event pattern node expression to be converted
+	 * @return the Apama EPL code to represent the event pattern node expression
+	 */
 	def String nodeExpression2Apama(EventPatternNodeExpression expr) {
 		if(expr instanceof EventNodeExpression) {
 			val enExpr = expr as EventNodeExpression
@@ -387,14 +524,27 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * @param expr the event node expression to be converted
+	 * @return the Apama EPL code to represent the event node expression
+	 */
 	def String nodeExpression2Apama(EventNodeExpression expr) {
 		return '''«expr.eventPatternNode.name»«IF expr.eventAttribute !== null».«expr.eventAttribute.name»«ENDIF»'''
 	}
 	
+	/**
+	 * @param expr the IBEX pattern node expression to be converted
+	 * @return the Apama EPL code to represent the IBEX pattern node expression
+	 */
 	def String nodeExpression2Apama(IBeXPatternNodeExpression expr) {
 		return '''«expr.eventPatternNode.name»«IF expr.patternAttribute !== null».«expr.patternAttribute.name»«ENDIF»'''
 	}
 	
+	/**
+	 * @param expr the attribute expression to be converted
+	 * @return the Apama EPL code to represent the attribute expression
+	 * @throws RuntimeException if the attribute expression is not supported
+	 */
 	def String attributeExpression2Apama(AttributeExpression expr) {
 		if(expr instanceof AttributeExpressionLiteral) {
 			val literal = expr as  AttributeExpressionLiteral
@@ -404,6 +554,9 @@ action «sendActionName»(«FOR param : model.getApplicationEventFields(returnSt
 		}
 	}
 	
+	/**
+	 * Returns the code for the Maintainance monitor synchronization monitor
+	 */
 	static def String getSyncPattern() {
 				return '''monitor Maintainance {
 	constant string eventChannel := "channel1";

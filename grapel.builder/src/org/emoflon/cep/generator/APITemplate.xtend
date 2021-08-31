@@ -1,7 +1,16 @@
 package org.emoflon.cep.generator
 
+/**
+ * Template for GrapeL API generation
+ */
 class APITemplate extends AbstractTemplate{
 	
+	/**
+	 * Constructor for an API Template
+	 * @param imports the manager that organizes the imports
+	 * @param names the manager that includes the name space mapping for the project
+	 * @param paths the manager that includes the utility for path generation
+	 */
 	new(ImportManager imports, NSManager names, PathManager paths) {
 		super(imports, names, paths)
 	}

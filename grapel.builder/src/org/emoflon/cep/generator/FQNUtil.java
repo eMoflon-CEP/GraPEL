@@ -28,9 +28,13 @@ import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.pde.internal.core.plugin.PluginElement;
 
+/**
+ * Utility helper for fully qualified names
+ */
 @SuppressWarnings("restriction")
 public class FQNUtil {
 	
+	// name mappings to full qualifiers
 	private static Map<String, String> packName2fq = new ConcurrentHashMap<>();
 	private static Map<String, String> className2fq = new ConcurrentHashMap<>();
 	private static Map<String, IProject> pack2project = new ConcurrentHashMap<>();
@@ -38,6 +42,10 @@ public class FQNUtil {
 	private static Map<EPackage, String> pack2fq = new ConcurrentHashMap<>();
 	private static Map<EPackage, String> class2fq = new ConcurrentHashMap<>();
 
+	/**
+	 * @param epack specifying the class
+	 * @return the fully qualified name for the specified class
+	 */
 	public static synchronized String getFQClassName(EPackage epack) {
 		if(getFQPackageName(epack) != null) {
 			if(className2fq.containsKey(epack.getNsURI()))
@@ -49,11 +57,16 @@ public class FQNUtil {
 		}
 	}
 	
+	/**
+	 * @param epack specifying the package
+	 * @return the fully qualified name for the specified package
+	 */
 	public static synchronized String getFQPackageName(EPackage epack) {
 		// if fully qualified package has already been calculated return it
 		if(packName2fq.containsKey(epack.getNsURI())) {
 			return packName2fq.get(epack.getNsURI());
 		}
+		// calculate fully qualified name
 		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		getProjectInWorkspace(epack, workspace);
@@ -80,6 +93,11 @@ public class FQNUtil {
 		return null;
 	}
 	
+	/**
+	 * @param epack that is included in the project
+	 * @param workspace including the project
+	 * @return the project from the workspace, that includes the ePackage
+	 */
 	public static synchronized IProject getProjectInWorkspace(EPackage epack, IWorkspace workspace) {
 		if(pack2project.containsKey(epack.getNsURI()))
 			return pack2project.get(epack.getNsURI());
@@ -119,6 +137,11 @@ public class FQNUtil {
 		return null;
 	}
 	
+	/**
+	 * @param modelName specifying the model
+	 * @param epack specifying the class
+	 * @return the fully qualified class name of the specified class
+	 */
 	public static String getFQClassName(String modelName, EPackage epack) {
 		getFQPackageName(modelName, epack);
 		if(class2fq.containsKey(epack))
@@ -126,6 +149,11 @@ public class FQNUtil {
 		return pack2fq.get(epack);
 	}
 	
+	/**
+	 * @param modelName specifying the model
+	 * @param epack specifying the package
+	 * @return the fully qualified package name of the given package in the project, which includes the model with the specified name
+	 */
 	public static String getFQPackageName(String modelName, EPackage epack) {
 		// if fully qualified package has already been calculated return it
 		if(pack2fq.containsKey(epack))
@@ -189,6 +217,13 @@ public class FQNUtil {
 		return epack.getName();
 	}
 
+	/**
+	 * @param epack specifying the class
+	 * @param jProject to search for the class in
+	 * @param packageName specifying the package
+	 * @return true, if a fully qualified class name is added to the class2fq mapping
+	 * @throws JavaModelException
+	 */
 	private static boolean getClass(EPackage epack, IJavaProject jProject, String packageName)
 			throws JavaModelException {
 		
@@ -226,6 +261,11 @@ public class FQNUtil {
 		return false;
 	}
 	
+	/**
+	 * @param modelName which should be included in the searched project
+	 * @param workspace that includes the project
+	 * @return the project from the workspace, that includes the specified model
+	 */
 	public static IProject getProjectInWorkspace(String modelName, IWorkspace workspace) {
 		IProject[] projects = workspace.getRoot().getProjects();
 		for(IProject project : projects) {

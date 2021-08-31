@@ -5,8 +5,19 @@ import GrapeLModel.EventAttribute
 import GrapeLModel.VirtualEventAttribute
 import org.eclipse.emf.ecore.EEnum
 
+/**
+ * Template for GrapeL match event generation
+ */
 class MatchEventTemplate extends EventTemplate {
 	
+	/**
+	 * Constructor for a match event template
+	 * @param imports the manager that organizes the imports
+	 * @param names the manager that includes the name space mapping for the project
+	 * @param paths the manager that includes the utility for path generation
+	 * @param model the manager that includes the utility for model access
+	 * @param patternName the pattern name specifying the match event
+	 */
 	new(ImportManager imports, NSManager names, PathManager paths, ModelManager model, String patternName) {
 		super(imports, names, paths, model, patternName)
 	}
@@ -102,6 +113,10 @@ public class «names.getMatchEventName(eventName)» extends EMoflonEvent<«names
 '''		
 	}
 	
+	/**
+	 * @param eAtr the match attribute, which should be accessed
+	 * @return the code to access the attribute according to the attribute type
+	 */
 	def String getAccessAttribute(EventAttribute eAtr) {
 		if(!(eAtr instanceof VirtualEventAttribute)) {
 			return '''match.get«StringUtil.firstToUpper(eAtr.name)»()'''

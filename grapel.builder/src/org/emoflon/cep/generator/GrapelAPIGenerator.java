@@ -18,12 +18,20 @@ import GrapeLModel.GrapeLModelContainer;
 import GrapeLModel.MatchEvent;
 import GrapeLModel.RuleEvent;
 
+/**
+ * Generator for generation of the GrapeL API
+ */
 public class GrapelAPIGenerator {
 	
+	// general project stuff
 	private IProject project;
 	private GrapeLModelContainer container;
+	/**
+	 * Collection of pattern matching engine identifiers
+	 */
 	private Collection<String> pmEngines;
 	
+	// Utility helpers
 	private ImportManager imports;
 	private NSManager names;
 	private PathManager paths;
@@ -31,7 +39,13 @@ public class GrapelAPIGenerator {
 	
 	private List<AbstractTemplate> templates = new LinkedList<>();
 	private Map<String, String> files = Collections.synchronizedMap(new HashMap<>());
-
+	
+	/**
+	 * Constructor for the GrapeL API generator
+	 * @param project that the generator should use for code generation 
+	 * @param container that includes all GrapeL elements
+	 * @param pmEngines the pattern matching engine identifiers for API generation
+	 */
 	public GrapelAPIGenerator(IProject project, GrapeLModelContainer container, Collection<String> pmEngines) {
 		this.project = project;
 		this.container = container;
@@ -45,6 +59,9 @@ public class GrapelAPIGenerator {
 		initTemplates();
 	}
 	
+	/**
+	 * Initializes the templates for code generation with the import manager, the name manager and the path manager
+	 */
 	private void initTemplates() {
 		templates.add(new APITemplate(imports, names, paths));
 		pmEngines.forEach(engine -> {
@@ -73,6 +90,10 @@ public class GrapelAPIGenerator {
 		});
 	}
 	
+	/**
+	 * Generates the GrapeL code
+	 * @throws CoreException if the generation of the required folders fails
+	 */
 	public void generateCode() throws CoreException {
 		paths.createRequiredFolders();
 		
