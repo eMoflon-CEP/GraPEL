@@ -50,12 +50,18 @@ import org.emoflon.ibex.gt.editor.utils.GTEnumExpressionHelper;
  */
 public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	
+	/**
+	 * @param context the element from which an element shall be referenced
+	 * @param reference the reference for which to get the scope
+	 * @return the scope for the reference in the given context
+	 */
 	public IScope getScopeInternal(EObject context, EReference reference) {
 		// Events
 	    if (isEvent(context, reference)) {
 	    	return getScopeForEvents((Event)context);
 	    }
 	    
+	    // Enum
 	    if (isEnumLiteralExpression(context)) {
 	    	return getScopeForEnumLiterals((EnumLiteral)context);
 	    }
@@ -120,15 +126,25 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 	    return super.getScope(context, reference);
 	}
 	
+	// enum scope
+	/**
+	 * @param context the enum from which an element shall be referenced
+	 * @return the scope for the given enum literal
+	 */
 	private IScope getScopeForEnumLiterals(EnumLiteral context) {
 		EditorGTFile gtFile = getGTFile(context);
 		return Scopes.scopeFor(GTEditorModelUtils.getEnums(gtFile).stream().flatMap(eenum -> eenum.getELiterals().stream()).collect(Collectors.toList()));
 	}
 
+	/**
+	 * @param context the element to check for being an enum literal expression
+	 * @return true, if the context is an instance of an enum literal
+	 */
 	private boolean isEnumLiteralExpression(EObject context) {
 		return context instanceof EnumLiteral;
 	}
-
+	
+	// general scope
 	@Override
 	public IScope getScope(EObject context, EReference reference) {	
 		try {
@@ -139,6 +155,11 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		}
 	}
 	
+	// match scope
+	/**
+	 * @param context the match event from which an element shall be referenced
+	 * @return the scope for the given match event state
+	 */
 	private IScope getScopeForMatchEventState(MatchEventState context) {
 		Collection<EObject> scope = new HashSet<>();
 		scope.addAll(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes().stream()
@@ -147,6 +168,12 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(scope);
 	}
 	
+	// event pattern node expression scope
+	/**
+	 * @param context the event pattern node expression from which an element shall be referenced
+	 * @param reference the reference for which to get the scope
+	 * @return the scope for the given event pattern node expression and the reference
+	 */
 	private IScope getScopeForEventPatternNodeExpressions(EventPatternNodeExpression context, EReference reference) {
 		Collection<EObject> scope = new HashSet<>();
 		
@@ -170,41 +197,85 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		
 		return Scopes.scopeFor(scope);
 	}
-
+	
+	/**
+	 * @param context the element to check for being an event pattern node expression
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an event pattern node expression
+	 */
 	private boolean isEventPatternNodeExpression(EObject context, EReference reference) {
 		return (context instanceof EventPatternNodeExpression);
 	}
-
+	
+	// attribute expression scope
+	/**
+	 * @param context the attribute expression from which an element shall be referenced
+	 * @param reference the reference for which to get the scope
+	 * @return the scope for the given attribute expression
+	 */
 	private IScope getScopeForGrapelAttributeExpressions(AttributeExpression context, EReference reference) {
 		return Scopes.scopeFor(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes());
 	}
 
+	/**
+	 * @param context the element to check for being an attribute expression
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an attribute expression
+	 */
 	private boolean isGrapelAttributeExpression(EObject context, EReference reference) {
 		 return (context instanceof AttributeExpression);
 	}
-
+	
+	// spawn/apply scope
+	/**
+	 * @param context the element to check for being a return spawn
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of a return spawn and the reference is to the return spawn return type 
+	 */
 	private boolean isReturnSpawn(EObject context, EReference reference) {
 		 return (context instanceof ReturnSpawn && reference == GrapelPackage.Literals.RETURN_SPAWN__RETURN_TYPE);
 	}
 	
+	/**
+	 * @param context the element to check for being a return apply
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of a return apply and the reference is to the return apply return type 
+	 */
 	private boolean isReturnApply(EObject context, EReference reference) {
 		 return (context instanceof ReturnApply && reference == GrapelPackage.Literals.RETURN_APPLY__RETURN_TYPE);
 	}
 	
+	/**
+	 * @param context the return spawn element from which an element shall be referenced
+	 * @return the scope for the given return spawn
+	 */
 	private IScope getScopeForReturnSpawn(ReturnSpawn context) {
 		return Scopes.scopeFor(getGTFile(context).getEvents());
 	}
 	
+	/**
+	 * @param context the return apply element from which an element shall be referenced
+	 * @return the context for the given return apply
+	 */
 	private IScope getScopeForReturnApply(ReturnApply context) {
 		return Scopes.scopeFor(getGTFile(context).getPatterns().stream()
 				.filter(pattern -> GTEditorPatternUtils.containsCreatedOrDeletedElements(pattern))
 				.collect(Collectors.toList()));
 	}
 	
+	/**
+	 * @param context the element to check for being a spawn statement
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of a spawn statement and the reference is a spawn statement return argument
+	 */
 	private boolean isSpawnStatement(EObject context, EReference reference) {
 		 return (context instanceof SpawnStatement && reference == GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG);
 	}
 	
+	/**
+	 * @param context the spawn statement from which an element shall be referenced
+	 * @return the scope for the given spawn statement
+	 */
 	private IScope getScopeForSpawnStatement(SpawnStatement context) {
 		EventPattern eventPattern = (EventPattern)context.eContainer();
 		if(eventPattern.getReturnType() != null && eventPattern.getReturnType() instanceof ReturnSpawn) {
@@ -216,14 +287,28 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(getGTFile(context).getEvents());
 	}
 	
+	/**
+	 * @param context the element to check for being an apply statement argument
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an apply statement and the reference is an apply statement return argument
+	 */
 	private boolean isApplyStatementArg(EObject context, EReference reference) {
 		 return (context instanceof ApplyStatement && reference == GrapelPackage.Literals.APPLY_STATEMENT__RETURN_ARG);
 	}
 	
+	/**
+	 * @param context the element to check for being an apply statement match
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an apply statement and the reference is an apply statement match
+	 */
 	private boolean isApplyStatementMatch(EObject context, EReference reference) {
 		 return (context instanceof ApplyStatement && reference == GrapelPackage.Literals.APPLY_STATEMENT__MATCH);
 	}
 	
+	/**
+	 * @param context the apply statement from which the apply statement argument shall be referenced
+	 * @return the scope for the given apply statement
+	 */
 	private IScope getScopeForApplyStatementArg(ApplyStatement context) {
 		EventPattern eventPattern = (EventPattern)context.eContainer();
 		if(eventPattern.getReturnType() != null && eventPattern.getReturnType() instanceof ReturnApply) {
@@ -237,6 +322,10 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 				.collect(Collectors.toList()));
 	}
 	
+	/**
+	 * @param context the apply statement from which the apply statement match shall be referenced
+	 * @return the scope for the given apply statement
+	 */
 	private IScope getScopeForApplyStatementMatch(ApplyStatement context) {
 		EventPattern eventPattern = (EventPattern)context.eContainer();
 		return Scopes.scopeFor(eventPattern.getNodes().stream()
@@ -244,26 +333,50 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 				.filter(node -> node.getType().equals(context.getReturnArg()))
 				.collect(Collectors.toList()));
 	}
-
+	
+	// constraint scope
+	/**
+	 * @param context the attribute from which an element shall be referenced
+	 * @param reference the reference for which to get the scope
+	 * @return the scope for the given GrapeL attribute constraints
+	 */
 	private IScope getScopeForGrapelAttributeConstraints(AttributeConstraint context, EReference reference) {
 		return Scopes.scopeFor(GTEditorPatternUtils.getContainer(context, EventPatternImpl.class).getNodes());
 	}
-
+	
+	/**
+	 * @param context the element to check for being an attribute constraint
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an attribute constraint
+	 */
 	private boolean isGrapelAttributeConstraint(EObject context, EReference reference) {
 		return (context instanceof AttributeConstraint);
 	}
-
+	
+	/**
+	 * @param context the relational constraint from which an element shall be referenced
+	 * @return the scope for the given relational constraint
+	 */
 	private IScope getScopeRelationalConstraints(RelationalConstraint context) {
 		EventPattern ePattern = GTEditorPatternUtils.getContainer(context, EventPatternImpl.class);
 		Collection<EObject> scope = new HashSet<>();
 		scope.addAll(ePattern.getNodes());
 		return Scopes.scopeFor(scope);
 	}
-
+	
+	/**
+	 * @param context the element to check for being an relational constraint
+	 * @return true, if the context is an instance of an relational constraint
+	 */
 	private boolean isRelationalConstraint(EObject context) {
 		return (context instanceof RelationalConstraint);
 	}
-
+	
+	/**
+	 * @param context the event pattern node attribute expression from which an element shall be referenced
+	 * @param reference the reference for which to get the scope
+	 * @return the scope for the the given event pattern node attribute expression
+	 */
 	private IScope getScopeForEventPatternNodeAttributeExpressionAttributeFields(
 			EventPatternNodeAttributeExpression context, EReference reference) {
 		Collection<EObject> scope = new HashSet<>();
@@ -291,24 +404,48 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		}
 		return Scopes.scopeFor(scope);
 	}
-
+	
+	/**
+	 * @param context the element to check for being an attribute expression attribute field
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an event pattern node attribute expression and the reference is an attribute expression field
+	 */
 	private boolean isEventPatternNodeAttributeExpressionAttributeField(EObject context, EReference reference) {
 		return (context instanceof EventPatternNodeAttributeExpression 
 				&& reference == GrapelPackage.Literals.EVENT_PATTERN_NODE_ATTRIBUTE_EXPRESSION__FIELD);
 	}
-
+	
+	/**
+	 * @param context the event pattern context constraint from which an element shall be referenced
+	 * @return the scope for the given event pattern context constraint
+	 */
 	private IScope getScopeForEventPatternContextConstraintNodes(EventPatternContextConstraint context) {
 		return Scopes.scopeFor(((EventPattern)context.eContainer()).getNodes());
 	}
-
+	
+	/**
+	 * @param context the element to check for being an event pattern context constraint
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an event pattern context constraint
+	 */
 	private boolean isEventPatternContextConstraint(EObject context, EReference reference) {
 		return (context instanceof EventPatternContextConstraint);
 	}
-
+	
+	// event scope
+	/**
+	 * @param context the element to check for being an event
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an event
+	 */
 	protected boolean isEvent(EObject context, EReference reference) {
 	    return (context instanceof Event);
 	}
 	
+	/**
+	 * @param context the event from which an element shall be referenced
+	 * @return the scope for the given event
+	 */
 	protected IScope getScopeForEvents(Event context) {
 		Collection<EObject> scope = new HashSet<>();
 		scope.addAll(GTEditorModelUtils.getClasses(getGTFile(context)));
@@ -316,10 +453,19 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(scope);
 	}
 	
+	/**
+	 * @param context the element to check for being an event attribute
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an event attribute and the reference is an event attribute
+	 */
 	protected boolean isEventAttribute(EObject context, EReference reference) {
 	    return (context instanceof EventAttribute && reference == GrapelPackage.Literals.EVENT_ATTRIBUTE__TYPE);
 	}
 	
+	/**
+	 * @param context the event attribute from which an element shall be referenced
+	 * @return the scope for the given event attribute
+	 */
 	protected IScope getScopeForEventAttributes(EventAttribute context) {
 		Collection<EObject> scope = new HashSet<>();
 		scope.addAll(GTEditorModelUtils.getClasses(getGTFile(context)));
@@ -327,18 +473,39 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(scope);
 	}
 	
+	// event pattern scope
+	/**
+	 * @param context the element to check for being an event pattern
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an event pattern and the reference is an event pattern return
+	 */
 	protected boolean isEventPattern(EObject context, EReference reference) {
 	    return (context instanceof EventPattern && reference != GrapelPackage.Literals.EVENT_PATTERN__RETURN_TYPE);
 	}
 	
+	/**
+	 * @param context the event pattern from which an element shall be referenced
+	 * @param reference the reference for which to get the scope
+	 * @return the scope for the given event pattern
+	 */
 	protected IScope getScopeForEventPatterns(EventPattern context, EReference reference) {
 		return Scopes.scopeFor(context.getNodes());
 	}
 	
+	// event pattern node scope
+	/**
+	 * @param context the element to check for being an event pattern node
+	 * @param reference the reference for which to check the scope type
+	 * @return true, if the context is an instance of an event pattern node and the reference is an event pattern node
+	 */
 	protected boolean isEventPatternNode(EObject context, EReference reference) {
 	    return (context instanceof EventPatternNode && reference == GrapelPackage.Literals.EVENT_PATTERN_NODE__TYPE);
 	}
 	
+	/**
+	 * @param context the event pattern node from which an element shall be referenced
+	 * @return the scope for the given event pattern node
+	 */
 	protected IScope getScopeForEventPatternNodes(EventPatternNode context) {
 		Collection<EObject> scope = new HashSet<>();
 		scope.addAll(getGTFile(context).getPatterns());
@@ -346,6 +513,7 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 		return Scopes.scopeFor(scope);
 	}
 	
+	// enum scope
 	@Override
 	public IScope getScopeForEnumLiterals(EditorEnumExpression enumExpression) {
 		EEnum type = (EEnum)GTEnumExpressionHelper.getEnumDataType(enumExpression);
@@ -360,6 +528,10 @@ public class GrapelScopeProvider extends AbstractGrapelScopeProvider {
 
 	}
 	
+	/**
+	 * @param node included in editor file
+	 * @return the GT editor file, which includes the node
+	 */
 	public static EditorGTFile getGTFile(EObject node) {
 		EObject current = node;
 		while(!(current instanceof EditorGTFile)) {
