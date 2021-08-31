@@ -77,11 +77,20 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public static final String EVENT_PATTERN_NAME_MULTIPLE_DECLARATIONS_MESSAGE = "Event_pattern '%s' must not be declared multiple times.";
 	
 	public static final String EVENT_PATTERN_INVALID_RETURN = CODE_PREFIX +  "event_pattern.returnStatement.invalid";
+	public static final String SPAWNING_EVENT_PATTERN_TYPE_MISSMATCH_MESSAGE = "Event_pattern %s has a spawn statement without being an spawning event_pattern.";
 	public static final String SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE = "Event_pattern %s spawns a different event than indicated.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with the wrong number of parameters.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE = "Event_pattern %s spawns an event with wrong parameters.";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING = "Event_pattern %s spawns an event without matching parameters. Will be cast automatically...";
 	public static final String SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR = "Event_pattern %s spawns an event without matching parameters. \nOnly EString attributes and EString literals can be parsed to numeric values.";
+	
+	public static final String APPLYING_EVENT_PATTERN_TYPE_MISSMATCH_MESSAGE = "Event_pattern %s has an apply statement without being an applying event_pattern.";
+	public static final String APPLYING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE = "Event_pattern %s applies a different rule than indicated.";
+	public static final String APPLYING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE = "Event_pattern %s applies a rule with the wrong number of parameters.";
+	public static final String APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE = "Event_pattern %s applies a rule with wrong parameters.";
+	public static final String APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING = "Event_pattern %s applies a rule without matching parameters. Will be cast automatically...";
+	public static final String APPLYING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR = "Event_pattern %s applies a rule without matching parameters. \nOnly EString attributes and EString literals can be parsed to numeric values.";
+	
 	
 	// Errors for event pattern nodes
 	public static final String EVENT_PATTERN_NODE_NAME_FORBIDDEN_MESSAGE = "Event_pattern node cannot be named '%s'. Use a different name.";
@@ -102,6 +111,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	public static final String ATTRIBUTE_RELATION_FORBIDDEN_OPERATION = "Operation '%s' can not be used on data type '%s'.";
 	public static final String ATTRIBUTE_RELATION_UNUSUAL_OPERATION = "Operation '%s' should not be used on data type '%s', it might lead to unexpected results.";
 
+	/**
+	 * @param event
+	 * 		to check for valid and unique name 
+	 */
 	@Check
 	public void checkEvent(Event event) {
 		try {
@@ -113,7 +126,12 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
-	@Check void checkEventAttribute(EventAttribute eventAttribute) {
+	/**
+	 * @param eventAttribute
+	 * 		to check for allowed datatype
+	 */
+	@Check
+	void checkEventAttribute(EventAttribute eventAttribute) {
 		try {
 			if(eventAttribute.getType() instanceof EDataType) {
 				EDataType type  = (EDataType) eventAttribute.getType();
@@ -130,6 +148,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 
+	/**
+	 * @param pattern
+	 * 		to check for valid and unique name
+	 */
 	@Check
 	public void checkEventPattern(EventPattern pattern) {
 		try {
@@ -141,6 +163,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
+	/**
+	 * @param node
+	 * 		to check for valid and unique name
+	 */
 	@Check
 	public void checkEventPatternNode(EventPatternNode node) {
 		try {
@@ -152,13 +178,18 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
+	/**
+	 * @param statement
+	 * 		to check for return type and correct return parameters
+	 */
 	@Check
 	public void checkReturnStatement(SpawnStatement statement) {
 		try {
 			EventPattern pattern = (EventPattern)statement.eContainer();
 			
 			if(!(pattern.getReturnType() instanceof ReturnSpawn)) {
-				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+				// TODO: check type -> return statement w/o spawn type
+				error(String.format(SPAWNING_EVENT_PATTERN_TYPE_MISSMATCH_MESSAGE, pattern.getName()),
 						GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
 						EVENT_PATTERN_INVALID_RETURN);
 				return;
@@ -178,14 +209,19 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
+	/**
+	 * @param statement
+	 * 		to check for apply type and correct return parameters
+	 */
 	@Check
 	public void checkReturnStatement(ApplyStatement statement) {
 		try {
 			EventPattern pattern = (EventPattern)statement.eContainer();
 			
 			if(!(pattern.getReturnType() instanceof ReturnApply)) {
-				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
-						GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
+				// TODO: check type -> apply statement w/o apply pattern type APPLYING_EVENT
+				error(String.format(APPLYING_EVENT_PATTERN_TYPE_MISSMATCH_MESSAGE, pattern.getName()),
+						GrapelPackage.Literals.APPLY_STATEMENT__RETURN_ARG,
 						EVENT_PATTERN_INVALID_RETURN);
 				return;
 			}
@@ -194,8 +230,8 @@ public class GrapelValidator extends AbstractGrapelValidator {
 			
 			ReturnApply returnType = (ReturnApply)pattern.getReturnType();
 			if(!statement.getReturnArg().equals(returnType.getReturnType()))
-				error(String.format(SPAWNING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
-						GrapelPackage.Literals.SPAWN_STATEMENT__RETURN_ARG,
+				error(String.format(APPLYING_EVENT_PATTERN_EVENT_MISSMATCH_MESSAGE, pattern.getName()),
+						GrapelPackage.Literals.APPLY_STATEMENT__RETURN_ARG,
 						EVENT_PATTERN_INVALID_RETURN);
 			checkReturnStatementParameters(pattern,  statement);
 		}catch(Exception e) {
@@ -204,6 +240,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
+	/**
+	 * @param expr
+	 * 		to check for object, boolean or string expression
+	 */
 	@Check
 	public void attributeExpressions(AttributeExpression expr) {
 		try {
@@ -219,6 +259,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 	}
 
 
+	/**
+	 * @param relation
+	 * 		to check for comparison type
+	 */
 	@Check 
 	public void attributeRelations(AttributeRelation relation) {
 		try {
@@ -232,6 +276,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
+	/**
+	 * @param relation
+	 * 		to check for only enum to enum comparison and allowed comparators
+	 */
 	private void checkEnumComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
 		if(relation.getRhs() == null) {
@@ -265,6 +313,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		}
 	}
 
+	/**
+	 * @param literal
+	 * 		to check to be not in an arithmetic expression
+	 */
 	@Check
 	public void enumLiterals(EnumLiteral literal) {
 		if(literal.eContainer() instanceof ArithmeticExpression) {
@@ -274,6 +326,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		}
 	}
 	
+	/**
+	 * @param relation
+	 * 		to check for only boolean subexpressions and allowed comparators
+	 */
 	private void checkBooleanComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
 		if(relation.getRhs() == null) {
@@ -307,6 +363,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		}
 	}
 
+	/**
+	 * @param relation
+	 * 		to check for only string subexpressions and allowed comparators
+	 */
 	private void checkStringComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
 		if(relation.getRhs() == null) {
@@ -337,6 +397,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		}
 	}
 	
+	/**
+	 * @param relation
+	 * 		to check for subexpression type and war for unusual operators
+	 */
 	private void checkFloatComparisons(AttributeRelation relation) {
 		EClassifier lhsType = getTypeOfExpression(relation.getLhs());
 		if(relation.getRhs() == null) {
@@ -365,6 +429,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		}
 	}
 
+	/**
+	 * @param event
+	 * 		to check for name not containing any blacklisted keywords
+	 */
 	public void checkEventNameValid(Event event) {
 		if(event.getName() == null)
 			return;
@@ -375,6 +443,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		// any style rules?
 	}
 	
+	/**
+	 * @param event
+	 * 		to check to have a unique name
+	 */
 	public void checkEventNameUnique(Event event) {
 		EditorGTFile file = (EditorGTFile) event.eContainer();
 		long count = file.getEvents().stream().filter(e -> e.getName() !=  null && e.getName().equals(event.getName())).count();
@@ -384,6 +456,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					NAME_EXPECT_UNIQUE);
 	}
 	
+	/**
+	 * @param pattern
+	 * 		to check for name not containing any blacklisted keywords
+	 */
 	public void checkEventPatternNameValid(EventPattern pattern) {
 		if(pattern.getName() == null)
 			return;
@@ -394,6 +470,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		// any style rules?
 	}
 	
+	/**
+	 * @param pattern
+	 * 		to check to have a unique name
+	 */
 	public void checkEventPatternNameUnique(EventPattern pattern) {
 		EditorGTFile file = (EditorGTFile) pattern.eContainer();
 		long count = file.getEventPatterns().stream().filter(p -> p.getName() !=  null && p.getName().equals(pattern.getName())).count();
@@ -403,6 +483,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					NAME_EXPECT_UNIQUE);
 	}
 	
+	/**
+	 * @param node
+	 * 		to check for name not containing any blacklisted keywords
+	 */
 	public void checkEventPatternNodeNameValid(EventPatternNode node) {
 		if(node.getName() == null)
 			return;
@@ -413,6 +497,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		// any style rules?
 	}
 	
+	/**
+	 * @param node
+	 * 		to check to have a unique name
+	 */
 	public void checkEventPatternNodeNameUnique(EventPatternNode node) {
 		EventPattern pattern = (EventPattern) node.eContainer();
 		long count = pattern.getNodes().stream().filter(p -> p.getName() !=  null && p.getName().equals(node.getName())).count();
@@ -422,6 +510,12 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					NAME_EXPECT_UNIQUE);
 	}
 	
+	/**
+	 * @param pattern
+	 * 		including the spawn statement
+	 * @param statement
+	 * 		to be check regarding the spawned event parameters
+	 */
 	public void checkReturnStatementParameters(EventPattern pattern, SpawnStatement statement) {
 		if(statement.getReturnParams().size() != statement.getReturnArg().getAttributes().size()) {
 			error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE , pattern.getName()),
@@ -544,9 +638,15 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
+	/**
+	 * @param pattern
+	 * 		including the apply statement
+	 * @param statement
+	 * 		to be check regarding the parameters of the rule, which should be applied
+	 */
 	public void checkReturnStatementParameters(EventPattern pattern, ApplyStatement statement) {
 		if(statement.getReturnParams().size() != statement.getReturnArg().getParameters().size()) {
-			error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE , pattern.getName()),
+			error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_NUMBER_MISSMATCH_MESSAGE , pattern.getName()),
 					GrapelPackage.Literals.APPLY_STATEMENT__RETURN_ARG,
 					EVENT_PATTERN_INVALID_RETURN);
 			return;
@@ -557,7 +657,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 			AttributeExpression given = statement.getReturnParams().get(i);
 			if(expected.getType() instanceof EClass) {
 				if(!(given instanceof EventPatternNodeAttributeExpression)) {
-					error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+					error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
 							GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 							EVENT_PATTERN_INVALID_RETURN);
 					continue;
@@ -565,7 +665,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				
 				EventPatternNodeAttributeExpression expr = (EventPatternNodeAttributeExpression) given;
 				if(expr.getField() != null) {
-					error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+					error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
 							GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 							EVENT_PATTERN_INVALID_RETURN);
 					continue;
@@ -573,14 +673,14 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				EventPatternNodeExpression nodeExpr = (EventPatternNodeExpression) expr.getNodeExpression();
 				if(nodeExpr.getAttribute() instanceof EventAttribute) {
 					if(expected != nodeExpr.getAttribute())
-						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+						error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
 				} else {
 					EditorNode gtNode = (EditorNode)nodeExpr.getAttribute();
 					if(expected.getType() != gtNode.getType())
-						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+						error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
@@ -589,14 +689,14 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				if((given instanceof EventPatternNodeAttributeExpression)) {
 					EClassifier givenType = getTypeOfExpression(given);
 					if(!(givenType instanceof EDataType)) {
-						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
+						error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_MESSAGE , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
 					}
 					
 					if(expected.getType() != givenType) {
-						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+						warning(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
@@ -605,13 +705,13 @@ public class GrapelValidator extends AbstractGrapelValidator {
 				} else {
 					EClassifier givenType = getTypeOfExpression(given);
 					if(givenType == null) {
-						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+						error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
 					}
 					if(!(givenType instanceof EDataType)) {
-						error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+						error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 						continue;
@@ -619,7 +719,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					
 					if(givenType == EcorePackage.Literals.ESTRING && expected.getType() != EcorePackage.Literals.ESTRING) {
 						if(!(given instanceof AttributeExpressionLiteral)) {
-							error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+							error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
 									GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 									EVENT_PATTERN_INVALID_RETURN);
 							continue;
@@ -629,7 +729,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 								try {
 									Double.parseDouble(val.getValue());
 								}catch(Exception e) {
-									error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+									error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
 											GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 											EVENT_PATTERN_INVALID_RETURN);
 									continue;
@@ -639,13 +739,13 @@ public class GrapelValidator extends AbstractGrapelValidator {
 								try {
 									Integer.parseInt(val.getValue());
 								}catch(Exception e) {
-									error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+									error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
 											GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 											EVENT_PATTERN_INVALID_RETURN);
 									continue;
 								}
 							} else {
-								error(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
+								error(String.format(APPLYING_EVENT_PATTERN_PARAMETER_STRING_PARSE_ERROR, pattern.getName()),
 										GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 										EVENT_PATTERN_INVALID_RETURN);
 								continue;
@@ -655,7 +755,7 @@ public class GrapelValidator extends AbstractGrapelValidator {
 					}
 					
 					if(givenType != expected.getType()) {
-						warning(String.format(SPAWNING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
+						warning(String.format(APPLYING_EVENT_PATTERN_PARAMETER_MISSMATCH_WARNING , pattern.getName()),
 								GrapelPackage.Literals.RETURN_STATEMENT__RETURN_PARAMS, i,
 								EVENT_PATTERN_INVALID_RETURN);
 					}
@@ -666,6 +766,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		
 	}
 	
+	/**
+	 * @param expr
+	 * 			to check for allowed object expression use
+	 */
 	private void checkObjectExpressions(AttributeExpression expr) {
 		if(expr instanceof AttributeExpressionLiteral) {
 			return;
@@ -709,6 +813,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		return;
 	}
 	
+	/**
+	 * @param expr
+	 * 		to check for allowed BooleanExpression use
+	 */
 	private void checkBooleanExpressions(AttributeExpression expr) {
 		if(expr instanceof AttributeExpressionLiteral) {
 			return;
@@ -741,6 +849,10 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		return;
 	}
 	
+	/**
+	 * @param expr
+	 * 		to check for allowed StringExpression use
+	 */
 	public void checkStringExpressions(AttributeExpression expr) {
 		if(expr instanceof AttributeExpressionLiteral) {
 			return;
@@ -775,6 +887,11 @@ public class GrapelValidator extends AbstractGrapelValidator {
 		return;
 	}
 	
+	/**
+	 * @param expr from which to determine the resulting type
+	 * @return the resulting type of the expression
+	 * @throws ParseException
+	 */
 	public static EClassifier getTypeOfExpression(AttributeExpression expr) throws ParseException{
 		if(expr instanceof AttributeExpressionLiteral) {
 			AttributeExpressionLiteral literal = (AttributeExpressionLiteral)expr;
