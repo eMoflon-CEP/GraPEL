@@ -32,26 +32,37 @@ import java.util.ArrayDeque
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class GrapelGenerator extends AbstractGenerator {
-
+	
+	/**
+	 * Generates code for the model
+	 * @param resource the editor GT file resource 
+	 * @param fsa abstraction for file system access
+	 * @param context the generator context
+	 */
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
+		// extract model out of the resource
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
 		val rs = new ResourceSetImpl;
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl())
 		val model = resource.contents.get(0) as EditorGTFile;
 		val output = rs.createResource(URI.createURI(resource.URI.trimFileExtension+".xmi"))
+		// add model and resolve
 		output.contents.add(model)
 		EcoreUtil.resolveAll(output)
 //		println(resource.URI)
-
+		
+		// configure save options
 		val saveOptions = (output as XMIResource).getDefaultSaveOptions()
 		saveOptions.put(XMIResource.OPTION_ENCODING,"UTF-8");
 		saveOptions.put(XMIResource.OPTION_USE_XMI_TYPE, Boolean.TRUE);
 		saveOptions.put(XMIResource.OPTION_SAVE_TYPE_INFORMATION,Boolean.TRUE);
 		saveOptions.put(XMIResource.OPTION_SCHEMA_LOCATION_IMPLEMENTATION, Boolean.TRUE);
+		// save output
 		(output as XMIResource).save(saveOptions)
 //		System.out.println("Xtext model saved to: "+output.URI.path)
 		
 //		println("Running Builder extensions...")
+		// run the builder with model
 		val workspace = getWorkspace()
 		val project = getProjectOfResource(workspace, output)
 		if(project === null)
@@ -61,10 +72,24 @@ class GrapelGenerator extends AbstractGenerator {
 		
 	}
 	
+	/**
+	 * @returns the resource plugin workspace 
+	 */
 	def static IWorkspace getWorkspace() {
 		return ResourcesPlugin.getWorkspace()
 	}
 	
+	/**
+	 * Returns the project for resource URI in a given workspace
+	 * 
+	 * @param workspace
+	 * 				to be searched in for the project
+	 * @param resource
+	 * 				in the project, which should be returned
+	 * @return the project for the given resource or null, if no corresponding project
+	 * 				is found or the segment count for the resource is to small
+	 * 
+	 */
 	def static IProject getProjectOfResource(IWorkspace workspace, Resource resource) {
 		if(resource.URI.segmentCount<2)
 				return null;
@@ -79,6 +104,13 @@ class GrapelGenerator extends AbstractGenerator {
 		return null;
 	}
 	
+	/**
+	 * Runs builder extensions with for all extensions with the GrapelBuilderExtension ID as a runnable.
+	 * 
+	 * @param action
+	 * 			the consumer action for the GrapelBuilderExtension
+	 * 
+	 */
 	def static void runBuilderExtensions(Consumer<GrapelBuilderExtension> action) {
 		val ISafeRunnable runnable = new ISafeRunnable() {
 			
